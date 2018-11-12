@@ -8,4 +8,4 @@ For this purpose I considerate two options:
 ## Child process with Node.js
 For this option I used as basis the [angular-electron](https://github.com/maximegris/angular-electron) project.
 
-## [node-java](https://github.com/joeferner/node-java) project
+## Comunication with [node-java](https://github.com/joeferner/node-java) project
