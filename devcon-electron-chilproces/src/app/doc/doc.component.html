@@ -1,0 +1,36 @@
+<div [ngSwitch]="devconroute">
+  <div *ngSwitchCase="'devon'" class="s12">
+    <h2>Devon</h2>
+    <p>Opens the Devonfw site in the default web browser</p>
+    <a class="waves-effect waves-light btn" (click)="goDevonsite()"
+      >Go to Devonfw</a
+    >
+  </div>
+
+  <div *ngSwitchCase="'devonguide'" class="s12">
+    <h2>Devon Guide</h2>
+    <p>Opens the Devonfw guide</p>
+    <a class="waves-effect waves-light btn" (click)="openDevonguide()"
+      >Go Devon Guide</a
+    >
+    <div>
+      <p>
+        Number of pages: {{ pdfViewer.getNumberOfPages() }} | Actual page:
+        {{ pdfViewer.getCurrentPage() }} | Zoom:
+        {{ pdfViewer.getZoomPercent() }} %
+      </p>
+
+      <button (click)="pdfViewer.zoomIn()">Zoom In</button>
+      <button (click)="pdfViewer.nextPage()">Next Page</button>
+      <button (click)="pdfViewer.search('PDF')">Search the world 'PDF'</button>
+
+      <section id="viewer">
+        <!-- Simple PDF Viewer: open the test.pdf at the second page -->
+        <simple-pdf-viewer
+          #pdfViewer
+          [src]="'../../assets/Devonfw_Guide_v2.4.0.pdf'"
+        ></simple-pdf-viewer>
+      </section>
+    </div>
+  </div>
+</div>
