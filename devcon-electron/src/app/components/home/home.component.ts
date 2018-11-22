@@ -7,10 +7,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  mobileQuery: MediaQueryList;
-
-  fillerNav = Array.from({ length: 50 }, (_, i) => `Nav Item ${i + 1}`);
-
   fillerContent = Array.from(
     { length: 50 },
     () =>
@@ -21,16 +17,6 @@ export class HomeComponent implements OnInit {
        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
   );
 
-  private _mobileQueryListener: () => void;
-
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
-  }
+  constructor() {}
   ngOnInit() {}
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
-  }
 }

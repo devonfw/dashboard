@@ -1,66 +1,7 @@
-<mat-sidenav-container>
-  <mat-sidenav #snav mode="side" opened>
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Dist </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-          <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Project </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-          <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Workspace </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-          <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Doc </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-          <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Github </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-          <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-      <mat-expansion-panel [disabled]="isDisabled">
-        <mat-expansion-panel-header>
-          <mat-panel-title> Custom Module </mat-panel-title>
-        </mat-expansion-panel-header>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <router-outlet>
-      <mat-toolbar color="primary" class="mat-elevation-z1">
-        <button mat-icon-button id="menu" (click)="snav.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span>Devcon</span>
-      </mat-toolbar>
-    </router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<!-- <mat-toolbar color="primary" class="mat-elevation-z1 toolbar"> -->
+
+<div class="container">
+  <app-toolbar></app-toolbar>
+
+  <app-sidenav class="sidenav"></app-sidenav>
+</div>

@@ -21,6 +21,9 @@ import { WebviewDirective } from './directives/webview.directive';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { AppMaterialModule } from './app-material.module';
+import { SidenavComponent } from './widgets/sidenav/sidenav.component';
+import { ToolbarComponent } from './widgets/toolbar/toolbar.component';
+import { SidenavService } from './sidenav.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -28,7 +31,13 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, WebviewDirective],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    WebviewDirective,
+    SidenavComponent,
+    ToolbarComponent,
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -44,7 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [ElectronService],
+  providers: [ElectronService, SidenavService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

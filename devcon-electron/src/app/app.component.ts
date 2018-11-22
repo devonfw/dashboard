@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
+import { SidenavService } from './sidenav.service';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public electronService: ElectronService,
-    private translate: TranslateService) {
-
+  @ViewChild('sidenav') public sidenav: MatSidenav;
+  constructor(
+    public electronService: ElectronService,
+    private translate: TranslateService,
+    private sidenavService: SidenavService,
+  ) {
     translate.setDefaultLang('en');
     console.log('AppConfig', AppConfig);
 
@@ -22,5 +27,6 @@ export class AppComponent {
     } else {
       console.log('Mode web');
     }
+    this.sidenavService.setSidenav(this.sidenav);
   }
 }
