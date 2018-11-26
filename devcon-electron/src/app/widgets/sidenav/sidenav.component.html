@@ -10,28 +10,51 @@
           <a mat-list-item>Install</a> <a mat-list-item>s2</a>
         </mat-nav-list>
       </mat-expansion-panel>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title> Project </mat-panel-title>
         </mat-expansion-panel-header>
-        <!--
-          <mat-expansion-panel>
-            <mat-expansion-panel-header>
-              <mat-panel-title> Dist </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-nav-list>
-              <a mat-list-item>Info</a> <a mat-list-item>Init</a>
-              <a mat-list-item>Install</a> <a mat-list-item>s2</a>
-            </mat-nav-list>
-          </mat-expansion-panel>
-        -->
+
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> devon4j </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item>Build</a>
+            <a routerLink="devon4jcreate" mat-list-item>Create</a>
+            <a mat-list-item>Deploy</a> <a mat-list-item>Run</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> devon4js </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item>Build</a> <a mat-list-item>Create</a>
+            <a mat-list-item>Run</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Other Projects </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item>Build</a> <a mat-list-item>Create</a>
+            <a mat-list-item>Run</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
       </mat-expansion-panel>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title> Workspace </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list> <a mat-list-item>Create</a> </mat-nav-list>
       </mat-expansion-panel>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title> Doc </mat-panel-title>
@@ -42,6 +65,7 @@
           <a mat-list-item>devon4j Guide</a> <a mat-list-item>User Guide</a>
         </mat-nav-list>
       </mat-expansion-panel>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title> Github </mat-panel-title>
@@ -50,6 +74,7 @@
           <a mat-list-item>devon Code</a> <a mat-list-item>devon4java</a>
         </mat-nav-list>
       </mat-expansion-panel>
+
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title> Custom Module </mat-panel-title>
@@ -57,13 +82,5 @@
       </mat-expansion-panel>
     </mat-accordion>
   </mat-sidenav>
-  <mat-sidenav-content>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    <!-- <div><router-outlet> </router-outlet></div> -->
-  </mat-sidenav-content>
+  <mat-sidenav-content> <router-outlet></router-outlet> </mat-sidenav-content>
 </mat-sidenav-container>

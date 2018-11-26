@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -24,6 +24,7 @@ import { AppMaterialModule } from './app-material.module';
 import { SidenavComponent } from './widgets/sidenav/sidenav.component';
 import { ToolbarComponent } from './widgets/toolbar/toolbar.component';
 import { SidenavService } from './sidenav.service';
+import { CreateComponent } from './components/project/create/create.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -37,6 +38,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     WebviewDirective,
     SidenavComponent,
     ToolbarComponent,
+    CreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     AppMaterialModule,
+    ReactiveFormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

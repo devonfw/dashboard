@@ -1,0 +1,75 @@
+<form>
+  <table>
+    <tr class="row">
+      <td colspan="3">Create a new server project based on devon template</td>
+      <td>
+        <button mat-raised-button>
+          <mat-icon type="submit">play_arrow</mat-icon>
+          Start
+        </button>
+      </td>
+    </tr>
+
+    <tr class="row">
+      <td>Server Name:</td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Server Name" />
+        </mat-form-field>
+      </td>
+      <td class="column">Package Name:</td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Package Name" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr class="row">
+      <td>Group ID:</td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Group ID" />
+        </mat-form-field>
+      </td>
+      <td class="column">Version</td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Version" />
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr class="row">
+      <td>Server Path:</td>
+      <td>
+        <mat-form-field>
+          <input matInput placeholder="Server Path" />
+        </mat-form-field>
+      </td>
+      <td class="browse-button"><button mat-raised-button>Browse</button></td>
+      <td class="column">
+        <mat-form-field>
+          <mat-select placeholder="DB Type" [formControl]="dbControl" required>
+            <mat-option value="h2">h2</mat-option>
+            <mat-option value="postgresql">postgresql</mat-option>
+            <mat-option value="mysql">mysql</mat-option>
+            <mat-option value="mariadb">mariadb</mat-option>
+            <mat-option value="oracle">oracle</mat-option>
+            <mat-option value="hana">hana</mat-option>
+            <mat-option value="db2">db2</mat-option>
+          </mat-select>
+          <mat-error *ngIf="dbControl.hasError('required')">
+            Please choose a DB Type
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+
+    <tr class="console">
+      <td colspan="4" class="console">
+        <pre class="console-output">>console-output</pre>
+      </td>
+    </tr>
+  </table>
+</form>

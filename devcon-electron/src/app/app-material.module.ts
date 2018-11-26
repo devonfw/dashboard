@@ -11,6 +11,8 @@ import {
   MatListModule,
   MatTreeModule,
   MatExpansionModule,
+  MatInputModule,
+  MatSelectModule,
 } from '@angular/material';
 
 @NgModule({
@@ -27,6 +29,8 @@ import {
     MatTreeModule,
     MatExpansionModule,
     FlexLayoutModule,
+    MatInputModule,
+    MatSelectModule,
   ],
   exports: [
     MatButtonModule,
@@ -39,6 +43,8 @@ import {
     MatTreeModule,
     MatExpansionModule,
     FlexLayoutModule,
+    MatInputModule,
+    MatSelectModule,
   ],
 })
 export class AppMaterialModule {}
