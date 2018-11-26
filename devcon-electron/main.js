@@ -3,22 +3,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var electron_1 = require("electron");
 var path = require("path");
 var url = require("url");
+var environment_1 = require("./src/environments/environment");
+var menu_1 = require("./menu");
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
 function createWindow() {
     var electronScreen = electron_1.screen;
     var size = electronScreen.getPrimaryDisplay().workAreaSize;
+    if (environment_1.AppConfig.production === false) {
+        menu_1.mainMenu.push({
+            label: 'View',
+            submenu: [
+                { label: 'Reload', role: 'reload' },
+                { label: 'Force Reload', role: 'forcereload' },
+                {
+                    label: 'Toggle Developpers Tools',
+                    role: 'toggledevtools',
+                },
+            ],
+        });
+    }
     // Create the browser window.
     win = new electron_1.BrowserWindow({
         x: 0,
         y: 0,
         width: size.width,
-        height: size.height
+        height: size.height,
     });
     if (serve) {
         require('electron-reload')(__dirname, {
-            electron: require(__dirname + "/node_modules/electron")
+            electron: require(__dirname + "/node_modules/electron"),
         });
         win.loadURL('http://localhost:4200');
     }
@@ -26,7 +41,7 @@ function createWindow() {
         win.loadURL(url.format({
             pathname: path.join(__dirname, 'dist/index.html'),
             protocol: 'file:',
-            slashes: true
+            slashes: true,
         }));
     }
     win.webContents.openDevTools();
@@ -37,6 +52,8 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
+    var menu = electron_1.Menu.buildFromTemplate(menu_1.mainMenu);
+    electron_1.Menu.setApplicationMenu(menu);
 }
 try {
     // This method will be called when Electron has finished
