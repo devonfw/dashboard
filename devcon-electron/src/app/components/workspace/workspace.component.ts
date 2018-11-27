@@ -4,11 +4,11 @@ const { app } = require('electron').remote;
 const { dialog } = require('electron').remote;
 
 @Component({
-  selector: 'app-create',
-  templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss'],
+  selector: 'app-workspace',
+  templateUrl: './workspace.component.html',
+  styleUrls: ['./workspace.component.scss'],
 })
-export class CreateComponent implements OnInit {
+export class WorkspaceComponent implements OnInit {
   serverPath = new FormControl('');
   dbControl = new FormControl('', [Validators.required]);
   constructor() {}

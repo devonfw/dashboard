@@ -51,6 +51,8 @@ function createWindow() {
 
   win.webContents.openDevTools();
 
+  console.log(app.getAppPath());
+
   // Emitted when the window is closed.
   win.on('closed', () => {
     // Dereference the window object, usually you would store window

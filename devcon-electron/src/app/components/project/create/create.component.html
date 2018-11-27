@@ -44,10 +44,16 @@
       <td>Server Path:</td>
       <td>
         <mat-form-field>
-          <input matInput placeholder="Server Path" />
+          <input
+            [formControl]="serverPath"
+            matInput
+            placeholder="Server Path"
+          />
         </mat-form-field>
       </td>
-      <td class="browse-button"><button mat-raised-button>Browse</button></td>
+      <td class="browse-button">
+        <a mat-raised-button (click)="searchFolder()">Browse</a>
+      </td>
       <td class="column">
         <mat-form-field>
           <mat-select placeholder="DB Type" [formControl]="dbControl" required>
