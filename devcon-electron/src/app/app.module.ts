@@ -26,6 +26,7 @@ import { ToolbarComponent } from './widgets/toolbar/toolbar.component';
 import { SidenavService } from './sidenav.service';
 import { CreateComponent } from './components/project/create/create.component';
 import { WorkspaceComponent } from './components/workspace/workspace.component';
+import { InfoComponent } from './components/dist/info/info.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -41,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarComponent,
     CreateComponent,
     WorkspaceComponent,
+    InfoComponent,
   ],
   imports: [
     BrowserModule,

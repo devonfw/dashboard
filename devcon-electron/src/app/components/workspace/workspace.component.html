@@ -1,10 +1,14 @@
-<form>
+<form [formGroup]="workspaceForm" (ngSubmit)="onSubmit()">
   <table>
     <tr class="row">
       <td colspan="3">Create a new server project based on devon template</td>
       <td>
-        <button mat-raised-button>
-          <mat-icon type="submit">play_arrow</mat-icon>
+        <button
+          [disabled]="!workspaceForm.valid"
+          mat-raised-button
+          type="submit"
+        >
+          <mat-icon>play_arrow</mat-icon>
           Start
         </button>
       </td>
@@ -14,7 +18,16 @@
       <td>Workspace Name:</td>
       <td>
         <mat-form-field>
-          <input matInput placeholder="Workspace Name" />
+          <input
+            matInput
+            formControlName="workspaceName"
+            placeholder="Workspace Name"
+          />
+          <mat-error
+            *ngIf="workspaceForm.controls['workspaceName'].errors?.required"
+          >
+            Workspace Name is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </td>
     </tr>
@@ -23,10 +36,26 @@
       <td>
         <mat-form-field>
           <input
-            [formControl]="serverPath"
+            id="workspacePath"
+            formControlName="workspacePath"
             matInput
-            placeholder="Server Path"
+            placeholder="Workspace Path"
           />
+
+          <mat-error
+            *ngIf="
+              workspaceForm.controls['workspacePath'].errors?.pattern &&
+              !workspaceForm.controls['workspacePath'].errors?.required
+            "
+          >
+            Workspace Path must be a valid directory name
+          </mat-error>
+
+          <mat-error
+            *ngIf="workspaceForm.controls['workspacePath'].errors?.required"
+          >
+            Workspace Path is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </td>
       <td class="browse-button">
