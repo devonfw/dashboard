@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 const { app } = require('electron').remote;
 const { dialog } = require('electron').remote;
+import { ipcRenderer } from 'electron';
 
 @Component({
   selector: 'app-workspace',
@@ -14,7 +15,7 @@ export class WorkspaceComponent implements OnInit {
     workspacePath: new FormControl('', [
       Validators.required,
       Validators.pattern(
-        /^[a-z]:((((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+)|(\\|\/)|(((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+(\\|\/)))$/i,
+        /^[a-z]:((((\\|\/)[a-z0-9\s_@\-^!#$%&.+={}\[\]]+)+)|(\\|\/)|(((\\|\/)[a-z0-9\s_@\-^!#$%&.+={}\[\]]+)+(\\|\/)))$/i,
       ),
     ]),
   });
@@ -43,5 +44,6 @@ export class WorkspaceComponent implements OnInit {
 
   onSubmit() {
     console.warn(this.workspaceForm.value);
+    ipcRenderer.send('workspace-info', this.workspaceForm.value);
   }
 }

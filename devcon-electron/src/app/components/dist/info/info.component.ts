@@ -15,7 +15,7 @@ export class InfoComponent implements OnInit {
     const str1 =
       'C:\\Users\\jsanchoh\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs';
     const patt = /^([A-z]\:|\\)((\[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_]+)*)$/;
-    const patt2 = /^[a-z]:((((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+)|(\\|\/)|(((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+(\\|\/)))$/i;
+    const patt2 = /^[a-z]:((((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+)|(\\|\/)|(((\\|\/)[a-z0-9\s_@\-^!#$%&+={}\[\]]+)+(\\|\/)))$/i; // <--
     const patt1 = /[a-z]/gi;
     const res = patt2.test(str);
     console.log(patt);

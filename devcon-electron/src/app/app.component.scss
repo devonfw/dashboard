@@ -2,10 +2,16 @@
 //   margin: 0px;
 //   border-radius: 0;
 // }
-.container,
-.sidenav {
+.container {
   height: 100%;
 }
+.toolbar {
+  height: 10%;
+}
+.sidenav {
+  height: 90%;
+}
+
 // .container {
 //   display: flex;
 //   flex-direction: column;

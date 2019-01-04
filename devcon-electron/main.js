@@ -5,6 +5,7 @@ var path = require("path");
 var url = require("url");
 var environment_1 = require("./src/environments/environment");
 var menu_1 = require("./menu");
+var Workspace_1 = require("./src/modules/workspace/Workspace");
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
@@ -45,7 +46,7 @@ function createWindow() {
         }));
     }
     win.webContents.openDevTools();
-    console.log(electron_1.app.getAppPath());
+    prueba(electron_1.app.getAppPath());
     // Emitted when the window is closed.
     win.on('closed', function () {
         // Dereference the window object, usually you would store window
@@ -55,6 +56,10 @@ function createWindow() {
     });
     var menu = electron_1.Menu.buildFromTemplate(menu_1.mainMenu);
     electron_1.Menu.setApplicationMenu(menu);
+    electron_1.ipcMain.on('workspace-info', function (event, workspaceInfo) {
+        console.log(workspaceInfo);
+        Workspace_1.Workspace.create(workspaceInfo.workspaceName, workspaceInfo.workspacePath[0]);
+    });
 }
 try {
     // This method will be called when Electron has finished
@@ -80,5 +85,17 @@ try {
 catch (e) {
     // Catch Error
     // throw e;
+}
+function prueba(prepath) {
+    var prpath = 'C:\\Project\\Devon-dist_2.4.0\\software\\devcon';
+    Workspace_1.Workspace.create('prueba4', prpath);
+    // console.log(prepath.split(path.sep));
+    // console.log(path.parse(prepath));
+    // prepath = 'C:\\Project\\Devon-dist_2.4.0';
+    // const configfile = prepath + '\\conf\\settings.json';
+    // console.log(configfile);
+    // const settingsPath = fs.existsSync(configfile);
+    // const workspace = fs.existsSync(prepath + '\\workspaces');
+    // console.log('Archivo conf:' + settingsPath + ' Workspaces:' + workspace);
 }
 //# sourceMappingURL=main.js.map
