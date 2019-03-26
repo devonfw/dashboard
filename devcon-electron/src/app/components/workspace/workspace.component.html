@@ -1,0 +1,72 @@
+<form [formGroup]="workspaceForm" (ngSubmit)="onSubmit()">
+  <table>
+    <tr class="row">
+      <td colspan="3">Create a new server project based on devon template</td>
+      <td>
+        <button
+          [disabled]="!workspaceForm.valid"
+          mat-raised-button
+          type="submit"
+        >
+          <mat-icon>play_arrow</mat-icon>
+          Start
+        </button>
+      </td>
+    </tr>
+
+    <tr class="row">
+      <td>Workspace Name:</td>
+      <td>
+        <mat-form-field>
+          <input
+            matInput
+            formControlName="workspaceName"
+            placeholder="Workspace Name"
+          />
+          <mat-error
+            *ngIf="workspaceForm.controls['workspaceName'].errors?.required"
+          >
+            Workspace Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </td>
+    </tr>
+    <tr>
+      <td>Workspace Path:</td>
+      <td>
+        <mat-form-field>
+          <input
+            id="workspacePath"
+            formControlName="workspacePath"
+            matInput
+            placeholder="Workspace Path"
+          />
+
+          <mat-error
+            *ngIf="
+              workspaceForm.controls['workspacePath'].errors?.pattern &&
+              !workspaceForm.controls['workspacePath'].errors?.required
+            "
+          >
+            Workspace Path must be a valid directory name
+          </mat-error>
+
+          <mat-error
+            *ngIf="workspaceForm.controls['workspacePath'].errors?.required"
+          >
+            Workspace Path is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </td>
+      <td class="browse-button">
+        <a mat-raised-button (click)="searchFolder()">Browse</a>
+      </td>
+    </tr>
+
+    <tr class="console">
+      <td colspan="4" class="console">
+        <pre class="console-output">>console-output</pre>
+      </td>
+    </tr>
+  </table>
+</form>
