@@ -5,6 +5,8 @@ var path = require("path");
 var url = require("url");
 var environment_1 = require("./src/environments/environment");
 var menu_1 = require("./menu");
+var Database_1 = require("./src/electron/providers/Database");
+var Devon_1 = require("./src/electron/providers/Devon");
 var win, serve;
 var args = process.argv.slice(1);
 serve = args.some(function (val) { return val === '--serve'; });
@@ -54,6 +56,9 @@ function createWindow() {
     });
     var menu = electron_1.Menu.buildFromTemplate(menu_1.mainMenu);
     electron_1.Menu.setApplicationMenu(menu);
+    // Set here de ipcHandlers for init
+    var ipcHandlers = [Database_1.default, Devon_1.default];
+    ipcHandlers.forEach(function (handler) { return new handler().init(win); });
 }
 try {
     // This method will be called when Electron has finished

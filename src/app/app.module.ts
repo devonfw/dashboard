@@ -14,7 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { ElectronService } from './providers/electron.service';
+import { ElectronService } from './shared/providers/electron.service';
 
 import { WebviewDirective } from './directives/webview.directive';
 
@@ -23,6 +23,11 @@ import { AppMaterialModule } from './app-material.module';
 import { SidenavComponent } from './widgets/sidenav/sidenav.component';
 import { ToolbarComponent } from './widgets/toolbar/toolbar.component';
 import { SidenavService } from './sidenav.service';
+import { WebframeComponent } from './components/webframe/webframe.component';
+import { SafePipe } from './shared/pipes/SafePipe';
+import { HomeComponent } from './views/home/home.component';
+import { DevconService } from './shared/providers/devcon.service';
+import { DatabaseService } from './shared/providers/database.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -35,6 +40,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     WebviewDirective,
     SidenavComponent,
     ToolbarComponent,
+    WebframeComponent,
+    SafePipe,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [ElectronService, SidenavService],
+  providers: [ElectronService, SidenavService, DatabaseService, DevconService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
