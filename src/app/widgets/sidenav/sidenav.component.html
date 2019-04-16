@@ -3,86 +3,34 @@
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title> Dist </mat-panel-title>
+          <mat-panel-title>My Projects</mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a routerLink="distinfo" mat-list-item>Info</a>
-          <a mat-list-item>Init</a> <a mat-list-item>Install</a>
-          <a mat-list-item>s2</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Project </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-expansion-panel-header>
-            <mat-panel-title> devon4j </mat-panel-title>
-          </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item>Build</a>
-            <a routerLink="devon4jcreate" mat-list-item>Create</a>
-            <a mat-list-item>Deploy</a> <a mat-list-item>Run</a>
+            <a mat-list-item [routerLink]="devonJavaPage">Java</a>
+            <a mat-list-item [routerLink]="devonJavaScriptPage">JavaScript</a>
+            <a mat-list-item [routerLink]="devonNetPage">.NET</a>
           </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-expansion-panel-header>
-            <mat-panel-title> devon4js </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item>Build</a> <a mat-list-item>Create</a>
-            <a mat-list-item>Run</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-expansion-panel-header>
-            <mat-panel-title> Other Projects </mat-panel-title>
-          </mat-expansion-panel-header>
-          <mat-nav-list>
-            <a mat-list-item>Build</a> <a mat-list-item>Create</a>
-            <a mat-list-item>Run</a>
-          </mat-nav-list>
-        </mat-expansion-panel>
       </mat-expansion-panel>
-
       <mat-expansion-panel>
         <mat-expansion-panel-header>
-          <mat-panel-title> Workspace </mat-panel-title>
+          <mat-panel-title>Devon</mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
-          <a routerLink="workspace" mat-list-item>Create</a>
+          <a mat-list-item [routerLink]="[repositoryPage, 'devonfw']">devonfw</a>
+          <a mat-list-item [routerLink]="[repositoryPage, 'devonfw-forge']">forge</a>
         </mat-nav-list>
       </mat-expansion-panel>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Doc </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>devon</a> <a mat-list-item>devon Guide</a>
-          <a mat-list-item>Get Started</a> <a mat-list-item>Links</a>
-          <a mat-list-item>devon4j Guide</a> <a mat-list-item>User Guide</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Github </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-nav-list>
-          <a mat-list-item>devon Code</a> <a mat-list-item>devon4java</a>
-        </mat-nav-list>
-      </mat-expansion-panel>
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="homePage">
+          <mat-icon matListIcon>home</mat-icon>Home
+        </a>
+        <a mat-list-item [routerLink]="settingsPage">
+          <mat-icon matListIcon>settings</mat-icon>Settings
+        </a>
+      </mat-nav-list>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title> Custom Module </mat-panel-title>
-        </mat-expansion-panel-header>
-      </mat-expansion-panel>
     </mat-accordion>
   </mat-sidenav>
   <mat-sidenav-content> <router-outlet></router-outlet> </mat-sidenav-content>

@@ -21,6 +21,10 @@ var Workspace = /** @class */ (function () {
         typeorm_1.Column(),
         __metadata("design:type", String)
     ], Workspace.prototype, "name", void 0);
+    __decorate([
+        typeorm_1.Column(),
+        __metadata("design:type", String)
+    ], Workspace.prototype, "type", void 0);
     Workspace = __decorate([
         typeorm_1.Entity()
     ], Workspace);

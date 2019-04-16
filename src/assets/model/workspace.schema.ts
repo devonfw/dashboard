@@ -7,4 +7,7 @@ export class Workspace {
 
     @Column()
     name: string;
+
+    @Column()
+    type: string;
 }

@@ -28,6 +28,18 @@ import { SafePipe } from './shared/pipes/SafePipe';
 import { HomeComponent } from './views/home/home.component';
 import { DevconService } from './shared/providers/devcon.service';
 import { DatabaseService } from './shared/providers/database.service';
+import { DocsService } from './shared/providers/docs.service';
+import { SettingsComponent } from './views/settings/settings.component';
+import SettingsService from './shared/providers/settings.service';
+import GitHubService from './shared/providers/github.service';
+import { ClipboardModule } from 'ngx-clipboard';
+import { clipboard } from 'electron';
+import { RepositoryComponent } from './views/repository/repository.component';
+import { TerminalComponent } from './components/terminal/terminal.component';
+import { NotificationsPanelComponent } from './components/notifications-panel/notifications-panel.component';
+import { ProjectsComponent } from './views/projects/projects.component';
+import { NotificationsComponent } from './views/notifications/notifications.component';
+import { ProjectComponent } from './views/project/project.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -42,7 +54,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarComponent,
     WebframeComponent,
     SafePipe,
-    HomeComponent
+    HomeComponent,
+    SettingsComponent,
+    RepositoryComponent,
+    TerminalComponent,
+    NotificationsPanelComponent,
+    ProjectsComponent,
+    NotificationsComponent,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     AppMaterialModule,
     ReactiveFormsModule,
+    ClipboardModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -60,7 +80,14 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [ElectronService, SidenavService, DatabaseService, DevconService],
+  providers: [
+    ElectronService, 
+    SidenavService, 
+    DatabaseService, 
+    DevconService, 
+    DocsService, 
+    GitHubService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -6,6 +6,7 @@ import { mainMenu } from './menu';
 import * as fs from 'fs';
 import Database from './src/electron/providers/Database';
 import Devon from './src/electron/providers/Devon';
+import Docs from './src/electron/providers/Docs';
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -66,7 +67,7 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
 
   // Set here de ipcHandlers for init
-  const ipcHandlers = [Database, Devon];
+  const ipcHandlers = [Database, Devon, Docs];
   ipcHandlers.forEach(handler => new handler().init(win));
 
 }

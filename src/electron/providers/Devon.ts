@@ -8,10 +8,6 @@ import ipcHandler from "./ipcHandler.schema";
 export enum actions {
     CHECK_VERSION = 'devon.check-version',
     INSTALL_IDE = 'devon.install-ide',
-    RUN_SCRIPT = 'devon.run-script',
-    CREATE_PROJECT = 'devon.create-project',
-    CREATE_WORKSPACE = 'devon.create-workspace',
-    OPEN_WORKSPACE = 'devon.open-workspace'
 }
 
 export enum events {
@@ -25,88 +21,45 @@ export default class Devon extends ipcHandler {
     public static events = events;
 
     public async init(win: BrowserWindow): Promise<void> {
-        ipcMain.on(actions.CHECK_VERSION, async (event: any, ...args: any[]) => {
-            exec('java -jar devcon.jar -v | tail -n 1', function (error, stdout, stderr) {
-                if (error) throw error;
-                event.returnValue = stdout.split('v.')[1];
-            });
-        });
-
         ipcMain.on(actions.INSTALL_IDE, async (event: any, ...args: any[]) => {
-            const lastVersion = 'devon-ide-scripts-3.0.0-beta1.tar.gz';
-            const ideUrl = 'http://repo.maven.apache.org/maven2/com/devonfw/tools/ide/devon-ide-scripts/3.0.0-beta1/devon-ide-scripts-3.0.0-beta1.tar.gz';
-            if (!await fs.existsSync('./devon-projects/')) {
-                await fs.mkdirSync('./devon-projects/');
+            const version = '3.0.0-beta5';
+            const ideUrl = `http://repo.maven.apache.org/maven2/com/devonfw/tools/ide/devon-ide-scripts/${version}/devon-ide-scripts-${version}.tar.gz`;
+            if (!fs.existsSync('./data/devon-projects')) {
+                fs.mkdirSync('./data/devon-projects');
             }
-            var devonideComp = fs.createWriteStream(`./devon-projects/${lastVersion}`);
-            win.webContents.send('script-out', 'Downloading!');
+            var devonideComp = fs.createWriteStream(`./data/devon-projects/${version}.tar.gz`);
+            win.webContents.send(events.CONSOLE_OUTPUT, `Downloading version ${version} of Devon-ide`);
             await new Promise((resolve, reject) => {
                 const request = http.get(ideUrl, function (response) {
                     response.pipe(devonideComp);
                     devonideComp.on('finish', () => {
                         devonideComp.close();
-                        win.webContents.send('script-out', 'Dist Downloaded');
+                        win.webContents.send(events.CONSOLE_OUTPUT, 'Download finished!');
                         resolve();
                     });
                 }).on('error', async function (err) {
-                    await fs.unlinkSync(`./devon-projects/${lastVersion}`);
+                    await fs.unlinkSync(`./data/devon-projects/${version}.tar.gz`);
                     reject();
                 })
             });
-            win.webContents.send('script-out', 'Decompressing!');
-            await new Promise((resolve, reject) => targz.decompress({
-                src: `./devon-projects/${lastVersion}`,
-                dest: '/projects'
+            win.webContents.send(events.CONSOLE_OUTPUT, `Installing Devon-ide ${version} distribution.`);
+            targz.decompress({
+                src: `./data/devon-projects/${version}.tar.gz`,
+                dest: `./data/devon-projects/`
             }, function (err) {
-                if (err) {
-                    win.webContents.send('script-out', 'Decompressed!');
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            }));
-            win.webContents.send('script-finished', null);
-        });
-
-        ipcMain.on(actions.RUN_SCRIPT, (event: any, ...args: any[]) => {
-            const script = spawn('java', ['-jar', 'devcon.jar', '-v']);
-            script.stdout.on('data', (data) => {
-                console.log(data.toString());
-                win.webContents.send('script-out', data);
+                win.webContents.send(events.CONSOLE_OUTPUT, 'Finished copying files!');
+                // shell.openItem(`${app.getAppPath()}\\data\\devon-projects\\setup.bat`);
+                const script = spawn(`${app.getAppPath()}\\data\\devon-projects\\setup.bat`, ['https://myhost.name/myrepo.git']);
+                script.stdout.on('data', (data) => {
+                    console.log(data.toString());
+                    win.webContents.send(Devon.events.CONSOLE_OUTPUT, data);
+                });
+                script.on('exit', () => {
+                    console.log('Process finished!');
+                    win.webContents.send(Devon.events.PROCESS_FINISHED, null);
+                });
+                win.webContents.send(events.PROCESS_FINISHED, null);
             });
-            script.on('exit', () => {
-                console.log('Process finished!');
-                win.webContents.send('script-finished', null);
-            });
-        });
-
-        ipcMain.on(actions.CREATE_PROJECT, (event: any, ...args: any[]) => {
-            const script = spawn('java', ['-jar', './devondist/software/devcon/devcon.jar', 'oasp4j', 'create', '-servername', 'TestProject', '-packagename', 'io.devon.app.test', '-groupid', 'io.devon.app', '-version', '1.0-SNAPSHOT', '-dbtype', 'h2']);
-            script.stdout.on('data', (data) => {
-                console.log(data.toString());
-                win.webContents.send('script-out', data);
-            });
-            script.on('exit', () => {
-                console.log('Process finished!');
-                win.webContents.send('script-finished', null);
-            });
-        });
-
-        ipcMain.on(actions.CREATE_WORKSPACE, (event: any, name: string) => {
-            const script = spawn('java', ['-jar', './devondist/software/devcon/devcon.jar', 'workspace', 'create', '-workspace', name, '-distribution', './devondist']);
-            script.stdout.on('data', (data) => {
-                console.log(data.toString());
-                win.webContents.send(Devon.events.CONSOLE_OUTPUT, data);
-            });
-            script.on('exit', () => {
-                console.log('Process finished!');
-                win.webContents.send(Devon.events.PROCESS_FINISHED, null);
-            });
-        });
-
-        ipcMain.on(actions.OPEN_WORKSPACE, (event: any, name: string) => {
-            // shell.openItem(`devondist\\eclipse-${name}.bat`);
-            shell.openItem(`${app.getAppPath()}\\devondist\\eclipse-${name}.bat`);
         });
     }
 }

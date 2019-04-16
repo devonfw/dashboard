@@ -1,0 +1,10 @@
+.settings-card {
+    width: 80%;
+    margin: 20px auto;
+    &:nth-child(1){
+        margin-top: 5%;
+    }
+    button {
+        margin-right: 15px;
+    }
+}

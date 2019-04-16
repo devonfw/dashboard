@@ -13,6 +13,10 @@ import {
   MatExpansionModule,
   MatInputModule,
   MatSelectModule,
+  MatSlideToggleModule,
+  MatCardModule,
+  MatSnackBarModule,
+  MatMenuModule
 } from '@angular/material';
 
 @NgModule({
@@ -31,6 +35,10 @@ import {
     FlexLayoutModule,
     MatInputModule,
     MatSelectModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatMenuModule,
   ],
   exports: [
     MatButtonModule,
@@ -45,6 +53,10 @@ import {
     FlexLayoutModule,
     MatInputModule,
     MatSelectModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatMenuModule,
   ],
 })
 export class AppMaterialModule {}

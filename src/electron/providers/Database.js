@@ -39,6 +39,7 @@ var typeorm_1 = require("typeorm");
 var electron_1 = require("electron");
 var item_schema_1 = require("../../assets/model/item.schema");
 var workspace_schema_1 = require("../../assets/model/workspace.schema");
+var notification_schema_1 = require("../../assets/model/notification.schema");
 var actions;
 (function (actions) {
     actions["GET_ITEMS"] = "db.get-items";
@@ -46,13 +47,16 @@ var actions;
     actions["DELETE_ITEM"] = "db.delete-item";
     actions["ADD_WORKSPACE"] = "db.add-workspace";
     actions["GET_WORKSPACES"] = "db.get-workspaces";
+    actions["GET_NOTIFICATIONS"] = "db.get-notifications";
+    actions["ADD_NOTIFICATION"] = "db.add-notification";
+    actions["UPDATE_NOTIFICATION"] = "db.update-notification";
 })(actions = exports.actions || (exports.actions = {}));
 var Database = /** @class */ (function () {
     function Database() {
     }
     Database.prototype.init = function (win) {
         return __awaiter(this, void 0, void 0, function () {
-            var connection, itemRepo, workspaceRepo;
+            var connection, itemRepo, workspaceRepo, notificationsRepo;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -62,12 +66,13 @@ var Database = /** @class */ (function () {
                             logging: true,
                             logger: 'simple-console',
                             database: './data/database.sqlite',
-                            entities: [item_schema_1.Item, workspace_schema_1.Workspace],
+                            entities: [item_schema_1.Item, workspace_schema_1.Workspace, notification_schema_1.Notification],
                         })];
                     case 1:
                         connection = _a.sent();
                         itemRepo = connection.getRepository(item_schema_1.Item);
                         workspaceRepo = connection.getRepository(workspace_schema_1.Workspace);
+                        notificationsRepo = connection.getRepository(notification_schema_1.Notification);
                         electron_1.ipcMain.on(actions.GET_ITEMS, function (event) {
                             var args = [];
                             for (var _i = 1; _i < arguments.length; _i++) {
@@ -188,6 +193,75 @@ var Database = /** @class */ (function () {
                                 });
                             });
                         });
+                        electron_1.ipcMain.on(actions.GET_NOTIFICATIONS, function (event) {
+                            var args = [];
+                            for (var _i = 1; _i < arguments.length; _i++) {
+                                args[_i - 1] = arguments[_i];
+                            }
+                            return __awaiter(_this, void 0, void 0, function () {
+                                var _a, err_6;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            _b.trys.push([0, 2, , 3]);
+                                            _a = event;
+                                            return [4 /*yield*/, notificationsRepo.find({ order: { id: "DESC" } })];
+                                        case 1:
+                                            _a.returnValue = _b.sent();
+                                            return [3 /*break*/, 3];
+                                        case 2:
+                                            err_6 = _b.sent();
+                                            throw err_6;
+                                        case 3: return [2 /*return*/];
+                                    }
+                                });
+                            });
+                        });
+                        electron_1.ipcMain.on(actions.ADD_NOTIFICATION, function (event, _notification) { return __awaiter(_this, void 0, void 0, function () {
+                            var notification, _a, err_7;
+                            return __generator(this, function (_b) {
+                                switch (_b.label) {
+                                    case 0:
+                                        _b.trys.push([0, 4, , 5]);
+                                        return [4 /*yield*/, notificationsRepo.create(_notification)];
+                                    case 1:
+                                        notification = _b.sent();
+                                        return [4 /*yield*/, notificationsRepo.save(notification)];
+                                    case 2:
+                                        _b.sent();
+                                        _a = event;
+                                        return [4 /*yield*/, notificationsRepo.find({ order: { id: "DESC" } })];
+                                    case 3:
+                                        _a.returnValue = _b.sent();
+                                        return [3 /*break*/, 5];
+                                    case 4:
+                                        err_7 = _b.sent();
+                                        throw err_7;
+                                    case 5: return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                        electron_1.ipcMain.on(actions.UPDATE_NOTIFICATION, function (event, _notification) { return __awaiter(_this, void 0, void 0, function () {
+                            var _a, err_8;
+                            return __generator(this, function (_b) {
+                                switch (_b.label) {
+                                    case 0:
+                                        _b.trys.push([0, 3, , 4]);
+                                        return [4 /*yield*/, notificationsRepo.save(_notification)];
+                                    case 1:
+                                        _b.sent();
+                                        _a = event;
+                                        return [4 /*yield*/, notificationsRepo.find({ order: { id: "DESC" } })];
+                                    case 2:
+                                        _a.returnValue = _b.sent();
+                                        return [3 /*break*/, 4];
+                                    case 3:
+                                        err_8 = _b.sent();
+                                        throw err_8;
+                                    case 4: return [2 /*return*/];
+                                }
+                            });
+                        }); });
                         return [2 /*return*/];
                 }
             });

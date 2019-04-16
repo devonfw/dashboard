@@ -58,10 +58,6 @@ var actions;
 (function (actions) {
     actions["CHECK_VERSION"] = "devon.check-version";
     actions["INSTALL_IDE"] = "devon.install-ide";
-    actions["RUN_SCRIPT"] = "devon.run-script";
-    actions["CREATE_PROJECT"] = "devon.create-project";
-    actions["CREATE_WORKSPACE"] = "devon.create-workspace";
-    actions["OPEN_WORKSPACE"] = "devon.open-workspace";
 })(actions = exports.actions || (exports.actions = {}));
 var events;
 (function (events) {
@@ -77,57 +73,36 @@ var Devon = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                electron_1.ipcMain.on(actions.CHECK_VERSION, function (event) {
-                    var args = [];
-                    for (var _i = 1; _i < arguments.length; _i++) {
-                        args[_i - 1] = arguments[_i];
-                    }
-                    return __awaiter(_this, void 0, void 0, function () {
-                        return __generator(this, function (_a) {
-                            child_process_1.exec('java -jar devcon.jar -v | tail -n 1', function (error, stdout, stderr) {
-                                if (error)
-                                    throw error;
-                                event.returnValue = stdout.split('v.')[1];
-                            });
-                            return [2 /*return*/];
-                        });
-                    });
-                });
                 electron_1.ipcMain.on(actions.INSTALL_IDE, function (event) {
                     var args = [];
                     for (var _i = 1; _i < arguments.length; _i++) {
                         args[_i - 1] = arguments[_i];
                     }
                     return __awaiter(_this, void 0, void 0, function () {
-                        var lastVersion, ideUrl, devonideComp;
+                        var version, ideUrl, devonideComp;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    lastVersion = 'devon-ide-scripts-3.0.0-beta1.tar.gz';
-                                    ideUrl = 'http://repo.maven.apache.org/maven2/com/devonfw/tools/ide/devon-ide-scripts/3.0.0-beta1/devon-ide-scripts-3.0.0-beta1.tar.gz';
-                                    return [4 /*yield*/, fs.existsSync('./devon-projects/')];
-                                case 1:
-                                    if (!!(_a.sent())) return [3 /*break*/, 3];
-                                    return [4 /*yield*/, fs.mkdirSync('./devon-projects/')];
-                                case 2:
-                                    _a.sent();
-                                    _a.label = 3;
-                                case 3:
-                                    devonideComp = fs.createWriteStream("./devon-projects/" + lastVersion);
-                                    win.webContents.send('script-out', 'Downloading!');
+                                    version = '3.0.0-beta5';
+                                    ideUrl = "http://repo.maven.apache.org/maven2/com/devonfw/tools/ide/devon-ide-scripts/" + version + "/devon-ide-scripts-" + version + ".tar.gz";
+                                    if (!fs.existsSync('./data/devon-projects')) {
+                                        fs.mkdirSync('./data/devon-projects');
+                                    }
+                                    devonideComp = fs.createWriteStream("./data/devon-projects/" + version + ".tar.gz");
+                                    win.webContents.send(events.CONSOLE_OUTPUT, "Downloading version " + version + " of Devon-ide");
                                     return [4 /*yield*/, new Promise(function (resolve, reject) {
                                             var request = http.get(ideUrl, function (response) {
                                                 response.pipe(devonideComp);
                                                 devonideComp.on('finish', function () {
                                                     devonideComp.close();
-                                                    win.webContents.send('script-out', 'Dist Downloaded');
+                                                    win.webContents.send(events.CONSOLE_OUTPUT, 'Download finished!');
                                                     resolve();
                                                 });
                                             }).on('error', function (err) {
                                                 return __awaiter(this, void 0, void 0, function () {
                                                     return __generator(this, function (_a) {
                                                         switch (_a.label) {
-                                                            case 0: return [4 /*yield*/, fs.unlinkSync("./devon-projects/" + lastVersion)];
+                                                            case 0: return [4 /*yield*/, fs.unlinkSync("./data/devon-projects/" + version + ".tar.gz")];
                                                             case 1:
                                                                 _a.sent();
                                                                 reject();
@@ -137,73 +112,30 @@ var Devon = /** @class */ (function (_super) {
                                                 });
                                             });
                                         })];
-                                case 4:
+                                case 1:
                                     _a.sent();
-                                    win.webContents.send('script-out', 'Decompressing!');
-                                    return [4 /*yield*/, new Promise(function (resolve, reject) { return targz.decompress({
-                                            src: "./devon-projects/" + lastVersion,
-                                            dest: '/projects'
-                                        }, function (err) {
-                                            if (err) {
-                                                win.webContents.send('script-out', 'Decompressed!');
-                                                reject(err);
-                                            }
-                                            else {
-                                                resolve();
-                                            }
-                                        }); })];
-                                case 5:
-                                    _a.sent();
-                                    win.webContents.send('script-finished', null);
+                                    win.webContents.send(events.CONSOLE_OUTPUT, "Installing Devon-ide " + version + " distribution.");
+                                    targz.decompress({
+                                        src: "./data/devon-projects/" + version + ".tar.gz",
+                                        dest: "./data/devon-projects/"
+                                    }, function (err) {
+                                        win.webContents.send(events.CONSOLE_OUTPUT, 'Finished copying files!');
+                                        // shell.openItem(`${app.getAppPath()}\\data\\devon-projects\\setup.bat`);
+                                        var script = child_process_1.spawn(electron_1.app.getAppPath() + "\\data\\devon-projects\\setup.bat", ['https://myhost.name/myrepo.git']);
+                                        script.stdout.on('data', function (data) {
+                                            console.log(data.toString());
+                                            win.webContents.send(Devon.events.CONSOLE_OUTPUT, data);
+                                        });
+                                        script.on('exit', function () {
+                                            console.log('Process finished!');
+                                            win.webContents.send(Devon.events.PROCESS_FINISHED, null);
+                                        });
+                                        win.webContents.send(events.PROCESS_FINISHED, null);
+                                    });
                                     return [2 /*return*/];
                             }
                         });
                     });
-                });
-                electron_1.ipcMain.on(actions.RUN_SCRIPT, function (event) {
-                    var args = [];
-                    for (var _i = 1; _i < arguments.length; _i++) {
-                        args[_i - 1] = arguments[_i];
-                    }
-                    var script = child_process_1.spawn('java', ['-jar', 'devcon.jar', '-v']);
-                    script.stdout.on('data', function (data) {
-                        console.log(data.toString());
-                        win.webContents.send('script-out', data);
-                    });
-                    script.on('exit', function () {
-                        console.log('Process finished!');
-                        win.webContents.send('script-finished', null);
-                    });
-                });
-                electron_1.ipcMain.on(actions.CREATE_PROJECT, function (event) {
-                    var args = [];
-                    for (var _i = 1; _i < arguments.length; _i++) {
-                        args[_i - 1] = arguments[_i];
-                    }
-                    var script = child_process_1.spawn('java', ['-jar', './devondist/software/devcon/devcon.jar', 'oasp4j', 'create', '-servername', 'TestProject', '-packagename', 'io.devon.app.test', '-groupid', 'io.devon.app', '-version', '1.0-SNAPSHOT', '-dbtype', 'h2']);
-                    script.stdout.on('data', function (data) {
-                        console.log(data.toString());
-                        win.webContents.send('script-out', data);
-                    });
-                    script.on('exit', function () {
-                        console.log('Process finished!');
-                        win.webContents.send('script-finished', null);
-                    });
-                });
-                electron_1.ipcMain.on(actions.CREATE_WORKSPACE, function (event, name) {
-                    var script = child_process_1.spawn('java', ['-jar', './devondist/software/devcon/devcon.jar', 'workspace', 'create', '-workspace', name, '-distribution', './devondist']);
-                    script.stdout.on('data', function (data) {
-                        console.log(data.toString());
-                        win.webContents.send(Devon.events.CONSOLE_OUTPUT, data);
-                    });
-                    script.on('exit', function () {
-                        console.log('Process finished!');
-                        win.webContents.send(Devon.events.PROCESS_FINISHED, null);
-                    });
-                });
-                electron_1.ipcMain.on(actions.OPEN_WORKSPACE, function (event, name) {
-                    // shell.openItem(`devondist\\eclipse-${name}.bat`);
-                    electron_1.shell.openItem(electron_1.app.getAppPath() + "\\devondist\\eclipse-" + name + ".bat");
                 });
                 return [2 /*return*/];
             });
