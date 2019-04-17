@@ -1,0 +1,24 @@
+<div class="defonfw-container">
+  <mat-card class="devonfwrepos-header-card">
+    <mat-card-header>
+      <div mat-card-avatar></div>
+      <mat-card-title>{{repoUser}} repositories:</mat-card-title>
+      <mat-card-subtitle>The Open Source Standard Software Development Platform for state of the art Cloud Native Micro Service and Multi
+      Platform Rich Web Apps, supported by Capgemini.</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+  <div class="spinner" *ngIf="!repos">
+    <div class="dot1"></div>
+    <div class="dot2"></div>
+  </div>
+  <mat-card class="devonfwrepos-repo-card" *ngFor="let repo of repos">
+    <mat-card-header><mat-card-title>{{repo.name}}</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <mat-card-subtitle>{{repo.description}}</mat-card-subtitle>
+      <div class="repo-item-actions">
+        <button mat-raised-button color="primary" (click)="copyURL(repo)">Copy Git URL</button>
+        <button mat-raised-button (click)="openRepo(repo)">Open Repository</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

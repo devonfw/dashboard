@@ -1,0 +1,33 @@
+<mat-card class="settings-card">
+  <mat-card-content>
+    <h2>General Settings</h2>
+    <section>
+      <h3>Theme</h3>
+      <mat-slide-toggle color="primary" [(ngModel)]="darkTheme" (change)="changeTheme($event)">
+        {{theme}}
+      </mat-slide-toggle>
+    </section>
+  </mat-card-content>
+</mat-card>
+<mat-card class="settings-card">
+  <app-terminal [lines]="stdout"></app-terminal>
+</mat-card>
+<mat-card class="settings-card">
+  <mat-card-content>
+    <h2>Devon ide</h2>
+    <section>
+      <h3>Version: 3.0.0-beta5</h3>
+      <button mat-raised-button color="primary">Check for updates</button>
+      <button mat-raised-button>Install / Update VS Code</button>
+      <button mat-raised-button>Install / Update Eclipse</button>
+      <button mat-raised-button>Install / Update intellij IDEA</button>
+    </section>
+  </mat-card-content>
+</mat-card>
+<mat-card class="settings-card">
+  <mat-card-content>
+    <section>
+      <button mat-raised-button color="primary" (click)="addNotification()">Add notification</button>
+    </section>
+  </mat-card-content>
+</mat-card>

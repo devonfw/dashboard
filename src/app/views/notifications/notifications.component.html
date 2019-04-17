@@ -1,0 +1,24 @@
+<mat-toolbar color="info">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Go Back</span>
+</mat-toolbar>
+<div class="notifications-container">
+  <mat-card class="notifications-header-card">
+    <mat-card-header>
+      <mat-card-title><mat-icon>notifications_none</mat-icon> Notifications <mat-icon>notifications_none</mat-icon></mat-card-title>
+    </mat-card-header>
+  </mat-card>
+  <mat-card class="notifications-notification-card" *ngFor="let notification of notifications">
+    <mat-card-header>
+      <mat-card-title><button mat-icon-button [disabled]="notification.read" (click)="readNotification(notification)">
+        <mat-icon aria-label="Mark as read">{{notification.read ? 'drafts' : 'mail'}}</mat-icon>
+      </button>{{notification.title}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-card-subtitle>{{notification.msg}}</mat-card-subtitle>
+      <mat-card-subtitle>{{notification.date.toString().split('GMT')[0]}}</mat-card-subtitle>
+    </mat-card-content>
+  </mat-card>
+</div>
