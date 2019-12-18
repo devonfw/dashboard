@@ -1,0 +1,43 @@
+{
+  "name": "devonfw-dashboard",
+  "productName": "ElectronNext",
+  "version": "1.0.0",
+  "main": "main/out/index.js",
+  "scripts": {
+    "build-main": "tsc -p main",
+    "start-all": "npm run build-main && electron .",
+    "build": "npm run build-main && next build renderer && next export renderer",
+    "dist": "npm run build && electron-builder --dir",
+    "start": "tsc-watch -p main --onSuccess \"npm run start-all\""
+  },
+  "build": {
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "renderer/out",
+        "to": "app/renderer"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.9",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.4",
+    "babel-plugin-styled-components": "^1.10.6",
+    "concurrently": "^5.0.0",
+    "electron": "^6.0.2",
+    "electron-builder": "^21.2.0",
+    "next": "latest",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "tsc-watch": "^4.0.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.7.1",
+    "@material-ui/icons": "^4.5.1",
+    "electron-is-dev": "^1.0.1",
+    "electron-next": "^3.1.5",
+    "isomorphic-unfetch": "^3.0.0"
+  }
+}
