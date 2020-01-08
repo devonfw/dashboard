@@ -85,8 +85,12 @@ export class TerminalService {
 
     @Process('terminal/open-dialog')
     async openDialog() {
-        const res = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-        return res;
+        try {
+            const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+            return new ReturnMessage(false, result);
+        } catch (error) {
+            return new ReturnMessage(true, error);
+        }
     }
 
 

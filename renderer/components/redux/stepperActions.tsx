@@ -5,14 +5,16 @@ export type StepperActionType =
   | 'NEXT_STEP'
   | 'PREVIOUS_STEP'
   | 'SET_STACK'
-  | 'SET_STACK_DATA'
+  | 'SET_STACK_CMD'
+  | 'SET_STACK_CWD'
   | 'NOT_HANDLED';
 
 export interface StepperAction {
   type: StepperActionType;
   payload?: {
     stack?: string;
-    stackData?: INgData
+    stackCmd?: string;
+    stackCwd?: string;
     activeStep?: number;
   };
 }

@@ -5,13 +5,15 @@ import { INgData } from './data.model';
 interface StepperState {
   activeStep: number | undefined;
   stack: string | undefined;
-  stackData: INgData | undefined;
+  stackCmd: string | undefined;
+  stackCwd: string | undefined;
 }
 
 const initialState: StepperState = {
   activeStep: 0,
   stack: '',
-  stackData: undefined,
+  stackCmd: '',
+  stackCwd: '',
 };
 
 const reducer = (state: StepperState = initialState, action: StepperAction) => {
@@ -27,10 +29,17 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
       };
     }
 
-    case 'SET_STACK_DATA': {
+    case 'SET_STACK_CMD': {
       return {
         ...state,
-        stackData: action.payload && action.payload.stackData,
+        stackCmd: action.payload && action.payload.stackCmd,
+      };
+    }
+
+    case 'SET_STACK_CWD': {
+      return {
+        ...state,
+        stackCwd: action.payload && action.payload.stackCwd,
       };
     }
 

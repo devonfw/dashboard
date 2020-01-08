@@ -1,6 +1,6 @@
 import Renderer from './renderer.service';
 
-export class MessageSenderService {
+export default class MessageSenderService {
 
     renderer: Renderer;
     constructor() {
@@ -26,10 +26,15 @@ export class MessageSenderService {
     }
     async sendOpenDialog() {
         const message = await this.renderer.send('terminal/open-dialog')
+        console.log(message)
         return message;
     }
     async sendMvnHelp(currentWorkingDir: string) {
         const message = await this.renderer.send('terminal/mvn-install', currentWorkingDir)
         return message;
+    }
+
+    openIDE(ide: string) {
+        return this.renderer.send('terminal/all-commands', `devon ${ide}`)
     }
 }
