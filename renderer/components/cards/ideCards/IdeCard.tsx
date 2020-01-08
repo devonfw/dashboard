@@ -7,32 +7,40 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles({
   card: {
     maxWidth: 300,
     margin: '0 1rem 1rem 0',
-    paddingTop: '1rem'
+    paddingTop: '1rem',
   },
   media: {
-    height: 120
+    height: 120,
   },
 
   containImg: {
     'background-size': 'contain',
     margin: '0 1rem',
-  }
+  },
+
+  spinner: {
+    height: '28px !important',
+    width: '28px !important',
+  },
 });
 
 interface IdeCardsProps {
   image: string;
   title: string;
   description: string;
+  onClick: () => void;
+  loading: boolean;
 }
 
 export default function IdeCard(props: IdeCardsProps) {
   const classes = useStyles();
-  const { image, title, description } = props;
+  const { image, title, description, onClick, loading } = props;
 
   return (
     <Card className={classes.card}>
@@ -52,9 +60,15 @@ export default function IdeCard(props: IdeCardsProps) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" variant="contained" color="primary">
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={onClick}
+        >
           Open
         </Button>
+        { loading ? <CircularProgress className={classes.spinner} /> : null }
       </CardActions>
     </Card>
   );

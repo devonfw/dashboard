@@ -5,38 +5,46 @@ import NgType from '../first/angular/NgType';
 import JavaType from '../first/java/JavaType';
 import NodeType from '../first/node/NodeType';
 
+
+const ngStep = () => (
+  <>
+    <NgType></NgType>
+    <NgData></NgData>
+  </>
+);
+
+const javaStep = () => (
+  <>
+    <JavaType></JavaType>
+    <NgData></NgData>
+  </>
+);
+
+const nodeStep = () => (
+  <>
+    <NodeType></NodeType>
+    <NgData></NgData>
+  </>
+);
+
 class DataStep extends Component {
 
   getStep = (stack: string) => {
     if (stack == 'ng') {
-      return (
-        <>
-          <NgType></NgType>
-          <NgData></NgData>
-        </>
-      );
+      return ngStep();
     }
 
     if (stack == 'java') {
-      return (
-        <>
-          <JavaType></JavaType>
-          <NgData></NgData>
-        </>
-      );
+      return javaStep();
     }
 
     if (stack == 'node') {
-      return (
-        <>
-          <NodeType></NodeType>
-          <NgData></NgData>
-        </>
-      );
+      return nodeStep();
     }
 
     return null;
   };
+
   render() {
     let stack = this.context.state.stack;
     stack = stack ? stack : '';
