@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import SingleCommandTerminal from '../../terminal/SingleCommandTerminal';
-import { StepperContext } from '../../redux/stepper/stepperContext';
+import { StepperContext } from '../redux/stepperContext';
 
 class ExecutionStep extends Component {
 

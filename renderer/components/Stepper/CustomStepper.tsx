@@ -2,7 +2,7 @@ import { Component, MouseEvent } from 'react';
 import MaterialStepper, { StepObject } from './MaterialStepper';
 import TypeStep from './first/TypeStep';
 import DataStep from './second/DataStep';
-import { StepperContext } from '../redux/stepper/stepperContext';
+import { StepperContext } from './redux/stepperContext';
 import ExecutionStep from './third/ExecutionStep';
 
 class CustomStepper extends Component {
