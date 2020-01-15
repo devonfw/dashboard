@@ -1,4 +1,4 @@
-import ResponsiveDrawer from './ResponsiveDrawer/ResponsiveDrawer';
+import ResponsiveDrawer from '../components/ResponsiveDrawer/ResponsiveDrawer';
 import Head from 'next/head';
 
 const styles = { padding: '2rem 1rem' };

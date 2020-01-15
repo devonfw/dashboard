@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import ResponsiveDrawer from '../components/ResponsiveDrawer/ResponsiveDrawer';
-import SpaceAround from '../components/SpaceAround';
+import SpaceAround from '../hoc/SpaceAround';
 
 export default class Home extends Component {
 

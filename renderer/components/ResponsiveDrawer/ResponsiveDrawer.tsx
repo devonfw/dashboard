@@ -34,7 +34,7 @@ export default function ResponsiveDrawer(props: { children: any, title?: string 
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            {props.title? props.title : 'Responsive drawer'}
+            {props.title? props.title : 'devonfw dashboard'}
           </Typography>
         </Toolbar>
       </AppBar>

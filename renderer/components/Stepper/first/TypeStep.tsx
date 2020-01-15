@@ -18,17 +18,8 @@ const TypeStep = () => {
               justify-content: space-between;
           }
 
-          .type:first-child {
-            padding-right: 0.5rem;
-          }
-
-          .type:last-child {
-            padding-left: 0.5rem;
-          }
-
-          .type:not(:first-child):not(:last-child) {
-              padding-left: 0.5rem;
-              padding-right: 0.5rem;
+          .type:not(:last-child) {
+              padding-right: 1rem;
           }
           `}
       </style>

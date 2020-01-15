@@ -23,11 +23,6 @@ const useStyles = makeStyles({
     'background-size': 'contain',
     margin: '0 1rem',
   },
-
-  spinner: {
-    height: '28px !important',
-    width: '28px !important',
-  },
 });
 
 interface IdeCardsProps {
@@ -68,7 +63,7 @@ export default function IdeCard(props: IdeCardsProps) {
         >
           Open
         </Button>
-        { loading ? <CircularProgress className={classes.spinner} /> : null }
+        { loading ? <CircularProgress size={28} /> : null }
       </CardActions>
     </Card>
   );
