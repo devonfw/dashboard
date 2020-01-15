@@ -1,5 +1,5 @@
 import { useContext, MouseEvent } from 'react';
-import { StepperContext } from '../../../redux/stepper/stepperContext';
+import { StepperContext } from '../../redux/stepperContext';
 import StackCard from '../../../cards/stackCard';
 
 const JavaType = () => {

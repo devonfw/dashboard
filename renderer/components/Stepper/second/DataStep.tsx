@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { StepperContext } from '../../redux/stepper/stepperContext';
+import { StepperContext } from '../redux/stepperContext';
 import STEPS_MAP from './StackSteps'
 
 class DataStep extends Component {
