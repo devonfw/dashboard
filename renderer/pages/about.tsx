@@ -1,8 +1,8 @@
 import {
   Component,
 } from 'react';
-import Layout from '../components/Layout';
-import SpaceAround from '../components/SpaceAround';
+import Layout from '../hoc/Layout';
+import SpaceAround from '../hoc/SpaceAround';
 import Terminal from '../components/terminal/Terminal';
 
 

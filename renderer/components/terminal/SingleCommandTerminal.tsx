@@ -32,6 +32,10 @@ export default class SingleCommandTerminal extends Component<TerminalProps, Term
     this.renderer.sendMultiple('terminal/powershell', this.props.initialCommand, this.props.initialCwd);
   }
 
+  componentWillUnmount() {
+    this.renderer.removeAll();
+  }
+
   handler = (_: any, message: any) => {
     this.setState((prevState: Readonly<TerminalState>, props: Readonly<TerminalProps>) => {
       const cwd = props.initialCwd ? props.initialCwd : ''

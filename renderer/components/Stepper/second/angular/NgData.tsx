@@ -1,6 +1,6 @@
 import { useContext, MouseEvent, useState, ChangeEvent } from 'react';
-import { StepperContext } from '../../../redux/stepperContext';
-import { INgData } from '../../../redux/data.model';
+import { StepperContext } from '../../../redux/stepper/stepperContext';
+import { INgData } from '../../../redux/stepper/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import MessageSenderService from '../../../../services/messageSender.service';
