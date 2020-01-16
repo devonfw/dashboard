@@ -3,6 +3,7 @@ import SearcherView from './Searcher.view';
 import Repository from '../../models/repository.model';
 import GithubService from '../../services/github.service';
 
+const DELAY_TIME = 1000;
 interface SearcherState {
   query?: string;
   repositories?: Repository[];
@@ -35,7 +36,7 @@ export default class Searcher extends Component<{}, SearcherState> {
         this.githubService
           .getRepos(this.state.query)
           .then((repositories) => this.setState({ repositories }));
-      }, 1000);
+      }, DELAY_TIME);
     }
   }
 

@@ -2,7 +2,7 @@ import {
   Component,
 } from 'react';
 import Renderer from '../../services/renderer.service';
-import TerminalUI from './TerminalUI';
+import TerminalUI from './terminal-ui/TerminalUI.controller';
 
 export interface TerminalState {
   previous: Array<{ cwd: string; cmd: string }>;
@@ -52,33 +52,10 @@ export default class SingleCommandTerminal extends Component<TerminalProps, Term
     cwd = cwd ? cwd : '';
 
     return (
-      <>
-        <TerminalUI
-          previous={this.state.previous}
-          cwd={cwd}
-        >
-        </TerminalUI>
-        <style jsx>
-          {`
-            .terminal__input {
-              background-color: inherit;
-              border: none;
-              caret-color: white;
-              color: inherit;
-              width: calc(100% - 1rem);
-            }
-
-            .terminal__input:focus {
-              outline-width: 0;
-            }
-
-            .font--console {
-              font-family: monospace, monospace;
-              font-size: 0.8125rem;
-            }
-          `}
-        </style>
-      </>
+      <TerminalUI
+        previous={this.state.previous}
+        cwd={cwd}
+      ></TerminalUI>
     );
   }
 }

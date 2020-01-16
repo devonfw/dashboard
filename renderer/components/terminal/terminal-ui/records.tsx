@@ -1,21 +1,21 @@
 const recordsStyle: string = `
-    .terminal__command,
-    .terminal__path {
-        width: 100%;
-        overflow-wrap: break-word;
-        white-space: pre-wrap;
-    }
-        .color--green {
-        color: #00ff66;
-    }
+  .terminal__command,
+  .terminal__path {
+      width: 100%;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+  }
+      .color--green {
+      color: #00ff66;
+  }
 
-    .mb-0 {
-        margin-bottom: 0;
-    }
+  .mb-0 {
+      margin-bottom: 0;
+  }
 
-    .mt-0 {
-        margin-top: 0;
-    }
+  .mt-0 {
+      margin-top: 0;
+  }
 `;
 
 interface RecordsProps {

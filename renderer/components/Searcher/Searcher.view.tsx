@@ -1,7 +1,8 @@
+import Repository from '../../models/repository.model';
+import RepositoryCard from '../cards/RepositoryCard';
 import React, { ChangeEvent } from 'react';
 import { TextField } from '@material-ui/core';
-import RepositoryCard from '../cards/RepositoryCard';
-import Repository from '../../models/repository.model';
+import { useSearcherStyles } from './Searcher.styles';
 
 export interface SearcherViewProps {
   query: string;
@@ -10,9 +11,11 @@ export interface SearcherViewProps {
 }
 
 export default function SearcherView(props: SearcherViewProps) {
+  const classes = useSearcherStyles();
+
   return (
     <>
-      <form noValidate autoComplete="off">
+      <form className={classes.root} noValidate autoComplete="off">
         <TextField
           id="outlined-basic"
           label="Search your repository..."

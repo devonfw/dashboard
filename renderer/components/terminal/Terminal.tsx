@@ -4,7 +4,7 @@ import {
   ChangeEvent,
 } from 'react';
 import Renderer from '../../services/renderer.service';
-import TerminalUI from './TerminalUI';
+import TerminalUI from './terminal-ui/TerminalUI.controller';
 
 export interface TerminalState {
   previous: Array<{ cwd: string; cmd: string }>;
