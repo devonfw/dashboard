@@ -1,4 +1,4 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from './node_modules/@material-ui/core/styles';
 
 export const useSearcherStyles = makeStyles((theme: Theme) =>
   createStyles({

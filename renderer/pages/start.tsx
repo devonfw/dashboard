@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import Layout from '../hoc/Layout';
 import SpaceAround from '../hoc/SpaceAround';
-import CustomStepper from '../components/Stepper/CustomStepper';
-import { StepperProvider } from '../components/Stepper/redux/stepperContext';
+import CustomStepper from '../components/stepper/CustomStepper';
+import { StepperProvider } from '../components/stepper/redux/stepperContext';
 
 class HelloElectron extends Component {
 

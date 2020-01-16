@@ -1,4 +1,4 @@
-import ResponsiveDrawer from '../components/ResponsiveDrawer/ResponsiveDrawer';
+import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
 import Head from 'next/head';
 
 const Layout = (props: { children: any }) => (

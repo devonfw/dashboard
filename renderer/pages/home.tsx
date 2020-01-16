@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ResponsiveDrawer from '../components/ResponsiveDrawer/ResponsiveDrawer';
+import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
 import SpaceAround from '../hoc/SpaceAround';
 
 export default class Home extends Component {
