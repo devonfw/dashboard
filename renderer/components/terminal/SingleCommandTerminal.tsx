@@ -1,7 +1,7 @@
 import {
   Component,
 } from 'react';
-import Renderer from '../../services/renderer.service';
+import Renderer from '../../services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
 
 export interface TerminalState {
