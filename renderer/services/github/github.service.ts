@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import Repository from '../models/repository.model';
+import Repository from './models/repository.model';
 
 interface ResType {
   description: string;

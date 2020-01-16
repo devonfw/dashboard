@@ -4,21 +4,9 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Repository from '../../models/repository.model';
-
-/*
-<mat-card-header><mat-card-title>{{repo.name}}</mat-card-title></mat-card-header>
-    <mat-card-content>
-      <mat-card-subtitle>{{repo.description}}</mat-card-subtitle>
-      <div class="repo-item-actions">
-        <button mat-raised-button color="primary" (click)="copyURL(repo)">Copy Git URL</button>
-        <button mat-raised-button (click)="openRepo(repo)">Open Repository</button>
-      </div>
-    </mat-card-content>
-*/
+import Repository from '../../services/github/models/repository.model';
 
 const useStyles = makeStyles({
   card: {
@@ -38,13 +26,6 @@ export default function RepositoryCard(props: Repository) {
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        {/*<CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title="Contemplative Reptile"
-        />*/}
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {name}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import IntellijView from './intellij-card.view';
-import MessageSenderService from '../../../../services/messageSender.service';
+import MessageSenderService from '../../../../services/renderer/messageSender.service';
 
 
 export default function IntellijCard() {

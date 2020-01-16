@@ -1,4 +1,4 @@
-import Repository from '../../models/repository.model';
+import Repository from '../../services/github/models/repository.model';
 import RepositoryCard from '../cards/RepositoryCard';
 import React, { ChangeEvent } from 'react';
 import { TextField } from '@material-ui/core';

@@ -3,7 +3,7 @@ import { StepperContext } from '../../redux/stepperContext';
 import { INgData } from '../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
-import MessageSenderService from '../../../../services/messageSender.service';
+import MessageSenderService from '../../../../services/renderer/messageSender.service';
 import {
   FormControl,
   InputLabel,

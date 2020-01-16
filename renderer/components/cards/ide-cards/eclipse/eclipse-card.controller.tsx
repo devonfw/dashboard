@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import EclipseView from './eclipse-card.view';
-import MessageSenderService from '../../../../services/messageSender.service';
+import MessageSenderService from '../../../../services/renderer/messageSender.service';
 
 
 export default function EclipseCard() {

@@ -1,7 +1,7 @@
 import { Component, ChangeEvent } from 'react';
 import SearcherView from './Searcher.view';
-import Repository from '../../models/repository.model';
-import GithubService from '../../services/github.service';
+import Repository from '../../services/github/models/repository.model';
+import GithubService from '../../services/github/github.service';
 
 const DELAY_TIME = 1000;
 interface SearcherState {
