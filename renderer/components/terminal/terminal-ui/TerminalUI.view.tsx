@@ -1,4 +1,4 @@
-import React, {RefObject} from 'react';
+import React, { RefObject } from 'react';
 import Records from './records';
 import { useTerminalUIStyles } from './TerminalUI.styles';
 
