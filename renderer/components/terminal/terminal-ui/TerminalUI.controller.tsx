@@ -21,7 +21,7 @@ export default class TerminalUI extends Component<TerminalUIProps, TerminalUISta
     this.scrollAnchor = createRef();
   }
 
-  componentDidUpdate(prevProps: TerminalUIProps, prevState: {}, snapshot: any) {
+  componentDidUpdate() {
     this.scrollToBottom();
   }
 

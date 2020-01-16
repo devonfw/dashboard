@@ -2,9 +2,9 @@ import React from 'react';
 import Layout from '../hoc/Layout';
 import SpaceAround from '../hoc/SpaceAround';
 import { makeStyles } from '@material-ui/core/styles';
-import EclipseCard from '../components/cards/ideCards/eclipse/eclipse-card.controller';
-import VSCodeCard from '../components/cards/ideCards/vscode-card/vscode-card.controller';
-import IntellijCard from '../components/cards/ideCards/intellij/intellij-card.controller';
+import EclipseCard from '../components/cards/ide-cards/eclipse/eclipse-card.controller';
+import VSCodeCard from '../components/cards/ide-cards/vscode-card/vscode-card.controller';
+import IntellijCard from '../components/cards/ide-cards/intellij/intellij-card.controller';
 
 const useStyles = makeStyles({
   cardsContainer: {
