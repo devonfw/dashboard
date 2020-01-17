@@ -1,7 +1,7 @@
 import Repository from '../../services/github/models/repository.model';
 import RepositoryCard from '../cards/RepositoryCard';
-import React, { ChangeEvent } from './node_modules/react';
-import { TextField } from './node_modules/@material-ui/core';
+import React, { ChangeEvent } from 'react';
+import { TextField } from '@material-ui/core';
 import { useSearcherStyles } from './Searcher.styles';
 
 export interface SearcherViewProps {

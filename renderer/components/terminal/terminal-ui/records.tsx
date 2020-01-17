@@ -1,38 +1,28 @@
-const recordsStyle: string = `
-  .terminal__command,
-  .terminal__path {
-      width: 100%;
-      overflow-wrap: break-word;
-      white-space: pre-wrap;
-  }
-      .color--green {
-      color: #00ff66;
-  }
-
-  .mb-0 {
-      margin-bottom: 0;
-  }
-
-  .mt-0 {
-      margin-top: 0;
-  }
-`;
+import { useTerminalUIStyles } from './TerminalUI.styles';
 
 interface RecordsProps {
   previous: { cwd: string; cmd: string }[];
 }
 
 const Records = (props: RecordsProps) => {
+  const classes = useTerminalUIStyles();
+  const { terminalPath, terminalCommand, mt0, mb0, colorGreen } = classes;
+
   return (
-    <div className="terminal__previous">
+    <div>
       <pre>Hello this is a terminal</pre>
       {props.previous.map((prevCmd: { cwd: string; cmd: string }) => (
         <>
-          <pre className="terminal__path mb-0 color--green">{prevCmd.cwd}</pre>
-          <pre className="terminal__command mt-0">{prevCmd.cmd}</pre>
+          <pre
+            className={`${terminalPath} ${mb0} ${colorGreen}`}
+          >
+            {prevCmd.cwd}
+          </pre>
+          <pre className={`${terminalCommand} ${mt0}`}>
+            {prevCmd.cmd}
+          </pre>
         </>
       ))}
-      <style jsx>{recordsStyle}</style>
     </div>
   );
 };

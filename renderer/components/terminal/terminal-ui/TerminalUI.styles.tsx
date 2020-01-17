@@ -40,4 +40,12 @@ export const useTerminalUIStyles = makeStyles({
   colorGreen: {
     color: '#00ff66',
   },
+
+  mb0: {
+    marginBottom: 0,
+  },
+
+  mt0: {
+    marginTop: 0,
+  }
 });
