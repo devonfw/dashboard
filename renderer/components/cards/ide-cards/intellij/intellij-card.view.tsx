@@ -1,12 +1,19 @@
 import React from 'react';
 import IdeCard from '../IdeCard';
+import GeneralCardController, {
+  RenderedViewProps,
+} from '../general/general-card.controller';
 
-export interface IntellijViewProps {
-  onClick: () => void;
-  loading: boolean;
+export default function IntellijCard() {
+  return (
+    <GeneralCardController
+      ide={'intellij'}
+      render={IntellijView}
+    />
+  );
 }
 
-export default function IntellijView(props: IntellijViewProps) {
+function IntellijView(props: RenderedViewProps) {
   return (
     <IdeCard
       image="/assets/intellij.png"

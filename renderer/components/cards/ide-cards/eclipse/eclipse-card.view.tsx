@@ -1,13 +1,19 @@
 import React from 'react';
 import IdeCard from '../IdeCard';
+import GeneralCardController, {
+  RenderedViewProps,
+} from '../general/general-card.controller';
 
-export interface EclipseViewProps {
-  onClick: () => void;
-  loading: boolean;
+export default function EclipseCard() {
+  return (
+    <GeneralCardController
+      ide={'eclipse'}
+      render={EclipseView}
+    />
+  );
 }
 
-export default function EclipseView(props: EclipseViewProps) {
-
+function EclipseView(props: RenderedViewProps) {
   return (
     <IdeCard
       image="/assets/eclipse.png"

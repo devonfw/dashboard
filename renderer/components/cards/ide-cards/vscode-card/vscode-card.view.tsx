@@ -1,12 +1,19 @@
 import React from 'react';
 import IdeCard from '../IdeCard';
+import GeneralCardController, {
+  RenderedViewProps,
+} from '../general/general-card.controller';
 
-export interface VSCodeViewProps {
-  onClick: () => void;
-  loading: boolean;
+export default function VSCodeCard() {
+  return (
+    <GeneralCardController
+      ide={'vscode'}
+      render={VSCodeView}
+    />
+  );
 }
 
-export default function VSCodeView(props: VSCodeViewProps) {
+export function VSCodeView(props: RenderedViewProps) {
   return (
     <IdeCard
       image="/assets/vscode.png"
