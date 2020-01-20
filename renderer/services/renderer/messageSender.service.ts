@@ -6,8 +6,8 @@ export default class MessageSenderService {
     constructor() {
         this.renderer = new Renderer()
     }
-    async sendLs() {
-        const message = await this.renderer.send('terminal/ls')
+    async sendLs(cwd?: string) {
+        const message = await this.renderer.send('terminal/ls', cwd)
         return message;
     }
     async sendMkdir(dirname: string) {
