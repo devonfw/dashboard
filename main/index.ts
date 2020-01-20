@@ -10,7 +10,7 @@ import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
 // Other dependencies
-import { TerminalService } from './services/terminal.service';
+import { TerminalService } from './services/terminal/terminal.service';
 
 const terminalService = new TerminalService();
 
