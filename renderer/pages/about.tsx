@@ -2,7 +2,8 @@ import { Component } from 'react';
 import Layout from '../hoc/Layout';
 import SpaceAround from '../hoc/SpaceAround';
 import Terminal from '../components/terminal/Terminal';
-import WorkspaceView from '../components/projects-workspace/workspace.view';
+import CustomTable from '../components/custom-table/custom-table/CustomTable'
+
 
 export default class About extends Component {
   render() {
@@ -11,7 +12,7 @@ export default class About extends Component {
         <SpaceAround>
           <>
             <Terminal></Terminal>
-            <WorkspaceView/>
+            <CustomTable />
           </>
         </SpaceAround>
       </Layout>
