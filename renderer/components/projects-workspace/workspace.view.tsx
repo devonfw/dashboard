@@ -47,14 +47,11 @@ export default function WorkspaceView(props: WorkspaceViewProps) {
           />
         </FormControl>
       </form>
-      <div>
-        my div
-        <ul>
+        {/*<ul>
           {data.projects.map((project: string) => (
             <li>{project}</li>
           ))}
-        </ul>
-      </div>
+        </ul>*/}
     </>
   );
 }
