@@ -27,6 +27,7 @@
     "concurrently": "^5.0.0",
     "electron": "^6.0.2",
     "electron-builder": "^21.2.0",
+    "electron-devtools-installer": "^2.2.4",
     "next": "latest",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
