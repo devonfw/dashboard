@@ -14,13 +14,13 @@ export default function GeneralCardController(
   props: GeneralCardControllerProps,
 ) {
   const messageSender = new MessageSenderService();
-  const [loadingEclipse, setLoadingEclipse] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleEclipse = async () => {
-    setLoadingEclipse(true);
+  const handleOpenIde = async () => {
+    setLoading(true);
     await messageSender.openIDE(props.ide);
-    setLoadingEclipse(false);
+    setLoading(false);
   };
 
-  return props.render({ onClick: handleEclipse, loading: loadingEclipse });
+  return props.render({ onClick: handleOpenIde, loading: loading });
 }

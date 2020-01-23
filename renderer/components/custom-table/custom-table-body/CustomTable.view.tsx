@@ -8,7 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import EnhancedTableToolbar from '../custom-table-toolbar/TableToolbar';
-import EnhancedTableHead from '../TableHead';
+import EnhancedTableHead from '../custom-table-head/TableHead';
 import { Data } from '../models/custom-table.model';
 import { useCustomTableStyles } from './CustomTable.styles';
 
@@ -37,7 +37,7 @@ export default function CustomTableView(props: CustomTableViewProps) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} loadData={loadData}/>
+        <EnhancedTableToolbar loadData={loadData} selected={selected}/>
         <TableContainer>
           <Table
             className={classes.table}
@@ -88,7 +88,7 @@ export default function CustomTableView(props: CustomTableViewProps) {
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
+                  <TableCell />
                 </TableRow>
               )}
             </TableBody>

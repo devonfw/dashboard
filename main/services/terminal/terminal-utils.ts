@@ -1,4 +1,10 @@
-import { CMD_LS, CMD_DIR, Command } from './terminal.service';
+import {
+  CMD_LS,
+  CMD_DIR,
+  Command,
+  CMD_XCOPY,
+  CMD_CP,
+} from './terminal-commands';
 
 const WINDOWS_OS = 'win32';
 
@@ -16,6 +22,17 @@ export function lsOS(): Command {
 
   if (isWin) {
     cmd = CMD_DIR;
+  }
+
+  return cmd;
+}
+
+export function cpOS(): Command {
+  let isWin = process.platform === WINDOWS_OS;
+  let cmd = CMD_CP;
+
+  if (isWin) {
+    cmd = CMD_XCOPY;
   }
 
   return cmd;

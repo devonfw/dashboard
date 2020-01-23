@@ -1,25 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import clsx from 'clsx';
 import { useToolbarStyles } from './TableToolbar.styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import MessageSenderService from '../../../services/renderer/messageSender.service';
 import { createData, Data } from '../models/custom-table.model';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
 
+const SOURCE_LOCATION: { [key: string]: string } = {
+  local: 'path',
+  git: 'url',
+};
+
 interface EnhancedTableToolbarProps {
-  numSelected: number;
+  selected: string[];
   loadData: (data: Data[]) => void;
 }
 
 export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const classes = useToolbarStyles();
   const messageSender: MessageSenderService = new MessageSenderService();
-  const { numSelected, loadData } = props;
+  const { selected, loadData } = props;
   const [workspace, setWorkspace] = useState<string>('');
+  const [source, setSource] = useState('local');
+  const [sourceLocation, setSourceLocation] = useState<string>('');
+  const numSelected = selected.length;
+
+  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const sourceOpt = event.target.value as string;
+    setSource(sourceOpt);
+  };
 
   const sendLoadProjects = (dirPath: string) => {
     messageSender
@@ -29,12 +44,26 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       );
   };
 
-  const handleSendOpenDialog = async () => {
+  const handleOpenSource = async () => {
+    const message = await messageSender.sendOpenDialog();
+    if (!message['canceled']) {
+      const dirPath = message['filePaths'][0];
+      setSourceLocation(dirPath);
+      sendLoadProjects(dirPath);
+    }
+  };
+
+  const handleOpenWorkspace = async () => {
     const message = await messageSender.sendOpenDialog();
     if (!message['canceled']) {
       const dirPath = message['filePaths'][0];
       setWorkspace(dirPath);
-      sendLoadProjects(dirPath);
+    }
+  };
+
+  const handleAddToWorkspace = () => {
+    if (workspace && sourceLocation) {
+      messageSender.sendCopy(sourceLocation, selected, workspace);
     }
   };
 
@@ -55,21 +84,50 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle">
           <form>
+            <div className={classes.sourceContainer}>
+              <FormControl className={classes.input}>
+                <InputLabel htmlFor="input-workspace">
+                  Projects {SOURCE_LOCATION[source]}
+                </InputLabel>
+                <Input
+                  id="input-workspace"
+                  value={sourceLocation}
+                  onClick={handleOpenSource}
+                />
+              </FormControl>
+              <FormControl className={classes.formControlSelect}>
+                <InputLabel id="select-source-label">Source</InputLabel>
+                <Select
+                  labelId="select-routing-label"
+                  id="select-routing"
+                  value={source}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={'local'}>Local</MenuItem>
+                  <MenuItem value={'git'}>Github</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
             <FormControl className={classes.input}>
-              <InputLabel htmlFor="input-workspace">Workspace</InputLabel>
+              <InputLabel htmlFor="input-destination">
+                Destination workspace
+              </InputLabel>
               <Input
-                id="input-workspace"
+                id="input-destination"
                 value={workspace}
-                onClick={handleSendOpenDialog}
+                onClick={handleOpenWorkspace}
               />
             </FormControl>
           </form>
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
+        <Tooltip title="Add to workspace">
+          <IconButton
+            aria-label="Add to workspace"
+            onClick={handleAddToWorkspace}
+          >
+            <LibraryAddIcon />
           </IconButton>
         </Tooltip>
       ) : null}

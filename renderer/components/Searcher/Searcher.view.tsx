@@ -1,5 +1,5 @@
 import Repository from '../../services/github/models/repository.model';
-import RepositoryCard from '../cards/RepositoryCard';
+import RepositoryCard from '../cards/repository-card/RepositoryCard';
 import React, { ChangeEvent } from 'react';
 import { TextField } from '@material-ui/core';
 import { useSearcherStyles } from './Searcher.styles';
