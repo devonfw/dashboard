@@ -1,5 +1,5 @@
 import React from 'react';
-import { Data } from './models/custom-table.model';
+import { Data } from '../models/custom-table.model';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';

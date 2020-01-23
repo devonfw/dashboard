@@ -28,5 +28,16 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
     input: {
       width: '100%',
     },
+
+    sourceContainer: {
+      boxSizing: 'border-box',
+      display: 'flex',
+      width: '100%',
+    },
+
+    formControlSelect: {
+      marginLeft: theme.spacing(1),
+      minWidth: 200,
+    }
   }),
 );

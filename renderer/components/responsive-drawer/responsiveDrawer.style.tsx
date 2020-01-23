@@ -34,6 +34,10 @@ const drawerStyle = (theme: Theme) =>
       flexGrow: 1,
       'min-height': '100vh',
     },
+
+    fxEnd: {
+      marginLeft: 'auto',
+    }
   });
 
 const responsiveDrawerStyle = makeStyles(drawerStyle)

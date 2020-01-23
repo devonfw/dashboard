@@ -1,4 +1,4 @@
-import NextLink from './NextLink';
+import NextLink from '../navigation/nextjs-link/NextLink';
 import Divider from '@material-ui/core/Divider';
 import DesktopWindowsOutlinedIcon from '@material-ui/icons/DesktopWindowsOutlined';
 import List from '@material-ui/core/List';

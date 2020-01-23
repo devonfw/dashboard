@@ -2,32 +2,7 @@ import { spawn, exec, ChildProcessWithoutNullStreams } from 'child_process';
 import Process from '../../decorators/process';
 import { dialog } from 'electron';
 import { dirStringToArray, lsOS, getOptions } from './terminal-utils';
-
-export class Command {
-  command: string;
-  arguments: string[];
-
-  constructor(command: string, args: string[] = []) {
-    this.command = command;
-    this.arguments = args;
-  }
-
-  toString() {
-    return `${this.command} ${this.arguments.join(' ')}`;
-  }
-}
-
-export const CMD_LS: Command = new Command('ls', ['-lh']);
-
-export const CMD_DIR: Command = new Command('cmd', ['/r', 'dir', '/b', '/d']);
-
-export const CMD_MKDIR: Command = new Command('mkdir');
-
-export const CMD_RMDIR: Command = new Command('rmdir');
-
-export const CMD_PWD: Command = new Command('pwd');
-
-export const POWERSHELL: Command = new Command('cmd.exe', ['mvn', '--help']);
+import { Command, CMD_MKDIR, CMD_RMDIR, CMD_PWD } from './terminal-commands';
 
 const MAX_BUFFER = 1024 * 500; /* 500 KB */
 
