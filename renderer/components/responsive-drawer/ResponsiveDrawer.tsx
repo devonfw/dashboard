@@ -10,8 +10,7 @@ import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import NotificationsNone from '@material-ui/icons/NotificationsNone';
 import Navigation from './navigation/Navigation';
-import ConfirmationDialog from '../notifications/Notifications'
-
+import NotificationsDialog from '../notifications/Notifications';
 
 export default function ResponsiveDrawer(props: {
   children: any;
@@ -19,6 +18,14 @@ export default function ResponsiveDrawer(props: {
 }) {
   const classes = responsiveDrawerStyle();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleReadNotifications = () => {
+    setOpen((prevState) => {
+      const opened = prevState;
+      return !opened;
+    });
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -42,14 +49,17 @@ export default function ResponsiveDrawer(props: {
             {props.title ? props.title : 'devonfw dashboard'}
           </Typography>
           <Tooltip title="Notifications" className={classes.fxEnd}>
-            <IconButton aria-label="Notifications">
+            <IconButton
+              aria-label="Notifications"
+              onClick={handleReadNotifications}
+            >
               <Badge color="secondary" badgeContent={1}>
                 <NotificationsNone />
               </Badge>
             </IconButton>
           </Tooltip>
         </Toolbar>
-        <ConfirmationDialog />
+        <NotificationsDialog open={open} />
       </AppBar>
       <Navigation
         classes={classes}

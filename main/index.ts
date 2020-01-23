@@ -11,6 +11,11 @@ import prepareNext from 'electron-next';
 
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+
+installExtension(REACT_DEVELOPER_TOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
 
 const terminalService = new TerminalService();
 
