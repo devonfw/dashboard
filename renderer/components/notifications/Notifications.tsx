@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
+import { NotificationsContext } from './redux/NotificationsContext';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,30 +43,26 @@ export interface NotificationsDialogProps {
 
 export default function NotificationsDialog(props: NotificationsDialogProps) {
   const classes = useStyles();
+  const { state } = useContext(NotificationsContext);
+  const notifications: string[] = state.notifications || [];
 
   return (
     <>
       {props.open ? (
         <List component="div" role="list" className={classes.notification}>
-          <ListItem button divider disabled role="listitem">
-            <ListItemText primary="Interruptions" />
-          </ListItem>
-          <ListItem
-            button
-            divider
-            aria-haspopup="true"
-            aria-controls="ringtone-menu"
-            aria-label="phone ringtone"
-            role="listitem"
-          >
-            <ListItemText primary="Phone ringtone" secondary={'value'} />
-          </ListItem>
-          <ListItem button divider disabled role="listitem">
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem>
+          {notifications
+            ? notifications.map((notification: string) => {
+                return (
+                  <ListItem divider role="listitem">
+                    <ListItemText
+                      primary={notification}
+                      secondary="something"
+                    />
+                    <IconButton><CloseIcon /></IconButton>
+                  </ListItem>
+                );
+              })
+            : null}
         </List>
       ) : null}
     </>
