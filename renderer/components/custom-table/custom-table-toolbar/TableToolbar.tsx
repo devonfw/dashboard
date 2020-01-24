@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, useContext } from 'react';
 import clsx from 'clsx';
 import { useToolbarStyles } from './TableToolbar.styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,6 +10,7 @@ import Select from '@material-ui/core/Select';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import MessageSenderService from '../../../services/renderer/messageSender.service';
 import { createData, Data } from '../models/custom-table.model';
+import { NotificationsContext } from '../../notifications/redux/NotificationsContext';
 import { FormControl, InputLabel, Input } from '@material-ui/core';
 
 const SOURCE_LOCATION: { [key: string]: string } = {
@@ -25,11 +26,21 @@ interface EnhancedTableToolbarProps {
 export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const classes = useToolbarStyles();
   const messageSender: MessageSenderService = new MessageSenderService();
+  const { dispatch } = useContext(NotificationsContext);
   const { selected, loadData } = props;
   const [workspace, setWorkspace] = useState<string>('');
   const [source, setSource] = useState('local');
   const [sourceLocation, setSourceLocation] = useState<string>('');
   const numSelected = selected.length;
+
+  const copyFinishedMessage = () => {
+    
+    dispatch({
+      type: 'ADD_NOTIFICATION',
+      payload: { notification: 'Finished copying' },
+    });
+    console.log('copy finished')
+  };
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
     const sourceOpt = event.target.value as string;
@@ -63,7 +74,9 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
   const handleAddToWorkspace = () => {
     if (workspace && sourceLocation) {
-      messageSender.sendCopy(sourceLocation, selected, workspace);
+      messageSender.sendCopy(sourceLocation, selected, workspace).then(() => {
+        copyFinishedMessage();
+      });
     }
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createData, Data } from '../models/custom-table.model';
+import { Data } from '../models/custom-table.model';
 import CustomTableView from './CustomTable.view';
 
 export default function CustomTable() {

@@ -2,25 +2,29 @@ import * as React from 'react';
 import { NotificationsAction } from './NotificationsActions';
 
 interface NotificationsState {
-  notifications: string[] | undefined;
+  notifications: string[];
 }
 
 const initialState: NotificationsState = {
-  notifications: [],
+  notifications: [
+    'Eclipse load complete!',
+    'Finished copying projects to workspace',
+  ],
 };
 
 const reducer = (
   state: NotificationsState = initialState,
   action: NotificationsAction,
 ) => {
+  console.log('dispatched add notif')
   switch (action.type) {
     case 'ADD_NOTIFICATION': {
       return {
-        ...state,
+        notifications: [...state.notifications, action.payload.notification],
       };
     }
 
-    case 'REMOVE_NOTIFICATION': {
+    case 'DELETE_NOTIFICATION': {
       return {
         ...state,
       };
@@ -39,11 +43,14 @@ export const NotificationsContext = React.createContext<INotificationsContext>({
   state: initialState,
   dispatch: () => {},
 });
+
 export const NotificationsConsumer = NotificationsContext.Consumer;
 
-export function NotificationProvider(props: any) {
+export function NotificationsProvider(props: any) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
+  console.log('provider value')
+  console.log(value)
   return (
     <NotificationsContext.Provider value={value}>
       {props.children}

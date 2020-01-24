@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StepperAction } from './stepperActions';
-import { INgData } from './data.model';
 
 interface StepperState {
   activeStep: number | undefined;
@@ -76,7 +75,8 @@ export const StepperConsumer = StepperContext.Consumer;
 export function StepperProvider(props: any) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
-  console.log(value);
+  console.log('provider value stepper')
+  console.log(value)
   return (
     <StepperContext.Provider value={value}>
       {props.children}
