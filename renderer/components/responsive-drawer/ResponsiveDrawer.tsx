@@ -35,7 +35,6 @@ export default function ResponsiveDrawer(props: {
     <NotificationsProvider>
       <div className={classes.root}>
         <CssBaseline />
-
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <IconButton
