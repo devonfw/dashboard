@@ -1,3 +1,5 @@
+import { devonfwIDE } from './devonfwIDE';
+
 export class devonfwDashboard {
   public devonfwIDEs: devonfwIDE[];
 

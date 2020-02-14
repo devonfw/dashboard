@@ -3,7 +3,6 @@ import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
 import SpaceAround from '../hoc/SpaceAround';
 
 export default class Home extends Component {
-
   render() {
     return (
       <ResponsiveDrawer>
