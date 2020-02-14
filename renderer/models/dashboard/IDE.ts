@@ -7,3 +7,9 @@ export class IDE {
       this.logo = logo;
     }
 }
+
+export class NullIDE extends IDE {
+  constructor() {
+    super('vscode', 'vscode/img');
+  }
+}
