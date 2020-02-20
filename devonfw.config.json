@@ -1,0 +1,9 @@
+{
+    "distributions": [
+        {
+            "basepath": "C:\\Proyectos\\devonfw-dashboard-fork",
+            "commands": "C:\\Proyectos\\devonfw-dashboard-fork\\scripts\\commands",
+            "workspaces": "C:\\Proyectos\\devonfw-dashboard-fork\\workspaces"
+        }
+    ]
+}

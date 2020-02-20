@@ -12,12 +12,11 @@ import prepareNext from 'electron-next';
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
 
 installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))
     .catch((err) => console.log('An error occurred: ', err));
-
-const terminalService = new TerminalService();
 
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -50,16 +49,12 @@ app.on('ready', async () => {
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit);
 
-terminalService.ls();
-terminalService.mkdir(null);
-terminalService.rmdir(null);
-terminalService.pwd();
-terminalService.openDialog();
-terminalService.mvnInstall();
-terminalService.allCommands(null, null);
 
-/*  */
 
+
+/* Enable services */
+
+/* terminal powershell */
 const eventHandler = (event: IpcMainEvent, ...eventArgs: any[]) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
@@ -84,4 +79,22 @@ const eventHandler = (event: IpcMainEvent, ...eventArgs: any[]) => {
   terminal.stdin.write(command + "\n")
 }
 
+/* terminal service */
+const terminalService = new TerminalService();
+terminalService.ls();
+terminalService.mkdir(null);
+terminalService.rmdir(null);
+terminalService.pwd();
+terminalService.openDialog();
+terminalService.mvnInstall();
+terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
+
+/* command retriever service */
+const commandRetrieverService = new CommandRetrieverService();
+commandRetrieverService.getCommands();
+
+
+
+
+
