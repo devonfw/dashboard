@@ -1,6 +1,6 @@
 //<iframe [src]="url | safe" width="100%" height="100%"></iframe>
 import React from 'react';
-import Layout from '../components/Layout';
+import Layout from '../hoc/Layout';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({

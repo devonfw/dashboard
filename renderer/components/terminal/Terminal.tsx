@@ -3,8 +3,8 @@ import {
   KeyboardEvent,
   ChangeEvent,
 } from 'react';
-import Renderer from '../../services/renderer.service';
-import TerminalUI from './TerminalUI';
+import Renderer from '../../services/renderer/renderer.service';
+import TerminalUI from './terminal-ui/TerminalUI.controller';
 
 export interface TerminalState {
   previous: Array<{ cwd: string; cmd: string }>;
@@ -51,7 +51,6 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
       let message: any;
 
       try {
-        console.log('before send')
         message = await this.renderer.send(
           'terminal/all-commands',
           inputClean,

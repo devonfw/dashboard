@@ -3,7 +3,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import { StepperContext } from '../redux/stepperContext';
+import { StepperContext } from './redux/stepperContext';
 export interface StepObject {
   title: string;
   content: string;

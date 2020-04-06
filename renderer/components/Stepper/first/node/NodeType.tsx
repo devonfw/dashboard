@@ -1,6 +1,6 @@
 import { useContext, MouseEvent } from 'react';
-import { StepperContext } from '../../../redux/stepperContext';
-import StackCard from '../../../cards/stackCard';
+import { StepperContext } from '../../redux/stepperContext';
+import StackCard from '../../../cards/stack-card/StackCard';
 
 const NodeType = () => {
   const { dispatch } = useContext(StepperContext);

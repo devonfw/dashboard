@@ -1,8 +1,9 @@
 import { useContext, MouseEvent, useState, ChangeEvent } from 'react';
-import { StepperContext } from '../../../redux/stepperContext';
-import { INgData } from '../../../redux/data.model';
+import { StepperContext } from '../../redux/stepperContext';
+import { INgData } from '../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
+import MessageSenderService from '../../../../services/renderer/messageSender.service';
 import {
   FormControl,
   InputLabel,
@@ -19,17 +20,19 @@ const useStyles = makeStyles((theme: Theme) =>
       '& > *': {
         marginLeft: theme.spacing(2),
       },
-      'display': 'flex',
+      display: 'flex',
       'flex-direction': 'column',
     },
   }),
 );
 
 const NgData = () => {
-  const classes = useStyles();
+  const messageSender: MessageSenderService = new MessageSenderService();
 
+  const classes = useStyles();
   const { dispatch } = useContext(StepperContext);
   const [data, setData] = useState<INgData>({
+    cwd: '',
     name: 'project-default',
     routing: true,
     styling: 'scss',
@@ -39,8 +42,17 @@ const NgData = () => {
     const ngData: INgData = data;
 
     dispatch({
-      type: 'SET_STACK_DATA',
-      payload: { stackData: ngData },
+      type: 'SET_STACK_CMD',
+      payload: {
+        stackCmd: `devon ng new ${ngData.name} --routing=${ngData.routing} --style=${ngData.styling} --interactive=false`,
+      },
+    });
+
+    dispatch({
+      type: 'SET_STACK_CWD',
+      payload: {
+        stackCwd: `${ngData.cwd}`,
+      },
     });
 
     dispatch({
@@ -49,8 +61,10 @@ const NgData = () => {
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const targetVal = event.target.value;
+
     setData((prevState: INgData) => {
-      return { ...prevState, name: event.target.value };
+      return { ...prevState, name: targetVal };
     });
   };
 
@@ -66,12 +80,30 @@ const NgData = () => {
     });
   };
 
+  const handleSendOpenDialog = async () => {
+    const message = await messageSender.sendOpenDialog();
+    if (!message['canceled']) {
+      setData((prevState: INgData) => {
+        return { ...prevState, cwd: message['filePaths'] };
+      });
+    }
+  };
+
   const step = (
     <form className={classes.root} noValidate autoComplete="off">
       <FormControl>
-        <InputLabel htmlFor="component-simple">Project name</InputLabel>
-        <Input id="component-simple" value={name} onChange={handleChange} />
+        <InputLabel htmlFor="input-cwd">Destination folder</InputLabel>
+        <Input id="input-cwd" value={data.cwd} onClick={handleSendOpenDialog} />
       </FormControl>
+      <FormControl>
+        <InputLabel htmlFor="component-simple">Project name</InputLabel>
+        <Input
+          id="component-simple"
+          value={data.name}
+          onChange={handleChange}
+        />
+      </FormControl>
+
       <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
       <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
       <Button
