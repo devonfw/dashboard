@@ -2,7 +2,7 @@
   "name": "devonfw-dashboard",
   "productName": "ElectronNext",
   "version": "1.0.0",
-  "main": "main/out/main/index.js",
+  "main": "main/out/index.js",
   "scripts": {
     "build-main": "tsc -p main",
     "start-all": "npm run build-main && electron .",
