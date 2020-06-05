@@ -5,7 +5,7 @@ import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
 
 // Packages
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
@@ -61,6 +61,9 @@ const downloadHandler = (event, item, webContents) => {
   })
   item.once('done', (event, state) => {
     mainWindow.webContents.send('download completed', state);
+    if (state === 'completed') {
+      shell.showItemInFolder(item.getSavePath());
+    }
   })
 };
 
