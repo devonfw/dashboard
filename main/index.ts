@@ -5,7 +5,7 @@ import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
 
 // Packages
-import { BrowserWindow, app, ipcMain } from 'electron';
+import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
@@ -14,11 +14,12 @@ import { TerminalService } from './services/terminal/terminal.service';
 import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
 import { devonfwConfig } from './devonfw.config';
 
+let mainWindow;
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer');
 
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     webPreferences: {
@@ -40,10 +41,31 @@ app.on('ready', async () => {
       });
 
   mainWindow.loadURL(url);
+
+  mainWindow.webContents.session.on('will-download', downloadHandler)
 });
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', app.quit);
+
+/* Manage all downloads */
+const downloadHandler = (event, item, webContents) => {
+  item.on('updated', (event, state) => {
+    if (state === 'interrupted') {
+      item.cancel();
+    } else if (state === 'progressing') {
+      if (!item.isPaused()) {
+        mainWindow.webContents.send('download progress', {total: item.getTotalBytes(), received: item.getReceivedBytes()});
+      }
+    }
+  })
+  item.once('done', (event, state) => {
+    mainWindow.webContents.send('download completed', state);
+    if (state === 'completed') {
+      shell.showItemInFolder(item.getSavePath());
+    }
+  })
+};
 
 /* Enable services */
 
