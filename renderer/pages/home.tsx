@@ -87,17 +87,17 @@ const useGridStyles = makeStyles({
 });
 
 export default function Home() {
-  const projects = [{
+  const allProjects = [{
     name: 'Project Created',
-    count: 15
+    count: 0
   },
   {
     name: 'Completed',
-    count: 11
+    count: 0
   },
   {
     name: 'Published',
-    count: 15
+    count: 0
   }];
 
   const classes = useStyles();
@@ -108,6 +108,7 @@ export default function Home() {
   const [downloadProgress, setDownloadProgress] = useState(false);
   const [downloadStatusMsg, setDownloadStatusMsg] = useState('');
   const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState('error.main');
+  const [projects, setProjects] = useState([]);
 
   let spinner = downloadProgress ?
     <CircularProgress variant='static' className={classes.spinner} value={received / total * 100}></CircularProgress>
@@ -116,6 +117,7 @@ export default function Home() {
   const downloadUrl = 'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
   useEffect(() => {
+    setProjects(allProjects);
     global.ipcRenderer.on('download progress', (event: IpcRendererEvent, arg: { total: number, received: number }) => {
       setTotal(arg.total);
       setReceived(arg.received);
@@ -132,55 +134,54 @@ export default function Home() {
       }
     });
   }, []);
-
   return (
     <ResponsiveDrawer>
       <SpaceAround>
         <div className={gridClasses.root}>
           <div className={gridClasses.dashboardInfo}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <div className={gridClasses.cardRoot}>
-                    <Card>
-                      <CardMedia
-                        className={gridClasses.cardCover}
-                        image="/assets/person.png"
-                        title="admin"
-                      />
-                    </Card>
-                  </div>
-                </Grid>
-                <Grid item xs={6}>
-                  <div>
-                    <h1>
-                      Welcome to devonfw-ide!
-                        </h1>
-                    <p>
-                      The devonfw-ide is a fantastic tool to automatically download, install, setup and update the IDE (integrated development environment) of your software development projects.
-                        </p>
-                    <p>
-                      For further details visit the following links:
-                        </p>
-                    <ul>
-                      <li><a>features &amp; motivation</a></li>
-                      <li><a>download &amp; setup</a></li>
-                      <li><a>usage</a></li>
-                    </ul>
-                    <Button variant="contained" color="primary" disabled={downloadProgress} size="large" className={classes.button} href={downloadUrl}>
-                      Download latest version
-                        </Button>
-                    {spinner}
-                    <Box component="p" color={downloadStatusMsgColor}>{downloadStatusMsg}</Box>
-                  </div>
-                </Grid>
-                <Grid item xs={6}></Grid>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <div className={gridClasses.cardRoot}>
+                  <Card>
+                    <CardMedia
+                      className={gridClasses.cardCover}
+                      image="/assets/person.png"
+                      title="admin"
+                    />
+                  </Card>
+                </div>
               </Grid>
-              </div>
-              <div className={gridClasses.projectInfo}>
-                <Grid container spacing={3}>
-                  <ProjectDetails projects={projects} />
-                </Grid>
-              </div>
+              <Grid item xs={6}>
+                <div style={{ fontSize: '16px' }}>
+                  <h1>
+                    Welcome to devonfw-ide!
+                        </h1>
+                  <p>
+                    The devonfw-ide is a fantastic tool to automatically download, install, setup and update the IDE (integrated development environment) of your software development projects.
+                        </p>
+                  <p>
+                    For further details visit the following links:
+                        </p>
+                  <ul style={{ fontWeight: 'bold' }}>
+                    <li><a>features &amp; motivation</a></li>
+                    <li><a>download &amp; setup</a></li>
+                    <li><a>usage</a></li>
+                  </ul>
+                  <Button variant="contained" color="primary" disabled={downloadProgress} size="large" className={classes.button} href={downloadUrl}>
+                    Download latest version
+                        </Button>
+                  {spinner}
+                  <Box component="p" color={downloadStatusMsgColor}>{downloadStatusMsg}</Box>
+                </div>
+              </Grid>
+              <Grid item xs={6}></Grid>
+            </Grid>
+          </div>
+          <div className={gridClasses.projectInfo}>
+            <Grid container spacing={3}>
+              <ProjectDetails projects={projects} />
+            </Grid>
+          </div>
         </div>
       </SpaceAround>
     </ResponsiveDrawer >
