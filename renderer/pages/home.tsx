@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import { IpcRendererEvent } from 'electron';
-import ProjectDetails from '../components/user-dashboard-projects/ProjectDetails'
+import ViewDashboardProjectsDetail from '../components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
 
 const useStyles = makeStyles({
   spinner: {
@@ -179,7 +179,7 @@ export default function Home() {
           </div>
           <div className={gridClasses.projectInfo}>
             <Grid container spacing={3}>
-              <ProjectDetails projects={projects} />
+              <ViewDashboardProjectsDetail projects={projects} />
             </Grid>
           </div>
         </div>

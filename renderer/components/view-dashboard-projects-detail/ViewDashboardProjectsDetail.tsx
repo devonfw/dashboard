@@ -32,7 +32,7 @@ interface Projects {
 }
 
 
-export default function ProjectDetails(props: { projects: Projects[] }) {
+export default function ViewDashboardProjectsDetail(props: { projects: Projects[] }) {
     const classes = useStyles();
     const projects = props.projects;
     return (

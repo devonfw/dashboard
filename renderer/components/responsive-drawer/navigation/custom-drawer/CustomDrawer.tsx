@@ -49,11 +49,11 @@ const CustomDrawer = (props: { classes: any }) => {
           </ListItemIcon>
           <ListItemText primary='Home' />
         </ListItem>
-        <ListItem button component={NextLink} href="/start">
+        <ListItem button component={NextLink} href="/projects">
           <ListItemIcon>
             <CreateNewFolderOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='New project' />
+          <ListItemText primary='Projects' />
         </ListItem>
         <ListItem button component={NextLink} href="/ides">
           <ListItemIcon>
