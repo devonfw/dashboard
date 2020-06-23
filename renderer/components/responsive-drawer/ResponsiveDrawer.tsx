@@ -11,6 +11,9 @@ import AlertIcon from '../notifications/alert-icon/AlertIcon';
 import Navigation from './navigation/Navigation';
 import NotificationsDialog from '../notifications/Notifications';
 import { NotificationsProvider } from '../notifications/redux/NotificationsContext';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 
 export default function ResponsiveDrawer(props: {
   children: any;
@@ -19,6 +22,7 @@ export default function ResponsiveDrawer(props: {
   const classes = responsiveDrawerStyle();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+
 
   const handleReadNotifications = () => {
     setOpen((prevState) => {
@@ -46,11 +50,24 @@ export default function ResponsiveDrawer(props: {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
-              {props.title ? props.title : 'devonfw dashboard'}
-            </Typography>
+            <div className={classes.cardDetails}>
+              <Card className={classes.cardRoot}>
+                <CardMedia
+                  className={classes.cardCover}
+                  image="/assets/devon.png"
+                  title="Devon"
+                />
+                <CardContent className={classes.cardContent}>
+                  <Typography variant="h6" noWrap>
+                    {props.title ? props.title : 'Devonfw Dashboard'}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </div>
+
             <Tooltip title="Notifications" className={classes.fxEnd}>
               <IconButton
+                color="inherit"
                 aria-label="Notifications"
                 onClick={handleReadNotifications}
               >

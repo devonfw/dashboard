@@ -1,11 +1,30 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const drawerStyle = (theme: Theme) =>
-
   createStyles({
     root: {
       display: 'flex',
+      backgroundColor: '#4CBDEC',
+      color: '#FFFFFF',
+      maxWidth: '1500px',
+      margin: '0 auto',
+      '& .MuiDrawer-paper': {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      },
+      '& .MuiDrawer-root': {
+        height: '100%'
+      },
+      '& .MuiAppBar-root': {
+        maxWidth: '1500px',
+        margin: '0 auto'
+      },
+      '& .MuiAppBar-positionFixed': {
+        right: 'auto'
+      }
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -14,11 +33,9 @@ const drawerStyle = (theme: Theme) =>
       },
     },
     appBar: {
-      [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
-      
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#FFFFFF',
+      backgroundColor: '#0075B3'
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -29,14 +46,95 @@ const drawerStyle = (theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
+      paddingTop: '2em'
     },
     content: {
       flexGrow: 1,
       'min-height': '100vh',
+      backgroundColor: '#4CBDEC',
     },
-
     fxEnd: {
       marginLeft: 'auto',
+    },
+    cardRoot: {
+      display: 'flex',
+      backgroundColor: 'none',
+    },
+    cardDetails: {
+      display: 'flex',
+      flexDirection: 'column',
+      color: '#FFFFFF',
+      '& .MuiPaper-root': {
+        backgroundColor: '#0075B3'
+      },
+      '& .MuiPaper-elevation1': {
+        boxShadow: 'none'
+      }
+    },
+    cardContent: {
+      padding: 19,
+      marginLeft: '3.2em',
+      backgroundColor: 'none',
+      '& h6': {
+        color: '#FFFFFF'
+      }
+    },
+    cardCover: {
+      width: 169,
+      height: 32,
+      position: 'relative',
+      top: 17,
+    },
+    customDrawerContainer: {
+      '& .MuiPaper-elevation1': {
+        boxShadow: 'none'
+      },
+      '& .MuiPaper-root': {
+        backgroundColor: 'transparent'
+      }
+    },
+    customDrawerRoot: {
+      display: 'flex',
+      flex: '1 0 auto'
+    },
+    customDrawerContent: {
+      flex: '1 0 auto'
+    },
+    customDrawerCover: {
+      width: 94,
+      height: 94
+    },
+    user: {
+      display: 'flex',
+      flexDirection: 'column',
+      fontSize: '14px'
+    },
+    updateAction: {
+      '& button': {
+        marginTop: '16px',
+        backgroundColor: '#0075B3',
+        color: '#FFFFFF'
+      },
+      '& .MuiButton-containedPrimary': {
+        backgroundColor: '#0075B3'
+      }
+    },
+    upgrade: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: '2em',
+      marginBottom: '5em'
+    },
+    uppercase: {
+      textTransform: 'uppercase',
+      marginBottom: 2,
+      display: 'flex',
+      justifyContent: 'space-between',
+      '& .MuiSvgIcon-root': {
+        color: '#0075B3',
+        position: 'relative',
+        top: '-1px'
+      }
     }
   });
 

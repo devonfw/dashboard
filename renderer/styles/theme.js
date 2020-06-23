@@ -3,9 +3,9 @@ import { red } from '@material-ui/core/colors';
 
 // Create a theme instance.
 const theme = createMuiTheme({
-    palette: {
-      type: 'dark',
-    },
-  })
+  palette: {
+    type: 'light',
+  },
+})
 
 export default theme;

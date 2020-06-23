@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     notification: {
-      backgroundColor: '#424242',
+      backgroundColor: '#0075B3',
       width: 350,
       position: 'absolute',
       top: 50,
