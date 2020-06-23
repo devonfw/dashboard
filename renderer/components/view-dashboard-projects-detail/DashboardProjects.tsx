@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles({
     root: {
@@ -30,23 +31,42 @@ const useStyles = makeStyles({
     newProject: {
         width: '211px',
         height: '159px'
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        color: '#495057',
+        padding: '0 3em 3em 0',
+        '& h3': {
+            margin: 0
+        },
+        '& .search': {
+            width: '250px'
+        },
+        '& .MuiFormControl-root': {
+            width: '100%'
+        }
     }
 });
 
-interface ProjectFolder {
+interface DashboardProjects {
     icon: string;
     title: string;
     date: string;
 }
 
 interface AllProjects {
-    projects: ProjectFolder[]
+    projects: DashboardProjects[]
 }
 
 export default function DashboardProjects(props: { projects: AllProjects }) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
+            <Grid item xs={12} className={classes.header}>
+                <h3>15 Projects</h3>
+                <div className="search"><TextField id="outlined-basic" label="Search" variant="outlined" /></div>
+            </Grid>
             <Grid item xs={3}>
                 <Card component={NextLink} href="/start">
                     <CardMedia

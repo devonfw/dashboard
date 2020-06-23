@@ -6,7 +6,25 @@ const drawerStyle = (theme: Theme) =>
     root: {
       display: 'flex',
       backgroundColor: '#4CBDEC',
-      color: '#FFFFFF'
+      color: '#FFFFFF',
+      maxWidth: '1500px',
+      margin: '0 auto',
+      '& .MuiDrawer-paper': {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative'
+      },
+      '& .MuiDrawer-root': {
+        height: '100%'
+      },
+      '& .MuiAppBar-root': {
+        maxWidth: '1500px',
+        margin: '0 auto'
+      },
+      '& .MuiAppBar-positionFixed': {
+        right: 'auto'
+      }
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -28,7 +46,7 @@ const drawerStyle = (theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
-      marginTop: '2em'
+      paddingTop: '2em'
     },
     content: {
       flexGrow: 1,
