@@ -3,6 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
+import * as fs from 'fs';
 
 // Packages
 import { BrowserWindow, app, ipcMain, shell } from 'electron';
@@ -35,10 +36,10 @@ app.on('ready', async () => {
   const url = isDev
     ? 'http://localhost:8000/start'
     : format({
-        pathname: join(__dirname, '../../renderer/start.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
+      pathname: join(__dirname, '../../renderer/start.html'),
+      protocol: 'file:',
+      slashes: true,
+    });
 
   mainWindow.loadURL(url);
 
@@ -55,7 +56,7 @@ const downloadHandler = (event, item, webContents) => {
       item.cancel();
     } else if (state === 'progressing') {
       if (!item.isPaused()) {
-        mainWindow.webContents.send('download progress', {total: item.getTotalBytes(), received: item.getReceivedBytes()});
+        mainWindow.webContents.send('download progress', { total: item.getTotalBytes(), received: item.getReceivedBytes() });
       }
     }
   })
@@ -66,6 +67,30 @@ const downloadHandler = (event, item, webContents) => {
     }
   })
 };
+
+// Finding out Devonfw Ide
+const countInstance = () => {
+  fs.readdir('/workspace', (error, files) => {
+    const reg = /ide/;
+    let ide = [];
+    if (files) {
+      ide = files.filter(file => reg.test(file) && isItContainZipFile(file));
+    }
+    let totalFiles = ide.length ? ide.length : 0; // return the number of files
+    mainWindow.webContents.send('count:instances', { total: totalFiles });
+  });
+
+  function isItContainZipFile(file) {
+    const lastWord = file.substring(file.lastIndexOf('.') + 1);
+    if (lastWord) {
+      if (lastWord !== 'tar' && lastWord !== 'gz') {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }
+}
 
 /* Enable services */
 
@@ -111,3 +136,6 @@ commandRetrieverService.getCommandsByIdeConfig(devonfwConfig.distributions[0].id
 commandRetrieverService.getWorkspacesByIdeConfig(devonfwConfig.distributions[0].ideConfig);
 commandRetrieverService.getAllDistributions(devonfwConfig);
 commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonfw-ide\\");
+
+// Finding out Devonfw Ide
+ipcMain.on('find:devonfw', countInstance);

@@ -32,24 +32,21 @@ interface Projects {
 }
 
 
-export default function ViewDashboardProjectsDetail(props: { projects: Projects[] }) {
+export default function ViewDashboardProjectsDetail(props: { title: string, total: number }) {
     const classes = useStyles();
-    const projects = props.projects;
     return (
-        projects.map((project, index) =>
-            <Grid item xs={4} key={index}>
-                <div className={classes.ideDetails}>
-                    <div className={classes.projectDetails}>
-                        <span style={{fontWeight: 'bold'}}>{project.name}</span>
-                        <span>
-                            {project.count}
-                        </span>
-                    </div>
-                    <div>
-                        <ShowChartIcon className={classes.showChartIcon} fontSize="large" />
-                    </div>
+        <Grid item xs={4}>
+            <div className={classes.ideDetails}>
+                <div className={classes.projectDetails}>
+                    <span style={{ fontWeight: 'bold' }}>{props.title}</span>
+                    <span>
+                        {props.total}
+                    </span>
                 </div>
-            </Grid>
-        )
+                <div>
+                    <ShowChartIcon className={classes.showChartIcon} fontSize="large" />
+                </div>
+            </div>
+        </Grid>
     )
 }
