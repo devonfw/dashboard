@@ -3,7 +3,8 @@ import { join } from 'path';
 import { format } from 'url';
 import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
-import * as fs from 'fs';
+import fs from 'fs';
+import path from 'path';
 
 // Packages
 import { BrowserWindow, app, ipcMain, shell } from 'electron';
@@ -14,12 +15,12 @@ import prepareNext from 'electron-next';
 import { TerminalService } from './services/terminal/terminal.service';
 import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
 import { devonfwConfig } from './devonfw.config';
+import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer');
-
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
@@ -68,28 +69,14 @@ const downloadHandler = (event, item, webContents) => {
   })
 };
 
-// Finding out Devonfw Ide
-const countInstance = () => {
-  fs.readdir('/workspace', (error, files) => {
-    const reg = /ide/;
-    let ide = [];
-    if (files) {
-      ide = files.filter(file => reg.test(file) && isItContainZipFile(file));
-    }
-    let totalFiles = ide.length ? ide.length : 0; // return the number of files
-    mainWindow.webContents.send('count:instances', { total: totalFiles });
+// Finding out Devonfw Ide Instances
+function countInstance() {
+  new DevonInstancesService().getAvailableDevonIdeInstances().then(instances => {
+    mainWindow.webContents.send('count:instances', { total: instances });
+  }).catch(error => {
+    console.log(error);
+    mainWindow.webContents.send('count:instances', { total: 0 });
   });
-
-  function isItContainZipFile(file) {
-    const lastWord = file.substring(file.lastIndexOf('.') + 1);
-    if (lastWord) {
-      if (lastWord !== 'tar' && lastWord !== 'gz') {
-        return true;
-      }
-      return false;
-    }
-    return true;
-  }
 }
 
 /* Enable services */
