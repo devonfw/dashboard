@@ -87,18 +87,6 @@ const useGridStyles = makeStyles({
 });
 
 export default function Home() {
-  const allProjects = [{
-    name: 'Project Created',
-    count: 0
-  },
-  {
-    name: 'Completed',
-    count: 0
-  },
-  {
-    name: 'Published',
-    count: 0
-  }];
 
   const classes = useStyles();
   const gridClasses = useGridStyles();
@@ -108,7 +96,7 @@ export default function Home() {
   const [downloadProgress, setDownloadProgress] = useState(false);
   const [downloadStatusMsg, setDownloadStatusMsg] = useState('');
   const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState('error.main');
-  const [projects, setProjects] = useState([]);
+  const [totalInstances, setTotalInstances] = useState(0);
 
   let spinner = downloadProgress ?
     <CircularProgress variant='static' className={classes.spinner} value={received / total * 100}></CircularProgress>
@@ -117,7 +105,6 @@ export default function Home() {
   const downloadUrl = 'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
   useEffect(() => {
-    setProjects(allProjects);
     global.ipcRenderer.on('download progress', (event: IpcRendererEvent, arg: { total: number, received: number }) => {
       setTotal(arg.total);
       setReceived(arg.received);
@@ -132,6 +119,10 @@ export default function Home() {
       } else {
         setDownloadStatusMsgColor('error.main');
       }
+    });
+    global.ipcRenderer.send('find:devonfw');
+    global.ipcRenderer.on('count:instances', (event: IpcRendererEvent, arg: { total: number }) => {
+      setTotalInstances(arg.total);
     });
   }, []);
   return (
@@ -179,7 +170,7 @@ export default function Home() {
           </div>
           <div className={gridClasses.projectInfo}>
             <Grid container spacing={3}>
-              <ViewDashboardProjectsDetail projects={projects} />
+              <ViewDashboardProjectsDetail title={'Created Project'} total={totalInstances} />
             </Grid>
           </div>
         </div>

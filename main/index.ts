@@ -3,6 +3,8 @@ import { join } from 'path';
 import { format } from 'url';
 import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 
 // Packages
 import { BrowserWindow, app, ipcMain, shell } from 'electron';
@@ -13,15 +15,15 @@ import prepareNext from 'electron-next';
 import { TerminalService } from './services/terminal/terminal.service';
 import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
 import { devonfwConfig } from './devonfw.config';
+import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer');
-
   mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
+    width: 1500,
+    height: 768,
     webPreferences: {
       nodeIntegration: false,
       preload: join(__dirname, 'preload.js'),
@@ -35,10 +37,10 @@ app.on('ready', async () => {
   const url = isDev
     ? 'http://localhost:8000/start'
     : format({
-        pathname: join(__dirname, '../../renderer/start.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
+      pathname: join(__dirname, '../../renderer/start.html'),
+      protocol: 'file:',
+      slashes: true,
+    });
 
   mainWindow.loadURL(url);
 
@@ -55,7 +57,7 @@ const downloadHandler = (event, item, webContents) => {
       item.cancel();
     } else if (state === 'progressing') {
       if (!item.isPaused()) {
-        mainWindow.webContents.send('download progress', {total: item.getTotalBytes(), received: item.getReceivedBytes()});
+        mainWindow.webContents.send('download progress', { total: item.getTotalBytes(), received: item.getReceivedBytes() });
       }
     }
   })
@@ -66,6 +68,16 @@ const downloadHandler = (event, item, webContents) => {
     }
   })
 };
+
+// Finding out Devonfw Ide Instances
+function countInstance() {
+  new DevonInstancesService().getAvailableDevonIdeInstances().then(instances => {
+    mainWindow.webContents.send('count:instances', { total: instances });
+  }).catch(error => {
+    console.log(error);
+    mainWindow.webContents.send('count:instances', { total: 0 });
+  });
+}
 
 /* Enable services */
 
@@ -111,3 +123,6 @@ commandRetrieverService.getCommandsByIdeConfig(devonfwConfig.distributions[0].id
 commandRetrieverService.getWorkspacesByIdeConfig(devonfwConfig.distributions[0].ideConfig);
 commandRetrieverService.getAllDistributions(devonfwConfig);
 commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonfw-ide\\");
+
+// Finding out Devonfw Ide
+ipcMain.on('find:devonfw', countInstance);

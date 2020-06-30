@@ -9,6 +9,7 @@ const drawerStyle = (theme: Theme) =>
       color: '#FFFFFF',
       maxWidth: '1500px',
       margin: '0 auto',
+      overflowX: 'hidden',
       '& .MuiDrawer-paper': {
         height: '100%',
         display: 'flex',
