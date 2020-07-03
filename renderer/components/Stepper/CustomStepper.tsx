@@ -41,11 +41,11 @@ class CustomStepper extends Component {
           </p>
         {this.steps[activeStep].stepJSX}
         { !activeStep ? 
-          <Link href="/projects">
             <div style={{marginTop: '4em'}}>
-                <Button variant="outlined">Back</Button>
+              <Link href="/projects">
+                  <Button variant="outlined">Back</Button>
+              </Link>
             </div>
-          </Link>
            : null
         }
       </>
