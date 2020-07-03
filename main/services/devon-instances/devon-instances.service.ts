@@ -46,7 +46,7 @@ export class DevonInstancesService {
         let paths = [];
         let instances = [];
         const instancesDirReader = new Promise<string[]>((resolve, reject) => {
-            fs.readFile(path.resolve(process.env.USERPROFILE, 'devon.txt'), 'utf8', (err, data) => {
+            fs.readFile(path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'), 'utf8', (err, data) => {
                 if (err) reject('No instances find out');
                 if (data) {
                     paths = data.split('\r\n');
