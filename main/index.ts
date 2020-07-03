@@ -84,7 +84,7 @@ function getDevonInstancesPath() {
   new DevonInstancesService().getAllUserCreatedDevonInstances().then((instancesPath: string[]) => {
     instancesPath.push(process.cwd());
     const getWorkspaces = findOutWorkspaceLocation(instancesPath);
-    mainWindow.webContents.send('get:devoninstances', getWorkspaces);
+    mainWindow.webContents.send('get:devoninstances', getWorkspaces.filter((item, pos) => getWorkspaces.indexOf(item) == pos));
   }).catch(error => {
     console.log(error);
     // If no instances are available
