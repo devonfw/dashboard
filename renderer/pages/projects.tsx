@@ -25,7 +25,7 @@ export default class Projects extends Component {
     render() {
         return (
             <Layout>
-                <SpaceAround changeBgColor={true}>
+                <SpaceAround bgColor={'#F4F6F8'}>
                     <DashboardProjects projects={this.projectsInfo} />
                 </SpaceAround>
             </Layout>

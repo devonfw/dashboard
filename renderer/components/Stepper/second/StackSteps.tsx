@@ -6,21 +6,21 @@ import NodeType from '../first/node/NodeType';
 
 const ngStep = () => (
   <>
-    <NgType></NgType>
+    <NgType variant={true}></NgType>
     <NgData></NgData>
   </>
 );
 
 const javaStep = () => (
   <>
-    <JavaType></JavaType>
+    <JavaType variant={true}></JavaType>
     <NgData></NgData>
   </>
 );
 
 const nodeStep = () => (
   <>
-    <NodeType></NodeType>
+    <NodeType variant={true}></NodeType>
     <NgData></NgData>
   </>
 );

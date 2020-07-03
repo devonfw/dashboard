@@ -1,9 +1,8 @@
 import { useState, ChangeEvent } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +24,7 @@ const NgDataStyling = (props: Props) => {
   const classes = useStyles();
   const [styling, setStyling] = useState('SCSS');
 
-  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: ChangeEvent<{ value: any }>) => {
     const stylingOpt = event.target.value as string;
     setStyling(stylingOpt);
     props.onSelected(stylingOpt);
@@ -34,16 +33,19 @@ const NgDataStyling = (props: Props) => {
   const step = (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel id="select-styling-label">Styling?</InputLabel>
-        <Select
-          labelId="select-styling-label"
-          id="select-styling"
+
+        <TextField
+          id="select-styling-label"
+          select
+          label="Styling?"
           value={styling}
           onChange={handleChange}
+          variant="outlined"
         >
           <MenuItem value={'CSS'}>CSS</MenuItem>
           <MenuItem value={'SCSS'}>SCSS</MenuItem>
-        </Select>
+        </TextField>
+
       </FormControl>
     </>
   );

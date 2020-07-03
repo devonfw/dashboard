@@ -11,12 +11,29 @@ const useStyles = makeStyles({
     maxWidth: 300,
     minWidth: 250,
     margin: '0',
-    padding: '1rem 0 0 0',
+    '& button': {
+      padding: '1rem 0 0 0'
+    },
+    '& .MuiButtonBase-root:hover': {
+      backgroundColor: '#4CBDEC',
+      '& .MuiTypography-colorTextSecondary': {
+        color: '#FFFFFF',
+        textTransform: 'uppercase'
+      }
+    }
   },
   media: {
     height: 120
   },
-
+  bgColor: {
+    backgroundColor: '#4CBDEC',
+    '& .MuiTypography-colorTextSecondary': {
+      color: '#FFFFFF'
+    },
+    '& .MuiCardActionArea-root': {
+      cursor: 'default'
+    }
+  },
   containImg: {
     'background-size': 'contain',
     margin: '0 1rem',
@@ -24,6 +41,10 @@ const useStyles = makeStyles({
 
   textCenter: {
     'text-align': 'center',
+    textTransform: 'uppercase'
+  },
+  noCursor: {
+    cursor: 'default'
   }
 });
 
@@ -31,15 +52,16 @@ const useStyles = makeStyles({
 interface StackProps {
   image: string;
   command: string;
+  variant: boolean;
   onClick: ((event: React.MouseEvent) => void);
 }
 
 export default function StackCard(props: StackProps) {
   const classes = useStyles();
-  const { image, command } = props;
+  const { image, command, variant } = props;
 
   return (
-    <Card className={classes.card} onClick={props.onClick}>
+    <Card className={`${classes.card} ${variant ? classes.bgColor : ''}`} onClick={variant ? undefined : props.onClick}>
       <CardActionArea>
         <CardMedia
           className={`${classes.media} ${classes.containImg}`}

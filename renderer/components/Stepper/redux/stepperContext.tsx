@@ -56,6 +56,10 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
     case 'PREVIOUS_STEP': {
       return { ...state, activeStep: activeStep - 1 };
     }
+
+    case 'RESET_STEP': {
+      return { ...state, activeStep: 0 };
+    }
     default:
       throw new Error();
   }

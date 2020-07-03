@@ -1,13 +1,14 @@
 import { useContext, MouseEvent, useState, ChangeEvent } from 'react';
+import Link from 'next/link';
 import { StepperContext } from '../../redux/stepperContext';
 import { INgData } from '../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
+import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import MessageSenderService from '../../../../services/renderer/messageSender.service';
+import TextField from '@material-ui/core/TextField';
 import {
   FormControl,
-  InputLabel,
-  Input,
   makeStyles,
   Theme,
   createStyles,
@@ -22,7 +23,28 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       display: 'flex',
       'flex-direction': 'column',
+      '& .MuiFormControl-root': {
+        width: '40em'
+      },
+      '& .formControl': {
+        marginTop: '1em'
+      },
+      '& .project': {
+        paddingLeft: '8px'
+      }
     },
+    action: {
+      marginTop: '1em',
+      marginLeft: '24px',
+      display: 'flex',
+      '& button': {
+        marginRight: '1em',
+        width: '75px'
+      },
+      '& .MuiButton-containedSizeSmall': {
+        padding: '7px 10px'
+      }
+    }
   }),
 );
 
@@ -36,6 +58,7 @@ const NgData = () => {
     name: 'project-default',
     routing: true,
     styling: 'scss',
+    devonInstances: ''
   });
 
   const handleNg = (_: MouseEvent) => {
@@ -51,7 +74,7 @@ const NgData = () => {
     dispatch({
       type: 'SET_STACK_CWD',
       payload: {
-        stackCwd: `${ngData.cwd}`,
+        stackCwd: `${ngData.devonInstances}`,
       },
     });
 
@@ -80,6 +103,12 @@ const NgData = () => {
     });
   };
 
+  const handleDevonInstancesSelection = (option: string) => {
+    setData((prevState: INgData) => {
+      return { ...prevState, devonInstances: option };
+    });
+  };
+
   const handleSendOpenDialog = async () => {
     const message = await messageSender.sendOpenDialog();
     if (!message['canceled']) {
@@ -89,32 +118,45 @@ const NgData = () => {
     }
   };
 
-  const step = (
-    <form className={classes.root} noValidate autoComplete="off">
-      <FormControl>
-        <InputLabel htmlFor="input-cwd">Destination folder</InputLabel>
-        <Input id="input-cwd" value={data.cwd} onClick={handleSendOpenDialog} />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="component-simple">Project name</InputLabel>
-        <Input
-          id="component-simple"
-          value={data.name}
-          onChange={handleChange}
-        />
-      </FormControl>
+  const setActiveState = () => {
+    dispatch({
+      type: 'RESET_STEP'
+    });
+  }
 
-      <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
-      <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
-      <Button
-        size="small"
-        variant="contained"
-        color="primary"
-        onClick={handleNg}
-      >
-        Next
-      </Button>
-    </form>
+  const step = (
+    <div>
+      <form className={classes.root} noValidate autoComplete="off">
+        <div className="project">
+          <FormControl>
+            <TextField id="component-simple" value={data.name} label="Project name" type="search" variant="outlined" onChange={handleChange} />
+          </FormControl>
+        </div>
+        <div className="formControl">
+          <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
+        </div>
+        <div className="formControl">
+          <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
+        </div>
+        <div className="formControl">
+          <NgDataDevonInstances onSelected={handleDevonInstancesSelection}></NgDataDevonInstances>
+        </div>
+      </form>
+      <div className={classes.action}>
+        <Link href="/start">
+          <div>
+            <Button variant="outlined" onClick={setActiveState}>Back</Button>
+          </div>
+        </Link>
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={handleNg}>
+          Next
+        </Button>
+      </div>
+    </div>
   );
   return step;
 };
