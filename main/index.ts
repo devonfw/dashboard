@@ -79,13 +79,51 @@ function countInstance() {
   });
 }
 
+// Get all User created Instances
+function getDevonInstancesPath() {
+  new DevonInstancesService().getAllUserCreatedDevonInstances().then((instancesPath: string[]) => {
+    const getWorkspaces = findOutWorkspaceLocation(instancesPath);
+    mainWindow.webContents.send('get:devoninstances', getWorkspaces);
+  }).catch(error => {
+    console.log(error);
+    // If no instances are available
+    mainWindow.webContents.send('get:devoninstances', findOutWorkspaceLocation([process.cwd()]));
+  });
+}
+
+function findOutWorkspaceLocation(paths) {
+  let workspaces = [];
+  let location = '';
+  for (let path of paths) {
+    if (path.includes('workspaces')) {
+      location = path.substring(path.lastIndexOf('workspaces') + 10, -path.length);
+      if (!workspaces.includes(location)) {
+        workspaces.push(location);
+      }
+    } else {
+      location = path + '\\workspaces';
+      if (!workspaces.includes(location)) {
+        workspaces.push(location);
+      }
+    }
+  }
+  return workspaces;
+}
+
+function getWorkspaceProject(workspacelocation: string) {
+  new DevonInstancesService().getWorkspaceProjects(workspacelocation).then((projects: string[]) => {
+    mainWindow.webContents.send('get:workspaceProjects', projects);
+  }).catch(error => {
+    mainWindow.webContents.send('get:workspaceProjects', []);
+  })
+}
+
 /* Enable services */
 
 /* terminal powershell */
 const eventHandler = (event: IpcMainEvent, ...eventArgs: any[]) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
-  console.log('received message:' + command);
 
   if (!command) event.sender.send('terminal/powershell', '');
   const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
@@ -126,3 +164,7 @@ commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonf
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
+ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
+ipcMain.on('find:workspaceProjects', (e, option) => {
+  getWorkspaceProject(option);
+});

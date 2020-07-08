@@ -5,32 +5,25 @@ export class DevonInstancesService {
     getAvailableDevonIdeInstances(): Promise<number> {
         let instanceCount = 0;
         let promiseInstances = [];
-        let paths;
         const dirReader = new Promise<number>((resolve, reject) => {
-            fs.readFile(path.resolve(process.env.USERPROFILE, 'devon.txt'), 'utf8', (err, data) => {
-                if (err) reject('No instances find out');
-                if (data) {
-                    const getCorrectedPaths = data.replace(/(\r\n|\n|\r)/gm, "");
-                    paths = getCorrectedPaths.split(';');
-                    console.log('Check Paths:', paths);
-                    for (let path of paths) {
-                        if (path) {
-                            promiseInstances.push(this.getInstances(path));
-                        }
+            this.getAllUserCreatedDevonInstances().then((instancesPath: string[]) => {
+                for (let path of instancesPath) {
+                    if (path) {
+                        promiseInstances.push(this.getInstances(path));
                     }
-                    if (promiseInstances.length) {
-                        Promise.all(promiseInstances)
-                            .then((results) => {
-                                console.log("Get All Instances", results);
-                                for (let result of results) {
-                                    instanceCount = instanceCount + result;
-                                }
-                                resolve(instanceCount);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                            });
-                    }
+                }
+                if (promiseInstances.length) {
+                    Promise.all(promiseInstances)
+                        .then((results) => {
+                            for (let result of results) {
+                                instanceCount = instanceCount + result;
+                            }
+                            resolve(instanceCount);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            reject(error);
+                        });
                 }
             });
         });
@@ -40,12 +33,44 @@ export class DevonInstancesService {
     getInstances(instancepath: string): Promise<number> {
         const devonInstances = new Promise<number>((resolve, reject) => {
             fs.readdir(path.resolve(instancepath, 'workspaces'), (error, files) => {
-                if (error) reject(`Error: may be path issues', ${instancepath}`);
+                if (error) reject(resolve(0));
                 if (files) {
                     resolve(files.length);
                 }
             });
         });
         return devonInstances;
+    }
+
+    getAllUserCreatedDevonInstances(): Promise<string[]> {
+        let paths = [];
+        let instances = [];
+        const instancesDirReader = new Promise<string[]>((resolve, reject) => {
+            fs.readFile(path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'), 'utf8', (err, data) => {
+                if (err) reject('No instances find out');
+                if (data) {
+                    paths = data.split('\n');
+                    for (let path of paths) {
+                        if (path) {
+                            instances.push(path);
+                        }
+                    }
+                    resolve(instances);
+                }
+            });
+        });
+        return instancesDirReader;
+    }
+
+    getWorkspaceProjects(workspacePath): Promise<string[]> {
+        const workspaceDirReader = new Promise<string[]>((resolve, reject) => {
+            fs.readdir(workspacePath, 'utf8', (err, data) => {
+                if (err) reject('Oops!! might be path is not proper');
+                if (data) {
+                    resolve(data);
+                }
+            });
+        });
+        return workspaceDirReader;
     }
 }

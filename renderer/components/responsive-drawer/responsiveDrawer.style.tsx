@@ -5,7 +5,7 @@ const drawerStyle = (theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      backgroundColor: '#4CBDEC',
+      backgroundColor: '#FFFFFF',
       color: '#FFFFFF',
       maxWidth: '1500px',
       margin: '0 auto',
@@ -52,7 +52,7 @@ const drawerStyle = (theme: Theme) =>
     content: {
       flexGrow: 1,
       'min-height': '100vh',
-      backgroundColor: '#4CBDEC',
+      backgroundColor: '#F4F6F8',
     },
     fxEnd: {
       marginLeft: 'auto',

@@ -1,9 +1,8 @@
 import { useState, ChangeEvent } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,27 +22,30 @@ interface Props {
 
 const NgDataStyling = (props: Props) => {
   const classes = useStyles();
-  const [styling, setStyling] = useState('SCSS');
+  const [styling, setStyling] = useState({ value: 'scss' });
 
-  const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: ChangeEvent<{ value: any }>) => {
     const stylingOpt = event.target.value as string;
-    setStyling(stylingOpt);
+    setStyling({ value: stylingOpt });
     props.onSelected(stylingOpt);
   };
 
   const step = (
     <>
       <FormControl className={classes.formControl}>
-        <InputLabel id="select-styling-label">Styling?</InputLabel>
-        <Select
-          labelId="select-styling-label"
-          id="select-styling"
-          value={styling}
+
+        <TextField
+          id="select-styling-label"
+          select
+          label="Styling?"
+          value={styling.value}
           onChange={handleChange}
+          variant="outlined"
         >
-          <MenuItem value={'CSS'}>CSS</MenuItem>
-          <MenuItem value={'SCSS'}>SCSS</MenuItem>
-        </Select>
+          <MenuItem value={'css'}>CSS</MenuItem>
+          <MenuItem value={'scss'}>SCSS</MenuItem>
+        </TextField>
+
       </FormControl>
     </>
   );

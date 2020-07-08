@@ -7,7 +7,8 @@ export type StepperActionType =
   | 'SET_STACK'
   | 'SET_STACK_CMD'
   | 'SET_STACK_CWD'
-  | 'NOT_HANDLED';
+  | 'NOT_HANDLED'
+  | 'RESET_STEP';
 
 export interface StepperAction {
   type: StepperActionType;

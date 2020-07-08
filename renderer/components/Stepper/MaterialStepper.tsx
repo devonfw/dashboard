@@ -33,7 +33,7 @@ class MaterialStepper extends Component<StepperProps> {
           {`
             .root {
               width: 100%;
-              margin-top: 4rem;
+              margin-top: 1rem;
               margin-bottom: 1rem;
             }
           `}
