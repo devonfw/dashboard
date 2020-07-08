@@ -49,7 +49,7 @@ export class DevonInstancesService {
             fs.readFile(path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'), 'utf8', (err, data) => {
                 if (err) reject('No instances find out');
                 if (data) {
-                    paths = data.split('\r\n');
+                    paths = data.split('\n');
                     for (let path of paths) {
                         if (path) {
                             instances.push(path);
