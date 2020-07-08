@@ -1,7 +1,26 @@
+import { ChangeEvent } from 'react';
+
 export interface INgData {
-    cwd: string,
-    name: string,
-    routing: boolean,
-    styling: string,
-    devonInstances: string
+    name: ValueType,
+    routing: ValueType,
+    styling: ValueType,
+    devonInstances: ValueType
+}
+
+export interface ValueType {
+    value: string,
+    valid?: boolean,
+    error?: string,
+    touched?: boolean
+}
+
+export interface EventType {
+    event?: ChangeEvent<HTMLInputElement>,
+    dir?: string[]
+}
+
+export interface FormParams {
+    value: string,
+    error: string,
+    valid: boolean
 }

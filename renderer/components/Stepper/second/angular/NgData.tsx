@@ -1,7 +1,8 @@
-import { useContext, MouseEvent, useState, ChangeEvent } from 'react';
+import { useContext, MouseEvent, useState, useEffect, ChangeEvent } from 'react';
 import Link from 'next/link';
+import { IpcRendererEvent } from 'electron';
 import { StepperContext } from '../../redux/stepperContext';
-import { INgData } from '../../redux/data.model';
+import { INgData, EventType, FormParams } from '../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
@@ -14,108 +15,128 @@ import {
   createStyles,
   Button,
 } from '@material-ui/core';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        marginLeft: theme.spacing(2),
-      },
-      display: 'flex',
-      'flex-direction': 'column',
-      '& .MuiFormControl-root': {
-        width: '40em'
-      },
-      '& .formControl': {
-        marginTop: '1em'
-      },
-      '& .project': {
-        paddingLeft: '8px'
-      }
-    },
-    action: {
-      marginTop: '1em',
-      marginLeft: '24px',
-      display: 'flex',
-      '& button': {
-        marginRight: '1em',
-        width: '75px'
-      },
-      '& .MuiButton-containedSizeSmall': {
-        padding: '7px 10px'
-      }
-    }
-  }),
-);
+import ngDataStyle from './ngData.style';
 
 const NgData = () => {
   const messageSender: MessageSenderService = new MessageSenderService();
-
-  const classes = useStyles();
+  const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
+  const classes = ngDataStyle();
   const { dispatch } = useContext(StepperContext);
+  const ERRORMSG = {
+    projectAlreadyExists: 'Project already exits with this name',
+    projectRequired: 'Please provide project name'
+  }
   const [data, setData] = useState<INgData>({
-    cwd: '',
-    name: 'project-default',
-    routing: true,
-    styling: 'scss',
-    devonInstances: ''
+    name: {
+      value: '',
+      valid: false,
+      error: '',
+      touched: false
+    },
+    routing: {
+      value: 'true',
+    },
+    styling: {
+      value: 'scss'
+    },
+    devonInstances: {
+      value: ''
+    }
   });
+
+  const handleDevonInstancesSelection = (option: string) => {
+    setData((prevState: INgData) => {
+      return {
+        ...prevState,
+        devonInstances: { value: option }
+      };
+    });
+  };
+
+  const setDevonWorkspace = (dir: string[]) => {
+    setWorkspaceDir(dir);
+    resetForm();
+  }
 
   const handleNg = (_: MouseEvent) => {
     const ngData: INgData = data;
+    if (data.name.valid) {
+      dispatch({
+        type: 'SET_STACK_CMD',
+        payload: {
+          stackCmd: `devon ng new ${ngData.name.value} --routing=${ngData.routing.value} --style=${ngData.styling.value} --interactive=false`,
+        },
+      });
 
-    dispatch({
-      type: 'SET_STACK_CMD',
-      payload: {
-        stackCmd: `devon ng new ${ngData.name} --routing=${ngData.routing} --style=${ngData.styling} --interactive=false`,
-      },
-    });
+      dispatch({
+        type: 'SET_STACK_CWD',
+        payload: {
+          stackCwd: `${ngData.devonInstances.value}`,
+        },
+      });
 
-    dispatch({
-      type: 'SET_STACK_CWD',
-      payload: {
-        stackCwd: `${ngData.devonInstances}`,
-      },
-    });
-
-    dispatch({
-      type: 'NEXT_STEP',
-    });
+      dispatch({
+        type: 'NEXT_STEP',
+      });
+    }
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const targetVal = event.target.value;
-
-    setData((prevState: INgData) => {
-      return { ...prevState, name: targetVal };
+    validateExistingProject({
+      event: event
     });
   };
 
-  const handleRouterSelection = (option: boolean) => {
+  const validateExistingProject = (event: EventType) => {
+    let targetValue = event.event && event.event.target ? event.event.target.value : data.name.value;
+    let workspace = event.dir ? event.dir : workspaceDir;
+    if (workspace.includes(targetValue)) {
+      validateProjectName({
+        value: targetValue,
+        error: ERRORMSG.projectAlreadyExists,
+        valid: false
+      });
+    } else {
+      validateProjectName({
+        value: targetValue,
+        error: '',
+        valid: true
+      });
+    }
+
+    if (!targetValue) {
+      validateProjectName({
+        value: targetValue,
+        error: ERRORMSG.projectRequired,
+        valid: false
+      });
+    }
+  }
+
+  const validateProjectName = (formData: FormParams) => {
+    const updatedData = data;
+    updatedData.name.value = formData.value;
+    updatedData.name.error = formData.error;
+    updatedData.name.valid = formData.valid;
+    updatedData.name.touched = true;
     setData((prevState: INgData) => {
-      return { ...prevState, routing: option };
+      return {
+        ...prevState,
+        updatedData
+      };
+    });
+  }
+
+  const handleRouterSelection = (option: string) => {
+    setData((prevState: INgData) => {
+      return { ...prevState, routing: { value: option } };
     });
   };
 
   const handleStyleSelection = (option: string) => {
     setData((prevState: INgData) => {
-      return { ...prevState, styling: option };
+      return { ...prevState, styling: { value: option } };
     });
-  };
-
-  const handleDevonInstancesSelection = (option: string) => {
-    setData((prevState: INgData) => {
-      return { ...prevState, devonInstances: option };
-    });
-  };
-
-  const handleSendOpenDialog = async () => {
-    const message = await messageSender.sendOpenDialog();
-    if (!message['canceled']) {
-      setData((prevState: INgData) => {
-        return { ...prevState, cwd: message['filePaths'] };
-      });
-    }
   };
 
   const setActiveState = () => {
@@ -124,13 +145,39 @@ const NgData = () => {
     });
   }
 
+  const resetForm = () => {
+    setData((prevState: INgData) => {
+      return {
+        ...prevState,
+        name: {
+          value: '',
+          valid: false,
+          error: '',
+          touched: false
+        }
+      };
+    });
+  }
+
+  const handleblur = () => {
+    validateExistingProject({});
+  }
+
   const step = (
     <div>
       <form className={classes.root} noValidate autoComplete="off">
-        <div className="project">
+        <div className={`project ${data.name.error && data.name.touched ? classes.invalid : ''}`}>
           <FormControl>
-            <TextField id="component-simple" value={data.name} label="Project name" type="search" variant="outlined" onChange={handleChange} />
+            <TextField
+              id="component-simple"
+              value={data.name.value}
+              label="Project name *"
+              type="search"
+              variant="outlined"
+              onChange={handleChange}
+              onBlur={handleblur} />
           </FormControl>
+          {data.name.error && data.name.touched ? <div className={classes.error}>{data.name.error}</div> : null}
         </div>
         <div className="formControl">
           <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
@@ -139,7 +186,10 @@ const NgData = () => {
           <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
         </div>
         <div className="formControl">
-          <NgDataDevonInstances onSelected={handleDevonInstancesSelection}></NgDataDevonInstances>
+          <NgDataDevonInstances
+            onSelected={handleDevonInstancesSelection}
+            devonWorkspace={setDevonWorkspace}
+          ></NgDataDevonInstances>
         </div>
       </form>
       <div className={classes.action}>
@@ -149,6 +199,7 @@ const NgData = () => {
           </div>
         </Link>
         <Button
+          disabled={!data.name.valid}
           size="small"
           variant="contained"
           color="primary"

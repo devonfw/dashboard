@@ -19,26 +19,39 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     onSelected: (option: string) => void;
+    devonWorkspace: (error: string[]) => void
 }
 
 const NgDataDevonInstances = (props: Props) => {
     const classes = useStyles();
-    const [devonInstances, setDevonInstances] = useState('');
-    const [allDevonInstances, setAllDevonInstances] = useState([]);
+    const [devonInstances, setDevonInstances] = useState({ value: '' });
+    const [allDevonInstances, setAllDevonInstances] = useState<string[]>([]);
     useEffect(() => {
         global.ipcRenderer.send('find:devonfwInstances');
         global.ipcRenderer.on('get:devoninstances', (event: IpcRendererEvent, instancesPath: string[]) => {
             setAllDevonInstances(instancesPath);
-            setDevonInstances(instancesPath[0]);
+            setDevonInstances({ value: instancesPath[0] });
             props.onSelected(instancesPath[0]);
+            getWorkspaceProjects(instancesPath[0]);
         });
+        global.ipcRenderer.on('get:workspaceProjects', (event: IpcRendererEvent, dirs: string[]) => {
+            props.devonWorkspace(dirs);
+        });
+        return () => {
+            global.ipcRenderer.removeAllListeners('get:devoninstances');
+            global.ipcRenderer.removeAllListeners('get:workspaceProjects');
+        }
     }, []);
 
+    const getWorkspaceProjects = (path: string) => {
+        global.ipcRenderer.send('find:workspaceProjects', path);
+    }
 
     const handleChange = (event: ChangeEvent<{ value: any }>) => {
-        const devonInstancesOpt = event.target.value as string;
-        setDevonInstances(devonInstancesOpt);
+        const devonInstancesOpt = event.target.value as string
+        setDevonInstances({ value: devonInstancesOpt });
         props.onSelected(devonInstancesOpt);
+        getWorkspaceProjects(devonInstancesOpt);
     };
 
     const getInstancePaths = (allDevonInstances.map(path => <MenuItem key={path} value={path}>{path}</MenuItem>));
@@ -50,7 +63,7 @@ const NgDataDevonInstances = (props: Props) => {
                     id="select-instance-label"
                     select
                     label="Devon Instances"
-                    value={devonInstances}
+                    value={devonInstances.value}
                     onChange={handleChange}
                     variant="outlined"
                 >

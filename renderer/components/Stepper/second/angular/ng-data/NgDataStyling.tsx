@@ -22,11 +22,11 @@ interface Props {
 
 const NgDataStyling = (props: Props) => {
   const classes = useStyles();
-  const [styling, setStyling] = useState('SCSS');
+  const [styling, setStyling] = useState({ value: 'scss' });
 
   const handleChange = (event: ChangeEvent<{ value: any }>) => {
     const stylingOpt = event.target.value as string;
-    setStyling(stylingOpt);
+    setStyling({ value: stylingOpt });
     props.onSelected(stylingOpt);
   };
 
@@ -38,12 +38,12 @@ const NgDataStyling = (props: Props) => {
           id="select-styling-label"
           select
           label="Styling?"
-          value={styling}
+          value={styling.value}
           onChange={handleChange}
           variant="outlined"
         >
-          <MenuItem value={'CSS'}>CSS</MenuItem>
-          <MenuItem value={'SCSS'}>SCSS</MenuItem>
+          <MenuItem value={'css'}>CSS</MenuItem>
+          <MenuItem value={'scss'}>SCSS</MenuItem>
         </TextField>
 
       </FormControl>

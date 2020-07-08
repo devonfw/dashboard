@@ -3,6 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+import { ValueType } from '../../../redux/data.model';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,32 +18,32 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  onSelected: (option: boolean) => void;
+  onSelected: (option: string) => void;
 }
 
 const NgDataRouting = (props: Props) => {
   const classes = useStyles();
-  const [routing, setRouting] = useState('Yes');
+  const [routing, setRouting] = useState({ value: 'Yes' });
 
   const handleChange = (event: ChangeEvent<{ value: any }>) => {
     const routingOpt = event.target.value as string;
-    setRouting(routingOpt);
-    props.onSelected(routingOpt == 'Yes');
+    setRouting({ value: routingOpt });
+    props.onSelected(routingOpt);
   };
 
   const step = (
     <>
       <FormControl className={classes.formControl}>
-      <TextField
+        <TextField
           id="select-routing-label"
           select
           label="Routing?"
-          value={routing}
+          value={routing.value}
           onChange={handleChange}
           variant="outlined"
         >
-        <MenuItem value={'Yes'}>Yes</MenuItem>
-        <MenuItem value={'No'}>No</MenuItem>
+          <MenuItem value={'Yes'}>Yes</MenuItem>
+          <MenuItem value={'No'}>No</MenuItem>
         </TextField>
       </FormControl>
     </>

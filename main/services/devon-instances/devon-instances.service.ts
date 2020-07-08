@@ -61,4 +61,16 @@ export class DevonInstancesService {
         });
         return instancesDirReader;
     }
+
+    getWorkspaceProjects(workspacePath): Promise<string[]> {
+        const workspaceDirReader = new Promise<string[]>((resolve, reject) => {
+            fs.readdir(workspacePath, 'utf8', (err, data) => {
+                if (err) reject('Oops!! might be path is not proper');
+                if (data) {
+                    resolve(data);
+                }
+            });
+        });
+        return workspaceDirReader;
+    }
 }
