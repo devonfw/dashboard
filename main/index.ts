@@ -16,6 +16,8 @@ import { TerminalService } from './services/terminal/terminal.service';
 import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
 import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
+import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
+import { readdirPromise } from './services/shared/promised';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -81,13 +83,21 @@ function countInstance() {
 
 // Get all User created Instances
 function getDevonInstancesPath() {
-  new DevonInstancesService().getAllUserCreatedDevonInstances().then((instancesPath: string[]) => {
-    const getWorkspaces = findOutWorkspaceLocation(instancesPath);
-    mainWindow.webContents.send('get:devoninstances', getWorkspaces);
+  new DevonInstancesService().getAllUserCreatedDevonInstances().then((instancesPath: DevonfwConfig) => {
+    mainWindow.webContents.send('get:devoninstances', instancesPath.distributions);
   }).catch(error => {
     console.log(error);
     // If no instances are available
-    mainWindow.webContents.send('get:devoninstances', findOutWorkspaceLocation([process.cwd()]));
+    const fakeInstance: IdeDistribution = {
+      id: process.cwd(),
+      ideConfig: {
+        basepath: process.cwd(),
+        commands: '',
+        version: '',
+        workspaces: process.cwd() + '\\workspaces'
+      }
+    };
+    mainWindow.webContents.send('get:devoninstances', [fakeInstance]);
   });
 }
 
@@ -111,7 +121,7 @@ function findOutWorkspaceLocation(paths) {
 }
 
 function getWorkspaceProject(workspacelocation: string) {
-  new DevonInstancesService().getWorkspaceProjects(workspacelocation).then((projects: string[]) => {
+  readdirPromise(workspacelocation).then((projects: string[]) => {
     mainWindow.webContents.send('get:workspaceProjects', projects);
   }).catch(error => {
     mainWindow.webContents.send('get:workspaceProjects', []);
@@ -160,7 +170,7 @@ const commandRetrieverService = new CommandRetrieverService();
 commandRetrieverService.getCommandsByIdeConfig(devonfwConfig.distributions[0].ideConfig);
 commandRetrieverService.getWorkspacesByIdeConfig(devonfwConfig.distributions[0].ideConfig);
 commandRetrieverService.getAllDistributions(devonfwConfig);
-commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonfw-ide\\");
+commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonfw-ide\\", "3.3.0");
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
