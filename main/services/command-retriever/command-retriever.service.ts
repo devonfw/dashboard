@@ -62,11 +62,12 @@ export class CommandRetrieverService {
     }
   }
 
-  addNewDistribution(devonfwConfig: DevonfwConfig, path: string) {
+  addNewDistribution(devonfwConfig: DevonfwConfig, path: string, version: string) {
     // TODO: check if dist exists
     const ideDistribution: IdeDistribution = {
       id: path,
       ideConfig: {
+        version: version,
         basepath: path,
         commands: path + "\\scripts\\command",
         workspaces: path + "\\workspaces",

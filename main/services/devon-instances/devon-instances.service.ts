@@ -1,15 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import { DevonfwConfig, IdeDistribution } from '../../models/devonfw-dists.model';
+
+const exec = require('child_process').exec;
 
 export class DevonInstancesService {
     getAvailableDevonIdeInstances(): Promise<number> {
         let instanceCount = 0;
         let promiseInstances = [];
         const dirReader = new Promise<number>((resolve, reject) => {
-            this.getAllUserCreatedDevonInstances().then((instancesPath: string[]) => {
-                for (let path of instancesPath) {
-                    if (path) {
-                        promiseInstances.push(this.getInstances(path));
+            this.getAllUserCreatedDevonInstances().then((instances: DevonfwConfig) => {
+                for (let distribution of instances.distributions) {
+                    if (distribution.id) {
+                        promiseInstances.push(this.getInstances(distribution.id));
                     }
                 }
                 if (promiseInstances.length) {
@@ -42,17 +45,29 @@ export class DevonInstancesService {
         return devonInstances;
     }
 
-    getAllUserCreatedDevonInstances(): Promise<string[]> {
+    getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
         let paths = [];
-        let instances = [];
-        const instancesDirReader = new Promise<string[]>((resolve, reject) => {
+        let instances: DevonfwConfig = { distributions: [] };
+        const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
             fs.readFile(path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'), 'utf8', (err, data) => {
                 if (err) reject('No instances find out');
                 if (data) {
                     paths = data.split('\n');
                     for (let path of paths) {
                         if (path) {
-                            instances.push(path);
+                            const instance: IdeDistribution = {
+                                id: path,
+                                    ideConfig: {
+                                        version: '',
+                                        basepath: path,
+                                        commands: path + '\\scripts\\command',
+                                        workspaces: path + '\\workspaces'
+                                    }
+                            };
+                            exec('devon -v', { cwd: path + '\\scripts' }, (err, stdout, stderr) => {
+                                instance.ideConfig.version = stdout;
+                            })
+                            instances.distributions.push(instance);
                         }
                     }
                     resolve(instances);
@@ -60,17 +75,5 @@ export class DevonInstancesService {
             });
         });
         return instancesDirReader;
-    }
-
-    getWorkspaceProjects(workspacePath): Promise<string[]> {
-        const workspaceDirReader = new Promise<string[]>((resolve, reject) => {
-            fs.readdir(workspacePath, 'utf8', (err, data) => {
-                if (err) reject('Oops!! might be path is not proper');
-                if (data) {
-                    resolve(data);
-                }
-            });
-        });
-        return workspaceDirReader;
     }
 }

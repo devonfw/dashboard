@@ -2,6 +2,7 @@ export interface IdeConfig {
     basepath: string;
     workspaces: string;
     commands: string;
+    version: string;
 }
 
 export interface IdeDistribution {
