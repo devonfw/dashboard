@@ -28,11 +28,12 @@ const NgDataDevonInstances = (props: Props) => {
     const [allDevonInstances, setAllDevonInstances] = useState<string[]>([]);
     useEffect(() => {
         global.ipcRenderer.send('find:devonfwInstances');
-        global.ipcRenderer.on('get:devoninstances', (event: IpcRendererEvent, instancesPath: string[]) => {
-            setAllDevonInstances(instancesPath);
-            setDevonInstances({ value: instancesPath[0] });
-            props.onSelected(instancesPath[0]);
-            getWorkspaceProjects(instancesPath[0]);
+        global.ipcRenderer.on('get:devoninstances', (event: IpcRendererEvent, instancesPath: any[]) => {
+            const instances = instancesPath.map(p => p.ideConfig.workspaces);
+            setAllDevonInstances(instances);
+            setDevonInstances({ value: instances[0] });
+            props.onSelected(instances[0]);
+            getWorkspaceProjects(instances[0]);
         });
         global.ipcRenderer.on('get:workspaceProjects', (event: IpcRendererEvent, dirs: string[]) => {
             props.devonWorkspace(dirs);

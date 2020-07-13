@@ -18,8 +18,19 @@ import Typography from '@material-ui/core/Typography';
 import { Theme, createStyles, makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
+import { useRouter } from "next/router";
+
+const useStyles = makeStyles({
+  active: {
+    color: '#0075B3',
+    fontWeight: 'bold'
+  }
+});
 
 const CustomDrawer = (props: { classes: any }) => {
+  const router = useRouter();
+  const classes = useStyles();
+
   return (
     <div>
       <div className={props.classes.toolbar} />
@@ -44,40 +55,40 @@ const CustomDrawer = (props: { classes: any }) => {
       </div>
       <List>
         <ListItem button component={NextLink} href="/home">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/home" ? classes.active : ""}>
             <HomeOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='Home' />
+          <ListItemText className={router.pathname == "/home" ? classes.active : ""} primary='Home' />
         </ListItem>
         <ListItem button component={NextLink} href="/projects">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/projects" ? classes.active : ""}>
             <CreateNewFolderOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='Projects' />
+          <ListItemText className={router.pathname == "/projects" ? classes.active : ""} primary='Projects' />
         </ListItem>
         <ListItem button component={NextLink} href="/ides">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/ides" ? classes.active : ""}>
             <DesktopWindowsOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='IDE' />
+          <ListItemText className={router.pathname == "/ides" ? classes.active : ""} primary='IDE' />
         </ListItem>
         <ListItem button component={NextLink} href="/repositories">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/repositories" ? classes.active : ""}>
             <StorageOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='Repositories' />
+          <ListItemText className={router.pathname == "/repositories" ? classes.active : ""} primary='Repositories' />
         </ListItem>
         <ListItem button component={NextLink} href="/about">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/about" ? classes.active : ""}>
             <BuildOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='Installed tools' />
+          <ListItemText className={router.pathname == "/about" ? classes.active : ""} primary='Installed tools' />
         </ListItem>
         <ListItem button component={NextLink} href="/wiki">
-          <ListItemIcon>
+          <ListItemIcon className={router.pathname == "/wiki" ? classes.active : ""}>
             <DescriptionOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary='Wiki' />
+          <ListItemText className={router.pathname == "/wiki" ? classes.active : ""} primary='Wiki' />
         </ListItem>
         <ListItem button>
           <ListItemIcon>
