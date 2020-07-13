@@ -13,6 +13,9 @@ const javaInitializerStyle = (theme: Theme) => ({
         },
         '& .formControl': {
             marginTop: '1em'
+        },
+        '& .formControl:first-child': {
+            marginTop: '0'
         }
     },
     action: {

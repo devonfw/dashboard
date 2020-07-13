@@ -8,7 +8,6 @@ export interface IJavaInitializerForm {
 export interface FormControls {
     group: FormType,
     artifact: FormType,
-    name: FormType,
     packageName: FormType,
     version: FormType,
     db: FormType,

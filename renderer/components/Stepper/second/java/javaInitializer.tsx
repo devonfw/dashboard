@@ -3,12 +3,13 @@ import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { FormControl, Button, TextField, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
 import { StepperContext } from '../../redux/stepperContext';
-import { IJavaInitializerForm, FormControls, FormType, ValueType } from './model/IJavaInitializer';
+import { IJavaInitializerForm, FormControls, FormType, ValueType } from '../../../../models/dashboard/IJavaInitializer';
 import javaInitializerStyle from './javaInitializerStyle';
 import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
 import javaProjectConfig from './javaInitializerFormConfig';
 import Input from './input/Input';
 import rulesDetails from './rulesDetails';
+import ValidateJavaForm from './validation/ValidateJavaForm';
 
 class JavaInitializer extends Component {
     static contextType = StepperContext;
@@ -46,14 +47,14 @@ class JavaInitializer extends Component {
 
         groupElement.touched = true;
         groupElement.value = value;
-        this.checkValidity(groupElement, 'group');
+        ValidateJavaForm.checkValidity(groupElement, 'group');
 
         packageName.value = artifact.value ? `${groupElement.value}.${artifact.value}` : groupElement.value;
 
         updatedForm.group = groupElement;
         updatedForm.artifact = artifact;
         updatedForm.packageName = packageName;
-        updatedForm.formIsValid = this.formStateValidity(updatedForm);
+        updatedForm.formIsValid = ValidateJavaForm.formStateValidity(updatedForm);
         this.setState({
             formControls: updatedForm
         });
@@ -66,19 +67,16 @@ class JavaInitializer extends Component {
         const artifact: FormType = { ...updatedForm.artifact };
         const groupElement: FormType = { ...updatedForm.group };
         const packageName: FormType = { ...updatedForm.packageName };
-        const name: FormType = { ...updatedForm.name };
 
         artifact.value = value;
-        this.checkValidity(artifact, 'artifact');
+        ValidateJavaForm.checkValidity(artifact, 'artifact', this.state.workspaceDir);
         artifact.touched = true;
 
         packageName.value = groupElement.value ? `${groupElement.value}.${artifact.value}` : artifact.value;
-        name.value = artifact.value;
 
         updatedForm.artifact = artifact;
         updatedForm.packageName = packageName;
-        updatedForm.name = name;
-        updatedForm.formIsValid = this.formStateValidity(updatedForm);
+        updatedForm.formIsValid = ValidateJavaForm.formStateValidity(updatedForm);
         this.setState({
             formControls: updatedForm
         });
@@ -98,25 +96,15 @@ class JavaInitializer extends Component {
         element.touched = true;
         element.value = value;
         if (element.validation) {
-            this.checkValidity(element, identifier);
+            ValidateJavaForm.checkValidity(element, identifier);
         }
         formState[identifier] = element;
 
-        formState.formIsValid = this.formStateValidity(formState);
+        formState.formIsValid = ValidateJavaForm.formStateValidity(formState);
 
         this.setState({
             formControls: formState
         });
-    }
-
-    formStateValidity = (formControls: FormControls): boolean => {
-        let formIsValid = true;
-        for (let inputIdentifier in formControls) {
-            if (formControls[inputIdentifier].valid !== undefined) {
-                formIsValid = formControls[inputIdentifier].valid && formIsValid;
-            }
-        }
-        return formIsValid;
     }
 
     updateFormState = (args: ValueType) => {
@@ -140,32 +128,6 @@ class JavaInitializer extends Component {
         this.context.dispatch({
             type: 'RESET_STEP'
         });
-    }
-
-    checkValidity(control: FormType, controlName: string) {
-        const rules = control.validation;
-        let isValid = true;
-        if (rules && rules.required) {
-            isValid = control.value.trim() !== '' && isValid;
-            control.error = rulesDetails[controlName]['required'];
-        }
-        if (control.value && rules && rules.pattern) {
-            isValid = control.value.match(rules.pattern) !== null && isValid;
-            control.error = rulesDetails[controlName]['pattern'];
-        }
-
-        if (control.value && rules && rules.existing) {
-            const workspaces = this.state.workspaceDir;
-            if (workspaces.includes(control.value)) {
-                isValid = false;
-                control.error = rulesDetails[controlName]['existing'];
-            }
-        }
-
-        if (isValid) {
-            control.error = ''
-        }
-        control.valid = isValid;
     }
 
     handleBatchChange = (event: ChangeEvent<HTMLInputElement>) => {

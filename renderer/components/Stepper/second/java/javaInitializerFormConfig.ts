@@ -1,4 +1,4 @@
-import { IJavaInitializerForm } from "./model/IJavaInitializer";
+import { IJavaInitializerForm } from "../../../../models/dashboard/IJavaInitializer";
 
 const javaProjectConfig: IJavaInitializerForm = {
     workspaceDir: [],
@@ -33,15 +33,6 @@ const javaProjectConfig: IJavaInitializerForm = {
             valid: false,
             touched: false,
             error: '',
-        },
-        name: {
-            elementType: 'search',
-            elementConfig: {
-                label: "Name",
-                id: "name"
-            },
-            value: '',
-            disabled: true
         },
         packageName: {
             elementType: 'search',

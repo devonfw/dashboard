@@ -1,5 +1,3 @@
-import { IJavaInitializerForm } from "./model/IJavaInitializer";
-
 const rulesDetails = {
     group: {
         required: 'Please provide a value',
@@ -14,9 +12,6 @@ const rulesDetails = {
         required: 'Please provide a value'
     },
     packageName: {
-        required: 'Please provide a value'
-    },
-    name: {
         required: 'Please provide a value'
     }
 }

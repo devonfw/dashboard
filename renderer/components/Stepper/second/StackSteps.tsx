@@ -3,7 +3,7 @@ import NgData from './angular/NgData';
 import NgType from '../first/angular/NgType';
 import JavaType from '../first/java/JavaType';
 import NodeType from '../first/node/NodeType';
-import JavaInitializer from '../second/java/javaInitializer';
+import JavaInitializer from '../second/java/JavaInitializer';
 
 const ngStep = () => (
   <>
