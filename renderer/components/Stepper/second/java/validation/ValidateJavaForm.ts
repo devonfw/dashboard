@@ -15,7 +15,7 @@ class ValidateJavaForm {
         }
 
         if (control.value && rules && rules.existing) {
-            if (workspaceDir.includes(control.value)) {
+            if (workspaceDir && workspaceDir.includes(control.value)) {
                 isValid = false;
                 control.error = rulesDetails[controlName]['existing'];
             }
