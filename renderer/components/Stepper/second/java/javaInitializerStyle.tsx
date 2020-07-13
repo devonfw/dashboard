@@ -1,0 +1,34 @@
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
+const javaInitializerStyle = (theme: Theme) => ({
+    root: {
+        paddingLeft: '8px',
+        '& > *': {
+            marginLeft: theme.spacing(2),
+        },
+        display: 'flex',
+        'flex-direction': 'column',
+        '& .MuiFormControl-root': {
+            width: '40em'
+        },
+        '& .formControl': {
+            marginTop: '1em'
+        }
+    },
+    action: {
+        marginTop: '1em',
+        display: 'flex',
+        '& button': {
+            marginRight: '1em',
+            width: '75px'
+        },
+        '& .MuiButton-containedSizeSmall': {
+            padding: '7px 10px'
+        }
+    },
+    error: {
+        color: 'red'
+    }
+});
+
+export default javaInitializerStyle;
