@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     onSelected: (option: string) => void;
-    devonWorkspace: (error: string[]) => void
+    devonWorkspace: (dir: string[]) => void
 }
 
 const NgDataDevonInstances = (props: Props) => {
