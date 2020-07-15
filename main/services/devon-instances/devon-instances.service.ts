@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { platform } from 'os';
 import { DevonfwConfig, IdeDistribution } from '../../models/devonfw-dists.model';
 
 const exec = require('child_process').exec;
@@ -53,18 +54,23 @@ export class DevonInstancesService {
                 if (err) reject('No instances find out');
                 if (data) {
                     paths = data.split('\n');
-                    for (let path of paths) {
-                        if (path) {
+                    for (let singlepath of paths) {
+                        if (singlepath) {
+                            if (platform() === 'win32') {
+                                singlepath = singlepath.replace('/', '');
+                                singlepath = singlepath.replace('/', ':/');
+                                singlepath = singlepath.replace(/\//g, path.sep);
+                            }
                             const instance: IdeDistribution = {
-                                id: path,
+                                id: singlepath,
                                     ideConfig: {
                                         version: '',
-                                        basepath: path,
-                                        commands: path + '\\scripts\\command',
-                                        workspaces: path + '\\workspaces'
+                                        basepath: singlepath,
+                                        commands: path.resolve(singlepath, 'scripts', 'command'),
+                                        workspaces: path.resolve(singlepath, 'workspaces')
                                     }
                             };
-                            exec('devon -v', { cwd: path + '\\scripts' }, (err, stdout, stderr) => {
+                            exec('devon -v', { cwd: path.resolve(singlepath, 'scripts') }, (err, stdout, stderr) => {
                                 instance.ideConfig.version = stdout;
                             })
                             instances.distributions.push(instance);
