@@ -119,6 +119,7 @@ class JavaInitializer extends Component {
     }
 
     setDevonWorkspace = (dir: string[]) => {
+        this.resetForm();
         this.setState({
             workspaceDir: dir
         });
@@ -137,6 +138,29 @@ class JavaInitializer extends Component {
         let batchControl = this.state.formControls.batch;
         batchControl = event.target.checked
         formState.batch = batchControl;
+        this.setState({ formControls: formState });
+    }
+
+    resetForm = () => {
+        const formState: FormControls = {
+            ...this.state.formControls
+        }
+        for (let key in formState) {
+            if (formState[key].elementType === 'search') {
+                const control: FormType = formState[key];
+                control.value = '';
+                if (control.touched) {
+                    control.touched = false;
+                }
+                if (control.error) {
+                    control.error = '';
+                }
+                if (control.valid) {
+                    control.valid = false;
+                }
+                formState[key] = control;
+            }
+        }
         this.setState({ formControls: formState });
     }
 
