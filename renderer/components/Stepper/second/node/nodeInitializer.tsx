@@ -3,27 +3,26 @@ import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { FormControl, Button, TextField, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core';
 import { StepperContext } from '../../redux/stepperContext';
-import { IJavaInitializerForm, FormControls } from '../../../../models/dashboard/IJavaInitializer';
-import javaInitializerStyle from './javaInitializerStyle';
+import { INodeInitializerForm, FormControls } from '../../../../models/dashboard/INodeInitializer';
+import nodeInitializerStyle from './nodeInitializerStyle';
 import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
-import javaProjectConfig from './javaInitializerFormConfig';
+import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
 import rulesDetails from '../validation/rulesDetails';
 import ValidateForm from '../validation/ValidateForm';
-import { FormType, ValueType } from '../../../../models/dashboard/FormType';
+import { FormType } from '../../../../models/dashboard/FormType';
 
-class JavaInitializer extends Component {
+class NodeInitializer extends Component {
     static contextType = StepperContext;
-    state: IJavaInitializerForm = javaProjectConfig;
+    state: INodeInitializerForm = nodeProjectConfig;
 
     createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData: IJavaInitializerForm = this.state;
-        const batch = formData.formControls.batch ? '-Dbatch=batch' : '';
+        const formData: INodeInitializerForm = this.state;
         this.context.dispatch({
             type: 'SET_STACK_CMD',
             payload: {
-                stackCmd: `devon java create ${formData.formControls.packageName.value} -DdbType=${formData.formControls.db.value} -Dversion="${formData.formControls.version.value}" ${formData.formControls.group.value} ${batch}`,
+                stackCmd: `devon node create ${formData.formControls.name.value.toLowerCase()} -n`,
             },
         });
         this.context.dispatch({
@@ -37,51 +36,6 @@ class JavaInitializer extends Component {
         });
     }
 
-    groupHandler = (value: string) => {
-        const updatedForm: FormControls = {
-            ...this.state.formControls
-        }
-        const artifact: FormType = { ...updatedForm.artifact };
-        const groupElement: FormType = { ...updatedForm.group };
-        const packageName: FormType = { ...updatedForm.packageName };
-
-        groupElement.touched = true;
-        groupElement.value = value;
-        ValidateForm.checkValidity(groupElement, 'group');
-
-        packageName.value = artifact.value ? `${groupElement.value}.${artifact.value}` : groupElement.value;
-
-        updatedForm.group = groupElement;
-        updatedForm.artifact = artifact;
-        updatedForm.packageName = packageName;
-        updatedForm.formIsValid = ValidateForm.formStateValidity(updatedForm);
-        this.setState({
-            formControls: updatedForm
-        });
-    }
-
-    artifactHandler = (value: string) => {
-        const updatedForm: FormControls = {
-            ...this.state.formControls
-        }
-        const artifact: FormType = { ...updatedForm.artifact };
-        const groupElement: FormType = { ...updatedForm.group };
-        const packageName: FormType = { ...updatedForm.packageName };
-
-        artifact.value = value;
-        ValidateForm.checkValidity(artifact, 'artifact', this.state.workspaceDir);
-        artifact.touched = true;
-
-        packageName.value = groupElement.value ? `${groupElement.value}.${artifact.value}` : artifact.value;
-
-        updatedForm.artifact = artifact;
-        updatedForm.packageName = packageName;
-        updatedForm.formIsValid = ValidateForm.formStateValidity(updatedForm);
-        this.setState({
-            formControls: updatedForm
-        });
-    }
-
     handleDevonInstancesSelection = (option: string) => {
         this.eventHandler(
             'devonInstances', option
@@ -89,6 +43,7 @@ class JavaInitializer extends Component {
     }
 
     eventHandler(identifier: string, value: string) {
+        console.log(identifier)
         const formState: FormControls = {
             ...this.state.formControls
         }
@@ -96,7 +51,7 @@ class JavaInitializer extends Component {
         element.touched = true;
         element.value = value;
         if (element.validation) {
-            ValidateForm.checkValidity(element, identifier);
+            ValidateForm.checkValidity(element, identifier, this.state.workspaceDir);
         }
         formState[identifier] = element;
 
@@ -105,17 +60,6 @@ class JavaInitializer extends Component {
         this.setState({
             formControls: formState
         });
-    }
-
-    updateFormState = (args: ValueType) => {
-        switch (args.identifier) {
-            case 'group':
-                return this.groupHandler(args.event.target.value);
-            case 'artifact':
-                return this.artifactHandler(args.event.target.value);
-            default:
-                return this.eventHandler(args.identifier, args.event ? args.event.target.value : args.value);
-        }
     }
 
     setDevonWorkspace = (dir: string[]) => {
@@ -129,16 +73,6 @@ class JavaInitializer extends Component {
         this.context.dispatch({
             type: 'RESET_STEP'
         });
-    }
-
-    handleBatchChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const formState: FormControls = {
-            ...this.state.formControls
-        }
-        let batchControl = this.state.formControls.batch;
-        batchControl = event.target.checked
-        formState.batch = batchControl;
-        this.setState({ formControls: formState });
     }
 
     resetForm = () => {
@@ -188,7 +122,7 @@ class JavaInitializer extends Component {
                                 shouldValidate={formElement.config.validation}
                                 touched={formElement.config.touched}
                                 disabled={formElement.config.disabled}
-                                changed={(event: ChangeEvent<HTMLInputElement>) => this.updateFormState({ event: event, identifier: formElement.id })}
+                                changed={(event: ChangeEvent<HTMLInputElement>) => this.eventHandler(formElement.id, event.target.value)}
                             />
                             {formElement.config.error ? <div className={classes.error}>{formElement.config.error}</div> : null}
                         </div>
@@ -199,19 +133,6 @@ class JavaInitializer extends Component {
                             ></NgDataDevonInstances>
                         </div>
                 })}
-                <div className="formControl">
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={this.state.formControls.batch}
-                                onChange={this.handleBatchChange}
-                                name="batch"
-                                color="primary"
-                            />
-                        }
-                        label="Do you need batch process?"
-                    />
-                </div>
                 <div className={classes.action}>
                     <Link href="/start">
                         <div>
@@ -234,4 +155,4 @@ class JavaInitializer extends Component {
         );
     }
 }
-export default withStyles(javaInitializerStyle)(JavaInitializer);
+export default withStyles(nodeInitializerStyle)(NodeInitializer);

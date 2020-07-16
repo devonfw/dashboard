@@ -1,7 +1,7 @@
-import { FormType, FormControls } from "../../../../../models/dashboard/IJavaInitializer";
-import rulesDetails from "../rulesDetails";
+import { FormType } from "../../../../models/dashboard/FormType";
+import rulesDetails from "../validation/rulesDetails";
 
-class ValidateJavaForm {
+class ValidateForm {
     static checkValidity(control: FormType, controlName: string, workspaceDir?: string[]): void {
         const rules = control.validation;
         let isValid = true;
@@ -39,4 +39,4 @@ class ValidateJavaForm {
 
 }
 
-export default ValidateJavaForm;
+export default ValidateForm;
