@@ -23,7 +23,6 @@ export default function ResponsiveDrawer(props: {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
-
   const handleReadNotifications = () => {
     setOpen((prevState) => {
       const opened = prevState;

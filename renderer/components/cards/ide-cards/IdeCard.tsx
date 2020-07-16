@@ -63,7 +63,7 @@ export default function IdeCard(props: IdeCardsProps) {
         >
           Open
         </Button>
-        { loading ? <CircularProgress size={28} /> : null }
+        {loading ? <CircularProgress size={28} /> : null}
       </CardActions>
     </Card>
   );

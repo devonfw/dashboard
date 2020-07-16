@@ -47,5 +47,5 @@ export const useTerminalUIStyles = makeStyles({
 
   mt0: {
     marginTop: 0,
-  }
+  },
 });

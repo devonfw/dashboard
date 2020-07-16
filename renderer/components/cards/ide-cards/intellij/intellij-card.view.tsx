@@ -5,12 +5,7 @@ import GeneralCardController, {
 } from '../general/general-card.controller';
 
 export default function IntellijCard() {
-  return (
-    <GeneralCardController
-      ide={'intellij'}
-      render={IntellijView}
-    />
-  );
+  return <GeneralCardController ide={'intellij'} render={IntellijView} />;
 }
 
 function IntellijView(props: RenderedViewProps) {

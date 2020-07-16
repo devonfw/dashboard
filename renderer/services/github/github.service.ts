@@ -32,7 +32,7 @@ function processResponse(data: any) {
 function fetchGithub(query: string): Promise<Response> {
   return fetch(
     `https://api.github.com/search/repositories?q=${query}user:devonfw`,
-    { headers: { 'User-Agent': 'jambulud' } },
+    { headers: { 'User-Agent': 'jambulud' } }
   );
 }
 

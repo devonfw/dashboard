@@ -4,10 +4,7 @@ import SpaceAround from '../hoc/SpaceAround';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -18,13 +15,13 @@ const useStyles = makeStyles({
   spinner: {
     verticalAlign: 'middle',
     marginTop: '16px',
-    marginLeft: '16px'
+    marginLeft: '16px',
   },
   button: {
     marginTop: '16px',
     backgroundColor: '#0075B3',
-    color: '#FFFFFF'
-  }
+    color: '#FFFFFF',
+  },
 });
 
 const useGridStyles = makeStyles({
@@ -35,7 +32,7 @@ const useGridStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
     backgroundSize: '460px 749px',
     minHeight: 720,
-    backgroundPositionY: '1em'
+    backgroundPositionY: '1em',
   },
   dashboardInfo: {
     flexGrow: 1,
@@ -44,7 +41,7 @@ const useGridStyles = makeStyles({
     backgroundRepeat: 'no-repeat',
     backgroundSize: '700px 535px',
     backgroundPositionY: '7em',
-    minHeight: 720
+    minHeight: 720,
   },
   ideDetails: {
     minHeight: 100,
@@ -55,39 +52,38 @@ const useGridStyles = makeStyles({
     fontSize: '20px',
     justifyContent: 'space-evenly',
     color: '#0075B3',
-    paddingTop: '1em'
+    paddingTop: '1em',
   },
   showChartIcon: {
     fontWeight: 'bold',
-    color: '#4CBDEC'
+    color: '#4CBDEC',
   },
   projectDetails: {
     display: 'flex',
     flexDirection: 'column',
     color: '#0075B3',
-    width: '60%'
+    width: '60%',
   },
   projectInfo: {
     marginTop: '3em',
-    paddingRight: '4em'
+    paddingRight: '4em',
   },
   cardRoot: {
     display: 'flex',
     '& .MuiPaper-elevation1': {
-      boxShadow: 'none'
+      boxShadow: 'none',
     },
     '& .MuiPaper-root': {
-      backgroundColor: 'transparent'
-    }
+      backgroundColor: 'transparent',
+    },
   },
   cardCover: {
     width: 293,
-    height: 197
-  }
+    height: 197,
+  },
 });
 
 export default function Home() {
-
   const classes = useStyles();
   const gridClasses = useGridStyles();
 
@@ -95,35 +91,51 @@ export default function Home() {
   const [received, setReceived] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(false);
   const [downloadStatusMsg, setDownloadStatusMsg] = useState('');
-  const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState('error.main');
+  const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState(
+    'error.main'
+  );
   const [totalInstances, setTotalInstances] = useState(0);
 
-  let spinner = downloadProgress ?
-    <CircularProgress variant='static' className={classes.spinner} value={received / total * 100}></CircularProgress>
-    : null;
+  let spinner = downloadProgress ? (
+    <CircularProgress
+      variant="static"
+      className={classes.spinner}
+      value={(received / total) * 100}
+    ></CircularProgress>
+  ) : null;
 
-  const downloadUrl = 'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
+  const downloadUrl =
+    'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
   useEffect(() => {
-    global.ipcRenderer.on('download progress', (event: IpcRendererEvent, arg: { total: number, received: number }) => {
-      setTotal(arg.total);
-      setReceived(arg.received);
-      setDownloadProgress(true);
-      setDownloadStatusMsg('');
-    });
-    global.ipcRenderer.on('download completed', (event: IpcRendererEvent, arg: string) => {
-      setDownloadProgress(false);
-      setDownloadStatusMsg('Download was ' + arg + '.');
-      if (arg === 'completed') {
-        setDownloadStatusMsgColor('success.main');
-      } else {
-        setDownloadStatusMsgColor('error.main');
+    global.ipcRenderer.on(
+      'download progress',
+      (event: IpcRendererEvent, arg: { total: number; received: number }) => {
+        setTotal(arg.total);
+        setReceived(arg.received);
+        setDownloadProgress(true);
+        setDownloadStatusMsg('');
       }
-    });
+    );
+    global.ipcRenderer.on(
+      'download completed',
+      (event: IpcRendererEvent, arg: string) => {
+        setDownloadProgress(false);
+        setDownloadStatusMsg('Download was ' + arg + '.');
+        if (arg === 'completed') {
+          setDownloadStatusMsgColor('success.main');
+        } else {
+          setDownloadStatusMsgColor('error.main');
+        }
+      }
+    );
     global.ipcRenderer.send('find:devonfw');
-    global.ipcRenderer.on('count:instances', (event: IpcRendererEvent, arg: { total: number }) => {
-      setTotalInstances(arg.total);
-    });
+    global.ipcRenderer.on(
+      'count:instances',
+      (event: IpcRendererEvent, arg: { total: number }) => {
+        setTotalInstances(arg.total);
+      }
+    );
   }, []);
   return (
     <ResponsiveDrawer>
@@ -144,25 +156,39 @@ export default function Home() {
               </Grid>
               <Grid item xs={6}>
                 <div style={{ fontSize: '16px' }}>
-                  <h1>
-                    Welcome to devonfw-ide!
-                        </h1>
+                  <h1>Welcome to devonfw-ide!</h1>
                   <p>
-                    The devonfw-ide is a fantastic tool to automatically download, install, setup and update the IDE (integrated development environment) of your software development projects.
-                        </p>
-                  <p>
-                    For further details visit the following links:
-                        </p>
+                    The devonfw-ide is a fantastic tool to automatically
+                    download, install, setup and update the IDE (integrated
+                    development environment) of your software development
+                    projects.
+                  </p>
+                  <p>For further details visit the following links:</p>
                   <ul style={{ fontWeight: 'bold' }}>
-                    <li><a>features &amp; motivation</a></li>
-                    <li><a>download &amp; setup</a></li>
-                    <li><a>usage</a></li>
+                    <li>
+                      <a>features &amp; motivation</a>
+                    </li>
+                    <li>
+                      <a>download &amp; setup</a>
+                    </li>
+                    <li>
+                      <a>usage</a>
+                    </li>
                   </ul>
-                  <Button variant="contained" color="primary" disabled={downloadProgress} size="large" className={classes.button} href={downloadUrl}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={downloadProgress}
+                    size="large"
+                    className={classes.button}
+                    href={downloadUrl}
+                  >
                     Download latest version
-                        </Button>
+                  </Button>
                   {spinner}
-                  <Box component="p" color={downloadStatusMsgColor}>{downloadStatusMsg}</Box>
+                  <Box component="p" color={downloadStatusMsgColor}>
+                    {downloadStatusMsg}
+                  </Box>
                 </div>
               </Grid>
               <Grid item xs={6}></Grid>
@@ -170,11 +196,14 @@ export default function Home() {
           </div>
           <div className={gridClasses.projectInfo}>
             <Grid container spacing={3}>
-              <ViewDashboardProjectsDetail title={'Created Project'} total={totalInstances} />
+              <ViewDashboardProjectsDetail
+                title={'Created Project'}
+                total={totalInstances}
+              />
             </Grid>
           </div>
         </div>
       </SpaceAround>
-    </ResponsiveDrawer >
-  )
+    </ResponsiveDrawer>
+  );
 }

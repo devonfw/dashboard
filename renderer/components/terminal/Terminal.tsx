@@ -1,8 +1,4 @@
-import {
-  Component,
-  KeyboardEvent,
-  ChangeEvent,
-} from 'react';
+import { Component, KeyboardEvent, ChangeEvent } from 'react';
 import Renderer from '../../services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
 
@@ -54,14 +50,14 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
         message = await this.renderer.send(
           'terminal/all-commands',
           inputClean,
-          cwdClean,
+          cwdClean
         );
 
         if (inputClean.startsWith('cd ')) {
           const resp = await this.renderer.send(
             'terminal/all-commands',
             `${inputClean} && cd`,
-            cwd,
+            cwd
           );
           cwd = resp.toString().trim();
         }
@@ -86,10 +82,7 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
   render() {
     return (
       <>
-        <TerminalUI
-          previous={this.state.previous}
-          cwd={this.state.cwd}
-        >
+        <TerminalUI previous={this.state.previous} cwd={this.state.cwd}>
           <input
             value={this.state.input}
             className="terminal__input font--console"

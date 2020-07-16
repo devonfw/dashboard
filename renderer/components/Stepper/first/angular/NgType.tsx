@@ -4,7 +4,7 @@ import StackCard from '../../../cards/stack-card/StackCard';
 
 const NgType = (props) => {
   const { dispatch } = useContext(StepperContext);
-  const {variant} = props;
+  const { variant } = props;
 
   const handleNg = (event: MouseEvent) => {
     dispatch({ type: 'SET_STACK', payload: { stack: 'ng' } });

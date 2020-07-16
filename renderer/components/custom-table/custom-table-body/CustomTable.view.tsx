@@ -37,7 +37,7 @@ export default function CustomTableView(props: CustomTableViewProps) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar loadData={loadData} selected={selected}/>
+        <EnhancedTableToolbar loadData={loadData} selected={selected} />
         <TableContainer>
           <Table
             className={classes.table}

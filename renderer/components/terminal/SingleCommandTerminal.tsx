@@ -1,6 +1,4 @@
-import {
-  Component,
-} from 'react';
+import { Component } from 'react';
 import Renderer from '../../services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
 
@@ -14,7 +12,10 @@ export interface TerminalProps {
   initialCwd?: string;
 }
 
-export default class SingleCommandTerminal extends Component<TerminalProps, TerminalState> {
+export default class SingleCommandTerminal extends Component<
+  TerminalProps,
+  TerminalState
+> {
   state = {
     previous: [],
     message: '',
@@ -29,7 +30,11 @@ export default class SingleCommandTerminal extends Component<TerminalProps, Term
   }
 
   componentDidMount() {
-    this.renderer.sendMultiple('terminal/powershell', this.props.initialCommand, this.props.initialCwd);
+    this.renderer.sendMultiple(
+      'terminal/powershell',
+      this.props.initialCommand,
+      this.props.initialCwd
+    );
   }
 
   componentWillUnmount() {
@@ -37,25 +42,22 @@ export default class SingleCommandTerminal extends Component<TerminalProps, Term
   }
 
   handler = (_: any, message: any) => {
-    this.setState((prevState: Readonly<TerminalState>, props: Readonly<TerminalProps>) => {
-      const cwd = props.initialCwd ? props.initialCwd : ''
-      const updatedMessage = `${prevState.message}${message}`;
-      const executedCmd = `\$ ${props.initialCommand}\n${updatedMessage}`;
-      const previousCmd = { cwd: cwd, cmd: executedCmd };
-      const previous = [previousCmd];
-      return { previous, message: updatedMessage };
-    });
-  }
+    this.setState(
+      (prevState: Readonly<TerminalState>, props: Readonly<TerminalProps>) => {
+        const cwd = props.initialCwd ? props.initialCwd : '';
+        const updatedMessage = `${prevState.message}${message}`;
+        const executedCmd = `\$ ${props.initialCommand}\n${updatedMessage}`;
+        const previousCmd = { cwd: cwd, cmd: executedCmd };
+        const previous = [previousCmd];
+        return { previous, message: updatedMessage };
+      }
+    );
+  };
 
   render() {
     let cwd = this.props.initialCwd;
     cwd = cwd ? cwd : '';
 
-    return (
-      <TerminalUI
-        previous={this.state.previous}
-        cwd={cwd}
-      ></TerminalUI>
-    );
+    return <TerminalUI previous={this.state.previous} cwd={cwd}></TerminalUI>;
   }
 }

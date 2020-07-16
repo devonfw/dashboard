@@ -5,12 +5,7 @@ import GeneralCardController, {
 } from '../general/general-card.controller';
 
 export default function VSCodeCard() {
-  return (
-    <GeneralCardController
-      ide={'vscode'}
-      render={VSCodeView}
-    />
-  );
+  return <GeneralCardController ide={'vscode'} render={VSCodeView} />;
 }
 
 export function VSCodeView(props: RenderedViewProps) {

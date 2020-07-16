@@ -5,12 +5,7 @@ import GeneralCardController, {
 } from '../general/general-card.controller';
 
 export default function EclipseCard() {
-  return (
-    <GeneralCardController
-      ide={'eclipse'}
-      render={EclipseView}
-    />
-  );
+  return <GeneralCardController ide={'eclipse'} render={EclipseView} />;
 }
 
 function EclipseView(props: RenderedViewProps) {

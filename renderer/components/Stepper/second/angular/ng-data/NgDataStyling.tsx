@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
-  }),
+  })
 );
 
 interface Props {
@@ -33,7 +33,6 @@ const NgDataStyling = (props: Props) => {
   const step = (
     <>
       <FormControl className={classes.formControl}>
-
         <TextField
           id="select-styling-label"
           select
@@ -45,7 +44,6 @@ const NgDataStyling = (props: Props) => {
           <MenuItem value={'css'}>CSS</MenuItem>
           <MenuItem value={'scss'}>SCSS</MenuItem>
         </TextField>
-
       </FormControl>
     </>
   );

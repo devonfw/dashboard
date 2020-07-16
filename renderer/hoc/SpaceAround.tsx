@@ -1,15 +1,19 @@
-import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
-import Head from 'next/head';
-
-const styles = { padding: '2rem 0 2rem 1rem', backgroundColor: '#4CBDEC' };
-
-const SpaceAround = (props: { children: any, bgColor: string }) => {
-    const spaceAroundStyles = !props.bgColor ? styles : {...styles, backgroundColor: props.bgColor}
-    return (
-        <div style={spaceAroundStyles}>
-            {props.children}
-        </div>
-    )
+const styles: { [key: string]: string } = {
+  padding: '2rem 0 2rem 1rem',
+  backgroundColor: '#4CBDEC',
 };
 
-export default SpaceAround
+interface SpaceAroundProps {
+  children: any;
+  bgColor?: string;
+}
+
+export default function SpaceAround(props: SpaceAroundProps) {
+  let spaceAroundStyles = styles;
+
+  if (props.bgColor) {
+    spaceAroundStyles = { ...spaceAroundStyles, bgColor: props.bgColor };
+  }
+
+  return <div style={spaceAroundStyles}>{props.children}</div>;
+}

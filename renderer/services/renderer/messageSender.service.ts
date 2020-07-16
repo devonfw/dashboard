@@ -38,14 +38,17 @@ export default class MessageSenderService extends Renderer {
 
   async sendCopy(source: string, which: string[], dest: string) {
     const filesToBeCopied = which.map((file) => {
-        return { 
-            source: `${source}\\${file}`,
-            dest: `${dest}\\${file}`,
-        }
+      return {
+        source: `${source}\\${file}`,
+        dest: `${dest}\\${file}`,
+      };
     });
 
     for (const file of filesToBeCopied) {
-      super.send('terminal/all-commands', `xcopy ${file.source} ${file.dest} /E /I /Y`);
+      super.send(
+        'terminal/all-commands',
+        `xcopy ${file.source} ${file.dest} /E /I /Y`
+      );
     }
     return;
   }

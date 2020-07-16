@@ -11,7 +11,7 @@ export interface GeneralCardControllerProps {
 }
 
 export default function GeneralCardController(
-  props: GeneralCardControllerProps,
+  props: GeneralCardControllerProps
 ) {
   const messageSender = new MessageSenderService();
   const [loading, setLoading] = useState(false);

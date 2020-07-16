@@ -20,7 +20,7 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
 
   switch (action.type) {
     case 'SET_STACK': {
-      console.log(activeStep)
+      console.log(activeStep);
       return {
         ...state,
         stack: action.payload && action.payload.stack,
@@ -79,8 +79,8 @@ export const StepperConsumer = StepperContext.Consumer;
 export function StepperProvider(props: any) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
-  console.log('provider value stepper')
-  console.log(value)
+  console.log('provider value stepper');
+  console.log(value);
   return (
     <StepperContext.Provider value={value}>
       {props.children}

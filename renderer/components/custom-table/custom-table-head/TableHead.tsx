@@ -25,7 +25,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onSelectAllClick: (
     event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean,
+    checked: boolean
   ) => void;
   rowCount: number;
 }

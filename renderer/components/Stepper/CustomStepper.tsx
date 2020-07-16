@@ -33,21 +33,21 @@ class CustomStepper extends Component {
     return (
       <>
         <MaterialStepper steps={this.steps} />
-          <p style={{color: '#495057', 'paddingBottom': '2rem'}}>
-            Choose the technology in the below section, dolor sit amet, consectetur adipiscing elit.
-            Phasellus non tincidunt velit. Quisque laoreet, lectus id tincidunt fringilla, eros est bibendum felis,
-            sit amet lobortis ante sem non diam. Donec viverra a nisi eu eleifend.
-            Mauris vel leo tempor, commodo felis in, sollicitudin velit.
-          </p>
+        <p style={{ color: '#495057', paddingBottom: '2rem' }}>
+          Choose the technology in the below section, dolor sit amet,
+          consectetur adipiscing elit. Phasellus non tincidunt velit. Quisque
+          laoreet, lectus id tincidunt fringilla, eros est bibendum felis, sit
+          amet lobortis ante sem non diam. Donec viverra a nisi eu eleifend.
+          Mauris vel leo tempor, commodo felis in, sollicitudin velit.
+        </p>
         {this.steps[activeStep].stepJSX}
-        { !activeStep ? 
-            <div style={{marginTop: '4em'}}>
-              <Link href="/projects">
-                  <Button variant="outlined">Back</Button>
-              </Link>
-            </div>
-           : null
-        }
+        {!activeStep ? (
+          <div style={{ marginTop: '4em' }}>
+            <Link href="/projects">
+              <Button variant="outlined">Back</Button>
+            </Link>
+          </div>
+        ) : null}
       </>
     );
   }

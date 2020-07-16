@@ -4,7 +4,7 @@ import StackCard from '../../../cards/stack-card/StackCard';
 
 const JavaType = (props) => {
   const { dispatch } = useContext(StepperContext);
-  const {variant} = props;
+  const { variant } = props;
 
   const handleJava = (event: MouseEvent) => {
     dispatch({ type: 'SET_STACK', payload: { stack: 'java' } });

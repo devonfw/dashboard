@@ -10,7 +10,7 @@ const StyledBadge = withStyles((theme: Theme) =>
       backgroundColor: '#4CBDEC',
       color: '#FFFFFF',
     },
-  }),
+  })
 )(Badge);
 
 export default function () {

@@ -1,5 +1,5 @@
-declare module NodeJS  {
-    interface Global {
-        ipcRenderer: any;
-    }
+declare module NodeJS {
+  interface Global {
+    ipcRenderer: any;
+  }
 }

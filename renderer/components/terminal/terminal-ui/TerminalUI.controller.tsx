@@ -1,8 +1,4 @@
-import {
-  Component,
-  createRef,
-  RefObject,
-} from 'react';
+import { Component, createRef, RefObject } from 'react';
 import TerminalUIView from './TerminalUI.view';
 
 export interface TerminalUIProps {
@@ -13,7 +9,10 @@ export interface TerminalUIProps {
 
 export interface TerminalUIState {}
 
-export default class TerminalUI extends Component<TerminalUIProps, TerminalUIState> {
+export default class TerminalUI extends Component<
+  TerminalUIProps,
+  TerminalUIState
+> {
   scrollAnchor: RefObject<HTMLInputElement>;
 
   constructor(props: TerminalUIProps) {
@@ -44,4 +43,3 @@ export default class TerminalUI extends Component<TerminalUIProps, TerminalUISta
     );
   }
 }
-

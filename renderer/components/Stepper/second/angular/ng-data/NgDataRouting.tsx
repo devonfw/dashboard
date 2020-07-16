@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
-  }),
+  })
 );
 
 interface Props {

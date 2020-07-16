@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
       color: '#fff',
     },
-  }),
+  })
 );
 
 export interface NotificationsDialogProps {
@@ -58,7 +58,9 @@ export default function NotificationsDialog(props: NotificationsDialogProps) {
                       primary={notification}
                       secondary="something"
                     />
-                    <IconButton><CloseIcon /></IconButton>
+                    <IconButton>
+                      <CloseIcon />
+                    </IconButton>
                   </ListItem>
                 );
               })

@@ -39,14 +39,14 @@ app.on('ready', async () => {
   const url = isDev
     ? 'http://localhost:8000/start'
     : format({
-      pathname: join(__dirname, '../../renderer/start.html'),
-      protocol: 'file:',
-      slashes: true,
-    });
+        pathname: join(__dirname, '../../renderer/start.html'),
+        protocol: 'file:',
+        slashes: true,
+      });
 
   mainWindow.loadURL(url);
 
-  mainWindow.webContents.session.on('will-download', downloadHandler)
+  mainWindow.webContents.session.on('will-download', downloadHandler);
 });
 
 // Quit the app once all windows are closed
@@ -59,46 +59,58 @@ const downloadHandler = (event, item, webContents) => {
       item.cancel();
     } else if (state === 'progressing') {
       if (!item.isPaused()) {
-        mainWindow.webContents.send('download progress', { total: item.getTotalBytes(), received: item.getReceivedBytes() });
+        mainWindow.webContents.send('download progress', {
+          total: item.getTotalBytes(),
+          received: item.getReceivedBytes(),
+        });
       }
     }
-  })
+  });
   item.once('done', (event, state) => {
     mainWindow.webContents.send('download completed', state);
     if (state === 'completed') {
       shell.showItemInFolder(item.getSavePath());
     }
-  })
+  });
 };
 
 // Finding out Devonfw Ide Instances
 function countInstance() {
-  new DevonInstancesService().getAvailableDevonIdeInstances().then(instances => {
-    mainWindow.webContents.send('count:instances', { total: instances });
-  }).catch(error => {
-    console.log(error);
-    mainWindow.webContents.send('count:instances', { total: 0 });
-  });
+  new DevonInstancesService()
+    .getAvailableDevonIdeInstances()
+    .then((instances) => {
+      mainWindow.webContents.send('count:instances', { total: instances });
+    })
+    .catch((error) => {
+      console.log(error);
+      mainWindow.webContents.send('count:instances', { total: 0 });
+    });
 }
 
 // Get all User created Instances
 function getDevonInstancesPath() {
-  new DevonInstancesService().getAllUserCreatedDevonInstances().then((instancesPath: DevonfwConfig) => {
-    mainWindow.webContents.send('get:devoninstances', instancesPath.distributions);
-  }).catch(error => {
-    console.log(error);
-    // If no instances are available
-    const fakeInstance: IdeDistribution = {
-      id: process.cwd(),
-      ideConfig: {
-        basepath: process.cwd(),
-        commands: '',
-        version: '',
-        workspaces: process.cwd() + '\\workspaces'
-      }
-    };
-    mainWindow.webContents.send('get:devoninstances', [fakeInstance]);
-  });
+  new DevonInstancesService()
+    .getAllUserCreatedDevonInstances()
+    .then((instancesPath: DevonfwConfig) => {
+      mainWindow.webContents.send(
+        'get:devoninstances',
+        instancesPath.distributions
+      );
+    })
+    .catch((error) => {
+      console.log(error);
+      // If no instances are available
+      const fakeInstance: IdeDistribution = {
+        id: process.cwd(),
+        ideConfig: {
+          basepath: process.cwd(),
+          commands: '',
+          version: '',
+          workspaces: process.cwd() + '\\workspaces',
+        },
+      };
+      mainWindow.webContents.send('get:devoninstances', [fakeInstance]);
+    });
 }
 
 function findOutWorkspaceLocation(paths) {
@@ -106,7 +118,10 @@ function findOutWorkspaceLocation(paths) {
   let location = '';
   for (let path of paths) {
     if (path.includes('workspaces')) {
-      location = path.substring(path.lastIndexOf('workspaces') + 10, -path.length);
+      location = path.substring(
+        path.lastIndexOf('workspaces') + 10,
+        -path.length
+      );
       if (!workspaces.includes(location)) {
         workspaces.push(location);
       }
@@ -121,11 +136,13 @@ function findOutWorkspaceLocation(paths) {
 }
 
 function getWorkspaceProject(workspacelocation: string) {
-  readdirPromise(workspacelocation).then((projects: string[]) => {
-    mainWindow.webContents.send('get:workspaceProjects', projects);
-  }).catch(error => {
-    mainWindow.webContents.send('get:workspaceProjects', []);
-  })
+  readdirPromise(workspacelocation)
+    .then((projects: string[]) => {
+      mainWindow.webContents.send('get:workspaceProjects', projects);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:workspaceProjects', []);
+    });
 }
 
 /* Enable services */
@@ -167,10 +184,18 @@ ipcMain.on('terminal/powershell', eventHandler);
 
 /* command retriever service */
 const commandRetrieverService = new CommandRetrieverService();
-commandRetrieverService.getCommandsByIdeConfig(devonfwConfig.distributions[0].ideConfig);
-commandRetrieverService.getWorkspacesByIdeConfig(devonfwConfig.distributions[0].ideConfig);
+commandRetrieverService.getCommandsByIdeConfig(
+  devonfwConfig.distributions[0].ideConfig
+);
+commandRetrieverService.getWorkspacesByIdeConfig(
+  devonfwConfig.distributions[0].ideConfig
+);
 commandRetrieverService.getAllDistributions(devonfwConfig);
-commandRetrieverService.addNewDistribution(devonfwConfig, "C:\\Proyectos\\devonfw-ide\\", "3.3.0");
+commandRetrieverService.addNewDistribution(
+  devonfwConfig,
+  'C:\\Proyectos\\devonfw-ide\\',
+  '3.3.0'
+);
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);

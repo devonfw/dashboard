@@ -12,27 +12,27 @@ const useStyles = makeStyles({
     minWidth: 250,
     margin: '0',
     '& button': {
-      padding: '1rem 0 0 0'
+      padding: '1rem 0 0 0',
     },
     '& .MuiButtonBase-root:hover': {
       backgroundColor: '#4CBDEC',
       '& .MuiTypography-colorTextSecondary': {
         color: '#FFFFFF',
-        textTransform: 'uppercase'
-      }
-    }
+        textTransform: 'uppercase',
+      },
+    },
   },
   media: {
-    height: 120
+    height: 120,
   },
   bgColor: {
     backgroundColor: '#4CBDEC',
     '& .MuiTypography-colorTextSecondary': {
-      color: '#FFFFFF'
+      color: '#FFFFFF',
     },
     '& .MuiCardActionArea-root': {
-      cursor: 'default'
-    }
+      cursor: 'default',
+    },
   },
   containImg: {
     'background-size': 'contain',
@@ -41,19 +41,18 @@ const useStyles = makeStyles({
 
   textCenter: {
     'text-align': 'center',
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
   noCursor: {
-    cursor: 'default'
-  }
+    cursor: 'default',
+  },
 });
-
 
 interface StackProps {
   image: string;
   command: string;
   variant: boolean;
-  onClick: ((event: React.MouseEvent) => void);
+  onClick: (event: React.MouseEvent) => void;
 }
 
 export default function StackCard(props: StackProps) {
@@ -61,7 +60,10 @@ export default function StackCard(props: StackProps) {
   const { image, command, variant } = props;
 
   return (
-    <Card className={`${classes.card} ${variant ? classes.bgColor : ''}`} onClick={variant ? undefined : props.onClick}>
+    <Card
+      className={`${classes.card} ${variant ? classes.bgColor : ''}`}
+      onClick={variant ? undefined : props.onClick}
+    >
       <CardActionArea>
         <CardMedia
           className={`${classes.media} ${classes.containImg}`}
@@ -69,7 +71,12 @@ export default function StackCard(props: StackProps) {
           title={command}
         />
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p" className={classes.textCenter}>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            component="p"
+            className={classes.textCenter}
+          >
             {command}
           </Typography>
         </CardContent>

@@ -34,12 +34,11 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const numSelected = selected.length;
 
   const copyFinishedMessage = () => {
-    
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: { notification: 'Finished copying' },
     });
-    console.log('copy finished')
+    console.log('copy finished');
   };
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
@@ -51,7 +50,7 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     messageSender
       .sendLs(dirPath)
       .then((projects: string[]) =>
-        loadData(projects.map((name: string) => createData(name))),
+        loadData(projects.map((name: string) => createData(name)))
       );
   };
 

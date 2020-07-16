@@ -33,7 +33,7 @@ export class TerminalService {
     const options = getOptions({ cwd });
     const cmd: Command = lsOS();
     const ls = exec(cmd.toString(), options);
-    console.log(cmd)
+    console.log(cmd);
 
     try {
       const result: string = (await this.standardHandler(ls)) as string;

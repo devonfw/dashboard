@@ -9,7 +9,7 @@ export class Project {
   constructor(
     directory: Directory,
     defaultIDE: IDE = new NullIDE(),
-    openWith: IDE[] = [],
+    openWith: IDE[] = []
   ) {
     this.directory = directory;
     this.defaultIDE = defaultIDE;
