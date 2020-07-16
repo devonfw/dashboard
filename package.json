@@ -8,7 +8,9 @@
     "start-all": "npm run build-main && electron .",
     "build": "npm run build-main && next build renderer && next export renderer",
     "dist": "npm run build && electron-builder --dir",
-    "start": "tsc-watch -p main --onSuccess \"npm run start-all\""
+    "start": "tsc-watch -p main --onSuccess \"npm run start-all\"",
+    "lint": "eslint main/**/*.ts renderer/**/*.ts renderer/**/*.tsx",
+    "prettier-format": "prettier --config .prettierrc \"./main/**/*.ts\" \"./renderer/**/*.{ts,tsx}\" --write"
   },
   "build": {
     "asar": false,
@@ -19,15 +21,29 @@
       }
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && npm run lint --fix"
+    }
+  },
   "devDependencies": {
     "@types/node": "^12.12.9",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
     "babel-plugin-styled-components": "^1.10.7",
     "concurrently": "^5.2.0",
     "electron": "^6.0.2",
     "electron-builder": "^21.2.0",
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "husky": "^4.2.5",
     "next": "latest",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "tsc-watch": "^4.0.0",
