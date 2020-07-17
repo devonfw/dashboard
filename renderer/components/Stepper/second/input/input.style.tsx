@@ -1,6 +1,6 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-const inputStyle = (theme: Theme) =>
+const inputStyle = () =>
   createStyles({
     inputElement: {
       color: 'red',

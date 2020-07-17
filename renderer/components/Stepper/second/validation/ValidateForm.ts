@@ -31,9 +31,9 @@ class ValidateForm {
     control.valid = isValid;
   }
 
-  static formStateValidity(formControls: any): boolean {
+  static formStateValidity(formControls: FormType): boolean {
     let formIsValid = true;
-    for (let inputIdentifier in formControls) {
+    for (const inputIdentifier in formControls) {
       if (formControls[inputIdentifier].valid !== undefined) {
         formIsValid = formControls[inputIdentifier].valid && formIsValid;
       }

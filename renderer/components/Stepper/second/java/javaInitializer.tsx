@@ -1,14 +1,7 @@
 import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
-import {
-  FormControl,
-  Button,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import { StepperContext } from '../../redux/stepperContext';
 import {
   IJavaInitializerForm,
@@ -18,11 +11,18 @@ import javaInitializerStyle from './javaInitializerStyle';
 import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
 import javaProjectConfig from './javaInitializerFormConfig';
 import Input from '../input/Input';
-import rulesDetails from '../validation/rulesDetails';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType, ValueType } from '../../../../models/dashboard/FormType';
 
-class JavaInitializer extends Component {
+interface JavaStyle {
+  classes: {
+    root: string;
+    error: string;
+    action: string;
+  };
+}
+
+class JavaInitializer extends Component<JavaStyle> {
   static contextType = StepperContext;
   state: IJavaInitializerForm = javaProjectConfig;
 
@@ -47,7 +47,7 @@ class JavaInitializer extends Component {
     });
   };
 
-  groupHandler = (value: string) => {
+  groupHandler = (value: string): void => {
     const updatedForm: FormControls = {
       ...this.state.formControls,
     };
@@ -100,7 +100,7 @@ class JavaInitializer extends Component {
     this.eventHandler('devonInstances', option);
   };
 
-  eventHandler(identifier: string, value: string) {
+  eventHandler(identifier: string, value: string): void {
     const formState: FormControls = {
       ...this.state.formControls,
     };
@@ -119,7 +119,7 @@ class JavaInitializer extends Component {
     });
   }
 
-  updateFormState = (args: ValueType) => {
+  updateFormState = (args: ValueType): void => {
     switch (args.identifier) {
       case 'group':
         return this.groupHandler(args.event.target.value);
@@ -133,20 +133,20 @@ class JavaInitializer extends Component {
     }
   };
 
-  setDevonWorkspace = (dir: string[]) => {
+  setDevonWorkspace = (dir: string[]): void => {
     this.resetForm();
     this.setState({
       workspaceDir: dir,
     });
   };
 
-  setActiveState = () => {
+  setActiveState = (): void => {
     this.context.dispatch({
       type: 'RESET_STEP',
     });
   };
 
-  handleBatchChange = (event: ChangeEvent<HTMLInputElement>) => {
+  handleBatchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const formState: FormControls = {
       ...this.state.formControls,
     };
@@ -156,11 +156,11 @@ class JavaInitializer extends Component {
     this.setState({ formControls: formState });
   };
 
-  resetForm = () => {
+  resetForm = (): void => {
     const formState: FormControls = {
       ...this.state.formControls,
     };
-    for (let key in formState) {
+    for (const key in formState) {
       if (formState[key].elementType === 'search') {
         const control: FormType = formState[key];
         control.value = '';
@@ -182,7 +182,7 @@ class JavaInitializer extends Component {
   render() {
     const { classes } = this.props;
     const formElementsArray = [];
-    for (let key in this.state.formControls) {
+    for (const key in this.state.formControls) {
       if (this.state.formControls[key].elementType) {
         formElementsArray.push({
           id: key,
@@ -190,7 +190,7 @@ class JavaInitializer extends Component {
         });
       }
     }
-    let form = (
+    const form = (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         {formElementsArray.map((formElement) => {
           return formElement.id !== 'devonInstances' ? (

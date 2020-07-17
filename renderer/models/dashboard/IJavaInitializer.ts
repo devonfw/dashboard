@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react';
 import { FormType } from './FormType';
 
 export interface IJavaInitializerForm {

@@ -1,14 +1,7 @@
 import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
-import {
-  FormControl,
-  Button,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { StepperContext } from '../../redux/stepperContext';
 import {
   INodeInitializerForm,
@@ -18,11 +11,18 @@ import nodeInitializerStyle from './nodeInitializerStyle';
 import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
 import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
-import rulesDetails from '../validation/rulesDetails';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType } from '../../../../models/dashboard/FormType';
 
-class NodeInitializer extends Component {
+interface NodeStyle {
+  classes: {
+    root: string;
+    error: string;
+    action: string;
+  };
+}
+
+class NodeInitializer extends Component<NodeStyle> {
   static contextType = StepperContext;
   state: INodeInitializerForm = nodeProjectConfig;
 
@@ -83,11 +83,11 @@ class NodeInitializer extends Component {
     });
   };
 
-  resetForm = () => {
+  resetForm = (): void => {
     const formState: FormControls = {
       ...this.state.formControls,
     };
-    for (let key in formState) {
+    for (const key in formState) {
       if (formState[key].elementType === 'search') {
         const control: FormType = formState[key];
         control.value = '';
@@ -109,7 +109,7 @@ class NodeInitializer extends Component {
   render() {
     const { classes } = this.props;
     const formElementsArray = [];
-    for (let key in this.state.formControls) {
+    for (const key in this.state.formControls) {
       if (this.state.formControls[key].elementType) {
         formElementsArray.push({
           id: key,
@@ -117,7 +117,7 @@ class NodeInitializer extends Component {
         });
       }
     }
-    let form = (
+    const form = (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         {formElementsArray.map((formElement) => {
           return formElement.id !== 'devonInstances' ? (
