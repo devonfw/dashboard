@@ -17,7 +17,8 @@ export class devonfwIDE {
     this.workspaces = workspaces;
   }
 
-  createWorkspace(name: string, location: string) {
+  createWorkspace(name: string, location: string): boolean {
+    console.log(`Should create workspace '${name}' at '${location}'`);
     return false;
   }
 }

@@ -1,7 +1,5 @@
 import { exec } from 'child_process';
-import Process from '../../decorators/process';
 import { getOptions } from '../terminal/terminal-utils';
-import { ReturnMessage } from '../shared/return-message';
 import { promiseChildProcess } from '../shared/handle-child-process';
 import { readdirPromise } from '../shared/promised';
 import {
@@ -10,6 +8,7 @@ import {
   IdeDistribution,
 } from '../../models/devonfw-dists.model';
 import * as fs from 'fs';
+import { RendererMessage } from '../../models/renderer-message';
 
 const MAX_BUFFER = 1024 * 500; /* 500 KB */
 
@@ -84,10 +83,10 @@ export class CommandRetrieverService {
     devonfwConfig.distributions[path] = ideDistribution;
   }
 
-  private async allCommands(
+  async allCommands(
     command: string,
     cwd?: string
-  ): Promise<string | ReturnMessage> {
+  ): Promise<string | RendererMessage<string>> {
     if (!command) return '';
 
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
@@ -95,9 +94,9 @@ export class CommandRetrieverService {
 
     try {
       const result = await promiseChildProcess(mvn);
-      return new ReturnMessage(false, result);
+      return new RendererMessage(false, result);
     } catch (error) {
-      return new ReturnMessage(true, error);
+      return new RendererMessage(true, error);
     }
   }
 }

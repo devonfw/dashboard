@@ -3,6 +3,7 @@ import Process from '../../decorators/process';
 import { dialog } from 'electron';
 import { dirStringToArray, lsOS, getOptions } from './terminal-utils';
 import { Command, CMD_MKDIR, CMD_RMDIR, CMD_PWD } from './terminal-commands';
+import { RendererMessage } from '../../models/renderer-message';
 
 const MAX_BUFFER = 1024 * 500; /* 500 KB */
 
@@ -31,7 +32,7 @@ export class TerminalService {
   }
 
   @Process('terminal/ls')
-  async ls(cwd?: string): Promise<ReturnMessage> {
+  async ls(cwd?: string): Promise<RendererMessage<string[]>> {
     const options = getOptions({ cwd });
     const cmd: Command = lsOS();
     const ls = exec(cmd.toString(), options);
@@ -41,69 +42,68 @@ export class TerminalService {
       const result: string = (await this.standardHandler(ls)) as string;
       const resultArray = dirStringToArray(result);
 
-      return new ReturnMessage(false, resultArray);
+      return new RendererMessage(false, resultArray);
     } catch (error) {
-      return new ReturnMessage(true, error);
+      return new RendererMessage(true, error);
     }
   }
 
   @Process('terminal/mkdir')
-  async mkdir(dirname: string): Promise<string> {
+  async mkdir(dirname: string): Promise<RendererMessage<string>> {
     const mkdir = spawn(CMD_MKDIR.command, [dirname]);
     try {
       const result = await this.standardHandler(mkdir);
-
-      return result;
+      return new RendererMessage(false, result);
     } catch (error) {
-      return error;
+      return new RendererMessage(true, error);
     }
   }
 
   @Process('terminal/rmdir')
-  async rmdir(dirname: string): Promise<string> {
+  async rmdir(dirname: string): Promise<RendererMessage<string>> {
     const rmdir = spawn(CMD_RMDIR.command, [dirname]);
     try {
       const result = await this.standardHandler(rmdir);
-      return result;
+      return new RendererMessage(false, result);
     } catch (error) {
-      return error;
+      return new RendererMessage(true, error);
     }
   }
 
   @Process('terminal/pwd')
-  async pwd(): Promise<string> {
+  async pwd(): Promise<RendererMessage<string>> {
     const pwd = spawn(CMD_PWD.command, CMD_PWD.arguments);
 
     try {
       const result = await this.standardHandler(pwd);
-      return result;
+      return new RendererMessage(false, result);
     } catch (error) {
-      return error;
+      return new RendererMessage(true, error);
     }
   }
 
   @Process('terminal/open-dialog')
-  async openDialog(): Promise<ReturnMessage> {
+  async openDialog(): Promise<RendererMessage<Electron.OpenDialogReturnValue>> {
     try {
       const result = await dialog.showOpenDialog({
         properties: ['openDirectory'],
       });
-      return new ReturnMessage(false, result);
+      return new RendererMessage(false, result);
     } catch (error) {
-      return new ReturnMessage(true, error);
+      return new RendererMessage(true, error);
     }
   }
 
   @Process('terminal/mvn-install')
-  async mvnInstall(cwd?: string): Promise<string> {
+  async mvnInstall(cwd?: string): Promise<RendererMessage<string>> {
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
     const mvn = exec('mvn --help', options);
 
     try {
       const result = await this.standardHandler(mvn);
-      return result;
+      return new RendererMessage(false, result);
     } catch (error) {
-      return error;
+      return new RendererMessage(true, error);
     }
   }
 
@@ -111,27 +111,17 @@ export class TerminalService {
   async allCommands(
     command: string,
     cwd?: string
-  ): Promise<string | ReturnMessage> {
-    if (!command) return '';
+  ): Promise<RendererMessage<string>> {
+    if (!command) return new RendererMessage(false, '');
 
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
     const mvn = exec(command, options);
 
     try {
       const result = await this.standardHandler(mvn);
-      return new ReturnMessage(false, result);
+      return new RendererMessage(false, result);
     } catch (error) {
-      return new ReturnMessage(true, error);
+      return new RendererMessage(true, error);
     }
-  }
-}
-
-class ReturnMessage {
-  error: boolean;
-  body: unknown;
-
-  constructor(error: boolean, body: unknown) {
-    this.error = error;
-    this.body = body;
   }
 }

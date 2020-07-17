@@ -2,7 +2,7 @@ import { ChildProcessWithoutNullStreams } from 'child_process';
 
 export function promiseChildProcess(
   childProcess: ChildProcessWithoutNullStreams
-): Promise<{}> {
+): Promise<string> {
   return new Promise((resolve, reject) => {
     let result = '';
     let error = '';

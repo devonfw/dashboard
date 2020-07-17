@@ -1,19 +1,22 @@
 import { IpcRendererEvent } from 'electron';
+import MainMessage from '../../models/main-message';
 
+type HandlerFunction = () => void;
+type ChannelArgs = unknown;
 class Renderer {
   private channels: string[] = [];
 
-  on(channel: string, handler: Function) {
+  on(channel: string, handler: HandlerFunction): void {
     global.ipcRenderer.on(channel, handler);
     this.channels.push(channel);
   }
 
-  removeListener(channel: string, handler: Function) {
+  removeListener(channel: string, handler: HandlerFunction): void {
     global.ipcRenderer.removeListener(channel, handler);
     this.channels = this.channels.filter((sub) => sub != channel);
   }
 
-  removeAll() {
+  removeAll(): void {
     for (const channel of this.channels) {
       global.ipcRenderer.removeAllListeners(channel);
     }
@@ -21,15 +24,15 @@ class Renderer {
     this.channels = [];
   }
 
-  sendMultiple(channel: string, ...args: any[]) {
+  sendMultiple(channel: string, ...args: ChannelArgs[]): void {
     global.ipcRenderer.send(channel, ...args);
   }
 
-  send(channel: string, ...args: any[]): Promise<any> {
-    const result = new Promise<{ error?: string }>((resolve, reject) => {
+  send<Body>(channel: string, ...args: ChannelArgs[]): Promise<Body> {
+    const result = new Promise<Body>((resolve, reject) => {
       global.ipcRenderer.once(
         channel,
-        (_: IpcRendererEvent, message: ReturnMessage) => {
+        (_: IpcRendererEvent, message: MainMessage<Body>) => {
           if (message.error) {
             reject(message.body);
           } else {
@@ -45,13 +48,3 @@ class Renderer {
 }
 
 export default Renderer;
-
-export class ReturnMessage {
-  error: boolean;
-  body: {};
-
-  constructor(error: boolean, body: {}) {
-    this.error = error;
-    this.body = body;
-  }
-}

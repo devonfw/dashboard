@@ -3,8 +3,6 @@ import { join } from 'path';
 import { format } from 'url';
 import { IpcMainEvent } from 'electron';
 import { spawn, StdioOptions, SpawnOptions } from 'child_process';
-import fs from 'fs';
-import path from 'path';
 
 // Packages
 import { BrowserWindow, app, ipcMain, shell } from 'electron';
@@ -53,8 +51,8 @@ app.on('ready', async () => {
 app.on('window-all-closed', app.quit);
 
 /* Manage all downloads */
-const downloadHandler = (event, item, webContents) => {
-  item.on('updated', (event, state) => {
+const downloadHandler = (_, item) => {
+  item.on('updated', (_, state) => {
     if (state === 'interrupted') {
       item.cancel();
     } else if (state === 'progressing') {
@@ -66,7 +64,7 @@ const downloadHandler = (event, item, webContents) => {
       }
     }
   });
-  item.once('done', (event, state) => {
+  item.once('done', (_, state) => {
     mainWindow.webContents.send('download completed', state);
     if (state === 'completed') {
       shell.showItemInFolder(item.getSavePath());
@@ -113,10 +111,10 @@ function getDevonInstancesPath() {
     });
 }
 
-function findOutWorkspaceLocation(paths) {
-  let workspaces = [];
+export function findOutWorkspaceLocation(paths: string[]): string[] {
+  const workspaces = [];
   let location = '';
-  for (let path of paths) {
+  for (const path of paths) {
     if (path.includes('workspaces')) {
       location = path.substring(
         path.lastIndexOf('workspaces') + 10,
@@ -140,7 +138,7 @@ function getWorkspaceProject(workspacelocation: string) {
     .then((projects: string[]) => {
       mainWindow.webContents.send('get:workspaceProjects', projects);
     })
-    .catch((error) => {
+    .catch(() => {
       mainWindow.webContents.send('get:workspaceProjects', []);
     });
 }
@@ -148,7 +146,7 @@ function getWorkspaceProject(workspacelocation: string) {
 /* Enable services */
 
 /* terminal powershell */
-const eventHandler = (event: IpcMainEvent, ...eventArgs: any[]) => {
+const eventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
 

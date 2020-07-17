@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useContext } from 'react';
+import React, { useState, ChangeEvent, useContext } from 'react';
 import clsx from 'clsx';
 import { useToolbarStyles } from './TableToolbar.styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -58,8 +58,8 @@ export default function EnhancedTableToolbar(
 
   const handleOpenSource = async () => {
     const message = await messageSender.sendOpenDialog();
-    if (!message['canceled']) {
-      const dirPath = message['filePaths'][0];
+    if (!message.canceled) {
+      const dirPath = message.filePaths[0];
       setSourceLocation(dirPath);
       sendLoadProjects(dirPath);
     }
@@ -67,8 +67,8 @@ export default function EnhancedTableToolbar(
 
   const handleOpenWorkspace = async () => {
     const message = await messageSender.sendOpenDialog();
-    if (!message['canceled']) {
-      const dirPath = message['filePaths'][0];
+    if (!message.canceled) {
+      const dirPath = message.filePaths[0];
       setWorkspace(dirPath);
     }
   };

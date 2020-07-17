@@ -8,7 +8,11 @@ import {
 
 const WINDOWS_OS = 'win32';
 
-function isNotEmpty(str: string) {
+export interface JSMap {
+  [key: string]: string | number;
+}
+
+function isNotEmpty(str: string): boolean {
   return str != '\x0d' && !!str;
 }
 
@@ -38,7 +42,7 @@ export function cpOS(): Command {
   return cmd;
 }
 
-export function getOptions(opts: {}): {} | undefined {
+export function getOptions(opts: JSMap): JSMap | undefined {
   const options = {};
 
   for (const key of Object.keys(opts)) {

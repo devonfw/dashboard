@@ -1,6 +1,6 @@
 import { DevonfwConfig } from './models/devonfw-dists.model';
 
-export let devonfwConfig: DevonfwConfig = {
+export const devonfwConfig: DevonfwConfig = {
   distributions: [
     {
       id: 'C:\\Proyectos\\devonfw-dashboard-fork',
