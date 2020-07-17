@@ -3,6 +3,8 @@ import NgData from './angular/NgData';
 import NgType from '../first/angular/NgType';
 import JavaType from '../first/java/JavaType';
 import NodeType from '../first/node/NodeType';
+import JavaInitializer from '../second/java/JavaInitializer';
+import NodeInitializer from '../second/node/NodeInitializer';
 
 const ngStep = () => (
   <>
@@ -14,14 +16,14 @@ const ngStep = () => (
 const javaStep = () => (
   <>
     <JavaType variant={true}></JavaType>
-    <NgData></NgData>
+    <JavaInitializer></JavaInitializer>
   </>
 );
 
 const nodeStep = () => (
   <>
     <NodeType variant={true}></NodeType>
-    <NgData></NgData>
+    <NodeInitializer></NodeInitializer>
   </>
 );
 
