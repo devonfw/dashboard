@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { platform } from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
@@ -62,20 +63,25 @@ export class DevonInstancesService {
           if (err) reject('No instances find out');
           if (data) {
             paths = data.split('\n');
-            for (const path of paths) {
-              if (path) {
+            for (let singlepath of paths) {
+              if (singlepath) {
+                if (platform() === 'win32') {
+                  singlepath = singlepath.replace('/', '');
+                  singlepath = singlepath.replace('/', ':/');
+                  singlepath = singlepath.replace(/\//g, path.sep);
+                }  
                 const instance: IdeDistribution = {
-                  id: path,
+                  id: singlepath,
                   ideConfig: {
                     version: '',
-                    basepath: path,
-                    commands: path + '\\scripts\\command',
-                    workspaces: path + '\\workspaces',
+                    basepath: singlepath,
+                    commands: path.resolve(singlepath, 'scripts', 'command'),
+                    workspaces: path.resolve(singlepath, 'workspaces'),
                   },
                 };
                 exec(
                   'devon -v',
-                  { cwd: path + '\\scripts' },
+                  { cwd: path.resolve(singlepath, 'scripts') },
                   (_: unknown, stdout: string) => {
                     instance.ideConfig.version = stdout;
                   }
