@@ -23,8 +23,8 @@ const nodeProjectConfig: INodeInitializerForm = {
       elementType: 'select',
       value: '',
     },
-    formIsValid: false,
   },
+  formIsValid: false,
 };
 
 export default nodeProjectConfig;

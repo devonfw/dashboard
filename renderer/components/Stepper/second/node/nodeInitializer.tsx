@@ -63,10 +63,9 @@ class NodeInitializer extends Component<NodeStyle> {
     }
     formState[identifier] = element;
 
-    formState.formIsValid = ValidateForm.formStateValidity(formState);
-
     this.setState({
       formControls: formState,
+      formIsValid: ValidateForm.formStateValidity(formState),
     });
   }
 
@@ -103,7 +102,7 @@ class NodeInitializer extends Component<NodeStyle> {
         formState[key] = control;
       }
     }
-    this.setState({ formControls: formState });
+    this.setState({ formControls: formState, formIsValid: false });
   };
 
   render() {
@@ -164,7 +163,7 @@ class NodeInitializer extends Component<NodeStyle> {
             variant="contained"
             color="primary"
             type="submit"
-            disabled={!this.state.formControls.formIsValid}
+            disabled={!this.state.formIsValid}
           >
             Next
           </Button>

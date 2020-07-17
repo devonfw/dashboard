@@ -66,9 +66,9 @@ class JavaInitializer extends Component<JavaStyle> {
     updatedForm.group = groupElement;
     updatedForm.artifact = artifact;
     updatedForm.packageName = packageName;
-    updatedForm.formIsValid = ValidateForm.formStateValidity(updatedForm);
     this.setState({
       formControls: updatedForm,
+      formIsValid: ValidateForm.formStateValidity(updatedForm),
     });
   };
 
@@ -90,9 +90,9 @@ class JavaInitializer extends Component<JavaStyle> {
 
     updatedForm.artifact = artifact;
     updatedForm.packageName = packageName;
-    updatedForm.formIsValid = ValidateForm.formStateValidity(updatedForm);
     this.setState({
       formControls: updatedForm,
+      formIsValid: ValidateForm.formStateValidity(updatedForm),
     });
   };
 
@@ -112,23 +112,22 @@ class JavaInitializer extends Component<JavaStyle> {
     }
     formState[identifier] = element;
 
-    formState.formIsValid = ValidateForm.formStateValidity(formState);
-
     this.setState({
       formControls: formState,
+      formIsValid: ValidateForm.formStateValidity(formState),
     });
   }
 
   updateFormState = (args: ValueType): void => {
     switch (args.identifier) {
       case 'group':
-        return this.groupHandler(args.event.target.value);
+        return this.groupHandler(args.event ? args.event.target.value : '');
       case 'artifact':
-        return this.artifactHandler(args.event.target.value);
+        return this.artifactHandler(args.event ? args.event.target.value : '');
       default:
         return this.eventHandler(
           args.identifier,
-          args.event ? args.event.target.value : args.value
+          args.event ? args.event.target.value : args.value ? args.value : ''
         );
     }
   };
@@ -176,7 +175,7 @@ class JavaInitializer extends Component<JavaStyle> {
         formState[key] = control;
       }
     }
-    this.setState({ formControls: formState });
+    this.setState({ formControls: formState, formIsValid: false });
   };
 
   render() {
@@ -253,7 +252,7 @@ class JavaInitializer extends Component<JavaStyle> {
             variant="contained"
             color="primary"
             type="submit"
-            disabled={!this.state.formControls.formIsValid}
+            disabled={!this.state.formIsValid}
           >
             Next
           </Button>

@@ -1,4 +1,10 @@
-const rulesDetails = {
+interface Rules {
+  required?: string;
+  pattern?: string;
+  existing?: string;
+}
+
+const rulesDetails: { [key: string]: Rules } = {
   name: {
     required: 'Please provide a value',
     pattern: 'Please remove special characters and numeric numbers',
