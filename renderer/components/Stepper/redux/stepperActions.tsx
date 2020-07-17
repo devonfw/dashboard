@@ -1,5 +1,3 @@
-import { INgData } from "./data.model";
-
 export type StepperActionType =
   | 'SET_ACTIVE'
   | 'NEXT_STEP'

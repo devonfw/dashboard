@@ -10,7 +10,7 @@ export interface SearcherViewProps {
   repositories: Repository[];
 }
 
-export default function SearcherView(props: SearcherViewProps) {
+export default function SearcherView(props: SearcherViewProps): JSX.Element {
   const classes = useSearcherStyles();
 
   return (
@@ -25,8 +25,8 @@ export default function SearcherView(props: SearcherViewProps) {
         />
       </form>
       <div>
-        {props.repositories.map((repository) => (
-          <RepositoryCard {...repository}></RepositoryCard>
+        {props.repositories.map((repository: Repository, index: number) => (
+          <RepositoryCard {...repository} key={index}></RepositoryCard>
         ))}
       </div>
     </>

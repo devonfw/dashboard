@@ -33,7 +33,7 @@ interface IdeCardsProps {
   loading: boolean;
 }
 
-export default function IdeCard(props: IdeCardsProps) {
+export default function IdeCard(props: IdeCardsProps): JSX.Element {
   const classes = useStyles();
   const { image, title, description, onClick, loading } = props;
 
@@ -63,7 +63,7 @@ export default function IdeCard(props: IdeCardsProps) {
         >
           Open
         </Button>
-        { loading ? <CircularProgress size={28} /> : null }
+        {loading ? <CircularProgress size={28} /> : null}
       </CardActions>
     </Card>
   );

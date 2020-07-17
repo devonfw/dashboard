@@ -1,5 +1,5 @@
-import { Directory } from "./Directory";
-import { Project } from "./Project";
+import { Directory } from './Directory';
+import { Project } from './Project';
 
 export class Workspace {
   public directory: Directory;

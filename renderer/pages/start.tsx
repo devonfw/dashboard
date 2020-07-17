@@ -1,17 +1,15 @@
-import { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../hoc/Layout';
 import SpaceAround from '../hoc/SpaceAround';
-import CustomStepper from '../components/stepper/CustomStepper';
-import { StepperProvider } from '../components/stepper/redux/stepperContext';
+import CustomStepper from '../components/Stepper/CustomStepper';
+import { StepperProvider } from '../components/Stepper/redux/stepperContext';
 
-const useStyles = theme => ({
+const useStyles = makeStyles({
   container: {
     backgroundColor: '#FFFFFF',
     color: '#000000',
     marginRight: '1em',
-    padding: '1em 2em;'
+    padding: '1em 2em;',
   },
   header: {
     paddingLeft: '1rem',
@@ -19,17 +17,20 @@ const useStyles = theme => ({
     paddingTop: '1rem',
     marginBottom: '0',
     '& span': {
-      color: '#0075B3'
-    }
-  }
+      color: '#0075B3',
+    },
+  },
 });
 
-class HelloElectron extends Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <Layout>
-        <h3 className={classes.header}><span>Projects > </span>New Project</h3>
+export default function HelloElectron(): JSX.Element {
+  const classes = useStyles();
+
+  return (
+    <Layout>
+      <>
+        <h3 className={classes.header}>
+          <span>Projects &gt;</span>New Project
+        </h3>
         <SpaceAround bgColor={'#F4F6F8'}>
           <div className={classes.container}>
             <StepperProvider>
@@ -37,9 +38,7 @@ class HelloElectron extends Component {
             </StepperProvider>
           </div>
         </SpaceAround>
-      </Layout>
-    );
-  }
+      </>
+    </Layout>
+  );
 }
-
-export default withStyles(useStyles)(HelloElectron);

@@ -38,6 +38,6 @@ export const useToolbarStyles = makeStyles((theme: Theme) =>
     formControlSelect: {
       marginLeft: theme.spacing(1),
       minWidth: 200,
-    }
-  }),
+    },
+  })
 );

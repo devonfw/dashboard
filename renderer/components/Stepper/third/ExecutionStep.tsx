@@ -3,21 +3,23 @@ import SingleCommandTerminal from '../../terminal/SingleCommandTerminal';
 import { StepperContext } from '../redux/stepperContext';
 
 class ExecutionStep extends Component {
+  render(): JSX.Element {
+    let stackCmd = this.context.state.stackCmd;
+    stackCmd = stackCmd ? stackCmd : '';
 
-    render() {
-        let stackCmd = this.context.state.stackCmd;
-        stackCmd = stackCmd ? stackCmd : '';
+    let stackCwd = this.context.state.stackCwd;
+    stackCwd = stackCwd ? stackCwd : '';
 
-        let stackCwd = this.context.state.stackCwd;
-        stackCwd = stackCwd ? stackCwd : '';
+    const initialCommand = `${stackCmd}`;
+    const initialCwd = `${stackCwd}`;
 
-        let initialCommand = `${stackCmd}`
-        let initialCwd = `${stackCwd}`
-
-        return (
-            <SingleCommandTerminal initialCommand={initialCommand} initialCwd={initialCwd}></SingleCommandTerminal>
-        )
-    }
+    return (
+      <SingleCommandTerminal
+        initialCommand={initialCommand}
+        initialCwd={initialCwd}
+      ></SingleCommandTerminal>
+    );
+  }
 }
 
 ExecutionStep.contextType = StepperContext;

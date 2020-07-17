@@ -1,12 +1,12 @@
-import { useContext, MouseEvent } from 'react';
+import { useContext } from 'react';
 import { StepperContext } from '../../redux/stepperContext';
 import StackCard from '../../../cards/stack-card/StackCard';
 
-const NodeType = (props) => {
+const NodeType = (props: { variant: boolean }): JSX.Element => {
   const { dispatch } = useContext(StepperContext);
-  const {variant} = props;
+  const { variant } = props;
 
-  const handleNode = (event: MouseEvent) => {
+  const handleNode = () => {
     dispatch({ type: 'SET_STACK', payload: { stack: 'node' } });
   };
 

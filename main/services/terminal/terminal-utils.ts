@@ -8,16 +8,20 @@ import {
 
 const WINDOWS_OS = 'win32';
 
-function isNotEmpty(str: string) {
+export interface JSMap {
+  [key: string]: string | number;
+}
+
+function isNotEmpty(str: string): boolean {
   return str != '\x0d' && !!str;
 }
 
-export function dirStringToArray(dirs: string) {
+export function dirStringToArray(dirs: string): string[] {
   return dirs.split('\n').filter(isNotEmpty);
 }
 
 export function lsOS(): Command {
-  let isWin = process.platform === WINDOWS_OS;
+  const isWin = process.platform === WINDOWS_OS;
   let cmd = CMD_LS;
 
   if (isWin) {
@@ -28,7 +32,7 @@ export function lsOS(): Command {
 }
 
 export function cpOS(): Command {
-  let isWin = process.platform === WINDOWS_OS;
+  const isWin = process.platform === WINDOWS_OS;
   let cmd = CMD_CP;
 
   if (isWin) {
@@ -38,8 +42,8 @@ export function cpOS(): Command {
   return cmd;
 }
 
-export function getOptions(opts: {}): {} | undefined {
-  let options = {};
+export function getOptions(opts: JSMap): JSMap | undefined {
+  const options = {};
 
   for (const key of Object.keys(opts)) {
     const value = opts[key];

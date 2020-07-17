@@ -1,19 +1,24 @@
-import { Directory } from "./Directory";
-import { Command } from "./Command";
-import { Workspace } from "./Workspace";
+import { Directory } from './Directory';
+import { Command } from './Command';
+import { Workspace } from './Workspace';
 
 export class devonfwIDE {
   public directory: Directory;
   public availableCommands: Command[];
   public workspaces: Workspace[];
 
-  constructor(directory: Directory, availableCommands: Command[] = [], workspaces: Workspace[] = []) {
+  constructor(
+    directory: Directory,
+    availableCommands: Command[] = [],
+    workspaces: Workspace[] = []
+  ) {
     this.directory = directory;
     this.availableCommands = availableCommands;
     this.workspaces = workspaces;
   }
 
-  createWorkspace(name: string, location: string) {
+  createWorkspace(name: string, location: string): boolean {
+    console.log(`Should create workspace '${name}' at '${location}'`);
     return false;
   }
 }

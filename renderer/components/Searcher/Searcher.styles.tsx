@@ -8,5 +8,5 @@ export const useSearcherStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
     },
-  }),
+  })
 );

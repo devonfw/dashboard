@@ -1,12 +1,12 @@
-import { useContext, MouseEvent } from 'react';
+import { useContext } from 'react';
 import { StepperContext } from '../../redux/stepperContext';
 import StackCard from '../../../cards/stack-card/StackCard';
 
-const NgType = (props) => {
+const NgType = (props: { variant: boolean }): JSX.Element => {
   const { dispatch } = useContext(StepperContext);
-  const {variant} = props;
+  const { variant } = props;
 
-  const handleNg = (event: MouseEvent) => {
+  const handleNg = () => {
     dispatch({ type: 'SET_STACK', payload: { stack: 'ng' } });
   };
 

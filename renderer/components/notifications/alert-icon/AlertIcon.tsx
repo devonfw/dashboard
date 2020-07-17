@@ -1,19 +1,19 @@
 import { useContext } from 'react';
 import Badge from '@material-ui/core/Badge';
-import { Theme, withStyles, createStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles } from '@material-ui/core/styles';
 import NotificationsNone from '@material-ui/icons/NotificationsNone';
 import { NotificationsContext } from '../redux/NotificationsContext';
 
-const StyledBadge = withStyles((theme: Theme) =>
+const StyledBadge = withStyles(() =>
   createStyles({
     badge: {
       backgroundColor: '#4CBDEC',
       color: '#FFFFFF',
     },
-  }),
+  })
 )(Badge);
 
-export default function () {
+export default function AlertIcon(): JSX.Element {
   const { state } = useContext(NotificationsContext);
 
   return (
