@@ -54,7 +54,7 @@ const Input = (props: InputParams): JSX.Element => {
           variant="outlined"
           onChange={props.changed}
         >
-          {props.elementConfig.options.map(option => (
+          {props.elementConfig.options.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.displayValue}
             </MenuItem>
