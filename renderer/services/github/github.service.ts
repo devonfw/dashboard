@@ -14,7 +14,7 @@ function formatQuery(query: string) {
   return `${query.trim().replace(' ', '+')}+`;
 }
 
-function processResponse(data: any) {
+function processResponse(data: ResType[]) {
   const output: Repository[] = [];
   data.forEach((repo: ResType) => {
     output.push({
@@ -32,14 +32,12 @@ function processResponse(data: any) {
 function fetchGithub(query: string): Promise<Response> {
   return fetch(
     `https://api.github.com/search/repositories?q=${query}user:devonfw`,
-    { headers: { 'User-Agent': 'jambulud' } },
+    { headers: { 'User-Agent': 'jambulud' } }
   );
 }
 
 export default class GithubService {
-  constructor() {}
-
-  async getReposNonFormatted(query: string) {
+  async getReposNonFormatted(query: string): Promise<Repository[]> {
     const res = await fetchGithub(query);
     const data = await res.json();
     const cleanData = data.items || [];
@@ -48,7 +46,7 @@ export default class GithubService {
     return output;
   }
 
-  async getRepos(query: string = '') {
+  async getRepos(query = ''): Promise<Repository[]> {
     return this.getReposNonFormatted(formatQuery(query));
   }
 }

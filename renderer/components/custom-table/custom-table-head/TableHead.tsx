@@ -25,12 +25,14 @@ interface EnhancedTableProps {
   numSelected: number;
   onSelectAllClick: (
     event: React.ChangeEvent<HTMLInputElement>,
-    checked: boolean,
+    checked: boolean
   ) => void;
   rowCount: number;
 }
 
-export default function EnhancedTableHead(props: EnhancedTableProps) {
+export default function EnhancedTableHead(
+  props: EnhancedTableProps
+): JSX.Element {
   const { onSelectAllClick, numSelected, rowCount } = props;
 
   return (

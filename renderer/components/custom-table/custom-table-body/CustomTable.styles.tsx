@@ -23,5 +23,5 @@ export const useCustomTableStyles = makeStyles((theme: Theme) =>
       top: 20,
       width: 1,
     },
-  }),
+  })
 );

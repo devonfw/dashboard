@@ -18,7 +18,7 @@ export interface CustomTableViewProps {
   page: number;
   rowsPerPage: number;
   emptyRows: number;
-  handleClick: (event: any, name: string) => void;
+  handleClick: (name: string) => void;
   handleChangePage: (event: unknown, newPage: number) => void;
   handleSelectAllClick: (event: ChangeEvent<HTMLInputElement>) => void;
   handleChangeRowsPerPage: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +26,9 @@ export interface CustomTableViewProps {
   loadData: (data: Data[]) => void;
 }
 
-export default function CustomTableView(props: CustomTableViewProps) {
+export default function CustomTableView(
+  props: CustomTableViewProps
+): JSX.Element {
   const classes = useCustomTableStyles();
   const { selected, isSelected } = props;
   const { rows, page, rowsPerPage, emptyRows } = props;
@@ -37,7 +39,7 @@ export default function CustomTableView(props: CustomTableViewProps) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar loadData={loadData} selected={selected}/>
+        <EnhancedTableToolbar loadData={loadData} selected={selected} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -60,7 +62,7 @@ export default function CustomTableView(props: CustomTableViewProps) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={() => handleClick(row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -15,7 +14,7 @@ interface StepperProps {
 }
 
 class MaterialStepper extends Component<StepperProps> {
-  getStep(step: StepObject) {
+  getStep(step: StepObject): JSX.Element {
     return (
       <Step key={step.title}>
         <StepLabel>{step.title}</StepLabel>
@@ -23,7 +22,7 @@ class MaterialStepper extends Component<StepperProps> {
     );
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <div className={'root'}>
         <Stepper activeStep={this.context.state.activeStep} alternativeLabel>

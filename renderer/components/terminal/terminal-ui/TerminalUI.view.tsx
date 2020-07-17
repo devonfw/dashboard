@@ -9,18 +9,19 @@ export interface TerminalUIViewProps {
   children?: JSX.Element;
 }
 
-export default function TerminalUIView(props: TerminalUIViewProps) {
+export default function TerminalUIView(
+  props: TerminalUIViewProps
+): JSX.Element {
   const classes = useTerminalUIStyles();
 
   return (
-    <div className={ classes.terminal }>
-      <Records previous={ props.previous } />
-      <span className={`${ classes.fontConsole } ${ classes.colorGreen }`}>
-        { props.cwd }
+    <div className={classes.terminal}>
+      <Records previous={props.previous} />
+      <span className={`${classes.fontConsole} ${classes.colorGreen}`}>
+        {props.cwd}
       </span>
-      <br />${' '}
-      { props.children }
-      <div ref={ props.scrollAnchor }></div>
+      <br />$ {props.children}
+      <div ref={props.scrollAnchor}></div>
     </div>
-  )
+  );
 }

@@ -13,19 +13,19 @@ const useStyles = makeStyles((theme: Theme) =>
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
-  }),
+  })
 );
 
 interface Props {
   onSelected: (option: string) => void;
 }
 
-const NgDataStyling = (props: Props) => {
+const NgDataStyling = (props: Props): JSX.Element => {
   const classes = useStyles();
   const [styling, setStyling] = useState({ value: 'scss' });
 
-  const handleChange = (event: ChangeEvent<{ value: any }>) => {
-    const stylingOpt = event.target.value as string;
+  const handleChange = (event: ChangeEvent<{ value: string }>) => {
+    const stylingOpt = event.target.value;
     setStyling({ value: stylingOpt });
     props.onSelected(stylingOpt);
   };
@@ -33,7 +33,6 @@ const NgDataStyling = (props: Props) => {
   const step = (
     <>
       <FormControl className={classes.formControl}>
-
         <TextField
           id="select-styling-label"
           select
@@ -45,7 +44,6 @@ const NgDataStyling = (props: Props) => {
           <MenuItem value={'css'}>CSS</MenuItem>
           <MenuItem value={'scss'}>SCSS</MenuItem>
         </TextField>
-
       </FormControl>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useContext } from 'react';
+import React, { useState, ChangeEvent, useContext } from 'react';
 import clsx from 'clsx';
 import { useToolbarStyles } from './TableToolbar.styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -23,7 +23,9 @@ interface EnhancedTableToolbarProps {
   loadData: (data: Data[]) => void;
 }
 
-export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+export default function EnhancedTableToolbar(
+  props: EnhancedTableToolbarProps
+): JSX.Element {
   const classes = useToolbarStyles();
   const messageSender: MessageSenderService = new MessageSenderService();
   const { dispatch } = useContext(NotificationsContext);
@@ -34,12 +36,11 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   const numSelected = selected.length;
 
   const copyFinishedMessage = () => {
-    
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: { notification: 'Finished copying' },
     });
-    console.log('copy finished')
+    console.log('copy finished');
   };
 
   const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
@@ -51,14 +52,14 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     messageSender
       .sendLs(dirPath)
       .then((projects: string[]) =>
-        loadData(projects.map((name: string) => createData(name))),
+        loadData(projects.map((name: string) => createData(name)))
       );
   };
 
   const handleOpenSource = async () => {
     const message = await messageSender.sendOpenDialog();
-    if (!message['canceled']) {
-      const dirPath = message['filePaths'][0];
+    if (!message.canceled) {
+      const dirPath = message.filePaths[0];
       setSourceLocation(dirPath);
       sendLoadProjects(dirPath);
     }
@@ -66,8 +67,8 @@ export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
   const handleOpenWorkspace = async () => {
     const message = await messageSender.sendOpenDialog();
-    if (!message['canceled']) {
-      const dirPath = message['filePaths'][0];
+    if (!message.canceled) {
+      const dirPath = message.filePaths[0];
       setWorkspace(dirPath);
     }
   };

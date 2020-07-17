@@ -7,7 +7,7 @@ export class Command {
     this.arguments = args;
   }
 
-  toString() {
+  toString(): string {
     return `${this.command} ${this.arguments.join(' ')}`;
   }
 }

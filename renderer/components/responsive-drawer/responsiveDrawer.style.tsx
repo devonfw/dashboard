@@ -14,18 +14,18 @@ const drawerStyle = (theme: Theme) =>
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        position: 'relative'
+        position: 'relative',
       },
       '& .MuiDrawer-root': {
-        height: '100%'
+        height: '100%',
       },
       '& .MuiAppBar-root': {
         maxWidth: '1500px',
-        margin: '0 auto'
+        margin: '0 auto',
       },
       '& .MuiAppBar-positionFixed': {
-        right: 'auto'
-      }
+        right: 'auto',
+      },
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -36,7 +36,7 @@ const drawerStyle = (theme: Theme) =>
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#FFFFFF',
-      backgroundColor: '#0075B3'
+      backgroundColor: '#0075B3',
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -47,7 +47,7 @@ const drawerStyle = (theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
-      paddingTop: '2em'
+      paddingTop: '2em',
     },
     content: {
       flexGrow: 1,
@@ -66,19 +66,19 @@ const drawerStyle = (theme: Theme) =>
       flexDirection: 'column',
       color: '#FFFFFF',
       '& .MuiPaper-root': {
-        backgroundColor: '#0075B3'
+        backgroundColor: '#0075B3',
       },
       '& .MuiPaper-elevation1': {
-        boxShadow: 'none'
-      }
+        boxShadow: 'none',
+      },
     },
     cardContent: {
       padding: 19,
       marginLeft: '3.2em',
       backgroundColor: 'none',
       '& h6': {
-        color: '#FFFFFF'
-      }
+        color: '#FFFFFF',
+      },
     },
     cardCover: {
       width: 169,
@@ -88,43 +88,43 @@ const drawerStyle = (theme: Theme) =>
     },
     customDrawerContainer: {
       '& .MuiPaper-elevation1': {
-        boxShadow: 'none'
+        boxShadow: 'none',
       },
       '& .MuiPaper-root': {
-        backgroundColor: 'transparent'
-      }
+        backgroundColor: 'transparent',
+      },
     },
     customDrawerRoot: {
       display: 'flex',
-      flex: '1 0 auto'
+      flex: '1 0 auto',
     },
     customDrawerContent: {
-      flex: '1 0 auto'
+      flex: '1 0 auto',
     },
     customDrawerCover: {
       width: 94,
-      height: 94
+      height: 94,
     },
     user: {
       display: 'flex',
       flexDirection: 'column',
-      fontSize: '14px'
+      fontSize: '14px',
     },
     updateAction: {
       '& button': {
         marginTop: '16px',
         backgroundColor: '#0075B3',
-        color: '#FFFFFF'
+        color: '#FFFFFF',
       },
       '& .MuiButton-containedPrimary': {
-        backgroundColor: '#0075B3'
-      }
+        backgroundColor: '#0075B3',
+      },
     },
     upgrade: {
       display: 'flex',
       justifyContent: 'center',
       marginTop: '2em',
-      marginBottom: '5em'
+      marginBottom: '5em',
     },
     uppercase: {
       textTransform: 'uppercase',
@@ -134,11 +134,11 @@ const drawerStyle = (theme: Theme) =>
       '& .MuiSvgIcon-root': {
         color: '#0075B3',
         position: 'relative',
-        top: '-1px'
-      }
-    }
+        top: '-1px',
+      },
+    },
   });
 
-const responsiveDrawerStyle = makeStyles(drawerStyle)
+const responsiveDrawerStyle = makeStyles(drawerStyle);
 
 export default responsiveDrawerStyle;

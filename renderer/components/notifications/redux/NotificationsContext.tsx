@@ -14,9 +14,9 @@ const initialState: NotificationsState = {
 
 const reducer = (
   state: NotificationsState = initialState,
-  action: NotificationsAction,
+  action: NotificationsAction
 ) => {
-  console.log('dispatched add notif')
+  console.log('dispatched add notif');
   switch (action.type) {
     case 'ADD_NOTIFICATION': {
       return {
@@ -41,16 +41,20 @@ export interface INotificationsContext {
 
 export const NotificationsContext = React.createContext<INotificationsContext>({
   state: initialState,
-  dispatch: () => {},
+  dispatch: () => null,
 });
 
 export const NotificationsConsumer = NotificationsContext.Consumer;
 
-export function NotificationsProvider(props: any) {
+interface NotificationsProps {
+  children: JSX.Element;
+}
+
+export function NotificationsProvider(props: NotificationsProps): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
-  console.log('provider value')
-  console.log(value)
+  console.log('provider value');
+  console.log(value);
   return (
     <NotificationsContext.Provider value={value}>
       {props.children}

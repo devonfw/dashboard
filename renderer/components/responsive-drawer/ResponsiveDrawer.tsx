@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
-import responsiveDrawerStyle from './ResponsiveDrawer.style';
+import responsiveDrawerStyle from './responsiveDrawer.style';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -16,13 +16,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
 export default function ResponsiveDrawer(props: {
-  children: any;
+  children: JSX.Element;
   title?: string;
-}) {
+}): JSX.Element {
   const classes = responsiveDrawerStyle();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-
 
   const handleReadNotifications = () => {
     setOpen((prevState) => {

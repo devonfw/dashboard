@@ -11,13 +11,13 @@ class DialogRes extends Component<CustomProps> {
     super(props);
   }
 
-  directoryInfo() {
+  directoryInfo(): JSX.Element | null {
     if (this.props.message.length > 0) {
       return (
         <Fragment>
           <h3>Selected files:</h3>
-          {this.props.message.map((item) => (
-            <p>{item}</p>
+          {this.props.message.map((item: string, index: number) => (
+            <p key={index}>{item}</p>
           ))}
         </Fragment>
       );
@@ -26,7 +26,7 @@ class DialogRes extends Component<CustomProps> {
     return null;
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Fragment>
         <div className="directory-info">

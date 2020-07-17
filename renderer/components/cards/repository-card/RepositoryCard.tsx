@@ -16,10 +16,10 @@ const useStyles = makeStyles({
 
   buttonsRight: {
     justifyContent: 'flex-end',
-  }
+  },
 });
 
-export default function RepositoryCard(props: Repository) {
+export default function RepositoryCard(props: Repository): JSX.Element {
   const classes = useStyles();
   const { name, description } = props;
 
@@ -36,10 +36,8 @@ export default function RepositoryCard(props: Repository) {
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.buttonsRight}>
-        <Button size="small">
-          {'Copy Github URL'}
-        </Button>
-        <Button size="small"variant="contained" color="primary">
+        <Button size="small">{'Copy Github URL'}</Button>
+        <Button size="small" variant="contained" color="primary">
           {'Open repository'}
         </Button>
       </CardActions>
