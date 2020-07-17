@@ -2,7 +2,7 @@ import React from 'react';
 import { Data } from '../models/custom-table.model';
 import CustomTableView from './CustomTable.view';
 
-export default function CustomTable() {
+export default function CustomTable(): JSX.Element {
   const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -17,7 +17,7 @@ export default function CustomTable() {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+  const handleClick = (name: string) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected: string[] = [];
 
@@ -37,7 +37,7 @@ export default function CustomTable() {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 

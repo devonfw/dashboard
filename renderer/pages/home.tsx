@@ -83,7 +83,7 @@ const useGridStyles = makeStyles({
   },
 });
 
-export default function Home() {
+export default function Home(): JSX.Element {
   const classes = useStyles();
   const gridClasses = useGridStyles();
 
@@ -96,7 +96,7 @@ export default function Home() {
   );
   const [totalInstances, setTotalInstances] = useState(0);
 
-  let spinner = downloadProgress ? (
+  const spinner = downloadProgress ? (
     <CircularProgress
       variant="static"
       className={classes.spinner}

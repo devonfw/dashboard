@@ -15,7 +15,7 @@ const MAX_BUFFER = 1024 * 500; /* 500 KB */
 
 export class CommandRetrieverService {
   //@Process('command-retriever/all-commands')
-  async getCommandsByIdeConfig(ideConfig: IdeConfig) {
+  async getCommandsByIdeConfig(ideConfig: IdeConfig): Promise<void> {
     const commandsFolder = ideConfig.commands;
 
     try {
@@ -28,7 +28,7 @@ export class CommandRetrieverService {
     }
   }
 
-  async getWorkspacesByIdeConfig(ideConfig: IdeConfig) {
+  async getWorkspacesByIdeConfig(ideConfig: IdeConfig): Promise<void> {
     const workspacesFolder = ideConfig.workspaces;
 
     try {
@@ -41,7 +41,7 @@ export class CommandRetrieverService {
     }
   }
 
-  async getWorkspaceContent(workspace: string) {
+  async getWorkspaceContent(workspace: string): Promise<void> {
     try {
       const readDirs = await readdirPromise(workspace);
       readDirs.forEach((dir: string) => {
@@ -52,7 +52,7 @@ export class CommandRetrieverService {
     }
   }
 
-  async getAllDistributions(devonfwConfig: DevonfwConfig) {
+  async getAllDistributions(devonfwConfig: DevonfwConfig): Promise<void> {
     const distributions: IdeDistribution[] = devonfwConfig.distributions;
 
     for (const dist of distributions) {
@@ -69,7 +69,7 @@ export class CommandRetrieverService {
     devonfwConfig: DevonfwConfig,
     path: string,
     version: string
-  ) {
+  ): void {
     // TODO: check if dist exists
     const ideDistribution: IdeDistribution = {
       id: path,
@@ -84,11 +84,14 @@ export class CommandRetrieverService {
     devonfwConfig.distributions[path] = ideDistribution;
   }
 
-  private async allCommands(command: string, cwd?: string) {
+  private async allCommands(
+    command: string,
+    cwd?: string
+  ): Promise<string | ReturnMessage> {
     if (!command) return '';
 
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
-    let mvn = exec(command, options);
+    const mvn = exec(command, options);
 
     try {
       const result = await promiseChildProcess(mvn);

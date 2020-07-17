@@ -1,5 +1,4 @@
 import NextLink from '../nextjs-link/NextLink';
-import Divider from '@material-ui/core/Divider';
 import DesktopWindowsOutlinedIcon from '@material-ui/icons/DesktopWindowsOutlined';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -15,15 +14,11 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-  useTheme,
-} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
 import { useRouter } from 'next/router';
+import responsiveDrawerStyle from '../../responsiveDrawer.style';
 
 const useStyles = makeStyles({
   active: {
@@ -32,7 +27,11 @@ const useStyles = makeStyles({
   },
 });
 
-const CustomDrawer = (props: { classes: any }) => {
+interface CustomDrawerProps {
+  classes: ReturnType<typeof responsiveDrawerStyle>;
+}
+
+export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
   const router = useRouter();
   const classes = useStyles();
 
@@ -156,6 +155,4 @@ const CustomDrawer = (props: { classes: any }) => {
       </div>
     </div>
   );
-};
-
-export default CustomDrawer;
+}

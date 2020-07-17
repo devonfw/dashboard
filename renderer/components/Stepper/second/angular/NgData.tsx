@@ -1,30 +1,15 @@
-import {
-  useContext,
-  MouseEvent,
-  useState,
-  useEffect,
-  ChangeEvent,
-} from 'react';
+import { useContext, useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { IpcRendererEvent } from 'electron';
 import { StepperContext } from '../../redux/stepperContext';
 import { INgData, EventType, FormParams } from '../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
-import MessageSenderService from '../../../../services/renderer/messageSender.service';
 import TextField from '@material-ui/core/TextField';
-import {
-  FormControl,
-  makeStyles,
-  Theme,
-  createStyles,
-  Button,
-} from '@material-ui/core';
+import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 
-const NgData = () => {
-  const messageSender: MessageSenderService = new MessageSenderService();
+const NgData = (): JSX.Element => {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
   const classes = ngDataStyle();
   const { dispatch } = useContext(StepperContext);
@@ -64,7 +49,7 @@ const NgData = () => {
     resetForm();
   };
 
-  const handleNg = (_: MouseEvent) => {
+  const handleNg = () => {
     const ngData: INgData = data;
     if (data.name.valid) {
       dispatch({
@@ -94,11 +79,11 @@ const NgData = () => {
   };
 
   const validateExistingProject = (event: EventType) => {
-    let targetValue =
+    const targetValue =
       event.event && event.event.target
         ? event.event.target.value
         : data.name.value;
-    let workspace = event.dir ? event.dir : workspaceDir;
+    const workspace = event.dir ? event.dir : workspaceDir;
     if (workspace.includes(targetValue)) {
       validateProjectName({
         value: targetValue,

@@ -55,7 +55,7 @@ interface StackProps {
   onClick: (event: React.MouseEvent) => void;
 }
 
-export default function StackCard(props: StackProps) {
+export default function StackCard(props: StackProps): JSX.Element {
   const classes = useStyles();
   const { image, command, variant } = props;
 

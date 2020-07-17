@@ -1,7 +1,7 @@
 import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
 import Head from 'next/head';
 
-const Layout = (props: { children: any }) => (
+const Layout = (props: { children: JSX.Element }): JSX.Element => (
   <div>
     <Head>
       <link

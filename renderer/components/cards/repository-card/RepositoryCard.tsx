@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function RepositoryCard(props: Repository) {
+export default function RepositoryCard(props: Repository): JSX.Element {
   const classes = useStyles();
   const { name, description } = props;
 

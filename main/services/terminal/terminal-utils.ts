@@ -12,12 +12,12 @@ function isNotEmpty(str: string) {
   return str != '\x0d' && !!str;
 }
 
-export function dirStringToArray(dirs: string) {
+export function dirStringToArray(dirs: string): string[] {
   return dirs.split('\n').filter(isNotEmpty);
 }
 
 export function lsOS(): Command {
-  let isWin = process.platform === WINDOWS_OS;
+  const isWin = process.platform === WINDOWS_OS;
   let cmd = CMD_LS;
 
   if (isWin) {
@@ -28,7 +28,7 @@ export function lsOS(): Command {
 }
 
 export function cpOS(): Command {
-  let isWin = process.platform === WINDOWS_OS;
+  const isWin = process.platform === WINDOWS_OS;
   let cmd = CMD_CP;
 
   if (isWin) {
@@ -39,7 +39,7 @@ export function cpOS(): Command {
 }
 
 export function getOptions(opts: {}): {} | undefined {
-  let options = {};
+  const options = {};
 
   for (const key of Object.keys(opts)) {
     const value = opts[key];

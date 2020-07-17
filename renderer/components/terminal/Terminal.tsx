@@ -22,12 +22,12 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
 
   renderer: Renderer;
 
-  constructor(props: {}) {
+  constructor(props: TerminalProps) {
     super(props);
     this.renderer = new Renderer();
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.renderer.send('terminal/all-commands', 'cd').then((cwd) => {
       this.setState({ cwd });
     });
@@ -39,12 +39,12 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
    *
    * @memberof Terminal
    */
-  handleSendCommand = async (e: KeyboardEvent) => {
+  handleSendCommand = async (e: KeyboardEvent): Promise<void> => {
     if (e.key === 'Enter') {
       const inputClean = this.state.input.trim();
       const cwdClean = this.state.cwd.trim();
       let cwd = cwdClean;
-      let message: any;
+      let message: string;
 
       try {
         message = await this.renderer.send(
@@ -75,11 +75,11 @@ export default class Terminal extends Component<TerminalProps, TerminalState> {
     }
   };
 
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     this.setState({ input: event.target.value });
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <>
         <TerminalUI previous={this.state.previous} cwd={this.state.cwd}>

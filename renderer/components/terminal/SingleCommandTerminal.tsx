@@ -29,7 +29,7 @@ export default class SingleCommandTerminal extends Component<
     this.renderer.on('terminal/powershell', this.handler);
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.renderer.sendMultiple(
       'terminal/powershell',
       this.props.initialCommand,
@@ -37,11 +37,11 @@ export default class SingleCommandTerminal extends Component<
     );
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this.renderer.removeAll();
   }
 
-  handler = (_: any, message: any) => {
+  handler = (_: unknown, message: string): void => {
     this.setState(
       (prevState: Readonly<TerminalState>, props: Readonly<TerminalProps>) => {
         const cwd = props.initialCwd ? props.initialCwd : '';
@@ -54,7 +54,7 @@ export default class SingleCommandTerminal extends Component<
     );
   };
 
-  render() {
+  render(): JSX.Element {
     let cwd = this.props.initialCwd;
     cwd = cwd ? cwd : '';
 

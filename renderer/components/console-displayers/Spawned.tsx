@@ -11,7 +11,7 @@ class Spawned extends Component<CustomProps> {
     super(props);
   }
 
-  directoryInfo() {
+  directoryInfo(): JSX.Element | null {
     if (this.props.message) {
       return (
         <Fragment>
@@ -24,7 +24,7 @@ class Spawned extends Component<CustomProps> {
     return null;
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <Fragment>
         <div className="directory-info">

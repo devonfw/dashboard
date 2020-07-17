@@ -34,7 +34,7 @@ interface Projects {
 export default function ViewDashboardProjectsDetail(props: {
   title: string;
   total: number;
-}) {
+}): JSX.Element {
   const classes = useStyles();
   return (
     <Grid item xs={4}>

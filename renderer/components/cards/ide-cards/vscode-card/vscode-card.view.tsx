@@ -4,11 +4,11 @@ import GeneralCardController, {
   RenderedViewProps,
 } from '../general/general-card.controller';
 
-export default function VSCodeCard() {
+export default function VSCodeCard(): JSX.Element {
   return <GeneralCardController ide={'vscode'} render={VSCodeView} />;
 }
 
-export function VSCodeView(props: RenderedViewProps) {
+export function VSCodeView(props: RenderedViewProps): JSX.Element {
   return (
     <IdeCard
       image="/assets/vscode.png"

@@ -4,7 +4,7 @@ import GeneralCardController, {
   RenderedViewProps,
 } from '../general/general-card.controller';
 
-export default function EclipseCard() {
+export default function EclipseCard(): JSX.Element {
   return <GeneralCardController ide={'eclipse'} render={EclipseView} />;
 }
 

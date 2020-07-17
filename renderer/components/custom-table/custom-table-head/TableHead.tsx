@@ -30,7 +30,9 @@ interface EnhancedTableProps {
   rowCount: number;
 }
 
-export default function EnhancedTableHead(props: EnhancedTableProps) {
+export default function EnhancedTableHead(
+  props: EnhancedTableProps
+): JSX.Element {
   const { onSelectAllClick, numSelected, rowCount } = props;
 
   return (

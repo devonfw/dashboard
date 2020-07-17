@@ -27,7 +27,7 @@ export default class Projects extends Component {
     },
   ];
 
-  render() {
+  render(): JSX.Element {
     return (
       <Layout>
         <SpaceAround bgColor={'#F4F6F8'}>

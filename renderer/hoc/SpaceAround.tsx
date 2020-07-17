@@ -4,11 +4,11 @@ const styles: { [key: string]: string } = {
 };
 
 interface SpaceAroundProps {
-  children: any;
+  children: JSX.Element;
   bgColor?: string;
 }
 
-export default function SpaceAround(props: SpaceAroundProps) {
+export default function SpaceAround(props: SpaceAroundProps): JSX.Element {
   let spaceAroundStyles = styles;
 
   if (props.bgColor) {

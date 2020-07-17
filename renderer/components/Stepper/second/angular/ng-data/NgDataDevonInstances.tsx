@@ -22,7 +22,13 @@ interface Props {
   devonWorkspace: (error: string[]) => void;
 }
 
-const NgDataDevonInstances = (props: Props) => {
+interface InstancePath {
+  ideConfig: {
+    workspaces: string;
+  };
+}
+
+const NgDataDevonInstances = (props: Props): JSX.Element => {
   const classes = useStyles();
   const [devonInstances, setDevonInstances] = useState({ value: '' });
   const [allDevonInstances, setAllDevonInstances] = useState<string[]>([]);
@@ -30,7 +36,7 @@ const NgDataDevonInstances = (props: Props) => {
     global.ipcRenderer.send('find:devonfwInstances');
     global.ipcRenderer.on(
       'get:devoninstances',
-      (event: IpcRendererEvent, instancesPath: any[]) => {
+      (_: IpcRendererEvent, instancesPath: InstancePath[]) => {
         const instances = instancesPath.map((p) => p.ideConfig.workspaces);
         setAllDevonInstances(instances);
         setDevonInstances({ value: instances[0] });
@@ -40,7 +46,7 @@ const NgDataDevonInstances = (props: Props) => {
     );
     global.ipcRenderer.on(
       'get:workspaceProjects',
-      (event: IpcRendererEvent, dirs: string[]) => {
+      (_: IpcRendererEvent, dirs: string[]) => {
         props.devonWorkspace(dirs);
       }
     );
@@ -54,8 +60,8 @@ const NgDataDevonInstances = (props: Props) => {
     global.ipcRenderer.send('find:workspaceProjects', path);
   };
 
-  const handleChange = (event: ChangeEvent<{ value: any }>) => {
-    const devonInstancesOpt = event.target.value as string;
+  const handleChange = (event: ChangeEvent<{ value: string }>) => {
+    const devonInstancesOpt = event.target.value;
     setDevonInstances({ value: devonInstancesOpt });
     props.onSelected(devonInstancesOpt);
     getWorkspaceProjects(devonInstancesOpt);

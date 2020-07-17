@@ -4,17 +4,18 @@ import {
   DevonfwConfig,
   IdeDistribution,
 } from '../../models/devonfw-dists.model';
+import * as child from 'child_process';
 
-const exec = require('child_process').exec;
+const exec = child.exec;
 
 export class DevonInstancesService {
   getAvailableDevonIdeInstances(): Promise<number> {
     let instanceCount = 0;
-    let promiseInstances = [];
+    const promiseInstances = [];
     const dirReader = new Promise<number>((resolve, reject) => {
       this.getAllUserCreatedDevonInstances().then(
         (instances: DevonfwConfig) => {
-          for (let distribution of instances.distributions) {
+          for (const distribution of instances.distributions) {
             if (distribution.id) {
               promiseInstances.push(this.getInstances(distribution.id));
             }
@@ -22,7 +23,7 @@ export class DevonInstancesService {
           if (promiseInstances.length) {
             Promise.all(promiseInstances)
               .then((results) => {
-                for (let result of results) {
+                for (const result of results) {
                   instanceCount = instanceCount + result;
                 }
                 resolve(instanceCount);
@@ -52,7 +53,7 @@ export class DevonInstancesService {
 
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     let paths = [];
-    let instances: DevonfwConfig = { distributions: [] };
+    const instances: DevonfwConfig = { distributions: [] };
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
       fs.readFile(
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
@@ -61,7 +62,7 @@ export class DevonInstancesService {
           if (err) reject('No instances find out');
           if (data) {
             paths = data.split('\n');
-            for (let path of paths) {
+            for (const path of paths) {
               if (path) {
                 const instance: IdeDistribution = {
                   id: path,
@@ -75,7 +76,7 @@ export class DevonInstancesService {
                 exec(
                   'devon -v',
                   { cwd: path + '\\scripts' },
-                  (err, stdout, stderr) => {
+                  (_: unknown, stdout: string) => {
                     instance.ideConfig.version = stdout;
                   }
                 );

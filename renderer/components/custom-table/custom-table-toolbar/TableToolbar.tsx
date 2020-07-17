@@ -23,7 +23,9 @@ interface EnhancedTableToolbarProps {
   loadData: (data: Data[]) => void;
 }
 
-export default function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+export default function EnhancedTableToolbar(
+  props: EnhancedTableToolbarProps
+): JSX.Element {
   const classes = useToolbarStyles();
   const messageSender: MessageSenderService = new MessageSenderService();
   const { dispatch } = useContext(NotificationsContext);

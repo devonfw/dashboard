@@ -4,7 +4,7 @@ import GeneralCardController, {
   RenderedViewProps,
 } from '../general/general-card.controller';
 
-export default function IntellijCard() {
+export default function IntellijCard(): JSX.Element {
   return <GeneralCardController ide={'intellij'} render={IntellijView} />;
 }
 

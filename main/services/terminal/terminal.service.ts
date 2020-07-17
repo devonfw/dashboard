@@ -7,7 +7,9 @@ import { Command, CMD_MKDIR, CMD_RMDIR, CMD_PWD } from './terminal-commands';
 const MAX_BUFFER = 1024 * 500; /* 500 KB */
 
 export class TerminalService {
-  private standardHandler(spawn: ChildProcessWithoutNullStreams): Promise<{}> {
+  private standardHandler(
+    spawn: ChildProcessWithoutNullStreams
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       let result = '';
       let error = '';
@@ -29,7 +31,7 @@ export class TerminalService {
   }
 
   @Process('terminal/ls')
-  async ls(cwd?: string) {
+  async ls(cwd?: string): Promise<ReturnMessage> {
     const options = getOptions({ cwd });
     const cmd: Command = lsOS();
     const ls = exec(cmd.toString(), options);
@@ -46,7 +48,7 @@ export class TerminalService {
   }
 
   @Process('terminal/mkdir')
-  async mkdir(dirname: string) {
+  async mkdir(dirname: string): Promise<string> {
     const mkdir = spawn(CMD_MKDIR.command, [dirname]);
     try {
       const result = await this.standardHandler(mkdir);
@@ -58,7 +60,7 @@ export class TerminalService {
   }
 
   @Process('terminal/rmdir')
-  async rmdir(dirname: string) {
+  async rmdir(dirname: string): Promise<string> {
     const rmdir = spawn(CMD_RMDIR.command, [dirname]);
     try {
       const result = await this.standardHandler(rmdir);
@@ -69,7 +71,7 @@ export class TerminalService {
   }
 
   @Process('terminal/pwd')
-  async pwd() {
+  async pwd(): Promise<string> {
     const pwd = spawn(CMD_PWD.command, CMD_PWD.arguments);
 
     try {
@@ -81,7 +83,7 @@ export class TerminalService {
   }
 
   @Process('terminal/open-dialog')
-  async openDialog() {
+  async openDialog(): Promise<ReturnMessage> {
     try {
       const result = await dialog.showOpenDialog({
         properties: ['openDirectory'],
@@ -93,9 +95,9 @@ export class TerminalService {
   }
 
   @Process('terminal/mvn-install')
-  async mvnInstall(cwd?: string) {
+  async mvnInstall(cwd?: string): Promise<string> {
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
-    let mvn = exec('mvn --help', options);
+    const mvn = exec('mvn --help', options);
 
     try {
       const result = await this.standardHandler(mvn);
@@ -106,11 +108,14 @@ export class TerminalService {
   }
 
   @Process('terminal/all-commands')
-  async allCommands(command: string, cwd?: string) {
+  async allCommands(
+    command: string,
+    cwd?: string
+  ): Promise<string | ReturnMessage> {
     if (!command) return '';
 
     const options = getOptions({ cwd, maxBuffer: MAX_BUFFER });
-    let mvn = exec(command, options);
+    const mvn = exec(command, options);
 
     try {
       const result = await this.standardHandler(mvn);
@@ -123,9 +128,9 @@ export class TerminalService {
 
 class ReturnMessage {
   error: boolean;
-  body: any;
+  body: unknown;
 
-  constructor(error: boolean, body: any) {
+  constructor(error: boolean, body: unknown) {
     this.error = error;
     this.body = body;
   }

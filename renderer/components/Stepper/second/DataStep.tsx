@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { StepperContext } from '../redux/stepperContext';
 import STEPS_MAP from './StackSteps';
 
-const useStyles = (theme) => ({
+const useStyles = () => ({
   dataContainer: {
     display: 'flex',
     marginBottom: '2em',
@@ -17,8 +17,13 @@ const useStyles = (theme) => ({
   },
 });
 
-class DataStep extends Component {
-  render() {
+interface DataStepProps {
+  classes: {
+    dataContainer: string;
+  };
+}
+class DataStep extends Component<DataStepProps> {
+  render(): JSX.Element {
     const { classes } = this.props;
     let stack: string = this.context.state.stack;
     stack = stack ? stack : '';

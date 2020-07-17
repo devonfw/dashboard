@@ -9,24 +9,24 @@ interface SearcherState {
   repositories?: Repository[];
 }
 
-export default class Searcher extends Component<{}, SearcherState> {
-  timeout: any;
+export default class Searcher extends Component<unknown, SearcherState> {
+  timeout: NodeJS.Timeout;
   githubService: GithubService;
   state = {
     query: '',
     repositories: [],
   };
 
-  constructor(props: {}) {
+  constructor(props: unknown) {
     super(props);
     this.githubService = new GithubService();
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.getRepositories();
   }
 
-  componentDidUpdate(_: {}, prevState: SearcherState) {
+  componentDidUpdate(_: unknown, prevState: SearcherState): void {
     const queryUpdated = this.state.query !== prevState.query;
     if (queryUpdated) {
       if (this.timeout) clearTimeout(this.timeout);
@@ -34,18 +34,18 @@ export default class Searcher extends Component<{}, SearcherState> {
     }
   }
 
-  getRepositories = () => {
+  getRepositories = (): void => {
     this.githubService
       .getRepos(this.state.query)
       .then((repositories) => this.setState({ repositories }));
   };
 
-  handleQuery = (event: ChangeEvent<{ value: unknown }>) => {
+  handleQuery = (event: ChangeEvent<{ value: unknown }>): void => {
     const query: string = event.target.value as string;
     this.setState({ query });
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <SearcherView
         handleQuery={this.handleQuery}

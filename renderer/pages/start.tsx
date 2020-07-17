@@ -22,21 +22,23 @@ const useStyles = makeStyles({
   },
 });
 
-export default function HelloElectron() {
+export default function HelloElectron(): JSX.Element {
   const classes = useStyles();
 
   return (
     <Layout>
-      <h3 className={classes.header}>
-        <span>Projects > </span>New Project
-      </h3>
-      <SpaceAround bgColor={'#F4F6F8'}>
-        <div className={classes.container}>
-          <StepperProvider>
-            <CustomStepper />
-          </StepperProvider>
-        </div>
-      </SpaceAround>
+      <>
+        <h3 className={classes.header}>
+          <span>Projects &gt;</span>New Project
+        </h3>
+        <SpaceAround bgColor={'#F4F6F8'}>
+          <div className={classes.container}>
+            <StepperProvider>
+              <CustomStepper />
+            </StepperProvider>
+          </div>
+        </SpaceAround>
+      </>
     </Layout>
   );
 }

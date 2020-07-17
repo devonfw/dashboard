@@ -13,11 +13,13 @@ type StyleClasses = Record<
   string
 >;
 
-const Navigation = (props: {
+interface NavigationProps {
   classes: StyleClasses;
   drawerToggle: () => void;
   mobileOpen: boolean;
-}) => {
+}
+
+const Navigation = (props: NavigationProps): JSX.Element => {
   return (
     <nav className={props.classes.drawer} aria-label="mailbox folders">
       <Hidden smUp implementation="js">

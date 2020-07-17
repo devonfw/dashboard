@@ -1,9 +1,10 @@
 {
   "java.home": "C:\\Proyectos\\devonfw-dashboard-fork/software/java",
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": { "source.fixAll.eslint": true },
   "eslint.validate": ["typescript", "typescriptreact"],
   "eslint.workingDirectories": ["./main", "./renderer"],
-  "editor.formatOnSave": true,
+  "eslint.lintTask.enable": true,
   "[javascript]": {
     "editor.formatOnSave": false
   },

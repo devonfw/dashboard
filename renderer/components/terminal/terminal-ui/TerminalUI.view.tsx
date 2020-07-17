@@ -9,7 +9,9 @@ export interface TerminalUIViewProps {
   children?: JSX.Element;
 }
 
-export default function TerminalUIView(props: TerminalUIViewProps) {
+export default function TerminalUIView(
+  props: TerminalUIViewProps
+): JSX.Element {
   const classes = useTerminalUIStyles();
 
   return (

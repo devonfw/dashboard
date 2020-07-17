@@ -33,7 +33,7 @@ interface IdeCardsProps {
   loading: boolean;
 }
 
-export default function IdeCard(props: IdeCardsProps) {
+export default function IdeCard(props: IdeCardsProps): JSX.Element {
   const classes = useStyles();
   const { image, title, description, onClick, loading } = props;
 

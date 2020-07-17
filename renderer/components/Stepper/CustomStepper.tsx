@@ -1,4 +1,4 @@
-import { Component, MouseEvent } from 'react';
+import { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 import MaterialStepper, { StepObject } from './MaterialStepper';
@@ -26,7 +26,7 @@ class CustomStepper extends Component {
     },
   ];
 
-  render() {
+  render(): JSX.Element {
     let activeStep = this.context.state.activeStep;
     activeStep = activeStep ? activeStep : 0;
 

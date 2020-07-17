@@ -41,7 +41,9 @@ export interface NotificationsDialogProps {
   open: boolean;
 }
 
-export default function NotificationsDialog(props: NotificationsDialogProps) {
+export default function NotificationsDialog(
+  props: NotificationsDialogProps
+): JSX.Element {
   const classes = useStyles();
   const { state } = useContext(NotificationsContext);
   const notifications: string[] = state.notifications || [];
@@ -51,9 +53,9 @@ export default function NotificationsDialog(props: NotificationsDialogProps) {
       {props.open ? (
         <List component="div" role="list" className={classes.notification}>
           {notifications
-            ? notifications.map((notification: string) => {
+            ? notifications.map((notification: string, index: number) => {
                 return (
-                  <ListItem divider role="listitem">
+                  <ListItem divider role="listitem" key={index}>
                     <ListItemText
                       primary={notification}
                       secondary="something"

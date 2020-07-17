@@ -16,7 +16,7 @@ const initialState: StepperState = {
 };
 
 const reducer = (state: StepperState = initialState, action: StepperAction) => {
-  let activeStep = state.activeStep ? state.activeStep : 0;
+  const activeStep = state.activeStep ? state.activeStep : 0;
 
   switch (action.type) {
     case 'SET_STACK': {
@@ -72,15 +72,17 @@ export interface IStepperContext {
 
 export const StepperContext = React.createContext<IStepperContext>({
   state: initialState,
-  dispatch: () => {},
+  dispatch: () => null,
 });
 export const StepperConsumer = StepperContext.Consumer;
 
-export function StepperProvider(props: any) {
+interface StepperProviderProps {
+  children: JSX.Element;
+}
+
+export function StepperProvider(props: StepperProviderProps): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
-  console.log('provider value stepper');
-  console.log(value);
   return (
     <StepperContext.Provider value={value}>
       {props.children}

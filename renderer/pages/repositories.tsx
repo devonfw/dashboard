@@ -8,7 +8,7 @@ interface HomeProps {
   data: Repository[];
 }
 export default class Home extends Component<HomeProps> {
-  render() {
+  render(): JSX.Element {
     return (
       <ResponsiveDrawer>
         <SpaceAround>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import MessageSenderService from '../../../../services/renderer/messageSender.service';
 
 export interface RenderedViewProps {
@@ -12,7 +12,7 @@ export interface GeneralCardControllerProps {
 
 export default function GeneralCardController(
   props: GeneralCardControllerProps
-) {
+): JSX.Element {
   const messageSender = new MessageSenderService();
   const [loading, setLoading] = useState(false);
 

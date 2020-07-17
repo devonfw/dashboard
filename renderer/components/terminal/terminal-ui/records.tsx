@@ -4,7 +4,7 @@ interface RecordsProps {
   previous: { cwd: string; cmd: string }[];
 }
 
-const Records = (props: RecordsProps) => {
+const Records = (props: RecordsProps): JSX.Element => {
   const classes = useTerminalUIStyles();
   const { terminalPath, terminalCommand, mt0, mb0, colorGreen } = classes;
 

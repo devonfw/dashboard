@@ -3,15 +3,14 @@ import { ipcMain, IpcMainEvent } from 'electron';
 function Process(path: string) {
   // this is the decorator factory
   return function (
-    target: Object,
+    _: unknown,
     propertyName: string,
     propertyDescriptor: PropertyDescriptor
   ): PropertyDescriptor {
     const method = propertyDescriptor.value;
 
-    propertyDescriptor.value = function (...args: any[]) {
-      let result: any;
-      const eventHandler = (event: IpcMainEvent, ...eventArgs: any[]) => {
+    propertyDescriptor.value = function () {
+      const eventHandler = (event: IpcMainEvent, ...eventArgs: unknown[]) => {
         Promise.resolve(method.apply(this, eventArgs)).then((result) => {
           const r = JSON.stringify(result);
 
@@ -26,9 +25,6 @@ function Process(path: string) {
       // invoke foo() and get its return value
       ipcMain.removeListener(path, eventHandler);
       ipcMain.on(path, eventHandler);
-
-      // return the result of invoking the method
-      return result;
     };
     return propertyDescriptor;
   };

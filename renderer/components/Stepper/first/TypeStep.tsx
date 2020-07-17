@@ -2,18 +2,18 @@ import NgType from './angular/NgType';
 import JavaType from './java/JavaType';
 import NodeType from './node/NodeType';
 
-const TypeStep = () => {
+const TypeStep = (): JSX.Element => {
   return (
     <>
       <div className={'types-container'}>
         <div className={'type'}>
-          <NgType></NgType>
+          <NgType variant={false}></NgType>
         </div>
         <div className={'type'}>
-          <JavaType></JavaType>
+          <JavaType variant={false}></JavaType>
         </div>
         <div className={'type'}>
-          <NodeType></NodeType>
+          <NodeType variant={false}></NodeType>
         </div>
       </div>
       <style jsx>

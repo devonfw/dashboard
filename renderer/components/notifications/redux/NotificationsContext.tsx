@@ -41,12 +41,16 @@ export interface INotificationsContext {
 
 export const NotificationsContext = React.createContext<INotificationsContext>({
   state: initialState,
-  dispatch: () => {},
+  dispatch: () => null,
 });
 
 export const NotificationsConsumer = NotificationsContext.Consumer;
 
-export function NotificationsProvider(props: any) {
+interface NotificationsProps {
+  children: JSX.Element;
+}
+
+export function NotificationsProvider(props: NotificationsProps): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
   console.log('provider value');
