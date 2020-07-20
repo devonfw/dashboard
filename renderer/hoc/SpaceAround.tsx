@@ -12,7 +12,10 @@ export default function SpaceAround(props: SpaceAroundProps): JSX.Element {
   let spaceAroundStyles = styles;
 
   if (props.bgColor) {
-    spaceAroundStyles = { ...spaceAroundStyles, bgColor: props.bgColor };
+    spaceAroundStyles = {
+      ...spaceAroundStyles,
+      backgroundColor: props.bgColor,
+    };
   }
 
   return <div style={spaceAroundStyles}>{props.children}</div>;

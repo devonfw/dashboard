@@ -1,9 +1,9 @@
-import { ChangeEvent } from 'react';
 import { FormType } from './FormType';
 
 export interface IJavaInitializerForm {
   workspaceDir: string[];
   formControls: FormControls;
+  formIsValid: boolean;
 }
 
 export interface FormControls {
@@ -13,6 +13,5 @@ export interface FormControls {
   version: FormType;
   db: FormType;
   devonInstances: FormType;
-  formIsValid: boolean;
   batch: boolean;
 }

@@ -2,8 +2,27 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FormControl } from '@material-ui/core';
 import inputElementStyle from './input.style';
+import { ChangeEvent } from 'react';
 
-const Input = (props: any) => {
+interface InputParams {
+  invalid: boolean;
+  shouldValidate: boolean;
+  touched: boolean;
+  value: string;
+  elementConfig: {
+    label: string;
+    id: string;
+    options: {
+      value: string;
+      displayValue: string;
+    }[];
+  };
+  disabled: boolean;
+  elementType: string;
+  changed: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Input = (props: InputParams): JSX.Element => {
   let inputElement = null;
   const inputClasses = [''];
   const classes = inputElementStyle({});
@@ -35,7 +54,7 @@ const Input = (props: any) => {
           variant="outlined"
           onChange={props.changed}
         >
-          {props.elementConfig.options.map((option: any) => (
+          {props.elementConfig.options.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.displayValue}
             </MenuItem>

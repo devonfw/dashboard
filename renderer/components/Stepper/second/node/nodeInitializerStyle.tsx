@@ -1,4 +1,4 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 
 const nodeInitializerStyle = (theme: Theme) => ({
   root: {

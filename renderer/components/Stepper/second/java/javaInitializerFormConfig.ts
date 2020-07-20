@@ -84,8 +84,8 @@ const javaProjectConfig: IJavaInitializerForm = {
       value: '',
     },
     batch: false,
-    formIsValid: false,
   },
+  formIsValid: false,
 };
 
 export default javaProjectConfig;
