@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
 import { useRouter } from 'next/router';
-import responsiveDrawerStyle from '../../responsiveDrawer.style';
+import responsiveDrawerStyle from '../../ResponsiveDrawer.style';
 
 const useStyles = makeStyles({
   active: {
@@ -104,14 +104,18 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
             primary="Repositories"
           />
         </ListItem>
-        <ListItem button component={NextLink} href="/about">
+        <ListItem button component={NextLink} href="/installations">
           <ListItemIcon
-            className={router.pathname == '/about' ? classes.active : ''}
+            className={
+              router.pathname == '/installations' ? classes.active : ''
+            }
           >
             <BuildOutlinedIcon />
           </ListItemIcon>
           <ListItemText
-            className={router.pathname == '/about' ? classes.active : ''}
+            className={
+              router.pathname == '/installations' ? classes.active : ''
+            }
             primary="Installed tools"
           />
         </ListItem>
@@ -142,12 +146,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
             <div>Get IDE fixes and more Features </div>
           </div>
           <div className={props.classes.updateAction}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              className={props.classes.button}
-            >
+            <Button variant="contained" color="primary" size="large">
               UPDATE NOW
             </Button>
           </div>
