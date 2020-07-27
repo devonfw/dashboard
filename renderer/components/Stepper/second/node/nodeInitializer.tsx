@@ -32,7 +32,7 @@ class NodeInitializer extends Component<NodeStyle> {
     this.context.dispatch({
       type: 'SET_STACK_CMD',
       payload: {
-        stackCmd: `devon node create ${formData.formControls.name.value.toLowerCase()} -n`,
+        stackCmd: `devon node create ${formData.formControls.name.value.toLowerCase()} -n --skip-install`,
       },
     });
     this.context.dispatch({
@@ -43,6 +43,15 @@ class NodeInitializer extends Component<NodeStyle> {
     });
     this.context.dispatch({
       type: 'NEXT_STEP',
+    });
+    this.context.dispatch({
+      type: 'PROJECT_DETAILS',
+      payload: {
+        projectDetails: {
+          name: formData.formControls.name.value.toLowerCase(),
+          domain: 'node'
+        },
+      }
     });
   };
 

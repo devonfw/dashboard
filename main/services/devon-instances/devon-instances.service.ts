@@ -1,15 +1,18 @@
 import fs from 'fs';
 import path from 'path';
-import { platform } from 'os';
+import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
 } from '../../models/devonfw-dists.model';
 import * as child from 'child_process';
+import { ProjectDetails } from '../../models/project-details.model';
 
 const exec = child.exec;
 
 export class DevonInstancesService {
+  private devonFilePath = path.resolve(platform.homedir(), '.devon', 'test.json');
+
   getAvailableDevonIdeInstances(): Promise<number> {
     let instanceCount = 0;
     const promiseInstances = [];
@@ -65,7 +68,7 @@ export class DevonInstancesService {
             paths = data.split('\n');
             for (let singlepath of paths) {
               if (singlepath) {
-                if (platform() === 'win32') {
+                if (process.platform === 'win32') {
                   singlepath = singlepath.replace('/', '');
                   singlepath = singlepath.replace('/', ':/');
                   singlepath = singlepath.replace(/\//g, path.sep);
@@ -96,4 +99,46 @@ export class DevonInstancesService {
     });
     return instancesDirReader;
   }
+
+  getData(data: ProjectDetails, writeFile: (data) => void) {
+      fs.exists(this.devonFilePath, (exists: boolean) => {
+        if(exists) {
+          writeFile(data);
+        } else {
+          this.writeFile([{...data}], { flag: 'wx'});
+        }
+    });
+  }
+    
+  saveProjectDetails(data: ProjectDetails): void {
+    this.getData(data, (data: ProjectDetails) => {
+      this.readFile().then((details: ProjectDetails[]) => {
+        if (details.length) {
+          const projectDetails = details.splice(0);
+          projectDetails.push(data);
+          this.writeFile(projectDetails);
+        }
+      })
+      .catch(error => {
+        throw error;
+      })
+    });
+  }
+
+  writeFile(data: ProjectDetails[], flag?: { flag : string}): void {
+    const optional = flag ? flag : '';
+    fs.writeFile(this.devonFilePath, JSON.stringify(data), optional, function(err) {
+      if (err) throw err;
+    });
+  }
+
+  readFile(): Promise<ProjectDetails[]> {
+    return new Promise<ProjectDetails[]>((resolve, reject) => {
+      fs.readFile(this.devonFilePath, (error, data) => {
+      if (error) reject(resolve([]));
+        resolve(data ? JSON.parse(data.toString()) : []);
+      });
+    });
+  }
+
 }

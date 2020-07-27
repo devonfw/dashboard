@@ -6,6 +6,10 @@ interface StepperState {
   stack: string | undefined;
   stackCmd: string | undefined;
   stackCwd: string | undefined;
+  projectDetails: {
+    name: string;
+    domain: string;
+  }
 }
 
 const initialState: StepperState = {
@@ -13,6 +17,10 @@ const initialState: StepperState = {
   stack: '',
   stackCmd: '',
   stackCwd: '',
+  projectDetails: {
+    name: '',
+    domain: ''
+  }
 };
 
 const reducer = (state: StepperState = initialState, action: StepperAction) => {
@@ -60,6 +68,14 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
     case 'RESET_STEP': {
       return { ...state, activeStep: 0 };
     }
+
+    case 'PROJECT_DETAILS': {
+      return { 
+        ...state,
+        projectDetails: action.payload && action.payload.projectDetails
+      };
+    }
+
     default:
       throw new Error();
   }

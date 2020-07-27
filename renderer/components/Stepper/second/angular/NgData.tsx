@@ -16,6 +16,7 @@ const NgData = (): JSX.Element => {
   const ERRORMSG = {
     projectAlreadyExists: 'Project already exits with this name',
     projectRequired: 'Please provide project name',
+    pattern: 'Please remove special characters and numeric numbers',
   };
   const [data, setData] = useState<INgData>({
     name: {
@@ -55,7 +56,7 @@ const NgData = (): JSX.Element => {
       dispatch({
         type: 'SET_STACK_CMD',
         payload: {
-          stackCmd: `devon ng new ${ngData.name.value} --routing=${ngData.routing.value} --style=${ngData.styling.value} --interactive=false`,
+          stackCmd: `devon ng new ${ngData.name.value} --routing=${ngData.routing.value} --style=${ngData.styling.value} --interactive=false --skip-install`,
         },
       });
 
@@ -68,6 +69,16 @@ const NgData = (): JSX.Element => {
 
       dispatch({
         type: 'NEXT_STEP',
+      });
+
+      dispatch({
+        type: 'PROJECT_DETAILS',
+        payload: {
+          projectDetails: {
+            name: ngData.name.value,
+            domain: 'angular'
+          }
+        }
       });
     }
   };
@@ -84,13 +95,20 @@ const NgData = (): JSX.Element => {
         ? event.event.target.value
         : data.name.value;
     const workspace = event.dir ? event.dir : workspaceDir;
-    if (workspace.includes(targetValue)) {
+    if (workspaceDir.filter(project => project.toLowerCase() === targetValue.toLowerCase()).length) {
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.projectAlreadyExists,
         valid: false,
       });
-    } else {
+    } else if(targetValue.match(/^[a-z]*$/gi) == null) {
+      validateProjectName({
+        value: targetValue,
+        error: ERRORMSG.pattern,
+        valid: false,
+      });
+    } 
+    else {
       validateProjectName({
         value: targetValue,
         error: '',

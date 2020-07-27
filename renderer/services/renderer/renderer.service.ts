@@ -1,5 +1,6 @@
 import { IpcRendererEvent } from 'electron';
 import MainMessage from '../../models/main-message';
+import { ProjectDetails } from '../../components/Stepper/redux/data.model';
 
 type HandlerFunction = () => void;
 type ChannelArgs = unknown;
@@ -24,8 +25,8 @@ class Renderer {
     this.channels = [];
   }
 
-  sendMultiple(channel: string, ...args: ChannelArgs[]): void {
-    global.ipcRenderer.send(channel, ...args);
+  sendMultiple(channel: string, projectDetails?: ProjectDetails, ...args: ChannelArgs[]): void {
+    global.ipcRenderer.send(channel, projectDetails ? projectDetails : '' , ...args);
   }
 
   send<Body>(channel: string, ...args: ChannelArgs[]): Promise<Body> {

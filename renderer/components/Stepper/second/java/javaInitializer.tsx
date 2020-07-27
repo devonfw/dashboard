@@ -45,6 +45,16 @@ class JavaInitializer extends Component<JavaStyle> {
     this.context.dispatch({
       type: 'NEXT_STEP',
     });
+
+    this.context.dispatch({
+      type: 'PROJECT_DETAILS',
+      payload: {
+        projectDetails: {
+          name: formData.formControls.artifact.value,
+          domain: 'java'
+        },
+      }
+    });
   };
 
   groupHandler = (value: string): void => {
@@ -115,7 +125,7 @@ class JavaInitializer extends Component<JavaStyle> {
     this.setState({
       formControls: formState,
       formIsValid: ValidateForm.formStateValidity(formState),
-    });
+   });
   }
 
   updateFormState = (args: ValueType): void => {

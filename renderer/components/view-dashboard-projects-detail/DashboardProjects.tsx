@@ -1,4 +1,3 @@
-import React from 'react';
 import NextLink from '../responsive-drawer/navigation/nextjs-link/NextLink';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -7,6 +6,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import { ProjectDetails } from '../Stepper/redux/data.model';
 
 const useStyles = makeStyles({
   root: {
@@ -48,35 +48,43 @@ const useStyles = makeStyles({
   link: {
     textDecoration: 'none',
   },
+  ProjectGrid: {
+    position: 'relative',
+    marginBottom: '2em',
+    '& .MuiCardContent-root': {
+      position: 'absolute',
+      top: '90px'
+    }
+  },
+  alignCenter: {
+    textAlign: 'center',
+    marginTop: '1em',
+    marginLeft: '2em'
+  }
 });
 
-interface Projects {
-  icon: string;
-  title: string;
-  date: string;
-}
 
 export default function DashboardProjects(props: {
-  projects: Projects[];
+  projects: ProjectDetails[];
 }): JSX.Element {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid item xs={12} className={classes.header}>
-        <h3>15 Projects</h3>
+        <h2>{ `${props.projects.length} Projects` }</h2>
         <div className="search">
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>
       </Grid>
       <Grid item xs={3}>
         <NextLink href="/start" className={classes.link}>
-          <Card>
+          <Card className={classes.ProjectGrid}>
             <CardMedia
               className={classes.newProject}
               image="/assets/add_new_project.png"
               title="Add new Project"
             />
-            <CardContent>
+            <CardContent className={classes.alignCenter}> 
               <Typography component="h6" variant="h6">
                 Add New Project
               </Typography>
@@ -84,23 +92,24 @@ export default function DashboardProjects(props: {
           </Card>
         </NextLink>
       </Grid>
-      {props.projects.map((project: Projects, index: number) => (
-        <Grid item xs={3} key={index}>
+      {props.projects && props.projects.length ? props.projects.map((project: ProjectDetails, index: number) => (
+        <Grid item xs={3} key={index} className={classes.ProjectGrid}>
           <Card>
             <CardMedia
               className={classes.newProject}
-              image={project.icon}
-              title={project.title}
+              image={`/assets/${project.domain}.png`}
+              title={project.domain}
             />
             <CardContent>
               <Typography component="h6" variant="h6">
-                <div>{project.title}</div>
-                <div>{project.date}</div>
+                <div style={{color: '#FFFFFF'}}>{project.name}</div>
+                <div style={{color: '#4CBDEC'}}>{`Last Updated ${project.date}`}</div>
               </Typography>
             </CardContent>
           </Card>
         </Grid>
-      ))}
+      )) : null
+    }
     </div>
   );
 }

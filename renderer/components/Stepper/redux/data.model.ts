@@ -24,3 +24,10 @@ export interface FormParams {
   error: string;
   valid: boolean;
 }
+
+export interface ProjectDetails {
+  name: string,
+  domain: string
+  date: string;
+}
+
