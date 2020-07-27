@@ -26,8 +26,7 @@ export interface FormParams {
 }
 
 export interface ProjectDetails {
-  name: string,
-  domain: string
+  name: string;
+  domain: string;
   date: string;
 }
-

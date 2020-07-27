@@ -14,7 +14,7 @@ export interface TerminalProps {
   projectDetails?: {
     name: string;
     domain: string;
-  }
+  };
 }
 
 export default class SingleCommandTerminal extends Component<

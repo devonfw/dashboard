@@ -6,29 +6,29 @@ import { IpcRendererEvent } from 'electron';
 import { ProjectDetails } from '../components/Stepper/redux/data.model';
 
 interface IProjects {
-  projects: ProjectDetails[]
+  projects: ProjectDetails[];
 }
 
 export default class Projects extends Component<IProjects> {
   state: IProjects = {
-    projects: []
-  }
+    projects: [],
+  };
   componentDidMount() {
-      global.ipcRenderer.send('find:projectDetails');
-      global.ipcRenderer.on(
-        'get:projectDetails',
-        (_: IpcRendererEvent, projects: ProjectDetails[]) => {
-          this.setState({
-            projects: projects
-          });
-        }
-      );
-   }
+    global.ipcRenderer.send('find:projectDetails');
+    global.ipcRenderer.on(
+      'get:projectDetails',
+      (_: IpcRendererEvent, projects: ProjectDetails[]) => {
+        this.setState({
+          projects: projects,
+        });
+      }
+    );
+  }
 
-   componentWillUnmount() {
+  componentWillUnmount() {
     global.ipcRenderer.removeAllListeners('find:projectDetails');
     global.ipcRenderer.removeAllListeners('get:projectDetails');
-   }
+  }
 
   render(): JSX.Element {
     return (

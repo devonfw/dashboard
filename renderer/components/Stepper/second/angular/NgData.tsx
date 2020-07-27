@@ -76,9 +76,9 @@ const NgData = (): JSX.Element => {
         payload: {
           projectDetails: {
             name: ngData.name.value,
-            domain: 'angular'
-          }
-        }
+            domain: 'angular',
+          },
+        },
       });
     }
   };
@@ -94,21 +94,23 @@ const NgData = (): JSX.Element => {
       event.event && event.event.target
         ? event.event.target.value
         : data.name.value;
-    const workspace = event.dir ? event.dir : workspaceDir;
-    if (workspaceDir.filter(project => project.toLowerCase() === targetValue.toLowerCase()).length) {
+    if (
+      workspaceDir.filter(
+        (project) => project.toLowerCase() === targetValue.toLowerCase()
+      ).length
+    ) {
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.projectAlreadyExists,
         valid: false,
       });
-    } else if(targetValue.match(/^[a-z]*$/gi) == null) {
+    } else if (targetValue.match(/^[a-z]*$/gi) == null) {
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.pattern,
         valid: false,
       });
-    } 
-    else {
+    } else {
       validateProjectName({
         value: targetValue,
         error: '',

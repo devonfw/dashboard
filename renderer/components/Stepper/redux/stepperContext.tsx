@@ -9,7 +9,7 @@ interface StepperState {
   projectDetails: {
     name: string;
     domain: string;
-  }
+  };
 }
 
 const initialState: StepperState = {
@@ -19,8 +19,8 @@ const initialState: StepperState = {
   stackCwd: '',
   projectDetails: {
     name: '',
-    domain: ''
-  }
+    domain: '',
+  },
 };
 
 const reducer = (state: StepperState = initialState, action: StepperAction) => {
@@ -70,9 +70,9 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
     }
 
     case 'PROJECT_DETAILS': {
-      return { 
+      return {
         ...state,
-        projectDetails: action.payload && action.payload.projectDetails
+        projectDetails: action.payload && action.payload.projectDetails,
       };
     }
 

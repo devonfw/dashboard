@@ -19,6 +19,6 @@ export interface StepperAction {
     projectDetails?: {
       name: string;
       domain: string;
-    }
+    };
   };
 }

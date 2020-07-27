@@ -19,7 +19,12 @@ class ValidateForm {
     }
 
     if (control.value && rules && rules.existing) {
-      if (workspaceDir && workspaceDir.filter(project => project.toLowerCase() === control.value.toLowerCase()).length) {
+      if (
+        workspaceDir &&
+        workspaceDir.filter(
+          (project) => project.toLowerCase() === control.value.toLowerCase()
+        ).length
+      ) {
         isValid = false;
         control.error = rulesDetails[controlName]['existing'];
       }

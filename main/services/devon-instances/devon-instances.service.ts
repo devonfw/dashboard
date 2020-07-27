@@ -11,7 +11,11 @@ import { ProjectDetails } from '../../models/project-details.model';
 const exec = child.exec;
 
 export class DevonInstancesService {
-  private devonFilePath = path.resolve(platform.homedir(), '.devon', 'test.json');
+  private devonFilePath = path.resolve(
+    platform.homedir(),
+    '.devon',
+    'test.json'
+  );
 
   getAvailableDevonIdeInstances(): Promise<number> {
     let instanceCount = 0;
@@ -72,7 +76,7 @@ export class DevonInstancesService {
                   singlepath = singlepath.replace('/', '');
                   singlepath = singlepath.replace('/', ':/');
                   singlepath = singlepath.replace(/\//g, path.sep);
-                }  
+                }
                 const instance: IdeDistribution = {
                   id: singlepath,
                   ideConfig: {
@@ -100,34 +104,37 @@ export class DevonInstancesService {
     return instancesDirReader;
   }
 
-  getData(data: ProjectDetails, writeFile: (data) => void) {
-      fs.exists(this.devonFilePath, (exists: boolean) => {
-        if(exists) {
-          writeFile(data);
-        } else {
-          this.writeFile([{...data}], { flag: 'wx'});
-        }
-    });
-  }
-    
-  saveProjectDetails(data: ProjectDetails): void {
-    this.getData(data, (data: ProjectDetails) => {
-      this.readFile().then((details: ProjectDetails[]) => {
-        if (details.length) {
-          const projectDetails = details.splice(0);
-          projectDetails.push(data);
-          this.writeFile(projectDetails);
-        }
-      })
-      .catch(error => {
-        throw error;
-      })
+  getData(data: ProjectDetails, writeFile: (data) => void): void {
+    fs.exists(this.devonFilePath, (exists: boolean) => {
+      if (exists) {
+        writeFile(data);
+      } else {
+        this.writeFile([{ ...data }], { flag: 'wx' });
+      }
     });
   }
 
-  writeFile(data: ProjectDetails[], flag?: { flag : string}): void {
+  saveProjectDetails(data: ProjectDetails): void {
+    this.getData(data, (data: ProjectDetails) => {
+      this.readFile()
+        .then((details: ProjectDetails[]) => {
+          if (details.length) {
+            const projectDetails = details.splice(0);
+            projectDetails.push(data);
+            this.writeFile(projectDetails);
+          }
+        })
+        .catch((error) => {
+          throw error;
+        });
+    });
+  }
+
+  writeFile(data: ProjectDetails[], flag?: { flag: string }): void {
     const optional = flag ? flag : '';
-    fs.writeFile(this.devonFilePath, JSON.stringify(data), optional, function(err) {
+    fs.writeFile(this.devonFilePath, JSON.stringify(data), optional, function (
+      err
+    ) {
       if (err) throw err;
     });
   }
@@ -135,10 +142,9 @@ export class DevonInstancesService {
   readFile(): Promise<ProjectDetails[]> {
     return new Promise<ProjectDetails[]>((resolve, reject) => {
       fs.readFile(this.devonFilePath, (error, data) => {
-      if (error) reject(resolve([]));
+        if (error) reject(resolve([]));
         resolve(data ? JSON.parse(data.toString()) : []);
       });
     });
   }
-
 }

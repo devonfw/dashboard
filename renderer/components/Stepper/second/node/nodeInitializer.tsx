@@ -49,9 +49,9 @@ class NodeInitializer extends Component<NodeStyle> {
       payload: {
         projectDetails: {
           name: formData.formControls.name.value.toLowerCase(),
-          domain: 'node'
+          domain: 'node',
         },
-      }
+      },
     });
   };
 

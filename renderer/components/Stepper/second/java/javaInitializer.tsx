@@ -51,9 +51,9 @@ class JavaInitializer extends Component<JavaStyle> {
       payload: {
         projectDetails: {
           name: formData.formControls.artifact.value,
-          domain: 'java'
+          domain: 'java',
         },
-      }
+      },
     });
   };
 
@@ -125,7 +125,7 @@ class JavaInitializer extends Component<JavaStyle> {
     this.setState({
       formControls: formState,
       formIsValid: ValidateForm.formStateValidity(formState),
-   });
+    });
   }
 
   updateFormState = (args: ValueType): void => {

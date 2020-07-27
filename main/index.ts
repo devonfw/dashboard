@@ -150,15 +150,19 @@ function getWorkspaceProject(workspacelocation: string) {
 }
 
 function getProjectDetails() {
-    new DevonInstancesService().readFile().then(details => {
-      mainWindow.webContents.send('get:projectDetails', details);
-    });
+  new DevonInstancesService().readFile().then((details) => {
+    mainWindow.webContents.send('get:projectDetails', details);
+  });
 }
 
 /* Enable services */
 
 /* terminal powershell */
-const eventHandler = (event: IpcMainEvent, projectDetails: ProjectDetails, ...eventArgs: string[] ) => {
+const eventHandler = (
+  event: IpcMainEvent,
+  projectDetails: ProjectDetails,
+  ...eventArgs: string[]
+) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
   if (!command) event.sender.send('terminal/powershell', '');
@@ -178,7 +182,12 @@ const eventHandler = (event: IpcMainEvent, projectDetails: ProjectDetails, ...ev
     console.log('closed stream');
     if (projectDetails) {
       const currentDate = new Date();
-      projectDetails.date = currentDate.getDate() + '/' + currentDate.getMonth() + '/' + currentDate.getFullYear();
+      projectDetails.date =
+        currentDate.getDate() +
+        '/' +
+        currentDate.getMonth() +
+        '/' +
+        currentDate.getFullYear();
       new DevonInstancesService().saveProjectDetails(projectDetails);
     }
   });

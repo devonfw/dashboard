@@ -25,8 +25,16 @@ class Renderer {
     this.channels = [];
   }
 
-  sendMultiple(channel: string, projectDetails?: ProjectDetails, ...args: ChannelArgs[]): void {
-    global.ipcRenderer.send(channel, projectDetails ? projectDetails : '' , ...args);
+  sendMultiple(
+    channel: string,
+    projectDetails?: ProjectDetails,
+    ...args: ChannelArgs[]
+  ): void {
+    global.ipcRenderer.send(
+      channel,
+      projectDetails ? projectDetails : '',
+      ...args
+    );
   }
 
   send<Body>(channel: string, ...args: ChannelArgs[]): Promise<Body> {

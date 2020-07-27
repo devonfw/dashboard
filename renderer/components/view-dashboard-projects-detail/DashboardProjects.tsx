@@ -53,16 +53,15 @@ const useStyles = makeStyles({
     marginBottom: '2em',
     '& .MuiCardContent-root': {
       position: 'absolute',
-      top: '90px'
-    }
+      top: '90px',
+    },
   },
   alignCenter: {
     textAlign: 'center',
     marginTop: '1em',
-    marginLeft: '2em'
-  }
+    marginLeft: '2em',
+  },
 });
-
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
@@ -71,7 +70,7 @@ export default function DashboardProjects(props: {
   return (
     <div className={classes.root}>
       <Grid item xs={12} className={classes.header}>
-        <h2>{ `${props.projects.length} Projects` }</h2>
+        <h2>{`${props.projects.length} Projects`}</h2>
         <div className="search">
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>
@@ -84,7 +83,7 @@ export default function DashboardProjects(props: {
               image="/assets/add_new_project.png"
               title="Add new Project"
             />
-            <CardContent className={classes.alignCenter}> 
+            <CardContent className={classes.alignCenter}>
               <Typography component="h6" variant="h6">
                 Add New Project
               </Typography>
@@ -92,24 +91,27 @@ export default function DashboardProjects(props: {
           </Card>
         </NextLink>
       </Grid>
-      {props.projects && props.projects.length ? props.projects.map((project: ProjectDetails, index: number) => (
-        <Grid item xs={3} key={index} className={classes.ProjectGrid}>
-          <Card>
-            <CardMedia
-              className={classes.newProject}
-              image={`/assets/${project.domain}.png`}
-              title={project.domain}
-            />
-            <CardContent>
-              <Typography component="h6" variant="h6">
-                <div style={{color: '#FFFFFF'}}>{project.name}</div>
-                <div style={{color: '#4CBDEC'}}>{`Last Updated ${project.date}`}</div>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      )) : null
-    }
+      {props.projects && props.projects.length
+        ? props.projects.map((project: ProjectDetails, index: number) => (
+            <Grid item xs={3} key={index} className={classes.ProjectGrid}>
+              <Card>
+                <CardMedia
+                  className={classes.newProject}
+                  image={`/assets/${project.domain}.png`}
+                  title={project.domain}
+                />
+                <CardContent>
+                  <Typography component="h6" variant="h6">
+                    <div style={{ color: '#FFFFFF' }}>{project.name}</div>
+                    <div
+                      style={{ color: '#4CBDEC' }}
+                    >{`Last Updated ${project.date}`}</div>
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        : null}
     </div>
   );
 }
