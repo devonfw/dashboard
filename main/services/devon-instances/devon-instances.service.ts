@@ -17,36 +17,59 @@ export class DevonInstancesService {
     'projectinfo.json'
   );
 
+  /* Find out DEVON ide instances  */
   getAvailableDevonIdeInstances(): Promise<number> {
-    let instanceCount = 0;
-    const promiseInstances = [];
     const dirReader = new Promise<number>((resolve, reject) => {
       this.getAllUserCreatedDevonInstances().then(
         (instances: DevonfwConfig) => {
-          for (const distribution of instances.distributions) {
-            if (distribution.id) {
-              promiseInstances.push(this.getInstances(distribution.id));
-            }
-          }
-          if (promiseInstances.length) {
-            Promise.all(promiseInstances)
-              .then((results) => {
-                for (const result of results) {
-                  instanceCount = instanceCount + result;
-                }
-                resolve(instanceCount);
-              })
-              .catch((error) => {
-                console.log(error);
-                reject(error);
-              });
-          }
+          this.getCreatedDevonInstancesCount(instances).then(count => {
+            resolve(count);
+          })
+          .catch(error => reject(error));
         }
       );
     });
     return dirReader;
   }
 
+  /* Finding out total count of projects available in each DEVON ide instances */
+  getCreatedDevonInstancesCount(instances: DevonfwConfig): Promise<number> {
+    const promiseInstances = [];
+    return new Promise<number>((resolve, reject) => {
+      for (const distribution of instances.distributions) {
+        if (distribution.id) {
+          promiseInstances.push(this.getInstances(distribution.id));
+        }
+      }
+      this.countInstance(promiseInstances)
+        .then(count => resolve(count))
+        .catch(error => reject(error));
+    });
+  }
+
+  /* Calculating all the projects of available DEVON IDE instances and
+    returning total count of projects
+  */
+  countInstance(intances: Promise<number>[]): Promise<number> {
+    let instanceCount = 0;
+    if (intances.length) {
+      return new Promise<number>((resolve, reject) => {
+        Promise.all(intances)
+        .then((results) => {
+          for (const result of results) {
+            instanceCount = instanceCount + result;
+          }
+          resolve(instanceCount);
+        })
+        .catch((error) => {
+          console.log(error);
+          reject(error);
+        });
+      });
+    }
+  }
+
+  /* Get the total count of projects avaiable in each workspace   */
   getInstances(instancepath: string): Promise<number> {
     const devonInstances = new Promise<number>((resolve, reject) => {
       fs.readdir(path.resolve(instancepath, 'workspaces'), (error, files) => {
@@ -59,6 +82,7 @@ export class DevonInstancesService {
     return devonInstances;
   }
 
+  /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     let paths = [];
     const instances: DevonfwConfig = { distributions: [] };
@@ -104,6 +128,9 @@ export class DevonInstancesService {
     return instancesDirReader;
   }
 
+  /* Checking projectinfo.json is exists?, if exits overriding data or 
+    creating a json file with project details
+  */
   getData(data: ProjectDetails, writeFile: (data) => void): void {
     fs.exists(this.devonFilePath, (exists: boolean) => {
       if (exists) {
@@ -114,6 +141,7 @@ export class DevonInstancesService {
     });
   }
 
+  /* Storing information of Project deatils */
   saveProjectDetails(data: ProjectDetails): void {
     this.getData(data, (data: ProjectDetails) => {
       this.readFile()
@@ -130,6 +158,7 @@ export class DevonInstancesService {
     });
   }
 
+  /* Writing up project deatils in a JSON file */
   writeFile(data: ProjectDetails[], flag?: { flag: string }): void {
     const optional = flag ? flag : '';
     fs.writeFile(this.devonFilePath, JSON.stringify(data), optional, function (
@@ -139,6 +168,7 @@ export class DevonInstancesService {
     });
   }
 
+  /* Reading out project deatils which user has created */
   readFile(): Promise<ProjectDetails[]> {
     return new Promise<ProjectDetails[]>((resolve, reject) => {
       fs.readFile(this.devonFilePath, (error, data) => {
