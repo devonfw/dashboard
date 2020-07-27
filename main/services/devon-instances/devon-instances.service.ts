@@ -14,7 +14,7 @@ export class DevonInstancesService {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',
-    'test.json'
+    'projectinfo.json'
   );
 
   getAvailableDevonIdeInstances(): Promise<number> {
