@@ -78,6 +78,18 @@ const downloadHandler = (_, item) => {
   });
 };
 
+// Get all devon-ide-scripts from maven repository
+function getDevonIdeScripts() {
+  new DevonInstancesService()
+    .getDevonIdeScriptsFromMaven()
+    .then((instances) => {
+      mainWindow.webContents.send('get:devonIdeScripts', instances);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:devonIdeScripts', []);
+    });
+}
+
 // Finding out Devonfw Ide Instances
 function countInstance() {
   new DevonInstancesService()
@@ -229,3 +241,4 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
+ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);

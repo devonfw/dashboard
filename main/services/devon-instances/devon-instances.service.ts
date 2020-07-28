@@ -1,14 +1,17 @@
 import fs from 'fs';
 import path from 'path';
+import https from 'https';
 import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
+  DevonIdeScripts,
 } from '../../models/devonfw-dists.model';
+import * as util from 'util';
 import * as child from 'child_process';
 import { ProjectDetails } from '../../models/project-details.model';
 
-const exec = child.exec;
+const exec = util.promisify(child.exec);
 
 export class DevonInstancesService {
   private devonFilePath = path.resolve(
@@ -90,7 +93,7 @@ export class DevonInstancesService {
       fs.readFile(
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
         'utf8',
-        (err, data) => {
+        async (err, data) => {
           if (err) reject('No instances find out');
           if (data) {
             paths = data.split('\n');
@@ -101,22 +104,18 @@ export class DevonInstancesService {
                   singlepath = singlepath.replace('/', ':/');
                   singlepath = singlepath.replace(/\//g, path.sep);
                 }
+                const { stdout, stderr } = await exec('devon -v', {
+                  cwd: path.resolve(singlepath, 'scripts'),
+                });
                 const instance: IdeDistribution = {
                   id: singlepath,
                   ideConfig: {
-                    version: '',
+                    version: stdout.trim(),
                     basepath: singlepath,
                     commands: path.resolve(singlepath, 'scripts', 'command'),
                     workspaces: path.resolve(singlepath, 'workspaces'),
                   },
                 };
-                exec(
-                  'devon -v',
-                  { cwd: path.resolve(singlepath, 'scripts') },
-                  (_: unknown, stdout: string) => {
-                    instance.ideConfig.version = stdout;
-                  }
-                );
                 instances.distributions.push(instance);
               }
             }
@@ -126,6 +125,33 @@ export class DevonInstancesService {
       );
     });
     return instancesDirReader;
+  }
+
+  getDevonIdeScriptsFromMaven(): Promise<any> {
+    let ideScripts: DevonIdeScripts[] = [];
+    let data = '';
+    const ideScriptsPromise = new Promise<any>((resolve, reject) => {
+      https
+        .get(
+          'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json',
+          (res) => {
+            res.on('data', (d) => {
+              data += d;
+            });
+            res.on('end', () => {
+              const jsonData = JSON.parse(data);
+              ideScripts = jsonData['response']['docs'].map((i) => {
+                return { version: i.v, updated: i.timestamp };
+              });
+              resolve(ideScripts);
+            });
+          }
+        )
+        .on('error', (e) => {
+          reject('error: ' + e);
+        });
+    });
+    return ideScriptsPromise;
   }
 
   /* Checking projectinfo.json is exists?, if exits overriding data or 

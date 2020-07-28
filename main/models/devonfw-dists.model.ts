@@ -13,3 +13,8 @@ export interface IdeDistribution {
 export interface DevonfwConfig {
   distributions: IdeDistribution[];
 }
+
+export interface DevonIdeScripts {
+  version: string;
+  updated: Date;
+}
