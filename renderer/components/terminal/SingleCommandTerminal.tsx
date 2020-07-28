@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Renderer from '../../services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
+import MainMessage from '../../models/main-message';
 
 export interface TerminalState {
   previous: Array<{ cwd: string; cmd: string }>;
@@ -10,6 +11,10 @@ export interface TerminalState {
 export interface TerminalProps {
   initialCommand: string;
   initialCwd?: string;
+  projectDetails?: {
+    name: string;
+    domain: string;
+  };
 }
 
 export default class SingleCommandTerminal extends Component<
@@ -32,6 +37,7 @@ export default class SingleCommandTerminal extends Component<
   componentDidMount(): void {
     this.renderer.sendMultiple(
       'terminal/powershell',
+      this.props.projectDetails,
       this.props.initialCommand,
       this.props.initialCwd
     );
@@ -41,7 +47,7 @@ export default class SingleCommandTerminal extends Component<
     this.renderer.removeAll();
   }
 
-  handler = (_: unknown, message: string): void => {
+  handler = (_: never, message: MainMessage<string>): void => {
     this.setState(
       (prevState: Readonly<TerminalState>, props: Readonly<TerminalProps>) => {
         const cwd = props.initialCwd ? props.initialCwd : '';

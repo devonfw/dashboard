@@ -6,7 +6,8 @@ export type StepperActionType =
   | 'SET_STACK_CMD'
   | 'SET_STACK_CWD'
   | 'NOT_HANDLED'
-  | 'RESET_STEP';
+  | 'RESET_STEP'
+  | 'PROJECT_DETAILS';
 
 export interface StepperAction {
   type: StepperActionType;
@@ -15,5 +16,9 @@ export interface StepperAction {
     stackCmd?: string;
     stackCwd?: string;
     activeStep?: number;
+    projectDetails?: {
+      name: string;
+      domain: string;
+    };
   };
 }
