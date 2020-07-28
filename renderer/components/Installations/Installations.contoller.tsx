@@ -6,6 +6,7 @@ export interface DevonIdeScripts {
   version: string;
   updated: Date;
   downloading?: boolean;
+  installed?: boolean;
 }
 
 interface InstallationsState {
@@ -33,6 +34,7 @@ export default class Installations extends Component<
 
   componentWillUnmount(): void {
     global.ipcRenderer.removeAllListeners('get:devonIdeScripts');
+    global.ipcRenderer.removeAllListeners('get:devoninstances');
   }
 
   getInstallations = (): void => {
@@ -42,10 +44,26 @@ export default class Installations extends Component<
       (event: IpcRendererEvent, arg: any) => {
         const installations = arg.map((a: any) => {
           a.downloading = false;
+          a.installed = false;
+          return a;
+        });
+        this.updateDownloadedInstallations(installations);
+      }
+    );
+  };
+
+  updateDownloadedInstallations = (mavenScripts: any): void => {
+    global.ipcRenderer.send('find:devonfwInstances');
+    global.ipcRenderer.on(
+      'get:devoninstances',
+      (event: IpcRendererEvent, arg: any) => {
+        const installedVersions = arg.map((a: any) => a.ideConfig.version);
+        const installations = mavenScripts.map((a: any) => {
+          a.installed = installedVersions.includes(a.version) ? true : false;
           return a;
         });
         this.setState({ installations });
-        this.allInstallations.push(...arg);
+        this.allInstallations.push(...installations);
       }
     );
   };

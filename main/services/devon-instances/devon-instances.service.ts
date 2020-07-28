@@ -7,9 +7,10 @@ import {
   IdeDistribution,
   DevonIdeScripts,
 } from '../../models/devonfw-dists.model';
+import * as util from 'util';
 import * as child from 'child_process';
 
-const exec = child.exec;
+const exec = util.promisify(child.exec);
 
 export class DevonInstancesService {
   getAvailableDevonIdeInstances(): Promise<number> {
@@ -61,7 +62,7 @@ export class DevonInstancesService {
       fs.readFile(
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
         'utf8',
-        (err, data) => {
+        async (err, data) => {
           if (err) reject('No instances find out');
           if (data) {
             paths = data.split('\n');
@@ -72,22 +73,18 @@ export class DevonInstancesService {
                   singlepath = singlepath.replace('/', ':/');
                   singlepath = singlepath.replace(/\//g, path.sep);
                 }
+                const { stdout, stderr } = await exec('devon -v', {
+                  cwd: path.resolve(singlepath, 'scripts'),
+                });
                 const instance: IdeDistribution = {
                   id: singlepath,
                   ideConfig: {
-                    version: '',
+                    version: stdout.trim(),
                     basepath: singlepath,
                     commands: path.resolve(singlepath, 'scripts', 'command'),
                     workspaces: path.resolve(singlepath, 'workspaces'),
                   },
                 };
-                exec(
-                  'devon -v',
-                  { cwd: path.resolve(singlepath, 'scripts') },
-                  (_: unknown, stdout: string) => {
-                    instance.ideConfig.version = stdout;
-                  }
-                );
                 instances.distributions.push(instance);
               }
             }

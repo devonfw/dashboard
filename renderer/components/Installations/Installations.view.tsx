@@ -87,6 +87,7 @@ export default function InstallationsView(
                       className={classes.button}
                       variant="contained"
                       color="primary"
+                      disabled={installation.installed}
                       startIcon={<GetApp />}
                       href={
                         'https://search.maven.org/classic/remotecontent?filepath=com/devonfw/tools/ide/devonfw-ide-scripts/' +
