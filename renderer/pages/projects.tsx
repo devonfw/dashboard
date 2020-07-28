@@ -1,37 +1,40 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Layout from '../hoc/Layout';
 import SpaceAround from '../hoc/SpaceAround';
 import DashboardProjects from '../components/view-dashboard-projects-detail/DashboardProjects';
+import { IpcRendererEvent } from 'electron';
+import { ProjectDetails } from '../components/Stepper/redux/data.model';
 
-export default class Projects extends Component {
-  private projectsInfo = [
-    {
-      icon: '/assets/folder.png',
-      title: 'My Thai Star',
-      date: new Date().toDateString(),
-    },
-    {
-      icon: '/assets/folder.png',
-      title: 'Devonfw Dashboard',
-      date: new Date().toDateString(),
-    },
-    {
-      icon: '/assets/folder.png',
-      title: 'Dashboard',
-      date: new Date().toDateString(),
-    },
-    {
-      icon: '/assets/folder.png',
-      title: 'Angular 4g',
-      date: new Date().toDateString(),
-    },
-  ];
+interface IProjects {
+  projects: ProjectDetails[];
+}
+
+export default class Projects extends Component<IProjects> {
+  state: IProjects = {
+    projects: [],
+  };
+  componentDidMount() {
+    global.ipcRenderer.send('find:projectDetails');
+    global.ipcRenderer.on(
+      'get:projectDetails',
+      (_: IpcRendererEvent, projects: ProjectDetails[]) => {
+        this.setState({
+          projects: projects,
+        });
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    global.ipcRenderer.removeAllListeners('find:projectDetails');
+    global.ipcRenderer.removeAllListeners('get:projectDetails');
+  }
 
   render(): JSX.Element {
     return (
       <Layout>
         <SpaceAround bgColor={'#F4F6F8'}>
-          <DashboardProjects projects={this.projectsInfo} />
+          <DashboardProjects projects={this.state.projects} />
         </SpaceAround>
       </Layout>
     );

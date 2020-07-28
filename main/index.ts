@@ -17,6 +17,12 @@ import { DevonInstancesService } from './services/devon-instances/devon-instance
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { readdirPromise } from './services/shared/promised';
 
+export interface ProjectDetails {
+  name: string;
+  domain: string;
+  date: string;
+}
+
 let mainWindow;
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
@@ -155,14 +161,24 @@ function getWorkspaceProject(workspacelocation: string) {
     });
 }
 
+function getProjectDetails() {
+  new DevonInstancesService().readFile().then((details) => {
+    mainWindow.webContents.send('get:projectDetails', details);
+  });
+}
+
 /* Enable services */
 
 /* terminal powershell */
-const eventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
+const eventHandler = (
+  event: IpcMainEvent,
+  projectDetails: ProjectDetails,
+  ...eventArgs: string[]
+) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
-
   if (!command) event.sender.send('terminal/powershell', '');
+
   const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
 
   let options: SpawnOptions = { stdio: stdioOptions };
@@ -176,9 +192,20 @@ const eventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   terminal.stderr.on('data', (data) => console.error(data.toString()));
   terminal.on('close', () => {
     console.log('closed stream');
+    if (projectDetails) {
+      const currentDate = new Date();
+      projectDetails.date =
+        currentDate.getDate() +
+        '/' +
+        currentDate.getMonth() +
+        '/' +
+        currentDate.getFullYear();
+      new DevonInstancesService().saveProjectDetails(projectDetails);
+    }
   });
 
   terminal.stdin.write(command + '\n');
+  terminal.stdin.end();
 };
 
 /* terminal service */
@@ -213,4 +240,5 @@ ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
 ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });
+ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);

@@ -10,6 +10,9 @@ class ExecutionStep extends Component {
     let stackCwd = this.context.state.stackCwd;
     stackCwd = stackCwd ? stackCwd : '';
 
+    let projectDetails = this.context.state.projectDetails;
+    projectDetails = projectDetails ? projectDetails : '';
+
     const initialCommand = `${stackCmd}`;
     const initialCwd = `${stackCwd}`;
 
@@ -17,6 +20,7 @@ class ExecutionStep extends Component {
       <SingleCommandTerminal
         initialCommand={initialCommand}
         initialCwd={initialCwd}
+        projectDetails={projectDetails}
       ></SingleCommandTerminal>
     );
   }
