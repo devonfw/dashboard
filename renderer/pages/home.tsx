@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
 
 import Grid from '@material-ui/core/Grid';
-import SpaceAround from '../shared/hoc/SpaceAround';
-import ResponsiveDrawer from '../shared/components/responsive-drawer/ResponsiveDrawer';
-import ViewDashboardProjectsDetail from '../home/components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
-import Background from '../home/components/background/background';
-import WelcomeToDevonfw from '../home/components/welcome-to-devonfw/welcome-to-devonfw';
+import SpaceAround from '../modules/shared/hoc/SpaceAround';
+import ResponsiveDrawer from '../modules/shared/components/responsive-drawer/ResponsiveDrawer';
+import ViewDashboardProjectsDetail from '../modules/home/components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
+import Background from '../modules/home/components/background/background';
+import WelcomeToDevonfw from '../modules/home/components/welcome-to-devonfw/welcome-to-devonfw';
 
 export default function Home(): JSX.Element {
   const [totalInstances, setTotalInstances] = useState(0);

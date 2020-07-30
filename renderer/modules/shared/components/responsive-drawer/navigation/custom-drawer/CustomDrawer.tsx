@@ -18,7 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
 import { useRouter } from 'next/router';
-import responsiveDrawerStyle from '../../ResponsiveDrawer.style';
+import responsiveDrawerStyle from '../../responsiveDrawer.style';
 
 const useStyles = makeStyles({
   active: {

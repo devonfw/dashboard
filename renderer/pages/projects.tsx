@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Layout from '../shared/hoc/Layout';
-import SpaceAround from '../shared/hoc/SpaceAround';
+import Layout from '../modules/shared/hoc/Layout';
+import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import DashboardProjects from '../components/dashboard-projects/DashboardProjects';
 import { IpcRendererEvent } from 'electron';
 import { ProjectDetails } from '../components/Stepper/redux/data.model';
