@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import Layout from '../hoc/Layout';
-import SpaceAround from '../hoc/SpaceAround';
-import DashboardProjects from '../components/view-dashboard-projects-detail/DashboardProjects';
+import Layout from '../shared/hoc/Layout';
+import SpaceAround from '../shared/hoc/SpaceAround';
+import DashboardProjects from '../components/dashboard-projects/DashboardProjects';
 import { IpcRendererEvent } from 'electron';
 import { ProjectDetails } from '../components/Stepper/redux/data.model';
 
@@ -13,7 +13,8 @@ export default class Projects extends Component<IProjects> {
   state: IProjects = {
     projects: [],
   };
-  componentDidMount() {
+
+  componentDidMount(): void {
     global.ipcRenderer.send('find:projectDetails');
     global.ipcRenderer.on(
       'get:projectDetails',
@@ -25,7 +26,7 @@ export default class Projects extends Component<IProjects> {
     );
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     global.ipcRenderer.removeAllListeners('find:projectDetails');
     global.ipcRenderer.removeAllListeners('get:projectDetails');
   }

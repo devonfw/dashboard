@@ -1,5 +1,5 @@
 import React from 'react';
-import Layout from '../hoc/Layout';
+import Layout from '../shared/hoc/Layout';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({

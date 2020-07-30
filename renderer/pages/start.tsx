@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
-import Layout from '../hoc/Layout';
-import SpaceAround from '../hoc/SpaceAround';
+import Layout from '../shared/hoc/Layout';
+import SpaceAround from '../shared/hoc/SpaceAround';
 import CustomStepper from '../components/Stepper/CustomStepper';
 import { StepperProvider } from '../components/Stepper/redux/stepperContext';
 

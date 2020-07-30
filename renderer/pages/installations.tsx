@@ -1,8 +1,7 @@
 import { Component } from 'react';
-import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
-import SpaceAround from '../hoc/SpaceAround';
+import ResponsiveDrawer from '../shared/components/responsive-drawer/ResponsiveDrawer';
+import SpaceAround from '../shared/hoc/SpaceAround';
 import Repository from '../services/github/models/repository.model';
-import Searcher from '../components/Searcher/Searcher.controller';
 import Installations from '../components/Installations/Installations.contoller';
 
 interface HomeProps {
