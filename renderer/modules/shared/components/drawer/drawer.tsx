@@ -2,20 +2,20 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import IconButton from '@material-ui/core/IconButton';
-import responsiveDrawerStyle from './responsiveDrawer.style';
+import responsiveDrawerStyle from './drawer.style';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import AlertIcon from '../notifications/alert-icon/AlertIcon';
-import Navigation from './navigation/Navigation';
-import NotificationsDialog from '../notifications/Notifications';
-import { NotificationsProvider } from '../notifications/redux/NotificationsContext';
+import AlertIcon from '../../../../components/notifications/alert-icon/AlertIcon';
+import Navigation from './navigation/navigation';
+import NotificationsDialog from '../../../../components/notifications/Notifications';
+import { NotificationsProvider } from '../../../../components/notifications/redux/NotificationsContext';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
-export default function ResponsiveDrawer(props: {
+export default function Drawer(props: {
   children: JSX.Element;
   title?: string;
 }): JSX.Element {

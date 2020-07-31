@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../hoc/Layout';
-import SpaceAround from '../hoc/SpaceAround';
+import Layout from '../modules/shared/hoc/Layout';
+import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import { makeStyles } from '@material-ui/core/styles';
 import EclipseCard from '../components/cards/ide-cards/eclipse/eclipse-card.view';
 import VSCodeCard from '../components/cards/ide-cards/vscode-card/vscode-card.view';

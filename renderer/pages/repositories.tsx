@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import ResponsiveDrawer from '../components/responsive-drawer/ResponsiveDrawer';
-import SpaceAround from '../hoc/SpaceAround';
+import Drawer from '../modules/shared/components/drawer/drawer';
+import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import Repository from '../services/github/models/repository.model';
 import Searcher from '../components/Searcher/Searcher.controller';
 
@@ -10,11 +10,11 @@ interface HomeProps {
 export default class Home extends Component<HomeProps> {
   render(): JSX.Element {
     return (
-      <ResponsiveDrawer>
+      <Drawer>
         <SpaceAround>
           <Searcher></Searcher>
         </SpaceAround>
-      </ResponsiveDrawer>
+      </Drawer>
     );
   }
 }

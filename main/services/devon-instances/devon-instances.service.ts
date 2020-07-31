@@ -25,10 +25,11 @@ export class DevonInstancesService {
     const dirReader = new Promise<number>((resolve, reject) => {
       this.getAllUserCreatedDevonInstances().then(
         (instances: DevonfwConfig) => {
-          this.getCreatedDevonInstancesCount(instances).then(count => {
-            resolve(count);
-          })
-          .catch(error => reject(error));
+          this.getCreatedDevonInstancesCount(instances)
+            .then((count) => {
+              resolve(count);
+            })
+            .catch((error) => reject(error));
         }
       );
     });
@@ -45,8 +46,8 @@ export class DevonInstancesService {
         }
       }
       this.countInstance(promiseInstances)
-        .then(count => resolve(count))
-        .catch(error => reject(error));
+        .then((count) => resolve(count))
+        .catch((error) => reject(error));
     });
   }
 
@@ -58,16 +59,16 @@ export class DevonInstancesService {
     if (intances.length) {
       return new Promise<number>((resolve, reject) => {
         Promise.all(intances)
-        .then((results) => {
-          for (const result of results) {
-            instanceCount = instanceCount + result;
-          }
-          resolve(instanceCount);
-        })
-        .catch((error) => {
-          console.log(error);
-          reject(error);
-        });
+          .then((results) => {
+            for (const result of results) {
+              instanceCount = instanceCount + result;
+            }
+            resolve(instanceCount);
+          })
+          .catch((error) => {
+            console.log(error);
+            reject(error);
+          });
       });
     }
   }
