@@ -1,20 +1,10 @@
-import CustomDrawer from './custom-drawer/CustomDrawer';
+import CustomDrawer from './custom-drawer/custom-drawer';
 import Hidden from '@material-ui/core/Hidden';
 import Drawer from '@material-ui/core/Drawer';
-
-type StyleClasses = Record<
-  | 'content'
-  | 'toolbar'
-  | 'root'
-  | 'drawer'
-  | 'appBar'
-  | 'menuButton'
-  | 'drawerPaper',
-  string
->;
+import responsiveDrawerStyle from '../drawer.style';
 
 interface NavigationProps {
-  classes: StyleClasses;
+  classes: ReturnType<typeof responsiveDrawerStyle>;
   drawerToggle: () => void;
   mobileOpen: boolean;
 }

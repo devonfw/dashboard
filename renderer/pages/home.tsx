@@ -3,7 +3,7 @@ import { IpcRendererEvent } from 'electron';
 
 import Grid from '@material-ui/core/Grid';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
-import ResponsiveDrawer from '../modules/shared/components/responsive-drawer/ResponsiveDrawer';
+import Drawer from '../modules/shared/components/drawer/drawer';
 import ViewDashboardProjectsDetail from '../modules/home/components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
 import Background from '../modules/home/components/background/background';
 import WelcomeToDevonfw from '../modules/home/components/welcome-to-devonfw/welcome-to-devonfw';
@@ -21,7 +21,7 @@ export default function Home(): JSX.Element {
     );
   }, []);
   return (
-    <ResponsiveDrawer>
+    <Drawer>
       <Background>
         <SpaceAround>
           <>
@@ -35,6 +35,6 @@ export default function Home(): JSX.Element {
           </>
         </SpaceAround>
       </Background>
-    </ResponsiveDrawer>
+    </Drawer>
   );
 }

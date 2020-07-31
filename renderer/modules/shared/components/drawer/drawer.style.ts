@@ -86,57 +86,6 @@ const drawerStyle = (theme: Theme) =>
       position: 'relative',
       top: 17,
     },
-    customDrawerContainer: {
-      '& .MuiPaper-elevation1': {
-        boxShadow: 'none',
-      },
-      '& .MuiPaper-root': {
-        backgroundColor: 'transparent',
-      },
-    },
-    customDrawerRoot: {
-      display: 'flex',
-      flex: '1 0 auto',
-    },
-    customDrawerContent: {
-      flex: '1 0 auto',
-    },
-    customDrawerCover: {
-      width: 94,
-      height: 94,
-    },
-    user: {
-      display: 'flex',
-      flexDirection: 'column',
-      fontSize: '14px',
-    },
-    updateAction: {
-      '& button': {
-        marginTop: '16px',
-        backgroundColor: '#0075B3',
-        color: '#FFFFFF',
-      },
-      '& .MuiButton-containedPrimary': {
-        backgroundColor: '#0075B3',
-      },
-    },
-    upgrade: {
-      display: 'flex',
-      justifyContent: 'center',
-      marginTop: '2em',
-      marginBottom: '5em',
-    },
-    uppercase: {
-      textTransform: 'uppercase',
-      marginBottom: 2,
-      display: 'flex',
-      justifyContent: 'space-between',
-      '& .MuiSvgIcon-root': {
-        color: '#0075B3',
-        position: 'relative',
-        top: '-1px',
-      },
-    },
   });
 
 const responsiveDrawerStyle = makeStyles(drawerStyle);
