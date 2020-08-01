@@ -78,6 +78,18 @@ const downloadHandler = (_, item) => {
   });
 };
 
+// Get all devon-ide-scripts from maven repository
+function getDevonIdeScripts() {
+  new DevonInstancesService()
+    .getDevonIdeScriptsFromMaven()
+    .then((instances) => {
+      mainWindow.webContents.send('get:devonIdeScripts', instances);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:devonIdeScripts', []);
+    });
+}
+
 // Finding out Devonfw Ide Instances
 function countInstance() {
   new DevonInstancesService()
@@ -165,12 +177,12 @@ const eventHandler = (
 ) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
-  let isError = false
+  let isError = false;
   if (!command) event.sender.send('terminal/powershell', '');
 
   const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
 
-  let options: SpawnOptions = { stdio: 'pipe', shell: true };
+  let options: SpawnOptions = { stdio: stdioOptions };
   options = cwd ? { ...options, cwd } : options;
   const terminal = spawn(`powershell.exe`, [], options);
 
@@ -183,9 +195,6 @@ const eventHandler = (
     isError = true;
   });
 
-  terminal.on('exit', (code) => {
-    console.log('exit code ->', code);
-  });
   terminal.on('close', () => {
     console.log('closed stream');
     if (!isError) {
@@ -283,3 +292,4 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
+ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);

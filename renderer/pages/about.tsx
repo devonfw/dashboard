@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Layout from '../hoc/Layout';
-import SpaceAround from '../hoc/SpaceAround';
+import Layout from '../modules/shared/hoc/Layout';
+import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import Terminal from '../components/terminal/Terminal';
 import CustomTable from '../components/custom-table/custom-table-body/CustomTable';
 
