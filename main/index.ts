@@ -165,34 +165,87 @@ const eventHandler = (
 ) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
+  let isError = false
   if (!command) event.sender.send('terminal/powershell', '');
 
   const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
 
-  let options: SpawnOptions = { stdio: stdioOptions };
+  let options: SpawnOptions = { stdio: 'pipe', shell: true };
   options = cwd ? { ...options, cwd } : options;
   const terminal = spawn(`powershell.exe`, [], options);
 
   terminal.stdout.on('data', (data) => {
+    isError = false;
     console.log('sending data: ' + data.toString());
-    event.sender.send('terminal/powershell', data.toString());
   });
-  terminal.stderr.on('data', (data) => console.error(data.toString()));
+  terminal.stderr.on('data', (data) => {
+    console.error(data.toString());
+    isError = true;
+  });
+
+  terminal.on('exit', (code) => {
+    console.log('exit code ->', code);
+  });
   terminal.on('close', () => {
     console.log('closed stream');
-    if (projectDetails) {
-      const currentDate = new Date();
-      projectDetails.date =
-        currentDate.getDate() +
-        '/' +
-        currentDate.getMonth() +
-        '/' +
-        currentDate.getFullYear();
-      new DevonInstancesService().saveProjectDetails(projectDetails);
+    if (!isError) {
+      console.log('No Error found');
+      event.sender.send('terminal/powershell', 'success');
+      if (projectDetails) {
+        const currentDate = new Date();
+        projectDetails.date =
+          currentDate.getDate() +
+          '/' +
+          currentDate.getMonth() +
+          '/' +
+          currentDate.getFullYear();
+        new DevonInstancesService().saveProjectDetails(projectDetails);
+      }
+    } else {
+      event.sender.send('terminal/powershell', 'error');
     }
   });
 
   terminal.stdin.write(command + '\n');
+  terminal.stdin.end();
+};
+
+/* Installation powershell */
+const installEventHandler = (
+  event: IpcMainEvent,
+  ...eventArgs: string[]
+) => {
+  const cwd = eventArgs[1];
+  let isError = false
+
+  let options: SpawnOptions = { stdio: 'pipe', shell: true };
+  options = cwd ? { ...options, cwd } : options;
+  const terminal = spawn(`powershell.exe`, [], options);
+
+  terminal.stdout.on('data', (data) => {
+    isError = false;
+    console.log('sending data: ' + data.toString());
+    event.sender.send('powershell/installation/packages', data.toString());
+  });
+  terminal.stderr.on('data', (data) => {
+    console.error(data.toString());
+    isError = true;
+  });
+
+  terminal.on('exit', (code) => {
+    console.log('exit code ->', code);
+  });
+  terminal.on('close', () => {
+    console.log('closed stream');
+    if (!isError) {
+      console.log('No Error found');
+      event.sender.send('powershell/installation/packages', 'success');
+    } else {
+      event.sender.send('powershell/installation/packages', 'error');
+    }
+  });
+
+  terminal.stdin.write('npm install' + '\n');
   terminal.stdin.end();
 };
 
@@ -206,6 +259,7 @@ terminalService.openDialog();
 terminalService.mvnInstall();
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
+ipcMain.on('powershell/installation/packages', installEventHandler);
 
 /* command retriever service */
 const commandRetrieverService = new CommandRetrieverService();
