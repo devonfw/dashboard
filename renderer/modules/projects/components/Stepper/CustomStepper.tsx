@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 import MaterialStepper, { StepObject } from './MaterialStepper';
-import TypeStep from './first/TypeStep';
+import StackStep from './first/stack-step';
 import DataStep from './second/DataStep';
 import { StepperContext } from './redux/stepperContext';
 import ExecutionStep from './third/ExecutionStep';
@@ -12,7 +12,7 @@ class CustomStepper extends Component {
     {
       title: 'Project type',
       content: 'Project type',
-      stepJSX: <TypeStep></TypeStep>,
+      stepJSX: <StackStep></StackStep>,
     },
     {
       title: 'Project data',

@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
-import CustomStepper from '../components/Stepper/CustomStepper';
-import { StepperProvider } from '../components/Stepper/redux/stepperContext';
+import CustomStepper from '../modules/projects/components/Stepper/CustomStepper';
+import { StepperProvider } from '../modules/projects/components/Stepper/redux/stepperContext';
 
 const useStyles = makeStyles({
   container: {

@@ -5,7 +5,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { ProjectDetails } from '../Stepper/redux/data.model';
+import { ProjectDetails } from '../../modules/projects/components/Stepper/redux/data.model';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 
 export default function DashboardProjects(props: {
