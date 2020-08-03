@@ -1,6 +1,6 @@
 import { IpcRendererEvent } from 'electron';
 import MainMessage from '../../models/main-message';
-import { ProjectDetails } from '../../components/Stepper/redux/data.model';
+import { ProjectDetails } from '../../modules/projects/components/Stepper/redux/data.model';
 
 type HandlerFunction = () => void;
 type ChannelArgs = unknown;
