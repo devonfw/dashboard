@@ -21,7 +21,7 @@ export default function DashboardProjects(props: {
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={6} md={4} lg={3}>
         <NextLink href="/start" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
@@ -39,7 +39,14 @@ export default function DashboardProjects(props: {
       </Grid>
       {props.projects && props.projects.length
         ? props.projects.map((project: ProjectDetails, index: number) => (
-            <Grid item xs={3} key={index} className={classes.ProjectGrid}>
+            <Grid
+              item
+              xs={6}
+              md={4}
+              lg={3}
+              key={index}
+              className={classes.ProjectGrid}
+            >
               <Card>
                 <CardMedia
                   className={classes.newProject}

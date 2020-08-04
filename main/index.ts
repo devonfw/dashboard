@@ -85,7 +85,7 @@ function getDevonIdeScripts() {
     .then((instances) => {
       mainWindow.webContents.send('get:devonIdeScripts', instances);
     })
-    .catch((error) => {
+    .catch(() => {
       mainWindow.webContents.send('get:devonIdeScripts', []);
     });
 }
@@ -210,12 +210,7 @@ const eventHandler = (
 
 /* terminal service */
 const terminalService = new TerminalService();
-terminalService.ls();
-terminalService.mkdir(null);
-terminalService.rmdir(null);
-terminalService.pwd();
 terminalService.openDialog();
-terminalService.mvnInstall();
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 

@@ -7,9 +7,25 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import { useAccordionStyles } from '../accordion.styles';
+import { useContext } from 'react';
+import { StepperContext } from '../../../redux/stepperContext';
+import SingleCommandTerminal from '../../../../../components/terminal/SingleCommandTerminal';
 
 export default function ModulesInstallation(): JSX.Element {
   const classes = useAccordionStyles();
+  const { state } = useContext(StepperContext);
+
+  let stackCmd = state.stackCmd;
+  stackCmd = stackCmd ? stackCmd : '';
+
+  let stackCwd = state.stackCwd;
+  stackCwd = stackCwd ? stackCwd : '';
+
+  let projectDetails = state.projectDetails;
+  projectDetails = projectDetails ? projectDetails : { name: '', domain: '' };
+
+  const initialCommand = stackCmd;
+  const initialCwd = stackCwd;
 
   return (
     <Accordion>
@@ -22,17 +38,31 @@ export default function ModulesInstallation(): JSX.Element {
           Modules installation
         </Typography>
       </AccordionSummary>
-      <AccordionDetails
-        className={`${classes.details} ${classes.installation}`}
-      >
-        <Typography align="center">Do you want to install Packages?</Typography>
-        <Box display="flex" justifyContent="center" mt={3}>
-          <Button variant="outlined" className={classes.cancel}>
-            Back
-          </Button>
-          <AcceptButton className={classes.accept}>Proceed</AcceptButton>
-        </Box>
-      </AccordionDetails>
+      {false ? (
+        <AccordionDetails
+          className={`${classes.details} ${classes.installation}`}
+        >
+          <Typography align="center">
+            Do you want to install Packages?
+          </Typography>
+          <Box display="flex" justifyContent="center" mt={3}>
+            <Button variant="outlined" className={classes.cancel}>
+              Back
+            </Button>
+            <AcceptButton className={classes.accept}>Proceed</AcceptButton>
+          </Box>
+        </AccordionDetails>
+      ) : (
+        <AccordionDetails
+          className={`${classes.details} ${classes.installation}`}
+        >
+          <SingleCommandTerminal
+            initialCommand={initialCommand}
+            initialCwd={initialCwd}
+            projectDetails={projectDetails}
+          ></SingleCommandTerminal>
+        </AccordionDetails>
+      )}
     </Accordion>
   );
 }
