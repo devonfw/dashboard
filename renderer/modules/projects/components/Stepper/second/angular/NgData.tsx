@@ -1,7 +1,7 @@
 import { useContext, useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { StepperContext } from '../../redux/stepperContext';
-import { INgData, EventType, FormParams } from '../../redux/data.model';
+import { StepperContext } from '../../../../redux/stepperContext';
+import { INgData, EventType, FormParams } from '../../../../redux/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';

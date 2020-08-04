@@ -4,7 +4,7 @@ import Link from 'next/link';
 import MaterialStepper, { StepObject } from './MaterialStepper';
 import StackStep from './first/stack-step';
 import DataStep from './second/DataStep';
-import { StepperContext } from './redux/stepperContext';
+import { StepperContext } from '../../redux/stepperContext';
 import ExecutionStep from './third/ExecutionStep';
 
 class CustomStepper extends Component {

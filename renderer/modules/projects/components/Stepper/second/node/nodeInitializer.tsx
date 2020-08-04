@@ -2,7 +2,7 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { Button } from '@material-ui/core';
-import { StepperContext } from '../../redux/stepperContext';
+import { StepperContext } from '../../../../redux/stepperContext';
 import {
   INodeInitializerForm,
   FormControls,

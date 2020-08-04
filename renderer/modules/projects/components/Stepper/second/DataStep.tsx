@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { StepperContext } from '../redux/stepperContext';
+import { StepperContext } from '../../../redux/stepperContext';
 import STEPS_MAP from './StackSteps';
 
 const useStyles = () => ({

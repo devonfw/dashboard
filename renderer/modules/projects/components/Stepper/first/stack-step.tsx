@@ -1,7 +1,7 @@
 import StackCard from '../../../../../components/cards/stack-card/StackCard';
 import Grid from '@material-ui/core/Grid';
 import { useContext } from 'react';
-import { StepperContext } from '../redux/stepperContext';
+import { StepperContext } from '../../../redux/stepperContext';
 import { stackKeys, stacksMap, Stack } from './stacks';
 
 export default function StackStep(): JSX.Element {

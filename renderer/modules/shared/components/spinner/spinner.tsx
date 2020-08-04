@@ -3,7 +3,7 @@ import { useSpinnerStyles } from './spinner.styles';
 
 interface SpinnerProps {
   inProgress: boolean;
-  progress: number;
+  size?: string;
 }
 
 export default function Spinner(props: SpinnerProps): JSX.Element | null {
@@ -15,9 +15,9 @@ export default function Spinner(props: SpinnerProps): JSX.Element | null {
 
   return (
     <CircularProgress
-      variant="static"
+      variant="indeterminate"
       className={spinner}
-      value={props.progress}
+      size={props.size}
     ></CircularProgress>
   );
 }
