@@ -1,4 +1,4 @@
-import { INodeInitializerForm } from '../../../../models/dashboard/INodeInitializer';
+import { INodeInitializerForm } from '../../../../../../models/dashboard/INodeInitializer';
 
 const nodeProjectConfig: INodeInitializerForm = {
   workspaceDir: [],

@@ -7,13 +7,6 @@ const useStyles = () => ({
   dataContainer: {
     display: 'flex',
     marginBottom: '2em',
-    '& .MuiCard-root': {
-      height: '200px',
-      padding: 0,
-    },
-    '& .MuiCardActionArea-root': {
-      height: '100%',
-    },
   },
 });
 

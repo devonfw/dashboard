@@ -1,4 +1,4 @@
-import { IJavaInitializerForm } from '../../../../models/dashboard/IJavaInitializer';
+import { IJavaInitializerForm } from '../../../../../../models/dashboard/IJavaInitializer';
 
 const javaProjectConfig: IJavaInitializerForm = {
   workspaceDir: [],

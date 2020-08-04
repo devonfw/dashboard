@@ -41,7 +41,7 @@ export const drawerLinks: DrawerLink[] = [
   {
     id: 4,
     section: 'Installations',
-    sectionPath: '/about',
+    sectionPath: '/installations',
     icon: <BuildOutlinedIcon />,
   },
   {

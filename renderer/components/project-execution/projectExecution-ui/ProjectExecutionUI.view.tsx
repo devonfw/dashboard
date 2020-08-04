@@ -5,7 +5,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { StepperContext } from '../../Stepper/redux/stepperContext';
+import { StepperContext } from '../../../modules/projects/components/Stepper/redux/stepperContext';
 import { useProjectExecutionUIStyles } from './ProjectExecutionUI.styles';
 import Renderer from '../../../services/renderer/renderer.service';
 import InstallationGuide from './InstallationGuide';
