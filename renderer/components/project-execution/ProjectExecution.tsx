@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import ProjectExecutionUIView from './projectExecution-ui/ProjectExecutionUI.view'
+import ProjectExecutionUIView from './projectExecution-ui/ProjectExecutionUI.view';
 import Renderer from '../../services/renderer/renderer.service';
-import MainMessage from '../../models/main-message';
 
 export interface ExecutionState {
   message: string;
@@ -31,9 +30,15 @@ export default class ProjectExecution extends Component<
     super(props);
     this.renderer = new Renderer();
     this.renderer.on('terminal/powershell', this.handler);
+    this.processCommand = this.processCommand.bind(this);
+    this.resetState = this.resetState.bind(this);
   }
 
   componentDidMount(): void {
+    this.processCommand();
+  }
+
+  processCommand(): void {
     this.renderer.sendMultiple(
       'terminal/powershell',
       this.props.projectDetails,
@@ -46,15 +51,26 @@ export default class ProjectExecution extends Component<
     this.renderer.removeAll();
   }
 
+  resetState(): void {
+    this.handler(null, '');
+  }
+
   handler = (_: never, message: string): void => {
     console.log(message);
     this.setState({
-      message: message
+      message: message,
     });
   };
 
   render(): JSX.Element {
-    return ( <ProjectExecutionUIView message={this.state.message} installationPath={`${this.props.initialCwd}\\${this.props.projectDetails.name}`} type={this.props.projectDetails.domain}>
-    </ProjectExecutionUIView> );
+    return (
+      <ProjectExecutionUIView
+        message={this.state.message}
+        installationPath={`${this.props.initialCwd}\\${this.props.projectDetails.name}`}
+        type={this.props.projectDetails.domain}
+        processCommand={this.processCommand}
+        resetState={this.resetState}
+      ></ProjectExecutionUIView>
+    );
   }
 }

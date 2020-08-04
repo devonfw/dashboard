@@ -5,10 +5,10 @@ export const useProjectExecutionUIStyles = makeStyles({
     '& .MuiExpansionPanelDetails-root': {
       backgroundColor: '#F6F6F6',
       borderTop: '1px solid #707070',
-      padding: '2em'
+      padding: '2em',
     },
     '& .MuiSvgIcon-root': {
-      fontSize: '2rem !important'
+      fontSize: '2rem !important',
     },
     '& .action': {
       marginTop: '1em',
@@ -28,7 +28,7 @@ export const useProjectExecutionUIStyles = makeStyles({
       flexDirection: 'column',
       fontSize: '1.2em',
       fontWeight: 'bold',
-      color: '#495057'
+      color: '#495057',
     },
     '& .execution': {
       display: 'flex',
@@ -37,19 +37,22 @@ export const useProjectExecutionUIStyles = makeStyles({
       fontSize: '1.2em',
       paddingTop: '0.2em',
       fontWeight: 'bold',
-      color: '#495057'
+      color: '#495057',
     },
     '& .success': {
       color: '#81CF08',
       '& .MuiSvgIcon-root': {
-        fontSize: '2.5rem'
-      }
+        fontSize: '2.5rem',
+      },
     },
     '& .error': {
       color: '#E01600',
       '& .MuiSvgIcon-root': {
-        fontSize: '2.5rem'
-      }
+        fontSize: '2.5rem',
+      },
+      '& .MuiButtonBase-root': {
+        marginLeft: '1em',
+      },
     },
     '& .process-details': {
       backgroundColor: '#212529',
@@ -57,7 +60,7 @@ export const useProjectExecutionUIStyles = makeStyles({
       overflowY: 'auto',
       color: '#FFFFFF',
       overflowWrap: 'break-word',
-      whiteSpace: 'pre-wrap'
+      whiteSpace: 'pre-wrap',
     },
     '& .project-process-info': {
       textAlign: 'center',
@@ -65,12 +68,12 @@ export const useProjectExecutionUIStyles = makeStyles({
       fontSize: '1.2em',
       '& .success': {
         fontWeight: 'bold',
-        color: '#495057'
+        color: '#495057',
       },
       '& .error': {
         fontWeight: 'bold',
-        color: 'red'
-      }
-    }
+        color: 'red',
+      },
+    },
   },
 });

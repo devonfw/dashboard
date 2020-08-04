@@ -220,12 +220,9 @@ const eventHandler = (
 };
 
 /* Installation powershell */
-const installEventHandler = (
-  event: IpcMainEvent,
-  ...eventArgs: string[]
-) => {
+const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   const cwd = eventArgs[1];
-  let isError = false
+  let isError = false;
 
   let options: SpawnOptions = { stdio: 'pipe', shell: true };
   options = cwd ? { ...options, cwd } : options;
