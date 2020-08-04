@@ -10,14 +10,14 @@ export default class InstallationTerminal extends Component<InstallationProps> {
   constructor(props: InstallationProps) {
     super(props);
   }
-  render() {
+  render(): JSX.Element {
     return (
       <div>
         {this.props.installationUpdate}
         <div ref={this.props.scrollAnchor}></div>
         {!this.props.installationUpdate.trim().includes('Completed') &&
         !this.props.installationUpdate.includes('Something went wrong') ? (
-          <div>
+          <div className="progress">
             <CircularProgress />
           </div>
         ) : null}

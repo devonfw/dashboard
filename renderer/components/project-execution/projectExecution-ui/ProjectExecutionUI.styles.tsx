@@ -11,7 +11,7 @@ export const useProjectExecutionUIStyles = makeStyles({
       fontSize: '2rem !important',
     },
     '& .action': {
-      marginTop: '1em',
+      marginTop: '2em',
       display: 'flex',
       '& button': {
         marginRight: '1em',
@@ -38,6 +38,10 @@ export const useProjectExecutionUIStyles = makeStyles({
       paddingTop: '0.2em',
       fontWeight: 'bold',
       color: '#495057',
+      '& > div': {
+        display: 'flex',
+        alignItems: 'center',
+      },
     },
     '& .success': {
       color: '#81CF08',
@@ -75,5 +79,11 @@ export const useProjectExecutionUIStyles = makeStyles({
         color: 'red',
       },
     },
+    '& .progress': {
+      marginTop: '1em',
+      '& .MuiCircularProgress-colorPrimary': {
+        color: '#FFFFFF',
+      }
+    }
   },
 });

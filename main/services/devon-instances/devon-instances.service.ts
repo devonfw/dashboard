@@ -88,44 +88,60 @@ export class DevonInstancesService {
 
   /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
-    let paths = [];
-    const instances: DevonfwConfig = { distributions: [] };
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
       fs.readFile(
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
         'utf8',
-        async (err, data) => {
+        (err, data) => {
           if (err) reject('No instances find out');
-          if (data) {
-            paths = data.split('\n');
-            for (let singlepath of paths) {
-              if (singlepath) {
-                if (process.platform === 'win32') {
-                  singlepath = singlepath.replace('/', '');
-                  singlepath = singlepath.replace('/', ':/');
-                  singlepath = singlepath.replace(/\//g, path.sep);
-                }
-                const { stdout, stderr } = await exec('devon -v', {
-                  cwd: path.resolve(singlepath, 'scripts'),
-                });
-                const instance: IdeDistribution = {
-                  id: singlepath,
-                  ideConfig: {
-                    version: stdout.trim(),
-                    basepath: singlepath,
-                    commands: path.resolve(singlepath, 'scripts', 'command'),
-                    workspaces: path.resolve(singlepath, 'workspaces'),
-                  },
-                };
-                instances.distributions.push(instance);
-              }
-            }
-            resolve(instances);
-          }
+          this.devonfwInstance(data)
+            .then((instances: DevonfwConfig) => resolve(instances))
+            .catch((error) => console.log(error));
         }
       );
     });
     return instancesDirReader;
+  }
+
+  async devonfwInstance(data: string) {
+    let paths: string[] = [];
+    const instances: DevonfwConfig = { distributions: [] };
+    if (data) {
+      paths = data.split('\n');
+      for (let singlepath of paths) {
+        if (singlepath) {
+          if (process.platform === 'win32') {
+            singlepath = singlepath
+              .replace('/', '')
+              .replace('/', ':/')
+              .replace(/\//g, path.sep);
+          }
+          try {
+            const { stdout, stderr } = await exec('devon -v', {
+              cwd: path.resolve(singlepath, 'scripts'),
+            });
+            instances.distributions.push(
+              this.getIdeDistribution(singlepath, stdout)
+            );
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    }
+    return instances;
+  }
+
+  getIdeDistribution(singlepath, stdout): IdeDistribution {
+    return {
+      id: singlepath,
+      ideConfig: {
+        version: stdout.trim(),
+        basepath: singlepath,
+        commands: path.resolve(singlepath, 'scripts', 'command'),
+        workspaces: path.resolve(singlepath, 'workspaces'),
+      },
+    };
   }
 
   getDevonIdeScriptsFromMaven(): Promise<any> {

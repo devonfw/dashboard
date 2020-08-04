@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Button } from '@material-ui/core';
-import { StepperContext } from '../../Stepper/redux/stepperContext';
+import { StepperContext } from '../../../modules/projects/components/Stepper/redux/stepperContext';
+import EXECTUION_CONTANTS from './ExecutionContants';
 
 interface IstallationProps {
   installEventHandler: () => void;
@@ -15,16 +16,14 @@ export default class InstallationGuide extends Component<IstallationProps> {
     });
   };
 
-  render() {
+  render(): JSX.Element {
     return (
       <div className="installation">
-        <div>
-          {'Do you want to install Packages? (Click "Proceed" to continue)'}
-        </div>
+        <div>{EXECTUION_CONTANTS.INSTALLATION_MESSAGES.install_packages}</div>
         <div className="action">
           <div>
             <Button variant="outlined" onClick={this.props.cancelInstallation}>
-              CANCEL
+              {EXECTUION_CONTANTS.cancel}
             </Button>
           </div>
           <Button
@@ -34,7 +33,7 @@ export default class InstallationGuide extends Component<IstallationProps> {
             color="primary"
             onClick={this.props.installEventHandler}
           >
-            PROCEED
+            {EXECTUION_CONTANTS.proceed}
           </Button>
         </div>
       </div>

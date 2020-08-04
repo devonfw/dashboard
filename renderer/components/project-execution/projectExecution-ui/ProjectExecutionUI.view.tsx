@@ -11,6 +11,7 @@ import Renderer from '../../../services/renderer/renderer.service';
 import InstallationGuide from './InstallationGuide';
 import InstallationTerminal from './InstallationTerminal';
 import TrackMessage from './TrackMessage';
+import EXECTUION_CONTANTS from './ExecutionContants';
 
 export interface ProjectExecutionUIViewProps {
   message: string;
@@ -25,7 +26,9 @@ export default function ProjectExecutionUIView(
 ): JSX.Element {
   const renderer = new Renderer();
   const classes = useProjectExecutionUIStyles({});
-  const [expanded, setExpanded] = useState<string | boolean>('panel2');
+  const [expanded, setExpanded] = useState<string | boolean>(
+    EXECTUION_CONTANTS.installation
+  );
   const [installationUpdate, setInstallationUpdate] = useState<string>('');
   const [installationTrack, setInstallationTrack] = useState<string>('');
   const [installationRequired, setInstallationRequired] = useState<boolean>(
@@ -33,19 +36,6 @@ export default function ProjectExecutionUIView(
   );
   const scrollAnchor: RefObject<HTMLDivElement> = createRef();
   const { dispatch } = useContext(StepperContext);
-  const INSTALLATION_MESSAGES = {
-    setUp: 'Setup Installation',
-    success: 'Installation Completed',
-    error: 'Something went wrong. Sorry for inconvenience',
-  };
-
-  const PROJECT_CREATION_INFO = {
-    projectCreation: 'Project Creation',
-    inprogress: 'In Progress',
-    success: 'Successfully Created',
-    error:
-      'Error Occurred while creating a project. Sorry for the inconvenience.',
-  };
 
   useEffect(() => {
     renderer.on('powershell/installation/packages', handler);
@@ -65,7 +55,7 @@ export default function ProjectExecutionUIView(
   };
 
   const handleChange = (panel: string) => (
-    event: React.ChangeEvent<any>,
+    event: React.ChangeEvent<HTMLElement>,
     newExpanded: boolean
   ) => {
     setExpanded(newExpanded ? panel : false);
@@ -78,16 +68,19 @@ export default function ProjectExecutionUIView(
   ) : null;
 
   const handler = (_: never, message: string): void => {
-    if (message === 'success' || message === 'error') {
+    if (
+      message === EXECTUION_CONTANTS.success ||
+      message === EXECTUION_CONTANTS.error
+    ) {
       setInstallationTrack(message);
     }
 
-    if (message === 'success') {
-      message = INSTALLATION_MESSAGES.success;
+    if (message === EXECTUION_CONTANTS.success) {
+      message = EXECTUION_CONTANTS.INSTALLATION_MESSAGES.success;
     }
 
-    if (message === 'error') {
-      message = INSTALLATION_MESSAGES.error;
+    if (message === EXECTUION_CONTANTS.error) {
+      message = EXECTUION_CONTANTS.INSTALLATION_MESSAGES.error;
     }
 
     setInstallationUpdate((prevState: string) => {
@@ -95,8 +88,8 @@ export default function ProjectExecutionUIView(
     });
   };
 
-  const installEventHandler = () => {
-    setInstallationTrack('start');
+  const installEventHandler = (): void => {
+    setInstallationTrack(EXECTUION_CONTANTS.start);
     renderer.sendMultiple(
       'powershell/installation/packages',
       null,
@@ -104,17 +97,17 @@ export default function ProjectExecutionUIView(
     );
   };
 
-  const cancelInstallation = () => {
+  const cancelInstallation = (): void => {
     setInstallationRequired(false);
   };
 
-  const setActiveState = () => {
+  const setActiveState = (): void => {
     dispatch({
       type: 'RESET_STEP',
     });
   };
 
-  const retry = () => {
+  const retry = (): void => {
     props.resetState();
     props.processCommand();
   };
@@ -123,8 +116,8 @@ export default function ProjectExecutionUIView(
     <div className={classes.root}>
       <ExpansionPanel
         square
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}
+        expanded={expanded === EXECTUION_CONTANTS.projectCreation}
+        onChange={handleChange(EXECTUION_CONTANTS.projectCreation)}
       >
         <ExpansionPanelSummary
           aria-controls="panel1d-content"
@@ -132,40 +125,45 @@ export default function ProjectExecutionUIView(
           expandIcon={<ExpandMoreIcon />}
         >
           <div className="execution">
-            <div>{PROJECT_CREATION_INFO.projectCreation}</div>
+            <div>
+              {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.projectCreation}
+            </div>
             {projectCreationUpdate}
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div className="project-process-info">
             {!props.message ? (
-              PROJECT_CREATION_INFO.inprogress
-            ) : props.message === 'success' ? (
-              <div className="success">{PROJECT_CREATION_INFO.success}</div>
+              EXECTUION_CONTANTS.PROJECT_CREATION_INFO.inprogress
+            ) : props.message === EXECTUION_CONTANTS.success ? (
+              <div className="success">
+                {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.success}
+              </div>
             ) : (
               <div className="error">
-                {PROJECT_CREATION_INFO.error}
+                {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.error}
                 <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   onClick={retry}
                 >
-                  Retry
+                  {EXECTUION_CONTANTS.retry}
                 </Button>
               </div>
             )}
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      {props.type !== 'java' &&
-      props.message === 'success' &&
+      {props.type !== EXECTUION_CONTANTS.java &&
+      props.message === EXECTUION_CONTANTS.success &&
       installationRequired ? (
         <ExpansionPanel
+          defaultExpanded={true}
           square
-          expanded={expanded === 'panel2'}
+          expanded={expanded === EXECTUION_CONTANTS.installation}
           className="process"
-          onChange={handleChange('panel2')}
+          onChange={handleChange(EXECTUION_CONTANTS.installation)}
         >
           <ExpansionPanelSummary
             aria-controls="panel2d-content"
@@ -173,12 +171,14 @@ export default function ProjectExecutionUIView(
             expandIcon={<ExpandMoreIcon />}
           >
             <div className="execution">
-              <div>{INSTALLATION_MESSAGES.setUp}</div>
+              <div>{EXECTUION_CONTANTS.INSTALLATION_MESSAGES.setUp}</div>
               {installUpdate}
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails
-            className={installationUpdate == '' ? '' : 'process-details'}
+            className={
+              installationUpdate == '' ? '' : EXECTUION_CONTANTS.process_details
+            }
           >
             {installationUpdate == '' ? (
               <InstallationGuide
@@ -197,17 +197,22 @@ export default function ProjectExecutionUIView(
       <div className="action">
         <div>
           <Button variant="outlined" onClick={setActiveState}>
-            Back
+            {EXECTUION_CONTANTS.back}
           </Button>
         </div>
         <Link href="/projects">
           <Button
-            disabled={installationRequired && installationTrack !== 'success'}
+            disabled={
+              installationRequired &&
+              (props.type !== EXECTUION_CONTANTS.java
+                ? installationTrack !== EXECTUION_CONTANTS.success
+                : props.message !== EXECTUION_CONTANTS.success)
+            }
             size="small"
             variant="contained"
             color="primary"
           >
-            Finish
+            {EXECTUION_CONTANTS.finish}
           </Button>
         </Link>
       </div>
