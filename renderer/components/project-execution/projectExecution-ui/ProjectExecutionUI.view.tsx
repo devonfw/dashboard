@@ -161,7 +161,6 @@ export default function ProjectExecutionUIView(
         <ExpansionPanel
           defaultExpanded={true}
           square
-          expanded={expanded === EXECTUION_CONTANTS.installation}
           className="process"
           onChange={handleChange(EXECTUION_CONTANTS.installation)}
         >

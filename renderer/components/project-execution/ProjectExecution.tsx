@@ -56,7 +56,6 @@ export default class ProjectExecution extends Component<
   }
 
   handler = (_: never, message: string): void => {
-    console.log(message);
     this.setState({
       message: message,
     });
