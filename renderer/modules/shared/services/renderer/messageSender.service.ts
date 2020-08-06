@@ -1,4 +1,5 @@
 import Renderer from './renderer.service';
+import { ChannelObservable } from '../../utils/observation/observable';
 
 interface DialogStatus {
   filePaths: string[];
@@ -17,4 +18,10 @@ export default class MessageSenderService extends Renderer {
   openIDE(ide: string): Promise<string> {
     return super.send<string>('terminal/all-commands', `devon ${ide}`);
   }
+
+  installModules(path: string): ChannelObservable {
+    return this.sendObservable('terminal/install-modules', path);
+  }
 }
+
+export const messageSender = new MessageSenderService();

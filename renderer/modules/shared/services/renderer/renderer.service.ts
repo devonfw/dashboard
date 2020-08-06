@@ -1,20 +1,28 @@
 import { IpcRendererEvent } from 'electron';
 import MainMessage from '../../../../models/main-message';
 import { ProjectDetails } from '../../../projects/redux/data.model';
+import { ChannelObservable } from '../../utils/observation/observable';
 
-type HandlerFunction = () => void;
+type HandlerFunction<T> = (event: IpcRendererEvent, data: T) => void;
 type ChannelArgs = unknown;
+export interface Channel {
+  status: string;
+  data: string;
+}
+
 class Renderer {
   private channels: string[] = [];
 
-  on(channel: string, handler: HandlerFunction): void {
+  on<T>(channel: string, handler: HandlerFunction<T>): void {
     global.ipcRenderer.on(channel, handler);
     this.channels.push(channel);
   }
 
-  removeListener(channel: string, handler: HandlerFunction): void {
-    global.ipcRenderer.removeListener(channel, handler);
-    this.channels = this.channels.filter((sub) => sub != channel);
+  removeAllInChannel(channel: string): void {
+    global.ipcRenderer.removeAllListeners(channel);
+    this.channels = this.channels.filter((existingChannel) => {
+      return channel !== existingChannel;
+    });
   }
 
   removeAll(): void {
@@ -53,6 +61,32 @@ class Renderer {
       global.ipcRenderer.send(channel, ...args);
     });
     return result;
+  }
+
+  sendObservable(
+    channelName: string,
+    ...args: ChannelArgs[]
+  ): ChannelObservable {
+    const channelObservable = new ChannelObservable((data, error, end) => {
+      this.on<Channel>(channelName, (_, channel) => {
+        console.log(channel);
+        if (channel.status === 'data') {
+          data(channel.data);
+        }
+
+        if (channel.status === 'error') {
+          error(channel.data);
+        }
+
+        if (channel.status === 'end') {
+          end();
+          this.removeAllInChannel(channelName);
+        }
+      });
+      global.ipcRenderer.send(channelName, ...args);
+    });
+
+    return channelObservable;
   }
 }
 

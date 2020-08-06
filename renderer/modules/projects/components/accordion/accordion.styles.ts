@@ -37,5 +37,8 @@ export const useAccordionStyles = makeStyles((theme: Theme) =>
     cancel: {
       marginRight: 8,
     },
+    noPad: {
+      padding: 0,
+    },
   })
 );

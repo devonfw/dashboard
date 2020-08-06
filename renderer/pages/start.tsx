@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function HelloElectron(): JSX.Element {
+export default function Start(): JSX.Element {
   const classes = useStyles();
 
   return (

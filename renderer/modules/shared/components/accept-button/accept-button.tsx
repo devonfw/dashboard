@@ -1,14 +1,7 @@
-import Button from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@material-ui/core/Button';
 import { useAcceptButtonStyles } from './accept-button.styles';
 
-interface AcceptButtonProps {
-  disabled?: boolean;
-  href?: string;
-  className?: string;
-  children: JSX.Element | string;
-}
-
-export default function AcceptButton(props: AcceptButtonProps): JSX.Element {
+export default function AcceptButton(props: ButtonProps): JSX.Element {
   const button: string = useAcceptButtonStyles().button;
 
   return (
@@ -18,6 +11,7 @@ export default function AcceptButton(props: AcceptButtonProps): JSX.Element {
       disabled={props.disabled}
       className={`${button} ${props.className}`}
       href={props.href}
+      onClick={props.onClick}
     >
       {props.children}
     </Button>
