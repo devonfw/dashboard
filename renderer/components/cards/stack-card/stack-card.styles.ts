@@ -14,6 +14,7 @@ const reversedColors: Style = {
 
 export const useStackCardStyles = makeStyles({
   card: {
+    'box-sizing': 'border-box',
     '& button': {
       padding: '1rem 0 0 0',
     },
@@ -22,6 +23,7 @@ export const useStackCardStyles = makeStyles({
   image: {
     height: 65,
     backgroundSize: 'contain',
+    margin: '0 1vw 0 1vw',
   },
   bgColor: reversedColors,
   textCenter: {
