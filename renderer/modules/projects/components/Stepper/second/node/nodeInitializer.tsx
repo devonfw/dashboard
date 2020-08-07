@@ -29,29 +29,23 @@ class NodeInitializer extends Component<NodeStyle> {
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: INodeInitializerForm = this.state;
+
     this.context.dispatch({
-      type: 'SET_STACK_CMD',
+      type: 'SET_PROJECT_DATA',
       payload: {
-        stackCmd: `devon node create ${formData.formControls.name.value.toLowerCase()} -n --skip-install`,
-      },
-    });
-    this.context.dispatch({
-      type: 'SET_STACK_CWD',
-      payload: {
-        stackCwd: `${formData.formControls.devonInstances.value}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
-    this.context.dispatch({
-      type: 'PROJECT_DETAILS',
-      payload: {
-        projectDetails: {
+        projectData: {
           name: formData.formControls.name.value.toLowerCase(),
-          domain: 'node',
+          path: formData.formControls.devonInstances.value,
+          specificArgs: {
+            '-routing': null,
+            '--skip-install': null,
+          },
         },
       },
+    });
+
+    this.context.dispatch({
+      type: 'NEXT_STEP',
     });
   };
 

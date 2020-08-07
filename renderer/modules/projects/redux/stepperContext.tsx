@@ -1,19 +1,13 @@
 import * as React from 'react';
-import { StepperAction } from './stepperActions';
+import { StepperActions } from './actions/stepper-actions';
+import { updateProjectDataState } from './utils/utils';
 
-interface StepperState {
+export interface StepperState {
   activeStep: number | undefined;
-  stack: string | undefined;
-  stackCmd: string | undefined;
-  stackCwd: string | undefined;
-  projectDetails: {
-    name: string;
-    domain: string;
-  };
   projectData?: {
-    name: string;
-    type: string;
-    path: string;
+    name?: string;
+    type?: string;
+    path?: string;
     specificArgs?: {
       [key: string]: string | boolean | null | undefined;
     };
@@ -22,40 +16,23 @@ interface StepperState {
 
 const initialState: StepperState = {
   activeStep: 0,
-  stack: '',
-  stackCmd: '',
-  stackCwd: '',
-  projectDetails: {
+  projectData: {
     name: '',
-    domain: '',
+    type: '',
+    path: '',
+    specificArgs: {},
   },
 };
 
-const reducer = (state: StepperState = initialState, action: StepperAction) => {
+const reducer = (
+  state: StepperState = initialState,
+  action: StepperActions
+) => {
   const activeStep = state.activeStep ? state.activeStep : 0;
 
   switch (action.type) {
-    case 'SET_STACK': {
-      console.log(activeStep);
-      return {
-        ...state,
-        stack: action.payload?.stack,
-        activeStep: activeStep + 1,
-      };
-    }
-
     case 'SET_PROJECT_DATA': {
-      return {
-        ...state,
-        projectDetails: { ...action.payload?.projectDetails },
-      };
-    }
-
-    case 'SET_STACK_CWD': {
-      return {
-        ...state,
-        stackCwd: action.payload?.stackCwd,
-      };
+      return updateProjectDataState(state, action.payload?.projectData);
     }
 
     case 'SET_ACTIVE': {
@@ -77,13 +54,6 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
       return { ...state, activeStep: 0 };
     }
 
-    case 'PROJECT_DETAILS': {
-      return {
-        ...state,
-        projectDetails: action.payload?.projectDetails,
-      };
-    }
-
     default:
       throw new Error('Unknown action');
   }
@@ -91,7 +61,7 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
 
 export interface IStepperContext {
   state: StepperState;
-  dispatch: (action: StepperAction) => void;
+  dispatch: (action: StepperActions) => void;
 }
 
 export const StepperContext = React.createContext<IStepperContext>({

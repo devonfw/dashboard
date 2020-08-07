@@ -8,7 +8,14 @@ export default function StackStep(): JSX.Element {
   const { dispatch } = useContext(StepperContext);
 
   const handleStack = (stack: string) => {
-    return () => dispatch({ type: 'SET_STACK', payload: { stack } });
+    return () => {
+      dispatch({
+        type: 'SET_PROJECT_DATA',
+        payload: { projectData: { type: stack } },
+      });
+
+      dispatch({ type: 'NEXT_STEP' });
+    };
   };
 
   return (

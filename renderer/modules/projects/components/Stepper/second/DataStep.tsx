@@ -18,8 +18,7 @@ interface DataStepProps {
 class DataStep extends Component<DataStepProps> {
   render(): JSX.Element {
     const { classes } = this.props;
-    let stack: string = this.context.state.stack;
-    stack = stack ? stack : '';
+    const stack: string = this.context.state.projectData.type;
 
     return (
       <>

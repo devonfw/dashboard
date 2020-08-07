@@ -58,7 +58,6 @@ const NgData = (): JSX.Element => {
         payload: {
           projectData: {
             name: ngData.name.value,
-            type: 'angular',
             path: ngData.devonInstances.value,
             specificArgs: {
               '--routing': ngData.routing.value,
@@ -71,24 +70,7 @@ const NgData = (): JSX.Element => {
       });
 
       dispatch({
-        type: 'SET_STACK_CWD',
-        payload: {
-          stackCwd: `${ngData.devonInstances.value}`,
-        },
-      });
-
-      dispatch({
         type: 'NEXT_STEP',
-      });
-
-      dispatch({
-        type: 'PROJECT_DETAILS',
-        payload: {
-          projectDetails: {
-            name: ngData.name.value,
-            domain: 'angular',
-          },
-        },
       });
     }
   };

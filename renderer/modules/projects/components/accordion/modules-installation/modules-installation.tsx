@@ -17,7 +17,7 @@ export default function ModulesInstallation(): JSX.Element {
   const router = useRouter();
   const { state } = useContext(StepperContext);
   const [install, setInstall] = useState(false);
-  const path = `${state.stackCwd}/${state.projectDetails.name}`;
+  const path = `${state.projectData?.path}/${state.projectData?.name}`;
 
   const proceedInstall = () => {
     setInstall(true);

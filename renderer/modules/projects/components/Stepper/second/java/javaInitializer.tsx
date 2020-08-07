@@ -32,32 +32,39 @@ class JavaInitializer extends Component<JavaStyle> {
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: IJavaInitializerForm = this.state;
-    const batch = formData.formControls.batch ? '-Dbatch=batch' : '';
-    this.context.dispatch({
-      type: 'SET_STACK_CMD',
-      payload: {
-        stackCmd: `devon java create ${formData.formControls.packageName.value} -DdbType=${formData.formControls.db.value} -Dversion="${formData.formControls.version.value}" ${formData.formControls.group.value} ${batch}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'SET_STACK_CWD',
-      payload: {
-        stackCwd: `${formData.formControls.devonInstances.value}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
 
     this.context.dispatch({
-      type: 'PROJECT_DETAILS',
+      type: 'SET_PROJECT_DATA',
       payload: {
-        projectDetails: {
-          name: formData.formControls.artifact.value,
-          domain: 'java',
+        projectData: {
+          name: formData.formControls.packageName.value,
+          path: formData.formControls.devonInstances.value,
+          specificArgs: this.specificArgs(),
         },
       },
     });
+
+    this.context.dispatch({
+      type: 'NEXT_STEP',
+    });
+  };
+
+  specificArgs = () => {
+    const formData: IJavaInitializerForm = this.state;
+
+    const specificArgs: {
+      [key: string]: string | null | boolean | undefined;
+    } = {
+      '-DdbType': formData.formControls.db.value,
+      '-Dversion': `"${formData.formControls.version.value}"`,
+      '-DartifactId': formData.formControls.artifact.value,
+    };
+    specificArgs[formData.formControls.group.value] = null;
+    if (formData.formControls.batch) {
+      specificArgs['-Dbatch'] = 'batch';
+    }
+
+    return specificArgs;
   };
 
   groupHandler = (value: string): void => {
