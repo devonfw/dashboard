@@ -15,8 +15,10 @@ import { CommandRetrieverService } from './services/command-retriever/command-re
 import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
-import { readdirPromise } from './services/shared/promised';
-import { createInstaller, Installer } from './services/installer/installer';
+import { readdirPromise } from './modules/shared/utils/promised';
+import { InstallListener } from './modules/projects/classes/listeners/install-listener';
+import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
+import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
 
 export interface ProjectDetails {
   name: string;
@@ -209,54 +211,17 @@ const eventHandler = (
   terminal.stdin.end();
 };
 
-const LSHandler = (event: IpcMainEvent, path: string) => {
-  const channel = 'terminal/install-modules';
-  let packageManager: Installer;
+const installEventListener = new InstallListener(new SpawnTerminalFactory());
+installEventListener.listen();
 
-  try {
-    packageManager = createInstaller(path);
-  } catch (error) {
-    event.sender.send(channel, {
-      status: 'error',
-      data: 'Package manager not found',
-    });
-    return;
-  }
-
-  const terminal = packageManager.installerProcess();
-
-  terminal.stdout.on('data', (data) => {
-    const formattedData = data.toString();
-    console.log('data -> ' + formattedData);
-    event.sender.send(channel, {
-      status: 'data',
-      data: formattedData,
-    });
-  });
-
-  terminal.stderr.on('data', (data) => {
-    const formattedData = data.toString();
-    console.error('error -> ' + formattedData);
-    event.sender.send(channel, {
-      status: 'error',
-      data: formattedData,
-    });
-  });
-
-  terminal.on('close', () => {
-    event.sender.send(channel, { status: 'end', data: '' });
-  });
-
-  packageManager.installPackages();
-};
+const projectListener = new ProjectCreationListener(new SpawnTerminalFactory());
+projectListener.listen();
 
 /* terminal service */
 const terminalService = new TerminalService();
 terminalService.openDialog();
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
-
-ipcMain.on('terminal/install-modules', LSHandler);
 
 /* command retriever service */
 const commandRetrieverService = new CommandRetrieverService();

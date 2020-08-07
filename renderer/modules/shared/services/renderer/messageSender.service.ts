@@ -5,6 +5,18 @@ interface DialogStatus {
   filePaths: string[];
   canceled?: boolean;
 }
+
+interface SpecificArgs {
+  [key: string]: string | boolean | null | undefined;
+}
+
+export interface ProjectData {
+  name: string;
+  type: string;
+  path: string;
+  specificArgs: SpecificArgs;
+}
+
 export default class MessageSenderService extends Renderer {
   constructor() {
     super();
@@ -21,6 +33,10 @@ export default class MessageSenderService extends Renderer {
 
   installModules(path: string): ChannelObservable {
     return this.sendObservable('terminal/install-modules', path);
+  }
+
+  createProject(projectData: ProjectData): ChannelObservable {
+    return this.sendObservable('terminal/create-project', projectData);
   }
 }
 

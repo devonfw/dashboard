@@ -54,9 +54,19 @@ const NgData = (): JSX.Element => {
     const ngData: INgData = data;
     if (data.name.valid) {
       dispatch({
-        type: 'SET_STACK_CMD',
+        type: 'SET_PROJECT_DATA',
         payload: {
-          stackCmd: `devon ng new ${ngData.name.value} --routing=${ngData.routing.value} --style=${ngData.styling.value} --interactive=false --skip-install`,
+          projectData: {
+            name: ngData.name.value,
+            type: 'angular',
+            path: ngData.devonInstances.value,
+            specificArgs: {
+              '--routing': ngData.routing.value,
+              '--style': ngData.styling.value,
+              '--interactive': false,
+              '--skip-install': null,
+            },
+          },
         },
       });
 

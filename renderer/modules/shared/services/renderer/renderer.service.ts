@@ -63,10 +63,7 @@ class Renderer {
     return result;
   }
 
-  sendObservable(
-    channelName: string,
-    ...args: ChannelArgs[]
-  ): ChannelObservable {
+  sendObservable<T>(channelName: string, channelData: T): ChannelObservable {
     const channelObservable = new ChannelObservable((data, error, end) => {
       this.on<Channel>(channelName, (_, channel) => {
         console.log(channel);
@@ -83,7 +80,7 @@ class Renderer {
           this.removeAllInChannel(channelName);
         }
       });
-      global.ipcRenderer.send(channelName, ...args);
+      global.ipcRenderer.send(channelName, channelData);
     });
 
     return channelObservable;

@@ -10,6 +10,14 @@ interface StepperState {
     name: string;
     domain: string;
   };
+  projectData?: {
+    name: string;
+    type: string;
+    path: string;
+    specificArgs?: {
+      [key: string]: string | boolean | null | undefined;
+    };
+  };
 }
 
 const initialState: StepperState = {
@@ -31,29 +39,29 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
       console.log(activeStep);
       return {
         ...state,
-        stack: action.payload && action.payload.stack,
+        stack: action.payload?.stack,
         activeStep: activeStep + 1,
       };
     }
 
-    case 'SET_STACK_CMD': {
+    case 'SET_PROJECT_DATA': {
       return {
         ...state,
-        stackCmd: action.payload && action.payload.stackCmd,
+        projectDetails: { ...action.payload?.projectDetails },
       };
     }
 
     case 'SET_STACK_CWD': {
       return {
         ...state,
-        stackCwd: action.payload && action.payload.stackCwd,
+        stackCwd: action.payload?.stackCwd,
       };
     }
 
     case 'SET_ACTIVE': {
       return {
         ...state,
-        activeStep: action.payload && action.payload.activeStep,
+        activeStep: action.payload?.activeStep,
       };
     }
 
@@ -72,12 +80,12 @@ const reducer = (state: StepperState = initialState, action: StepperAction) => {
     case 'PROJECT_DETAILS': {
       return {
         ...state,
-        projectDetails: action.payload && action.payload.projectDetails,
+        projectDetails: action.payload?.projectDetails,
       };
     }
 
     default:
-      throw new Error();
+      throw new Error('Unknown action');
   }
 };
 

@@ -6,9 +6,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import { useAccordionStyles } from '../accordion.styles';
 import LoadIcon from '../../../../shared/components/load-icon/load-icon';
+import ProjectCreator from './project-creator';
+import { useContext } from 'react';
+import { StepperContext } from '../../../redux/stepperContext';
 
 export default function ProjectCreation(): JSX.Element {
   const classes = useAccordionStyles();
+  const { state } = useContext(StepperContext);
 
   return (
     <Accordion>
@@ -22,10 +26,11 @@ export default function ProjectCreation(): JSX.Element {
         <LoadIcon success />
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
-        <Typography align="center" className={classes.error}>
+        {/* <Typography align="center" className={classes.error}>
           Project creation failed
           <AcceptButton className={classes.accept}>Retry</AcceptButton>
-        </Typography>
+        </Typography> */}
+        <ProjectCreator projectData={state.projectData}></ProjectCreator>
       </AccordionDetails>
     </Accordion>
   );

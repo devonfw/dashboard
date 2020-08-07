@@ -7,7 +7,8 @@ export type StepperActionType =
   | 'SET_STACK_CWD'
   | 'NOT_HANDLED'
   | 'RESET_STEP'
-  | 'PROJECT_DETAILS';
+  | 'PROJECT_DETAILS'
+  | 'SET_PROJECT_DATA';
 
 export interface StepperAction {
   type: StepperActionType;
@@ -19,6 +20,14 @@ export interface StepperAction {
     projectDetails?: {
       name: string;
       domain: string;
+    };
+    projectData?: {
+      name: string;
+      type: string;
+      path: string;
+      specificArgs?: {
+        [key: string]: string | boolean | null | undefined;
+      };
     };
   };
 }

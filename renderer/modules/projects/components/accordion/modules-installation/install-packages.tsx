@@ -5,8 +5,8 @@ import AcceptButton from '../../../../shared/components/accept-button/accept-but
 import { useAccordionStyles } from '../accordion.styles';
 
 interface InstallPackagesProps {
-  proceed?: () => void;
-  cancel?: () => void;
+  onProceed?: () => void;
+  onCancel?: () => void;
 }
 
 export default function InstallPackages(
@@ -21,11 +21,11 @@ export default function InstallPackages(
         <Button
           variant="outlined"
           className={classes.cancel}
-          onClick={props.cancel}
+          onClick={props.onCancel}
         >
           Back
         </Button>
-        <AcceptButton className={classes.accept} onClick={props.proceed}>
+        <AcceptButton className={classes.accept} onClick={props.onProceed}>
           Proceed
         </AcceptButton>
       </Box>
