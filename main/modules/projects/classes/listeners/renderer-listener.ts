@@ -10,19 +10,14 @@ export abstract class RendererListener<T> {
   event: RendererEvent;
 
   constructor(
-    private terminalFactory: TerminalFactory,
-    private channel: string
+    private channel: string,
+    private terminalFactory: TerminalFactory
   ) {
     this.terminal = null;
   }
 
-  executeCommand(command: Command): void {
-    this.terminal = this.terminalFactory.createTerminal(command.getCwd());
-    this.onData();
-    this.onError();
-    this.onClose();
-    this.terminal.stdin.write(`${command.toString()} 2>&1 | %{ "$_" }\n`);
-    this.terminal.stdin.end();
+  listen(): void {
+    ipcMain.on(this.channel, this.eventHandler.bind(this));
   }
 
   private eventHandler(event: IpcMainEvent, arg: T) {
@@ -33,8 +28,13 @@ export abstract class RendererListener<T> {
 
   abstract buildCommand(arg: T): Command;
 
-  listen(): void {
-    ipcMain.on(this.channel, this.eventHandler.bind(this));
+  private executeCommand(command: Command): void {
+    this.terminal = this.terminalFactory.createTerminal(command.getCwd());
+    this.onData();
+    this.onError();
+    this.onClose();
+    this.terminal.stdin.write(`${command.toString()} 2>&1 | %{ "$_" }\n`);
+    this.terminal.stdin.end();
   }
 
   protected onData(): void {

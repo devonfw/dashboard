@@ -19,12 +19,8 @@ import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
-
-export interface ProjectDetails {
-  name: string;
-  domain: string;
-  date: string;
-}
+import { ProjectDetails } from './models/project-details.model';
+import { projectDate } from './modules/shared/utils/project-date';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -172,7 +168,10 @@ function getProjectDetails() {
 
 /* Enable services */
 
-/* terminal powershell */
+/**
+ * @deprecated. You should use listeners inside
+ * modules/projects/listeners/ or create a new one
+ */
 const eventHandler = (
   event: IpcMainEvent,
   projectDetails: ProjectDetails,
@@ -196,13 +195,7 @@ const eventHandler = (
   terminal.on('close', () => {
     console.log('closed stream');
     if (projectDetails) {
-      const currentDate = new Date();
-      projectDetails.date =
-        currentDate.getDate() +
-        '/' +
-        currentDate.getMonth() +
-        '/' +
-        currentDate.getFullYear();
+      projectDetails.date = projectDate();
       new DevonInstancesService().saveProjectDetails(projectDetails);
     }
   });
@@ -214,7 +207,10 @@ const eventHandler = (
 const installEventListener = new InstallListener(new SpawnTerminalFactory());
 installEventListener.listen();
 
-const projectListener = new ProjectCreationListener(new SpawnTerminalFactory());
+const projectListener = new ProjectCreationListener(
+  new SpawnTerminalFactory(),
+  new DevonInstancesService()
+);
 projectListener.listen();
 
 /* terminal service */

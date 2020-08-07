@@ -5,13 +5,22 @@ import AngularProjectCommand from '../commands/project-commands/angular-project-
 import JavaProjectCommand from '../commands/project-commands/java-project-command';
 import NodeProjectCommand from '../commands/project-commands/node-project-command';
 import { TerminalFactory } from '../terminal/terminal-factory';
+import { SaveDetails } from '../../../../services/devon-instances/save-details';
+import { projectDate } from '../../../shared/utils/project-date';
 
 export class ProjectCreationListener extends RendererListener<ProjectData> {
-  constructor(terminalFactory: TerminalFactory) {
-    super(terminalFactory, 'terminal/create-project');
+  data: ProjectData;
+
+  constructor(
+    terminalFactory: TerminalFactory,
+    private saveProject: SaveDetails
+  ) {
+    super('terminal/create-project', terminalFactory);
   }
 
   public buildCommand(projectData: ProjectData): Command {
+    this.data = projectData;
+
     if (projectData.type == 'angular') {
       return new AngularProjectCommand(projectData);
     }
@@ -25,5 +34,17 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
     }
 
     throw new Error(`Unable to create ${projectData.type} project`);
+  }
+
+  protected onClose(): void {
+    this.terminal.on('close', () => {
+      this.send('end', '');
+      this.saveProject.saveProjectDetails({
+        date: projectDate(),
+        name: this.data.name,
+        domain: this.data.type,
+        path: `${this.data.path}/${this.data.name}`,
+      });
+    });
   }
 }

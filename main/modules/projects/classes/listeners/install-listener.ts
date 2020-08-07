@@ -8,7 +8,7 @@ import { TerminalFactory } from '../terminal/terminal-factory';
 
 export class InstallListener extends RendererListener<string> {
   constructor(terminalFactory: TerminalFactory) {
-    super(terminalFactory, 'terminal/install-modules');
+    super('terminal/install-modules', terminalFactory);
   }
 
   public buildCommand(path: string): Command {
