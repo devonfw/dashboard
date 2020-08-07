@@ -29,7 +29,7 @@ export default function HelloElectron(): JSX.Element {
     <Layout>
       <>
         <h3 className={classes.header}>
-          <span>Projects &gt;</span>New Project
+          <span>Projects &gt;</span> New Project
         </h3>
         <SpaceAround bgColor={'#F4F6F8'}>
           <div className={classes.container}>
