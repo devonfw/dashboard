@@ -11,7 +11,7 @@ import Renderer from '../../../services/renderer/renderer.service';
 import InstallationGuide from './InstallationGuide';
 import InstallationTerminal from './InstallationTerminal';
 import TrackMessage from './TrackMessage';
-import EXECTUION_CONTANTS from './ExecutionContants';
+import EXECUTION_CONTANTS from './ExecutionContants';
 
 export interface ProjectExecutionUIViewProps {
   message: string;
@@ -27,7 +27,7 @@ export default function ProjectExecutionUIView(
   const renderer = new Renderer();
   const classes = useProjectExecutionUIStyles({});
   const [expanded, setExpanded] = useState<string | boolean>(
-    EXECTUION_CONTANTS.installation
+    EXECUTION_CONTANTS.installation
   );
   const [installationUpdate, setInstallationUpdate] = useState<string>('');
   const [installationTrack, setInstallationTrack] = useState<string>('');
@@ -69,18 +69,18 @@ export default function ProjectExecutionUIView(
 
   const handler = (_: never, message: string): void => {
     if (
-      message === EXECTUION_CONTANTS.success ||
-      message === EXECTUION_CONTANTS.error
+      message === EXECUTION_CONTANTS.success ||
+      message === EXECUTION_CONTANTS.error
     ) {
       setInstallationTrack(message);
     }
 
-    if (message === EXECTUION_CONTANTS.success) {
-      message = EXECTUION_CONTANTS.INSTALLATION_MESSAGES.success;
+    if (message === EXECUTION_CONTANTS.success) {
+      message = EXECUTION_CONTANTS.INSTALLATION_MESSAGES.success;
     }
 
-    if (message === EXECTUION_CONTANTS.error) {
-      message = EXECTUION_CONTANTS.INSTALLATION_MESSAGES.error;
+    if (message === EXECUTION_CONTANTS.error) {
+      message = EXECUTION_CONTANTS.INSTALLATION_MESSAGES.error;
     }
 
     setInstallationUpdate((prevState: string) => {
@@ -89,7 +89,7 @@ export default function ProjectExecutionUIView(
   };
 
   const installEventHandler = (): void => {
-    setInstallationTrack(EXECTUION_CONTANTS.start);
+    setInstallationTrack(EXECUTION_CONTANTS.start);
     renderer.sendMultiple(
       'powershell/installation/packages',
       null,
@@ -116,8 +116,8 @@ export default function ProjectExecutionUIView(
     <div className={classes.root}>
       <ExpansionPanel
         square
-        expanded={expanded === EXECTUION_CONTANTS.projectCreation}
-        onChange={handleChange(EXECTUION_CONTANTS.projectCreation)}
+        expanded={expanded === EXECUTION_CONTANTS.projectCreation}
+        onChange={handleChange(EXECUTION_CONTANTS.projectCreation)}
       >
         <ExpansionPanelSummary
           aria-controls="panel1d-content"
@@ -126,7 +126,7 @@ export default function ProjectExecutionUIView(
         >
           <div className="execution">
             <div>
-              {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.projectCreation}
+              {EXECUTION_CONTANTS.PROJECT_CREATION_INFO.projectCreation}
             </div>
             {projectCreationUpdate}
           </div>
@@ -134,35 +134,35 @@ export default function ProjectExecutionUIView(
         <ExpansionPanelDetails>
           <div className="project-process-info">
             {!props.message ? (
-              EXECTUION_CONTANTS.PROJECT_CREATION_INFO.inprogress
-            ) : props.message === EXECTUION_CONTANTS.success ? (
+              EXECUTION_CONTANTS.PROJECT_CREATION_INFO.inprogress
+            ) : props.message === EXECUTION_CONTANTS.success ? (
               <div className="success">
-                {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.success}
+                {EXECUTION_CONTANTS.PROJECT_CREATION_INFO.success}
               </div>
             ) : (
               <div className="error">
-                {EXECTUION_CONTANTS.PROJECT_CREATION_INFO.error}
+                {EXECUTION_CONTANTS.PROJECT_CREATION_INFO.error}
                 <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   onClick={retry}
                 >
-                  {EXECTUION_CONTANTS.retry}
+                  {EXECUTION_CONTANTS.retry}
                 </Button>
               </div>
             )}
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      {props.type !== EXECTUION_CONTANTS.java &&
-      props.message === EXECTUION_CONTANTS.success &&
+      {props.type !== EXECUTION_CONTANTS.java &&
+      props.message === EXECUTION_CONTANTS.success &&
       installationRequired ? (
         <ExpansionPanel
           defaultExpanded={true}
           square
           className="process"
-          onChange={handleChange(EXECTUION_CONTANTS.installation)}
+          onChange={handleChange(EXECUTION_CONTANTS.installation)}
         >
           <ExpansionPanelSummary
             aria-controls="panel2d-content"
@@ -170,13 +170,13 @@ export default function ProjectExecutionUIView(
             expandIcon={<ExpandMoreIcon />}
           >
             <div className="execution">
-              <div>{EXECTUION_CONTANTS.INSTALLATION_MESSAGES.setUp}</div>
+              <div>{EXECUTION_CONTANTS.INSTALLATION_MESSAGES.setUp}</div>
               {installUpdate}
             </div>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails
             className={
-              installationUpdate == '' ? '' : EXECTUION_CONTANTS.process_details
+              installationUpdate == '' ? '' : EXECUTION_CONTANTS.process_details
             }
           >
             {installationUpdate == '' ? (
@@ -196,22 +196,22 @@ export default function ProjectExecutionUIView(
       <div className="action">
         <div>
           <Button variant="outlined" onClick={setActiveState}>
-            {EXECTUION_CONTANTS.back}
+            {EXECUTION_CONTANTS.back}
           </Button>
         </div>
         <Link href="/projects">
           <Button
             disabled={
               installationRequired &&
-              (props.type !== EXECTUION_CONTANTS.java
-                ? installationTrack !== EXECTUION_CONTANTS.success
-                : props.message !== EXECTUION_CONTANTS.success)
+              (props.type !== EXECUTION_CONTANTS.java
+                ? installationTrack !== EXECUTION_CONTANTS.success
+                : props.message !== EXECUTION_CONTANTS.success)
             }
             size="small"
             variant="contained"
             color="primary"
           >
-            {EXECTUION_CONTANTS.finish}
+            {EXECUTION_CONTANTS.finish}
           </Button>
         </Link>
       </div>

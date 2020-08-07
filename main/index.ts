@@ -16,12 +16,7 @@ import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { readdirPromise } from './services/shared/promised';
-
-export interface ProjectDetails {
-  name: string;
-  domain: string;
-  date: string;
-}
+import { ProcessState, ProjectDetails } from './models/project-details.model';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -129,28 +124,6 @@ function getDevonInstancesPath() {
     });
 }
 
-export function findOutWorkspaceLocation(paths: string[]): string[] {
-  const workspaces = [];
-  let location = '';
-  for (const path of paths) {
-    if (path.includes('workspaces')) {
-      location = path.substring(
-        path.lastIndexOf('workspaces') + 10,
-        -path.length
-      );
-      if (!workspaces.includes(location)) {
-        workspaces.push(location);
-      }
-    } else {
-      location = path + '\\workspaces';
-      if (!workspaces.includes(location)) {
-        workspaces.push(location);
-      }
-    }
-  }
-  return workspaces;
-}
-
 function getWorkspaceProject(workspacelocation: string) {
   readdirPromise(workspacelocation)
     .then((projects: string[]) => {
@@ -198,18 +171,8 @@ const eventHandler = (
   terminal.on('close', () => {
     console.log('closed stream');
     if (!isError) {
-      console.log('No Error found');
       event.sender.send('terminal/powershell', 'success');
-      if (projectDetails) {
-        const currentDate = new Date();
-        projectDetails.date =
-          currentDate.getDate() +
-          '/' +
-          currentDate.getMonth() +
-          '/' +
-          currentDate.getFullYear();
-        new DevonInstancesService().saveProjectDetails(projectDetails);
-      }
+      saveProjectDetails(projectDetails);
     } else {
       event.sender.send('terminal/powershell', 'error');
     }
@@ -217,6 +180,19 @@ const eventHandler = (
 
   terminal.stdin.write(command + '\n');
   terminal.stdin.end();
+};
+
+const saveProjectDetails = (projectDetails: ProjectDetails): void => {
+  if (projectDetails) {
+    const currentDate = new Date();
+    projectDetails.date =
+      currentDate.getDate() +
+      '/' +
+      currentDate.getMonth() +
+      '/' +
+      currentDate.getFullYear();
+    new DevonInstancesService().saveProjectDetails(projectDetails);
+  }
 };
 
 /* Installation powershell */
@@ -244,7 +220,6 @@ const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   terminal.on('close', () => {
     console.log('closed stream');
     if (!isError) {
-      console.log('No Error found');
       event.sender.send('powershell/installation/packages', 'success');
     } else {
       event.sender.send('powershell/installation/packages', 'error');
@@ -253,6 +228,22 @@ const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
 
   terminal.stdin.write('npm install' + '\n');
   terminal.stdin.end();
+};
+
+const openProjectInIde = (project: ProjectDetails) => {
+  if (project.domain !== 'java') {
+    new DevonInstancesService()
+      .openIdeExecutionCommandForVscode(project)
+      .then((data: ProcessState) => {
+        mainWindow.webContents.send('open:projectInIde', data);
+      });
+  } else {
+    new DevonInstancesService()
+      .openIdeExecutionCommand(project)
+      .then((data: ProcessState) => {
+        mainWindow.webContents.send('open:projectInIde', data);
+      });
+  }
 };
 
 /* terminal service */
@@ -290,3 +281,6 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
+ipcMain.on('open:projectInIde', (e, option) => {
+  openProjectInIde(option);
+});

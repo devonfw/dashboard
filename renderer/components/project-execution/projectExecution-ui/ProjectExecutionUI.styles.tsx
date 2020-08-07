@@ -83,7 +83,7 @@ export const useProjectExecutionUIStyles = makeStyles({
       marginTop: '1em',
       '& .MuiCircularProgress-colorPrimary': {
         color: '#FFFFFF',
-      }
-    }
+      },
+    },
   },
 });

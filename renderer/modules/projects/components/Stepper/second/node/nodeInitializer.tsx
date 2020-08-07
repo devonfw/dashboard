@@ -50,6 +50,9 @@ class NodeInitializer extends Component<NodeStyle> {
         projectDetails: {
           name: formData.formControls.name.value.toLowerCase(),
           domain: 'node',
+          path: `${
+            formData.formControls.devonInstances.value
+          }\\${formData.formControls.name.value.toLowerCase()}`,
         },
       },
     });

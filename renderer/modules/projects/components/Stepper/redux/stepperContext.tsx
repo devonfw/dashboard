@@ -9,6 +9,7 @@ interface StepperState {
   projectDetails: {
     name: string;
     domain: string;
+    path: string;
   };
 }
 
@@ -20,6 +21,7 @@ const initialState: StepperState = {
   projectDetails: {
     name: '',
     domain: '',
+    path: '',
   },
 };
 

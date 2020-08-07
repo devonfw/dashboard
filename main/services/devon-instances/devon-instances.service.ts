@@ -9,9 +9,13 @@ import {
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
-import { ProjectDetails } from '../../models/project-details.model';
+import {
+  ProjectDetails,
+  ProcessState,
+} from '../../models/project-details.model';
+import { exec } from 'child_process';
 
-const exec = util.promisify(child.exec);
+const utilExec = util.promisify(child.exec);
 
 export class DevonInstancesService {
   private devonFilePath = path.resolve(
@@ -103,7 +107,7 @@ export class DevonInstancesService {
     return instancesDirReader;
   }
 
-  async devonfwInstance(data: string) {
+  async devonfwInstance(data: string): Promise<DevonfwConfig> {
     let paths: string[] = [];
     const instances: DevonfwConfig = { distributions: [] };
     if (data) {
@@ -117,7 +121,7 @@ export class DevonInstancesService {
               .replace(/\//g, path.sep);
           }
           try {
-            const { stdout, stderr } = await exec('devon -v', {
+            const { stdout, stderr } = await utilExec('devon -v', {
               cwd: path.resolve(singlepath, 'scripts'),
             });
             instances.distributions.push(
@@ -132,7 +136,7 @@ export class DevonInstancesService {
     return instances;
   }
 
-  getIdeDistribution(singlepath, stdout): IdeDistribution {
+  getIdeDistribution(singlepath: string, stdout: string): IdeDistribution {
     return {
       id: singlepath,
       ideConfig: {
@@ -219,5 +223,49 @@ export class DevonInstancesService {
         resolve(data ? JSON.parse(data.toString()) : []);
       });
     });
+  }
+
+  async openIdeExecutionCommandForVscode(
+    project: ProjectDetails
+  ): Promise<ProcessState> {
+    return await utilExec(this.findCommand(project.domain), {
+      cwd: project.path,
+    });
+  }
+
+  openIdeExecutionCommand(project: ProjectDetails): Promise<ProcessState> {
+    return new Promise<ProcessState>((resolve, reject) => {
+      const terminal = exec(this.findCommand(project.domain), {
+        cwd: project.path,
+      });
+
+      terminal.stdout.on('data', (data) => {
+        resolve({
+          stdout: data.toString(),
+          stderr: '',
+        });
+      });
+
+      terminal.stderr.on('data', (data) => {
+        reject({
+          stdout: '',
+          stderr: data.toString(),
+        });
+      });
+
+      terminal.on('close', () => {
+        resolve(null);
+      });
+    });
+  }
+
+  findCommand(domain: string): string {
+    switch (domain) {
+      case 'java':
+        return 'devon eclipse';
+      case 'angular':
+      case 'node':
+        return 'devon vscode';
+    }
   }
 }

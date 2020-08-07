@@ -1,7 +1,7 @@
-const EXECTUION_CONTANTS = {
+const EXECUTION_CONTANTS = {
   PROJECT_CREATION_INFO: {
     projectCreation: 'Project Creation',
-    inprogress: 'In Progress',
+    inprogress: 'In Progress...',
     success: 'Successfully Created',
     error:
       'Error Occurred while creating a project. Sorry for the inconvenience.',
@@ -27,4 +27,4 @@ const EXECTUION_CONTANTS = {
   start: 'start',
 };
 
-export default EXECTUION_CONTANTS;
+export default EXECUTION_CONTANTS;

@@ -77,6 +77,7 @@ const NgData = (): JSX.Element => {
           projectDetails: {
             name: ngData.name.value,
             domain: 'angular',
+            path: `${ngData.devonInstances.value}\\${ngData.name.value}`,
           },
         },
       });

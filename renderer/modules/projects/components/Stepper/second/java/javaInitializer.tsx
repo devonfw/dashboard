@@ -55,6 +55,7 @@ class JavaInitializer extends Component<JavaStyle> {
         projectDetails: {
           name: formData.formControls.artifact.value,
           domain: 'java',
+          path: `${formData.formControls.devonInstances.value}\\${formData.formControls.artifact.value}`,
         },
       },
     });
