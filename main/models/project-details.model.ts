@@ -4,3 +4,8 @@ export interface ProjectDetails {
   date?: string;
   path?: string;
 }
+
+export interface ProcessState {
+  stdout: string;
+  stderr: string;
+}

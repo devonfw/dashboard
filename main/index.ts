@@ -19,7 +19,7 @@ import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
-import { ProjectDetails } from './models/project-details.model';
+import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
 
 let mainWindow;
@@ -172,6 +172,7 @@ function getProjectDetails() {
  * @deprecated. You should use listeners inside
  * modules/projects/listeners/ or create a new one
  */
+/* terminal powershell */
 const eventHandler = (
   event: IpcMainEvent,
   projectDetails: ProjectDetails,
@@ -179,6 +180,7 @@ const eventHandler = (
 ) => {
   const command = eventArgs[0];
   const cwd = eventArgs[1];
+  let isError = false;
   if (!command) event.sender.send('terminal/powershell', '');
 
   const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
@@ -188,20 +190,33 @@ const eventHandler = (
   const terminal = spawn(`powershell.exe`, [], options);
 
   terminal.stdout.on('data', (data) => {
+    isError = false;
     console.log('sending data: ' + data.toString());
-    event.sender.send('terminal/powershell', data.toString());
   });
-  terminal.stderr.on('data', (data) => console.error(data.toString()));
+  terminal.stderr.on('data', (data) => {
+    console.error(data.toString());
+    isError = true;
+  });
+
   terminal.on('close', () => {
     console.log('closed stream');
-    if (projectDetails) {
-      projectDetails.date = projectDate();
-      new DevonInstancesService().saveProjectDetails(projectDetails);
+    if (!isError) {
+      event.sender.send('terminal/powershell', 'success');
+      saveProjectDetails(projectDetails);
+    } else {
+      event.sender.send('terminal/powershell', 'error');
     }
   });
 
   terminal.stdin.write(command + '\n');
   terminal.stdin.end();
+};
+
+const saveProjectDetails = (projectDetails: ProjectDetails): void => {
+  if (projectDetails) {
+    projectDetails.date = projectDate();
+    new DevonInstancesService().saveProjectDetails(projectDetails);
+  }
 };
 
 const installEventListener = new InstallListener(new SpawnTerminalFactory());
@@ -213,11 +228,63 @@ const projectListener = new ProjectCreationListener(
 );
 projectListener.listen();
 
+/* Installation powershell */
+const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
+  const cwd = eventArgs[1];
+  let isError = false;
+
+  let options: SpawnOptions = { stdio: 'pipe', shell: true };
+  options = cwd ? { ...options, cwd } : options;
+  const terminal = spawn(`powershell.exe`, [], options);
+
+  terminal.stdout.on('data', (data) => {
+    isError = false;
+    console.log('sending data: ' + data.toString());
+    event.sender.send('powershell/installation/packages', data.toString());
+  });
+  terminal.stderr.on('data', (data) => {
+    console.error(data.toString());
+    isError = true;
+  });
+
+  terminal.on('exit', (code) => {
+    console.log('exit code ->', code);
+  });
+  terminal.on('close', () => {
+    console.log('closed stream');
+    if (!isError) {
+      event.sender.send('powershell/installation/packages', 'success');
+    } else {
+      event.sender.send('powershell/installation/packages', 'error');
+    }
+  });
+
+  terminal.stdin.write('npm install' + '\n');
+  terminal.stdin.end();
+};
+
+const openProjectInIde = (project: ProjectDetails) => {
+  if (project.domain !== 'java') {
+    new DevonInstancesService()
+      .openIdeExecutionCommandForVscode(project)
+      .then((data: ProcessState) => {
+        mainWindow.webContents.send('open:projectInIde', data);
+      });
+  } else {
+    new DevonInstancesService()
+      .openIdeExecutionCommand(project)
+      .then((data: ProcessState) => {
+        mainWindow.webContents.send('open:projectInIde', data);
+      });
+  }
+};
+
 /* terminal service */
 const terminalService = new TerminalService();
 terminalService.openDialog();
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
+ipcMain.on('powershell/installation/packages', installEventHandler);
 
 /* command retriever service */
 const commandRetrieverService = new CommandRetrieverService();
@@ -242,3 +309,6 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
+ipcMain.on('open:projectInIde', (e, option) => {
+  openProjectInIde(option);
+});

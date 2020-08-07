@@ -6,7 +6,7 @@ export type StepActionType =
 
 export interface StepAction {
   type: StepActionType;
-  payload: {
+  payload?: {
     activeStep?: number;
   };
 }

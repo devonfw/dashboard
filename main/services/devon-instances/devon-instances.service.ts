@@ -9,10 +9,14 @@ import {
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
-import { ProjectDetails } from '../../models/project-details.model';
+import {
+  ProcessState,
+  ProjectDetails,
+} from '../../models/project-details.model';
 import { SaveDetails } from './save-details';
+import { exec } from 'child_process';
 
-const exec = util.promisify(child.exec);
+const utilExec = util.promisify(child.exec);
 
 export class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
@@ -89,44 +93,60 @@ export class DevonInstancesService implements SaveDetails {
 
   /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
-    let paths = [];
-    const instances: DevonfwConfig = { distributions: [] };
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
       fs.readFile(
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
         'utf8',
-        async (err, data) => {
+        (err, data) => {
           if (err) reject('No instances find out');
-          if (data) {
-            paths = data.split('\n');
-            for (let singlepath of paths) {
-              if (singlepath) {
-                if (process.platform === 'win32') {
-                  singlepath = singlepath.replace('/', '');
-                  singlepath = singlepath.replace('/', ':/');
-                  singlepath = singlepath.replace(/\//g, path.sep);
-                }
-                const { stdout, stderr } = await exec('devon -v', {
-                  cwd: path.resolve(singlepath, 'scripts'),
-                });
-                const instance: IdeDistribution = {
-                  id: singlepath,
-                  ideConfig: {
-                    version: stdout.trim(),
-                    basepath: singlepath,
-                    commands: path.resolve(singlepath, 'scripts', 'command'),
-                    workspaces: path.resolve(singlepath, 'workspaces'),
-                  },
-                };
-                instances.distributions.push(instance);
-              }
-            }
-            resolve(instances);
-          }
+          this.devonfwInstance(data)
+            .then((instances: DevonfwConfig) => resolve(instances))
+            .catch((error) => console.log(error));
         }
       );
     });
     return instancesDirReader;
+  }
+
+  async devonfwInstance(data: string): Promise<DevonfwConfig> {
+    let paths: string[] = [];
+    const instances: DevonfwConfig = { distributions: [] };
+    if (data) {
+      paths = data.split('\n');
+      for (let singlepath of paths) {
+        if (singlepath) {
+          if (process.platform === 'win32') {
+            singlepath = singlepath
+              .replace('/', '')
+              .replace('/', ':/')
+              .replace(/\//g, path.sep);
+          }
+          try {
+            const { stdout, stderr } = await utilExec('devon -v', {
+              cwd: path.resolve(singlepath, 'scripts'),
+            });
+            instances.distributions.push(
+              this.getIdeDistribution(singlepath, stdout)
+            );
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+    }
+    return instances;
+  }
+
+  getIdeDistribution(singlepath: string, stdout: string): IdeDistribution {
+    return {
+      id: singlepath,
+      ideConfig: {
+        version: stdout.trim(),
+        basepath: singlepath,
+        commands: path.resolve(singlepath, 'scripts', 'command'),
+        workspaces: path.resolve(singlepath, 'workspaces'),
+      },
+    };
   }
 
   getDevonIdeScriptsFromMaven(): Promise<any> {
@@ -169,7 +189,7 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  /* Storing information of Project deatils */
+  /* Storing information of Project details */
   saveProjectDetails(data: ProjectDetails): void {
     this.getData(data, (data: ProjectDetails) => {
       this.readFile()
@@ -204,5 +224,49 @@ export class DevonInstancesService implements SaveDetails {
         resolve(data ? JSON.parse(data.toString()) : []);
       });
     });
+  }
+
+  async openIdeExecutionCommandForVscode(
+    project: ProjectDetails
+  ): Promise<ProcessState> {
+    return await utilExec(this.findCommand(project.domain), {
+      cwd: project.path,
+    });
+  }
+
+  openIdeExecutionCommand(project: ProjectDetails): Promise<ProcessState> {
+    return new Promise<ProcessState>((resolve, reject) => {
+      const terminal = exec(this.findCommand(project.domain), {
+        cwd: project.path,
+      });
+
+      terminal.stdout.on('data', (data) => {
+        resolve({
+          stdout: data.toString(),
+          stderr: '',
+        });
+      });
+
+      terminal.stderr.on('data', (data) => {
+        reject({
+          stdout: '',
+          stderr: data.toString(),
+        });
+      });
+
+      terminal.on('close', () => {
+        resolve(null);
+      });
+    });
+  }
+
+  findCommand(domain: string): string {
+    switch (domain) {
+      case 'java':
+        return 'devon eclipse';
+      case 'angular':
+      case 'node':
+        return 'devon vscode';
+    }
   }
 }
