@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import SingleCommandTerminal from '../../../../../components/terminal/SingleCommandTerminal';
 import { StepperContext } from '../redux/stepperContext';
+import ProjectExecution from '../../../../../components/project-execution/ProjectExecution';
 
 class ExecutionStep extends Component {
   render(): JSX.Element {
@@ -17,11 +17,11 @@ class ExecutionStep extends Component {
     const initialCwd = `${stackCwd}`;
 
     return (
-      <SingleCommandTerminal
+      <ProjectExecution
         initialCommand={initialCommand}
         initialCwd={initialCwd}
         projectDetails={projectDetails}
-      ></SingleCommandTerminal>
+      ></ProjectExecution>
     );
   }
 }
