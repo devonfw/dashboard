@@ -10,3 +10,7 @@ export interface StepAction {
     activeStep?: number;
   };
 }
+
+export class NextStepAction {
+  type: StepActionType = 'NEXT_STEP';
+}

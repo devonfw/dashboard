@@ -8,6 +8,8 @@ import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import TextField from '@material-ui/core/TextField';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
+import { NextStepAction } from '../../../../redux/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/actions/project-data-action';
 
 const NgData = (): JSX.Element => {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
@@ -53,25 +55,20 @@ const NgData = (): JSX.Element => {
   const handleNg = () => {
     const ngData: INgData = data;
     if (data.name.valid) {
-      dispatch({
-        type: 'SET_PROJECT_DATA',
-        payload: {
-          projectData: {
-            name: ngData.name.value,
-            path: ngData.devonInstances.value,
-            specificArgs: {
-              '--routing': ngData.routing.value,
-              '--style': ngData.styling.value,
-              '--interactive': false,
-              '--skip-install': null,
-            },
+      dispatch(
+        new ProjectDataActionData({
+          name: ngData.name.value,
+          path: ngData.devonInstances.value,
+          specificArgs: {
+            '--routing': ngData.routing.value,
+            '--style': ngData.styling.value,
+            '--interactive': false,
+            '--skip-install': null,
           },
-        },
-      });
+        })
+      );
 
-      dispatch({
-        type: 'NEXT_STEP',
-      });
+      dispatch(new NextStepAction());
     }
   };
 

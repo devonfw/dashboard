@@ -15,3 +15,14 @@ export interface ProjectDataAction {
     projectData?: ProjectDataPayload;
   };
 }
+
+export class ProjectDataActionData implements ProjectDataAction {
+  type: ProjectDataType = 'SET_PROJECT_DATA';
+  payload: {
+    projectData?: ProjectDataPayload;
+  };
+
+  constructor(projectData?: ProjectDataPayload) {
+    this.payload = { projectData };
+  }
+}

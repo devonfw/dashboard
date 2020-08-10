@@ -4,6 +4,14 @@ import { updateProjectDataState } from './utils/utils';
 
 export interface StepperState {
   activeStep: number | undefined;
+  install: {
+    loading: boolean;
+    success: boolean;
+  };
+  create: {
+    loading: boolean;
+    success: boolean;
+  };
   projectData?: {
     name?: string;
     type?: string;
@@ -16,6 +24,14 @@ export interface StepperState {
 
 const initialState: StepperState = {
   activeStep: 0,
+  install: {
+    loading: false,
+    success: false,
+  },
+  create: {
+    loading: false,
+    success: false,
+  },
   projectData: {
     name: '',
     type: '',
@@ -39,6 +55,26 @@ const reducer = (
       return {
         ...state,
         activeStep: action.payload?.activeStep,
+      };
+    }
+
+    case 'SET_INSTALL_MODULES': {
+      return {
+        ...state,
+        install: {
+          ...state.install,
+          ...action.payload.install,
+        },
+      };
+    }
+
+    case 'SET_CREATE_PROJECT': {
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          ...action.payload.create,
+        },
       };
     }
 
@@ -72,10 +108,15 @@ export const StepperConsumer = StepperContext.Consumer;
 
 interface StepperProviderProps {
   children: JSX.Element;
+  initialState?: StepperState;
 }
 
 export function StepperProvider(props: StepperProviderProps): JSX.Element {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const storeInitialState = props.initialState
+    ? props.initialState
+    : initialState;
+
+  const [state, dispatch] = React.useReducer(reducer, storeInitialState);
   const value = { state, dispatch };
   return (
     <StepperContext.Provider value={value}>

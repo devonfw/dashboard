@@ -16,6 +16,8 @@ import {
   FormType,
   ValueType,
 } from '../../../../../../models/dashboard/FormType';
+import { NextStepAction } from '../../../../redux/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/actions/project-data-action';
 
 interface JavaStyle {
   classes: {
@@ -33,20 +35,15 @@ class JavaInitializer extends Component<JavaStyle> {
     event.preventDefault();
     const formData: IJavaInitializerForm = this.state;
 
-    this.context.dispatch({
-      type: 'SET_PROJECT_DATA',
-      payload: {
-        projectData: {
-          name: formData.formControls.packageName.value,
-          path: formData.formControls.devonInstances.value,
-          specificArgs: this.specificArgs(),
-        },
-      },
-    });
+    this.context.dispatch(
+      new ProjectDataActionData({
+        name: formData.formControls.packageName.value,
+        path: formData.formControls.devonInstances.value,
+        specificArgs: this.specificArgs(),
+      })
+    );
 
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
+    this.context.dispatch(new NextStepAction());
   };
 
   specificArgs = () => {

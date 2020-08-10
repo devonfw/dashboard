@@ -13,6 +13,7 @@ import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType } from '../../../../../../models/dashboard/FormType';
+import { NextStepAction } from '../../../../redux/actions/step-action';
 
 interface NodeStyle {
   classes: {
@@ -44,9 +45,7 @@ class NodeInitializer extends Component<NodeStyle> {
       },
     });
 
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
+    this.context.dispatch(new NextStepAction());
   };
 
   handleDevonInstancesSelection = (option: string) => {

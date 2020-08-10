@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Channel } from '../../../../shared/services/renderer/renderer.service';
+import { useState, useEffect, useContext } from 'react';
 import {
   messageSender,
   ProjectData,
 } from '../../../../shared/services/renderer/messageSender.service';
+import { StepperContext } from '../../../redux/stepperContext';
+import { projectCreationProgress } from '../../../../../components/project-execution/projectExecution-ui/ExecutionContants';
+import { CreateProjectActionData } from '../../../redux/actions/create-project-action';
 
 interface ProjectCreatorProps {
   projectData: ProjectData;
@@ -12,17 +14,15 @@ interface ProjectCreatorProps {
 export default function ProjectCreator(
   props: ProjectCreatorProps
 ): JSX.Element {
-  const [logMessages, setLogMessages] = useState<Channel[]>([]);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const { state, dispatch } = useContext(StepperContext);
 
   useEffect(() => {
     const observable = messageSender.createProject(props.projectData);
     observable.subscribe(
-      (message) => {
-        setLogMessages((prev) => [...prev, { status: 'data', data: message }]);
-      },
-      (err) => {
-        setLogMessages((prev) => [...prev, { status: 'error', data: err }]);
-      }
+      () => setHasError(false),
+      () => setHasError(true),
+      () => dispatch(new CreateProjectActionData(false, !hasError))
     );
 
     return () => {
@@ -31,10 +31,6 @@ export default function ProjectCreator(
   }, []);
 
   return (
-    <div>
-      {logMessages.map((message, index) => (
-        <p key={index}>{message.data}</p>
-      ))}
-    </div>
+    <p>{projectCreationProgress(state.create.loading, state.create.success)}</p>
   );
 }

@@ -3,18 +3,16 @@ import Grid from '@material-ui/core/Grid';
 import { useContext } from 'react';
 import { StepperContext } from '../../../redux/stepperContext';
 import { stackKeys, stacksMap, Stack } from './stacks';
+import { NextStepAction } from '../../../redux/actions/step-action';
+import { ProjectDataActionData } from '../../../redux/actions/project-data-action';
 
 export default function StackStep(): JSX.Element {
   const { dispatch } = useContext(StepperContext);
 
   const handleStack = (stack: string) => {
     return () => {
-      dispatch({
-        type: 'SET_PROJECT_DATA',
-        payload: { projectData: { type: stack } },
-      });
-
-      dispatch({ type: 'NEXT_STEP' });
+      dispatch(new ProjectDataActionData({ type: stack }));
+      dispatch(new NextStepAction());
     };
   };
 

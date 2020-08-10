@@ -1,7 +1,9 @@
 import { messageSender } from '../../../shared/services/renderer/messageSender.service';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useModulesInstallerStyles } from './modules-installer.styles';
 import { Channel } from '../../../shared/services/renderer/renderer.service';
+import { StepperContext } from '../../redux/stepperContext';
+import { InstallModulesActionData } from '../../redux/actions/install-modules-action';
 
 interface ModulesInstallerProps {
   path: string;
@@ -17,6 +19,7 @@ export default function ModulesInstaller(
   const classes = useModulesInstallerStyles();
   const color: TerminalColors = { error: classes.error };
   const [logMessages, setLogMessages] = useState<Channel[]>([]);
+  const { dispatch } = useContext(StepperContext);
 
   useEffect(() => {
     const observable = messageSender.installModules(props.path);
@@ -26,12 +29,15 @@ export default function ModulesInstaller(
       },
       (err) => {
         setLogMessages((prev) => [...prev, { status: 'error', data: err }]);
+      },
+      () => {
+        const lastMessage = logMessages[logMessages.length - 1];
+        const isLastSuccess = lastMessage?.status === 'data';
+        dispatch(new InstallModulesActionData(false, isLastSuccess));
       }
     );
 
-    return () => {
-      observable.unsubscribe();
-    };
+    return () => observable.unsubscribe();
   }, []);
 
   return (
