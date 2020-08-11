@@ -5,21 +5,30 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import LoadIcon from '../../../../shared/components/load-icon/load-icon';
-import ProjectCreator from './project-creator';
 import { useAccordionStyles } from '../accordion.styles';
 import { StepperContext } from '../../../redux/stepperContext';
 import { useContext, useEffect } from 'react';
 import { CreateProjectActionData } from '../../../redux/actions/create-project-action';
+import { CreatorContext } from '../../../../shared/redux/installer/creator';
+import { projectCreationProgress } from '../../../../../components/project-execution/projectExecution-ui/ExecutionContants';
 
 export default function ProjectCreation(): JSX.Element {
   const classes = useAccordionStyles();
   const { state, dispatch } = useContext(StepperContext);
+  const { triggerCreation } = useContext(CreatorContext);
 
   const load = () => dispatch(new CreateProjectActionData(true));
 
   useEffect(() => {
-    load();
+    if (!state.create.loading && !state.create.success) {
+      load();
+      triggerCreation(state.projectData);
+    }
   }, []);
+
+  useEffect(() => {
+    console.log(state.create.loading);
+  });
 
   return (
     <Accordion>
@@ -44,7 +53,7 @@ export default function ProjectCreation(): JSX.Element {
             </AcceptButton>
           </Typography>
         ) : (
-          <ProjectCreator projectData={state.projectData}></ProjectCreator>
+          projectCreationProgress(state.create.loading, state.create.success)
         )}
       </AccordionDetails>
     </Accordion>

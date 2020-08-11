@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import CustomStepper from '../modules/projects/components/Stepper/CustomStepper';
-import { StepperProvider } from '../modules/projects/redux/stepperContext';
 
 const useStyles = makeStyles({
   container: {
@@ -33,9 +32,7 @@ export default function Start(): JSX.Element {
         </h3>
         <SpaceAround bgColor={'#F4F6F8'}>
           <div className={classes.container}>
-            <StepperProvider>
-              <CustomStepper />
-            </StepperProvider>
+            <CustomStepper />
           </div>
         </SpaceAround>
       </>

@@ -2,6 +2,8 @@ import React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { StepperProvider } from '../modules/projects/redux/stepperContext';
+import { CreatorProvider } from '../modules/shared/redux/installer/creator';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../styles/theme';
 
@@ -25,7 +27,11 @@ export default class MyApp extends App {
         <ThemeProvider theme={theme}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Component {...pageProps} />
+          <StepperProvider>
+            <CreatorProvider>
+              <Component {...pageProps} />
+            </CreatorProvider>
+          </StepperProvider>
         </ThemeProvider>
       </React.Fragment>
     );

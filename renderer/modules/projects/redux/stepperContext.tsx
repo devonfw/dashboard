@@ -3,7 +3,8 @@ import { StepperActions } from './actions/stepper-actions';
 import { updateProjectDataState } from './utils/utils';
 
 export interface StepperState {
-  activeStep: number | undefined;
+  activeStep: number;
+  creatingProject: boolean;
   install: {
     loading: boolean;
     success: boolean;
@@ -24,6 +25,7 @@ export interface StepperState {
 
 const initialState: StepperState = {
   activeStep: 0,
+  creatingProject: false,
   install: {
     loading: false,
     success: false,
@@ -44,18 +46,12 @@ const reducer = (
   state: StepperState = initialState,
   action: StepperActions
 ) => {
-  const activeStep = state.activeStep ? state.activeStep : 0;
-
   switch (action.type) {
+    case 'SET_CREATING_PROJECT': {
+      return { ...state, creatingProject: true };
+    }
     case 'SET_PROJECT_DATA': {
       return updateProjectDataState(state, action.payload?.projectData);
-    }
-
-    case 'SET_ACTIVE': {
-      return {
-        ...state,
-        activeStep: action.payload?.activeStep,
-      };
     }
 
     case 'SET_INSTALL_MODULES': {
@@ -79,15 +75,36 @@ const reducer = (
     }
 
     case 'NEXT_STEP': {
-      return { ...state, activeStep: activeStep + 1 };
+      return { ...state, activeStep: state.activeStep + 1 };
     }
 
     case 'PREVIOUS_STEP': {
-      return { ...state, activeStep: activeStep - 1 };
+      return { ...state, activeStep: state.activeStep - 1 };
     }
 
     case 'RESET_STEP': {
       return { ...state, activeStep: 0 };
+    }
+
+    case 'RESET_STEPPER': {
+      return {
+        activeStep: 0,
+        creatingProject: false,
+        install: {
+          loading: false,
+          success: false,
+        },
+        create: {
+          loading: false,
+          success: false,
+        },
+        projectData: {
+          name: '',
+          type: '',
+          path: '',
+          specificArgs: {},
+        },
+      };
     }
 
     default:

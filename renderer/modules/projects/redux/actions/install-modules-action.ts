@@ -1,6 +1,6 @@
 export type InstallModulesType = 'SET_INSTALL_MODULES';
 
-interface InstallModulesPayload {
+export interface InstallModulesPayload {
   install: {
     loading: boolean;
     success?: boolean;
