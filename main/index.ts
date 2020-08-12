@@ -246,6 +246,20 @@ const openProjectInIde = (project: ProjectDetails) => {
   }
 };
 
+const deleteProject = (project: ProjectDetails) => {
+  new DevonInstancesService().deleteProject(project).then(projects => {
+    console.log(projects);
+    mainWindow.webContents.send('delete:project', projects);
+  })
+  .catch(error => {
+    mainWindow.webContents.send('delete:project', []);
+  });
+}
+
+const openProjectDirectory = (path: string) => {
+  shell.showItemInFolder(path);
+}
+
 /* terminal service */
 const terminalService = new TerminalService();
 terminalService.ls();
@@ -283,4 +297,10 @@ ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.on('open:projectInIde', (e, option) => {
   openProjectInIde(option);
+});
+ipcMain.on('delete:project', (e, option) => {
+  deleteProject(option);
+});
+ipcMain.on('open:projectDirectory', (e, path) => {
+  openProjectDirectory(path);
 });

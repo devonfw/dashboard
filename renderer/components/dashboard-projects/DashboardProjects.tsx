@@ -16,6 +16,7 @@ import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
+  setProject: (project: ProjectDetails[]) => void
 }): JSX.Element {
   const classes = useDashboardProjectsStyles({});
 
@@ -46,12 +47,17 @@ export default function DashboardProjects(props: {
           stderr: string;
         }
       ) => {
-        console.log('I am -> ', data);
         setOpen(false);
       }
     );
+    global.ipcRenderer.on('delete:project', (_: IpcRendererEvent, data: ProjectDetails[]) => {
+      setOpen(false);
+      props.setProject(data);
+    });
     return () => {
       global.ipcRenderer.removeAllListeners('open:projectInIde');
+      global.ipcRenderer.removeAllListeners('delete:project');
+      global.ipcRenderer.removeAllListeners('open:projectDirectory');
     };
   }, []);
 
@@ -72,10 +78,20 @@ export default function DashboardProjects(props: {
   };
 
   const openProjectInIde = () => {
-    setState(initialState);
     setOpen(true);
     global.ipcRenderer.send('open:projectInIde', state.project);
+    setState(initialState);
   };
+
+  const deleteProject = (project: ProjectDetails) => {
+    setOpen(true);
+    global.ipcRenderer.send('delete:project', state.project);
+    setState(initialState);
+  }
+
+  const openProjectDirectory = (path: string) => {
+    global.ipcRenderer.send('open:projectDirectory', path);
+  }
 
   return (
     <div className={classes.root}>
@@ -125,16 +141,24 @@ export default function DashboardProjects(props: {
                       <Menu
                         keepMounted
                         open={state.mouseY !== null}
-                        onClose={handleClose}
                         anchorReference="anchorPosition"
                         anchorPosition={
                           state.mouseY !== null && state.mouseX !== null
                             ? { top: state.mouseY, left: state.mouseX }
                             : undefined
                         }
+                        MenuListProps={{
+                          onMouseLeave: handleClose
+                        }}
                       >
                         <MenuItem onClick={openProjectInIde}>
                           Show in terminal
+                        </MenuItem>
+                        <MenuItem onClick={() => openProjectDirectory(project.path)}>
+                          Enclosing Folder
+                        </MenuItem>
+                        <MenuItem onClick={() => deleteProject(project)}>
+                          Delete
                         </MenuItem>
                       </Menu>
                     </CardContent>

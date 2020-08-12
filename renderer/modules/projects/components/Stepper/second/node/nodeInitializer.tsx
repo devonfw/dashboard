@@ -63,7 +63,6 @@ class NodeInitializer extends Component<NodeStyle> {
   };
 
   eventHandler(identifier: string, value: string) {
-    console.log(identifier);
     const formState: FormControls = {
       ...this.state.formControls,
     };

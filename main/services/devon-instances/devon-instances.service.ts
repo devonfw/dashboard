@@ -16,6 +16,9 @@ import {
 import { exec } from 'child_process';
 
 const utilExec = util.promisify(child.exec);
+const utilReaddir = util.promisify(fs.readdir);
+const rmdir = util.promisify(fs.rmdir);
+const unlink = util.promisify(fs.unlink);
 
 export class DevonInstancesService {
   private devonFilePath = path.resolve(
@@ -193,10 +196,12 @@ export class DevonInstancesService {
     this.getData(data, (data: ProjectDetails) => {
       this.readFile()
         .then((details: ProjectDetails[]) => {
-          if (details.length) {
+          if (details && details.length) {
             const projectDetails = details.splice(0);
             projectDetails.push(data);
             this.writeFile(projectDetails);
+          } else if (details && details.length === 0) {
+            this.writeFile([data]);
           }
         })
         .catch((error) => {
@@ -223,6 +228,20 @@ export class DevonInstancesService {
         resolve(data ? JSON.parse(data.toString()) : []);
       });
     });
+  }
+
+  async deleteProjectFolder(projectPath) {
+    let entries = await utilReaddir(projectPath, { withFileTypes: true });
+    let results = await Promise.all(entries.map(entry => {
+        let fullPath = path.join(projectPath, entry.name);
+        let task = entry.isDirectory() ? this.deleteProjectFolder(fullPath) : unlink(fullPath);
+        return task.catch(error => ({ error }));
+    }));
+    results.forEach(result => {
+        // Ignore missing files/directories; bail on other errors
+        if (result && result.error.code !== 'ENOENT') throw result.error;
+    });
+    await rmdir(projectPath);
   }
 
   async openIdeExecutionCommandForVscode(
@@ -267,5 +286,19 @@ export class DevonInstancesService {
       case 'node':
         return 'devon vscode';
     }
+  }
+
+  deleteProject(projectDetail: ProjectDetails): Promise<ProjectDetails[]> {
+    return new Promise<ProjectDetails[]>((resolve, reject) => {
+      this.deleteProjectFolder(projectDetail.path).then(async (data) => {
+        const projects = await this.readFile();
+        const updatedProjects = projects.filter(project => project.name !== projectDetail.name);
+        this.writeFile(updatedProjects);
+        return updatedProjects.length ? resolve(updatedProjects) : resolve([]);
+      })
+      .catch(error => {
+        reject([]);
+      })
+    });
   }
 }

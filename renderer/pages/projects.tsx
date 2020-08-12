@@ -14,16 +14,25 @@ export default class Projects extends Component<IProjects> {
     projects: [],
   };
 
+  constructor(props: IProjects) {
+    super(props);
+    this.setProject = this.setProject.bind(this);
+  }
+
   componentDidMount(): void {
     global.ipcRenderer.send('find:projectDetails');
     global.ipcRenderer.on(
       'get:projectDetails',
       (_: IpcRendererEvent, projects: ProjectDetails[]) => {
-        this.setState({
-          projects: projects,
-        });
+        this.setProject(projects);
       }
     );
+  }
+
+  setProject(projects: ProjectDetails[]): void {
+    this.setState({
+      projects: projects,
+    });
   }
 
   componentWillUnmount(): void {
@@ -35,7 +44,7 @@ export default class Projects extends Component<IProjects> {
     return (
       <Layout>
         <SpaceAround bgColor={'#F4F6F8'}>
-          <DashboardProjects projects={this.state.projects} />
+          <DashboardProjects projects={this.state.projects} setProject={this.setProject}/>
         </SpaceAround>
       </Layout>
     );
