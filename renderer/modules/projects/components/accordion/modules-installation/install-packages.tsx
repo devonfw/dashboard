@@ -7,6 +7,7 @@ import { useAccordionStyles } from '../accordion.styles';
 interface InstallPackagesProps {
   onProceed?: () => void;
   onCancel?: () => void;
+  disabled: boolean;
 }
 
 export default function InstallPackages(
@@ -23,9 +24,13 @@ export default function InstallPackages(
           className={classes.cancel}
           onClick={props.onCancel}
         >
-          Back
+          Cancel
         </Button>
-        <AcceptButton className={classes.accept} onClick={props.onProceed}>
+        <AcceptButton
+          className={classes.accept}
+          onClick={props.onProceed}
+          disabled={props.disabled}
+        >
           Proceed
         </AcceptButton>
       </Box>

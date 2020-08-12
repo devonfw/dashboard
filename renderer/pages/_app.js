@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import React from 'react';
 import App from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { StepperProvider } from '../modules/projects/redux/stepperContext';
-import { CreatorProvider } from '../modules/shared/redux/installer/creator';
+import { StepperProvider } from '../modules/projects/redux/stepper/stepperContext';
+import { CreatorProvider } from '../modules/projects/redux/creator/creator';
+import { InstallerProvider } from '../modules/projects/redux/installer/installer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../styles/theme';
 
@@ -25,12 +27,13 @@ export default class MyApp extends App {
           <title>My page</title>
         </Head>
         <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
           <StepperProvider>
-            <CreatorProvider>
-              <Component {...pageProps} />
-            </CreatorProvider>
+            <InstallerProvider>
+              <CreatorProvider>
+                <Component {...pageProps} />
+              </CreatorProvider>
+            </InstallerProvider>
           </StepperProvider>
         </ThemeProvider>
       </React.Fragment>

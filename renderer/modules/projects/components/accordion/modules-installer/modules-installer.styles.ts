@@ -13,4 +13,7 @@ export const useModulesInstallerStyles = makeStyles({
     color: 'white',
     overflowY: 'auto',
   },
+  line: {
+    whiteSpace: 'pre-wrap',
+  },
 });

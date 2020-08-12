@@ -1,15 +1,19 @@
 import { useContext, useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { StepperContext } from '../../../../redux/stepperContext';
-import { INgData, EventType, FormParams } from '../../../../redux/data.model';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
+import {
+  INgData,
+  EventType,
+  FormParams,
+} from '../../../../redux/stepper/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import TextField from '@material-ui/core/TextField';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
-import { NextStepAction } from '../../../../redux/actions/step-action';
-import { ProjectDataActionData } from '../../../../redux/actions/project-data-action';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
 
 const NgData = (): JSX.Element => {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);

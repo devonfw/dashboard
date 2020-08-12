@@ -6,10 +6,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import LoadIcon from '../../../../shared/components/load-icon/load-icon';
 import { useAccordionStyles } from '../accordion.styles';
-import { StepperContext } from '../../../redux/stepperContext';
+import { StepperContext } from '../../../redux/stepper/stepperContext';
 import { useContext, useEffect } from 'react';
-import { CreateProjectActionData } from '../../../redux/actions/create-project-action';
-import { CreatorContext } from '../../../../shared/redux/installer/creator';
+import { CreateProjectActionData } from '../../../redux/stepper/actions/create-project-action';
+import { CreatorContext } from '../../../redux/creator/creator';
 import { projectCreationProgress } from '../../../../../components/project-execution/projectExecution-ui/ExecutionContants';
 
 export default function ProjectCreation(): JSX.Element {

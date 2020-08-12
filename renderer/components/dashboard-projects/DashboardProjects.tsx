@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
-import { ProjectDetails } from '../../modules/projects/redux/data.model';
+import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];

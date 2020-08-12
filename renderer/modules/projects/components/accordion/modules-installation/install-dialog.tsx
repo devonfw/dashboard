@@ -1,11 +1,11 @@
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ModulesInstaller from '../../modules-installer/modules-installer';
+import ModulesInstaller from '../modules-installer/modules-installer';
 import { useAccordionStyles } from '../accordion.styles';
 import InstallPackages from './install-packages';
 
 interface InstallDialogProps {
   install: boolean | null;
-  path: string;
+  disabled: boolean;
   onProceed?: () => void;
   onCancel?: () => void;
 }
@@ -21,6 +21,7 @@ export default function InstallDialog(props: InstallDialogProps): JSX.Element {
         <InstallPackages
           onCancel={props.onCancel}
           onProceed={props.onProceed}
+          disabled={props.disabled}
         ></InstallPackages>
       </AccordionDetails>
     );
@@ -29,10 +30,10 @@ export default function InstallDialog(props: InstallDialogProps): JSX.Element {
   if (props.install) {
     return (
       <AccordionDetails className={classes.noPad}>
-        <ModulesInstaller path={props.path}></ModulesInstaller>
+        <ModulesInstaller></ModulesInstaller>
       </AccordionDetails>
     );
   }
 
-  return <AccordionDetails></AccordionDetails>;
+  return <AccordionDetails>Installation canceled</AccordionDetails>;
 }

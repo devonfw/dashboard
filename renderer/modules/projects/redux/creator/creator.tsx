@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   ProjectData,
   messageSender,
-} from '../../services/renderer/messageSender.service';
-import { CreateProjectActionData } from '../../../projects/redux/actions/create-project-action';
-import { StepperContext } from '../../../projects/redux/stepperContext';
+} from '../../../shared/services/renderer/messageSender.service';
+import { CreateProjectActionData } from '../stepper/actions/create-project-action';
+import { StepperContext } from '../stepper/stepperContext';
 
 export interface ICreatorContext {
   triggerCreation: (data: ProjectData) => void;
@@ -28,7 +28,10 @@ export function CreatorProvider(props: CreatorProviderProps): JSX.Element {
     observable.subscribe(
       () => setHasError(false),
       () => setHasError(true),
-      () => dispatch(new CreateProjectActionData(false, !hasError))
+      () => {
+        observable.unsubscribe();
+        dispatch(new CreateProjectActionData(false, !hasError));
+      }
     );
   };
   const value = { triggerCreation };

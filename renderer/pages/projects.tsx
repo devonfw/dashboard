@@ -3,9 +3,9 @@ import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import DashboardProjects from '../components/dashboard-projects/DashboardProjects';
 import { IpcRendererEvent } from 'electron';
-import { ProjectDetails } from '../modules/projects/redux/data.model';
+import { ProjectDetails } from '../modules/projects/redux/stepper/data.model';
 import { useRouter } from 'next/router';
-import { StepperContext } from '../modules/projects/redux/stepperContext';
+import { StepperContext } from '../modules/projects/redux/stepper/stepperContext';
 
 export default function Projects(): JSX.Element {
   const [projects, setProjects] = useState<ProjectDetails[]>([]);

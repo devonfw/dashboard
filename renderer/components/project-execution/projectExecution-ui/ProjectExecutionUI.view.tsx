@@ -11,7 +11,7 @@ import InstallationTerminal from './InstallationTerminal';
 import TrackMessage from './TrackMessage';
 import EXECUTION_CONTANTS from './ExecutionContants';
 import Renderer from '../../../modules/shared/services/renderer/renderer.service';
-import { StepperContext } from '../../../modules/projects/redux/stepperContext';
+import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
 
 export interface ProjectExecutionUIViewProps {
   message: string;

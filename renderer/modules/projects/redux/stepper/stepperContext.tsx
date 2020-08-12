@@ -13,7 +13,7 @@ export interface StepperState {
     loading: boolean;
     success: boolean;
   };
-  projectData?: {
+  projectData: {
     name?: string;
     type?: string;
     path?: string;
@@ -23,7 +23,7 @@ export interface StepperState {
   };
 }
 
-const initialState: StepperState = {
+const getInitialState = () => ({
   activeStep: 0,
   creatingProject: false,
   install: {
@@ -40,10 +40,10 @@ const initialState: StepperState = {
     path: '',
     specificArgs: {},
   },
-};
+});
 
 const reducer = (
-  state: StepperState = initialState,
+  state: StepperState = getInitialState(),
   action: StepperActions
 ) => {
   switch (action.type) {
@@ -51,7 +51,7 @@ const reducer = (
       return { ...state, creatingProject: true };
     }
     case 'SET_PROJECT_DATA': {
-      return updateProjectDataState(state, action.payload?.projectData);
+      return updateProjectDataState(state, action.payload.projectData);
     }
 
     case 'SET_INSTALL_MODULES': {
@@ -87,24 +87,7 @@ const reducer = (
     }
 
     case 'RESET_STEPPER': {
-      return {
-        activeStep: 0,
-        creatingProject: false,
-        install: {
-          loading: false,
-          success: false,
-        },
-        create: {
-          loading: false,
-          success: false,
-        },
-        projectData: {
-          name: '',
-          type: '',
-          path: '',
-          specificArgs: {},
-        },
-      };
+      return getInitialState();
     }
 
     default:
@@ -118,7 +101,7 @@ export interface IStepperContext {
 }
 
 export const StepperContext = React.createContext<IStepperContext>({
-  state: initialState,
+  state: getInitialState(),
   dispatch: () => null,
 });
 export const StepperConsumer = StepperContext.Consumer;
@@ -129,11 +112,7 @@ interface StepperProviderProps {
 }
 
 export function StepperProvider(props: StepperProviderProps): JSX.Element {
-  const storeInitialState = props.initialState
-    ? props.initialState
-    : initialState;
-
-  const [state, dispatch] = React.useReducer(reducer, storeInitialState);
+  const [state, dispatch] = React.useReducer(reducer, getInitialState());
   const value = { state, dispatch };
   return (
     <StepperContext.Provider value={value}>

@@ -1,6 +1,6 @@
 import { IpcRendererEvent } from 'electron';
 import MainMessage from '../../../../models/main-message';
-import { ProjectDetails } from '../../../projects/redux/data.model';
+import { ProjectDetails } from '../../../projects/redux/stepper/data.model';
 import { ChannelObservable } from '../../utils/observation/observable';
 
 type HandlerFunction<T> = (event: IpcRendererEvent, data: T) => void;
@@ -66,7 +66,6 @@ class Renderer {
   sendObservable<T>(channelName: string, channelData: T): ChannelObservable {
     const channelObservable = new ChannelObservable((data, error, end) => {
       this.on<Channel>(channelName, (_, channel) => {
-        console.log(channel);
         if (channel.status === 'data') {
           data(channel.data);
         }
@@ -76,7 +75,7 @@ class Renderer {
         }
 
         if (channel.status === 'end') {
-          end();
+          end(channel.data === 'error');
           this.removeAllInChannel(channelName);
         }
       });

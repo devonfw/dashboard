@@ -1,10 +1,10 @@
 import StackCard from '../../../../../components/cards/stack-card/StackCard';
 import Grid from '@material-ui/core/Grid';
 import { useContext } from 'react';
-import { StepperContext } from '../../../redux/stepperContext';
+import { StepperContext } from '../../../redux/stepper/stepperContext';
 import { stackKeys, stacksMap, Stack } from './stacks';
-import { NextStepAction } from '../../../redux/actions/step-action';
-import { ProjectDataActionData } from '../../../redux/actions/project-data-action';
+import { NextStepAction } from '../../../redux/stepper/actions/step-action';
+import { ProjectDataActionData } from '../../../redux/stepper/actions/project-data-action';
 
 export default function StackStep(): JSX.Element {
   const { dispatch } = useContext(StepperContext);

@@ -12,17 +12,17 @@ export interface ProjectDataPayload {
 export interface ProjectDataAction {
   type: ProjectDataType;
   payload: {
-    projectData?: ProjectDataPayload;
+    projectData: ProjectDataPayload;
   };
 }
 
 export class ProjectDataActionData implements ProjectDataAction {
   type: ProjectDataType = 'SET_PROJECT_DATA';
   payload: {
-    projectData?: ProjectDataPayload;
+    projectData: ProjectDataPayload;
   };
 
-  constructor(projectData?: ProjectDataPayload) {
+  constructor(projectData: ProjectDataPayload) {
     this.payload = { projectData };
   }
 }

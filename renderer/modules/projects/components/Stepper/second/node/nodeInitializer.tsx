@@ -2,7 +2,7 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { Button } from '@material-ui/core';
-import { StepperContext } from '../../../../redux/stepperContext';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
   INodeInitializerForm,
   FormControls,
@@ -13,7 +13,7 @@ import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType } from '../../../../../../models/dashboard/FormType';
-import { NextStepAction } from '../../../../redux/actions/step-action';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 
 interface NodeStyle {
   classes: {

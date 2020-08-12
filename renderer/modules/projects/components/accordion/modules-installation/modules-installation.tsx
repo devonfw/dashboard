@@ -4,25 +4,35 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import LoadIcon from '../../../../shared/components/load-icon/load-icon';
 import { useAccordionStyles } from '../accordion.styles';
-import { useContext, useState } from 'react';
-import { StepperContext } from '../../../redux/stepperContext';
+import { useContext, useState, useEffect } from 'react';
+import { StepperContext } from '../../../redux/stepper/stepperContext';
 import InstallDialog from './install-dialog';
-import { InstallModulesActionData } from '../../../redux/actions/install-modules-action';
+import { InstallModulesActionData } from '../../../redux/stepper/actions/install-modules-action';
+import { InstallerContext } from '../../../redux/installer/installer';
 
 export default function ModulesInstallation(): JSX.Element {
   const classes = useAccordionStyles();
   const { state, dispatch } = useContext(StepperContext);
+  const { triggerInstallation } = useContext(InstallerContext);
   const [install, setInstall] = useState<boolean | null>(null);
   const path = `${state.projectData?.path}/${state.projectData?.name}`;
 
   const proceedInstall = () => {
     setInstall(true);
     dispatch(new InstallModulesActionData(true));
+    triggerInstallation(path);
   };
 
   const cancelInstall = () => {
     setInstall(false);
   };
+
+  useEffect(() => {
+    const isAlreadyInstalled = state.install.loading || state.install.success;
+    if (isAlreadyInstalled) {
+      setInstall(true);
+    }
+  }, []);
 
   return (
     <Accordion>
@@ -44,9 +54,9 @@ export default function ModulesInstallation(): JSX.Element {
       </AccordionSummary>
       <InstallDialog
         install={install}
-        path={path}
         onProceed={proceedInstall}
         onCancel={cancelInstall}
+        disabled={!state.create.success}
       ></InstallDialog>
     </Accordion>
   );

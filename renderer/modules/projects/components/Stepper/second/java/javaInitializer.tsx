@@ -2,7 +2,7 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
-import { StepperContext } from '../../../../redux/stepperContext';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
   IJavaInitializerForm,
   FormControls,
@@ -16,8 +16,8 @@ import {
   FormType,
   ValueType,
 } from '../../../../../../models/dashboard/FormType';
-import { NextStepAction } from '../../../../redux/actions/step-action';
-import { ProjectDataActionData } from '../../../../redux/actions/project-data-action';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
 
 interface JavaStyle {
   classes: {

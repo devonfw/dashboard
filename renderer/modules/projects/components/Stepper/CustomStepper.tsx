@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import MaterialStepper, { StepObject } from './MaterialStepper';
 import StackStep from './first/stack-step';
 import DataStep from './second/DataStep';
-import { StepperContext } from '../../redux/stepperContext';
+import { StepperContext } from '../../redux/stepper/stepperContext';
 import ExecutionStep from './third/execution-step';
 import { useRouter } from 'next/router';
 
