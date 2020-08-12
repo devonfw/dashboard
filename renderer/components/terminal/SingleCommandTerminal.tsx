@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Renderer from '../../services/renderer/renderer.service';
+import Renderer from '../../modules/shared/services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
 import MainMessage from '../../models/main-message';
 

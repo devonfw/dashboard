@@ -10,14 +10,15 @@ import {
 import * as util from 'util';
 import * as child from 'child_process';
 import {
-  ProjectDetails,
   ProcessState,
+  ProjectDetails,
 } from '../../models/project-details.model';
+import { SaveDetails } from './save-details';
 import { exec } from 'child_process';
 
 const utilExec = util.promisify(child.exec);
 
-export class DevonInstancesService {
+export class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',

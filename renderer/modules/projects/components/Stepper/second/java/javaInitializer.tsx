@@ -2,7 +2,7 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
-import { StepperContext } from '../../redux/stepperContext';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
   IJavaInitializerForm,
   FormControls,
@@ -16,6 +16,8 @@ import {
   FormType,
   ValueType,
 } from '../../../../../../models/dashboard/FormType';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
 
 interface JavaStyle {
   classes: {
@@ -32,33 +34,34 @@ class JavaInitializer extends Component<JavaStyle> {
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: IJavaInitializerForm = this.state;
-    const batch = formData.formControls.batch ? '-Dbatch=batch' : '';
-    this.context.dispatch({
-      type: 'SET_STACK_CMD',
-      payload: {
-        stackCmd: `devon java create ${formData.formControls.packageName.value} -DdbType=${formData.formControls.db.value} -Dversion="${formData.formControls.version.value}" ${formData.formControls.group.value} ${batch}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'SET_STACK_CWD',
-      payload: {
-        stackCwd: `${formData.formControls.devonInstances.value}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
 
-    this.context.dispatch({
-      type: 'PROJECT_DETAILS',
-      payload: {
-        projectDetails: {
-          name: formData.formControls.artifact.value,
-          domain: 'java',
-          path: `${formData.formControls.devonInstances.value}\\${formData.formControls.artifact.value}`,
-        },
-      },
-    });
+    this.context.dispatch(
+      new ProjectDataActionData({
+        name: formData.formControls.packageName.value,
+        path: formData.formControls.devonInstances.value,
+        specificArgs: this.specificArgs(),
+      })
+    );
+
+    this.context.dispatch(new NextStepAction());
+  };
+
+  specificArgs = () => {
+    const formData: IJavaInitializerForm = this.state;
+
+    const specificArgs: {
+      [key: string]: string | null | boolean | undefined;
+    } = {
+      '-DdbType': formData.formControls.db.value,
+      '-Dversion': `"${formData.formControls.version.value}"`,
+      '-DartifactId': formData.formControls.artifact.value,
+    };
+    specificArgs[formData.formControls.group.value] = null;
+    if (formData.formControls.batch) {
+      specificArgs['-Dbatch'] = 'batch';
+    }
+
+    return specificArgs;
   };
 
   groupHandler = (value: string): void => {

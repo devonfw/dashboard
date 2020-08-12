@@ -5,7 +5,12 @@ module.exports = {
     // in the production version of your app
     return {
       '/start': { page: '/start' },
-      '/about': { page: '/about' },
-    }
+      '/home': { page: '/home' },
+      '/ides': { page: '/ides' },
+      '/installations': { page: '/installations' },
+      '/projects': { page: '/projects' },
+      '/repositories': { page: '/repositories' },
+      '/wiki': { page: '/wiki' },
+    };
   },
-}
+};

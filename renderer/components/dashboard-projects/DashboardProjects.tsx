@@ -11,8 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { ProjectDetails } from '../../modules/projects/components/Stepper/redux/data.model';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
+import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
@@ -85,7 +85,7 @@ export default function DashboardProjects(props: {
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={6} md={4} lg={3}>
         <NextLink href="/start" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
@@ -104,7 +104,14 @@ export default function DashboardProjects(props: {
       {props.projects && props.projects.length
         ? props.projects.map((project: ProjectDetails, index: number) => {
             return (
-              <Grid item xs={3} key={index} className={classes.ProjectGrid}>
+              <Grid
+                item
+                xs={6}
+                md={4}
+                lg={3}
+                key={index}
+                className={classes.ProjectGrid}
+              >
                 <Card>
                   <div
                     onContextMenu={(event) => handleClick(event, project)}

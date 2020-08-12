@@ -1,13 +1,19 @@
 import { useContext, useState, ChangeEvent } from 'react';
 import Link from 'next/link';
-import { StepperContext } from '../../redux/stepperContext';
-import { INgData, EventType, FormParams } from '../../redux/data.model';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
+import {
+  INgData,
+  EventType,
+  FormParams,
+} from '../../../../redux/stepper/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import TextField from '@material-ui/core/TextField';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
+import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
 
 const NgData = (): JSX.Element => {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
@@ -53,34 +59,20 @@ const NgData = (): JSX.Element => {
   const handleNg = () => {
     const ngData: INgData = data;
     if (data.name.valid) {
-      dispatch({
-        type: 'SET_STACK_CMD',
-        payload: {
-          stackCmd: `devon ng new ${ngData.name.value} --routing=${ngData.routing.value} --style=${ngData.styling.value} --interactive=false --skip-install`,
-        },
-      });
-
-      dispatch({
-        type: 'SET_STACK_CWD',
-        payload: {
-          stackCwd: `${ngData.devonInstances.value}`,
-        },
-      });
-
-      dispatch({
-        type: 'NEXT_STEP',
-      });
-
-      dispatch({
-        type: 'PROJECT_DETAILS',
-        payload: {
-          projectDetails: {
-            name: ngData.name.value,
-            domain: 'angular',
-            path: `${ngData.devonInstances.value}\\${ngData.name.value}`,
+      dispatch(
+        new ProjectDataActionData({
+          name: ngData.name.value,
+          path: ngData.devonInstances.value,
+          specificArgs: {
+            '--routing': ngData.routing.value,
+            '--style': ngData.styling.value,
+            '--interactive': false,
+            '--skip-install': null,
           },
-        },
-      });
+        })
+      );
+
+      dispatch(new NextStepAction());
     }
   };
 

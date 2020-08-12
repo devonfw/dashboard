@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard(): JSX.Element {
+export default function IDES(): JSX.Element {
   const classes = useStyles();
 
   return (

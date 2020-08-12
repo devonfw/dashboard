@@ -1,5 +1,5 @@
 import { Component, KeyboardEvent, ChangeEvent } from 'react';
-import Renderer from '../../services/renderer/renderer.service';
+import Renderer from '../../modules/shared/services/renderer/renderer.service';
 import TerminalUI from './terminal-ui/TerminalUI.controller';
 
 export interface TerminalState {

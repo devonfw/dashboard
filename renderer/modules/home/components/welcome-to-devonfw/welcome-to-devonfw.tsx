@@ -11,8 +11,8 @@ const DASHBOARD_DOWNLOAD_URL =
   'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
 export default function WelcomeToDevonfw(): JSX.Element {
-  const [total, setTotal] = useState(0);
-  const [received, setReceived] = useState(0);
+  const [, setTotal] = useState(0);
+  const [, setReceived] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(false);
   const [downloadStatusMsg, setDownloadStatusMsg] = useState('');
   const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState(
@@ -58,10 +58,7 @@ export default function WelcomeToDevonfw(): JSX.Element {
           >
             Download latest version
           </AcceptButton>
-          <Spinner
-            inProgress={downloadProgress}
-            progress={(received / total) * 100}
-          ></Spinner>
+          <Spinner inProgress={downloadProgress}></Spinner>
           <Box component="p" color={downloadStatusMsgColor}>
             {downloadStatusMsg}
           </Box>
