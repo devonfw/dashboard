@@ -8,6 +8,6 @@ export default class PomInstallCommand implements Command {
   }
 
   toString(): string {
-    return `mvn clean install`;
+    return `devon mvn clean install`;
   }
 }

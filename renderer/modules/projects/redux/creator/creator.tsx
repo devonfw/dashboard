@@ -20,17 +20,16 @@ interface CreatorProviderProps {
 }
 
 export function CreatorProvider(props: CreatorProviderProps): JSX.Element {
-  const [hasError, setHasError] = React.useState<boolean>(false);
   const { dispatch } = React.useContext(StepperContext);
 
   const triggerCreation = (projectData: ProjectData) => {
     const observable = messageSender.createProject(projectData);
     observable.subscribe(
-      () => setHasError(false),
-      () => setHasError(true),
-      () => {
+      () => null,
+      () => null,
+      (finishedWithError) => {
         observable.unsubscribe();
-        dispatch(new CreateProjectActionData(false, !hasError));
+        dispatch(new CreateProjectActionData(false, !finishedWithError));
       }
     );
   };

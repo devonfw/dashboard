@@ -39,7 +39,7 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
 
   protected onClose(): void {
     this.terminal.on('close', () => {
-      this.send('end', '');
+      this.send('end', this.errorMessage);
       this.saveProject.saveProjectDetails({
         date: projectDate(),
         name: this.data.name,

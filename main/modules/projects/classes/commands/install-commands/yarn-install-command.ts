@@ -8,6 +8,6 @@ export default class YarnInstallCommand implements Command {
   }
 
   toString(): string {
-    return `yarn`;
+    return `devon yarn install`;
   }
 }
