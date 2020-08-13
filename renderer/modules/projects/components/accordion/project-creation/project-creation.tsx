@@ -26,10 +26,6 @@ export default function ProjectCreation(): JSX.Element {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(state.create.loading);
-  });
-
   return (
     <Accordion>
       <AccordionSummary

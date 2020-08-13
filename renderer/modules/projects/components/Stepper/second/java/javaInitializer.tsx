@@ -37,7 +37,7 @@ class JavaInitializer extends Component<JavaStyle> {
 
     this.context.dispatch(
       new ProjectDataActionData({
-        name: formData.formControls.packageName.value,
+        name: formData.formControls.artifact.value,
         path: formData.formControls.devonInstances.value,
         specificArgs: this.specificArgs(),
       })
@@ -55,8 +55,10 @@ class JavaInitializer extends Component<JavaStyle> {
       '-DdbType': formData.formControls.db.value,
       '-Dversion': `"${formData.formControls.version.value}"`,
       '-DartifactId': formData.formControls.artifact.value,
+      '-DgroupId': `"${formData.formControls.group.value}"`,
+      '-Dpackage': `"${formData.formControls.packageName.value}"`,
     };
-    specificArgs[formData.formControls.group.value] = null;
+
     if (formData.formControls.batch) {
       specificArgs['-Dbatch'] = 'batch';
     }
