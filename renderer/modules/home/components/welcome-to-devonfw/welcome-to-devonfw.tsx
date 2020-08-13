@@ -7,10 +7,13 @@ import Spinner from '../../../shared/components/spinner/spinner';
 import AcceptButton from '../../../shared/components/accept-button/accept-button';
 import WelcomeSnippet from '../welcome-snippet/welcome-snippet';
 
+import { ProfileData } from '../../../../models/dashboard/ProfileData';
+
 const DASHBOARD_DOWNLOAD_URL =
   'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
 export default function WelcomeToDevonfw(): JSX.Element {
+  const [avatar, setAvatar] = useState('male.svg');
   const [, setTotal] = useState(0);
   const [, setReceived] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(false);
@@ -42,12 +45,24 @@ export default function WelcomeToDevonfw(): JSX.Element {
         }
       }
     );
+
+    global.ipcRenderer.send('find:profile');
+
+    global.ipcRenderer.on(
+      'get:profile',
+      (_: IpcRendererEvent, data: ProfileData) => {
+        if (data.gender !== '') {
+          const avatarImg = data.gender + '.svg';
+          setAvatar(avatarImg);
+        }
+      }
+    );
   }, []);
 
   return (
     <Grid container spacing={3} style={{ fontSize: '16px' }}>
       <Grid item xs={12}>
-        <img src="/assets/person.png" alt="admin" />
+        <img src={'/assets/' + avatar} alt="admin" />
       </Grid>
       <Grid item xs={7}>
         <>

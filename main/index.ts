@@ -15,6 +15,7 @@ import { CommandRetrieverService } from './services/command-retriever/command-re
 import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
+import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
@@ -40,9 +41,9 @@ app.on('ready', async () => {
   }
 
   const url = isDev
-    ? 'http://localhost:8000/start'
+    ? 'http://localhost:8000/intro'
     : format({
-        pathname: join(__dirname, '../../renderer/start.html'),
+        pathname: join(__dirname, '../../renderer/intro.html'),
         protocol: 'file:',
         slashes: true,
       });
@@ -76,6 +77,54 @@ const downloadHandler = (_, item) => {
     }
   });
 };
+
+// Get base64 image when user selects profile picture
+function getBase64Img(src: string) {
+  new ProfileSetupService()
+    .getBase64Img(src)
+    .then((outputImg) => {
+      mainWindow.webContents.send('get:base64Img', outputImg);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:base64Img', '');
+    });
+}
+
+// Create or update Dashboard user profile
+function setDashboardProfile(data: string) {
+  new ProfileSetupService()
+    .setProfile(data)
+    .then((status) => {
+      mainWindow.webContents.send('get:profileCreationStatus', status);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:profileCreationStatus', error);
+    });
+}
+
+// Check if dashboard profile file exists
+function checkProfileStatus() {
+  new ProfileSetupService()
+    .checkProfile()
+    .then((exists) => {
+      mainWindow.webContents.send('get:profileStatus', exists);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:profileStatus', false);
+    });
+}
+
+// Check if dashboard profile file exists
+function getDashboardProfile() {
+  new ProfileSetupService()
+    .getProfile()
+    .then((data) => {
+      mainWindow.webContents.send('get:profile', data);
+    })
+    .catch((error) => {
+      mainWindow.webContents.send('get:profile', {});
+    });
+}
 
 // Get all devon-ide-scripts from maven repository
 function getDevonIdeScripts() {
@@ -281,7 +330,7 @@ const openProjectInIde = (project: ProjectDetails) => {
 
 /* terminal service */
 const terminalService = new TerminalService();
-terminalService.openDialog();
+terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 ipcMain.on('powershell/installation/packages', installEventHandler);
@@ -312,3 +361,7 @@ ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.on('open:projectInIde', (e, option) => {
   openProjectInIde(option);
 });
+ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg));
+ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg));
+ipcMain.on('find:profileStatus', checkProfileStatus);
+ipcMain.on('find:profile', getDashboardProfile);
