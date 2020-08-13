@@ -10,7 +10,7 @@ export default class JavaProjectCommand implements Command {
 
   toString(): string {
     const commandArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
-    const generationCommand = `devon java create ${this.data.name} ${commandArgs}`;
+    const generationCommand = `devon java create ${commandArgs}`;
 
     return generationCommand;
   }
