@@ -3,16 +3,15 @@ import { StepperState } from '../stepperContext';
 
 export function updateProjectDataState(
   state: StepperState,
-  projectData: ProjectDataPayload | undefined
+  projectData: ProjectDataPayload
 ): StepperState {
   return {
     ...state,
     projectData: {
       ...state.projectData,
-      ...(projectData ? projectData : {}),
+      ...projectData,
       specificArgs: {
-        ...state.projectData?.specificArgs,
-        ...(projectData?.specificArgs ? projectData?.specificArgs : {}),
+        ...(projectData.specificArgs ? projectData.specificArgs : {}),
       },
     },
   };

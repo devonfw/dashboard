@@ -38,7 +38,7 @@ class NodeInitializer extends Component<NodeStyle> {
           name: formData.formControls.name.value.toLowerCase(),
           path: formData.formControls.devonInstances.value,
           specificArgs: {
-            '-routing': null,
+            '-n': null,
             '--skip-install': null,
           },
         },
@@ -53,7 +53,6 @@ class NodeInitializer extends Component<NodeStyle> {
   };
 
   eventHandler(identifier: string, value: string) {
-    console.log(identifier);
     const formState: FormControls = {
       ...this.state.formControls,
     };

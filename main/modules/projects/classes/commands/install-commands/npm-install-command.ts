@@ -8,6 +8,6 @@ export default class NpmInstallCommand implements Command {
   }
 
   toString(): string {
-    return `npm install`;
+    return `devon npm install`;
   }
 }

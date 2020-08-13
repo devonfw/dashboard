@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as pathModule from 'path';
 import { Command } from '../commands/command';
 import { RendererListener } from './renderer-listener';
 import YarnInstallCommand from '../commands/install-commands/yarn-install-command';
@@ -28,7 +29,7 @@ export class InstallListener extends RendererListener<string> {
 
 function uses(path: string, file: string): boolean {
   try {
-    return fs.existsSync(`${path}/${file}`);
+    return fs.existsSync(pathModule.join(path, file));
   } catch (err) {
     return false;
   }

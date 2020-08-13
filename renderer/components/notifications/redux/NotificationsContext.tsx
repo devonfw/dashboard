@@ -16,7 +16,6 @@ const reducer = (
   state: NotificationsState = initialState,
   action: NotificationsAction
 ) => {
-  console.log('dispatched add notif');
   switch (action.type) {
     case 'ADD_NOTIFICATION': {
       return {

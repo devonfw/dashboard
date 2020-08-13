@@ -7,6 +7,7 @@ import NodeProjectCommand from '../commands/project-commands/node-project-comman
 import { TerminalFactory } from '../terminal/terminal-factory';
 import { SaveDetails } from '../../../../services/devon-instances/save-details';
 import { projectDate } from '../../../shared/utils/project-date';
+import * as path from 'path';
 
 export class ProjectCreationListener extends RendererListener<ProjectData> {
   data: ProjectData;
@@ -38,12 +39,12 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
 
   protected onClose(): void {
     this.terminal.on('close', () => {
-      this.send('end', '');
+      this.send('end', this.errorMessage);
       this.saveProject.saveProjectDetails({
         date: projectDate(),
         name: this.data.name,
         domain: this.data.type,
-        path: `${this.data.path}/${this.data.name}`,
+        path: path.join(this.data.path, this.data.name),
       });
     });
   }

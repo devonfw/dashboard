@@ -8,7 +8,7 @@ type RendererEvent = IpcMainEvent;
 export abstract class RendererListener<T> {
   terminal: Terminal | null;
   event: RendererEvent;
-  finishedWithError: boolean;
+  errorMessage: string;
 
   constructor(
     private channel: string,
@@ -34,27 +34,27 @@ export abstract class RendererListener<T> {
     this.onData();
     this.onError();
     this.onClose();
-    this.terminal.stdin.write(`${command.toString()} 2>&1 | %{ "$_" }\n`);
+    this.terminal.stdin.write(`${command.toString()} \n`);
     this.terminal.stdin.end();
   }
 
   protected onData(): void {
     this.terminal.stdout.on('data', (data) => {
-      this.finishedWithError = false;
+      this.unsetFinishedWitError();
       this.send('data', data);
     });
   }
 
   protected onError(): void {
     this.terminal.stderr.on('data', (data) => {
-      this.finishedWithError = true;
+      this.setFinishedWithError();
       this.send('error', data);
     });
   }
 
   protected onClose(): void {
     this.terminal.on('close', () => {
-      this.send('end', this.finishedWithError ? 'error' : '');
+      this.send('end', this.errorMessage);
     });
   }
 
@@ -65,5 +65,13 @@ export abstract class RendererListener<T> {
       status,
       data: formattedData,
     });
+  }
+
+  private setFinishedWithError() {
+    this.errorMessage = 'error';
+  }
+
+  private unsetFinishedWitError() {
+    this.errorMessage = '';
   }
 }
