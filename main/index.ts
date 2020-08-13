@@ -40,15 +40,29 @@ app.on('ready', async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  const url = isDev
-    ? 'http://localhost:8000/intro'
-    : format({
-        pathname: join(__dirname, '../../renderer/intro.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
+  try {
+    const profileExists = await new ProfileSetupService().checkProfile();
+    const startPage = profileExists ? 'home' : 'intro';
+    const url = isDev
+      ? 'http://localhost:8000/' + startPage
+      : format({
+          pathname: join(__dirname, '../../renderer/' + startPage + '.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
 
-  mainWindow.loadURL(url);
+    mainWindow.loadURL(url);
+  } catch (error) {
+    const url = isDev
+      ? 'http://localhost:8000/intro'
+      : format({
+          pathname: join(__dirname, '../../renderer/intro.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
+
+    mainWindow.loadURL(url);
+  }
 
   mainWindow.webContents.session.on('will-download', downloadHandler);
 });
