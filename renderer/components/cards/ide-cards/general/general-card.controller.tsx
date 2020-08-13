@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import MessageSenderService from '../../../../services/renderer/messageSender.service';
+import MessageSenderService from '../../../../modules/shared/services/renderer/messageSender.service';
 
 export interface RenderedViewProps {
   onClick: () => void;

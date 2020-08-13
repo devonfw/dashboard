@@ -1,52 +1,45 @@
-import { Component } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import DashboardProjects from '../components/dashboard-projects/DashboardProjects';
 import { IpcRendererEvent } from 'electron';
-import { ProjectDetails } from '../modules/projects/components/Stepper/redux/data.model';
+import { ProjectDetails } from '../modules/projects/redux/stepper/data.model';
+import { useRouter } from 'next/router';
+import { StepperContext } from '../modules/projects/redux/stepper/stepperContext';
 
-interface IProjects {
-  projects: ProjectDetails[];
-}
+export default function Projects(): JSX.Element {
+  const [projects, setProjects] = useState<ProjectDetails[]>([]);
+  const { state } = useContext(StepperContext);
+  const router = useRouter();
 
-export default class Projects extends Component<IProjects> {
-  state: IProjects = {
-    projects: [],
-  };
-
-  constructor(props: IProjects) {
-    super(props);
-    this.setProject = this.setProject.bind(this);
-  }
-
-  componentDidMount(): void {
+  useEffect(() => {
+    if (state.creatingProject) {
+      router.push('/start');
+      return;
+    }
     global.ipcRenderer.send('find:projectDetails');
     global.ipcRenderer.on(
       'get:projectDetails',
       (_: IpcRendererEvent, projects: ProjectDetails[]) => {
-        this.setProject(projects);
+        setProjects(projects);
       }
     );
+
+    return () => {
+      global.ipcRenderer.removeAllListeners('find:projectDetails');
+      global.ipcRenderer.removeAllListeners('get:projectDetails');
+    };
+  }, []);
+
+  const setProject = (projects: ProjectDetails[]): void => {
+    setProjects(projects);
   }
 
-  setProject(projects: ProjectDetails[]): void {
-    this.setState({
-      projects: projects,
-    });
-  }
-
-  componentWillUnmount(): void {
-    global.ipcRenderer.removeAllListeners('find:projectDetails');
-    global.ipcRenderer.removeAllListeners('get:projectDetails');
-  }
-
-  render(): JSX.Element {
-    return (
-      <Layout>
-        <SpaceAround bgColor={'#F4F6F8'}>
-          <DashboardProjects projects={this.state.projects} setProject={this.setProject}/>
-        </SpaceAround>
-      </Layout>
-    );
-  }
+  return (
+    <Layout>
+      <SpaceAround bgColor={'#F4F6F8'}>
+        <DashboardProjects projects={projects} setProject={setProject}/>
+      </SpaceAround>
+    </Layout>
+  );
 }

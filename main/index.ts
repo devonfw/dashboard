@@ -15,8 +15,12 @@ import { CommandRetrieverService } from './services/command-retriever/command-re
 import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
-import { readdirPromise } from './services/shared/promised';
+import { readdirPromise } from './modules/shared/utils/promised';
+import { InstallListener } from './modules/projects/classes/listeners/install-listener';
+import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
+import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
+import { projectDate } from './modules/shared/utils/project-date';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -80,7 +84,7 @@ function getDevonIdeScripts() {
     .then((instances) => {
       mainWindow.webContents.send('get:devonIdeScripts', instances);
     })
-    .catch((error) => {
+    .catch(() => {
       mainWindow.webContents.send('get:devonIdeScripts', []);
     });
 }
@@ -124,6 +128,28 @@ function getDevonInstancesPath() {
     });
 }
 
+export function findOutWorkspaceLocation(paths: string[]): string[] {
+  const workspaces = [];
+  let location = '';
+  for (const path of paths) {
+    if (path.includes('workspaces')) {
+      location = path.substring(
+        path.lastIndexOf('workspaces') + 10,
+        -path.length
+      );
+      if (!workspaces.includes(location)) {
+        workspaces.push(location);
+      }
+    } else {
+      location = path + '\\workspaces';
+      if (!workspaces.includes(location)) {
+        workspaces.push(location);
+      }
+    }
+  }
+  return workspaces;
+}
+
 function getWorkspaceProject(workspacelocation: string) {
   readdirPromise(workspacelocation)
     .then((projects: string[]) => {
@@ -142,6 +168,10 @@ function getProjectDetails() {
 
 /* Enable services */
 
+/**
+ * @deprecated. You should use listeners inside
+ * modules/projects/listeners/ or create a new one
+ */
 /* terminal powershell */
 const eventHandler = (
   event: IpcMainEvent,
@@ -184,16 +214,19 @@ const eventHandler = (
 
 const saveProjectDetails = (projectDetails: ProjectDetails): void => {
   if (projectDetails) {
-    const currentDate = new Date();
-    projectDetails.date =
-      currentDate.getDate() +
-      '/' +
-      currentDate.getMonth() +
-      '/' +
-      currentDate.getFullYear();
+    projectDetails.date = projectDate();
     new DevonInstancesService().saveProjectDetails(projectDetails);
   }
 };
+
+const installEventListener = new InstallListener(new SpawnTerminalFactory());
+installEventListener.listen();
+
+const projectListener = new ProjectCreationListener(
+  new SpawnTerminalFactory(),
+  new DevonInstancesService()
+);
+projectListener.listen();
 
 /* Installation powershell */
 const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
@@ -252,7 +285,8 @@ const deleteProject = (project: ProjectDetails) => {
     mainWindow.webContents.send('delete:project', projects);
   })
   .catch(error => {
-    mainWindow.webContents.send('delete:project', []);
+    console.log(error);
+    // mainWindow.webContents.send('delete:project', []);
   });
 }
 
@@ -262,12 +296,7 @@ const openProjectDirectory = (path: string) => {
 
 /* terminal service */
 const terminalService = new TerminalService();
-terminalService.ls();
-terminalService.mkdir(null);
-terminalService.rmdir(null);
-terminalService.pwd();
 terminalService.openDialog();
-terminalService.mvnInstall();
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 ipcMain.on('powershell/installation/packages', installEventHandler);

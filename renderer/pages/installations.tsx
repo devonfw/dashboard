@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Drawer from '../modules/shared/components/drawer/drawer';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
-import Repository from '../services/github/models/repository.model';
+import Repository from '../modules/shared/services/github/models/repository.model';
 import Installations from '../components/Installations/Installations.contoller';
 
 interface HomeProps {

@@ -1,5 +1,5 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-const drawerWidth = 260;
+const drawerWidth = '260px';
 
 const drawerStyle = (theme: Theme) =>
   createStyles({
@@ -7,7 +7,6 @@ const drawerStyle = (theme: Theme) =>
       display: 'flex',
       backgroundColor: '#FFFFFF',
       color: '#FFFFFF',
-      maxWidth: '1500px',
       margin: '0 auto',
       overflowX: 'hidden',
       '& .MuiDrawer-paper': {
@@ -20,7 +19,6 @@ const drawerStyle = (theme: Theme) =>
         height: '100%',
       },
       '& .MuiAppBar-root': {
-        maxWidth: '1500px',
         margin: '0 auto',
       },
       '& .MuiAppBar-positionFixed': {
@@ -52,6 +50,7 @@ const drawerStyle = (theme: Theme) =>
     content: {
       flexGrow: 1,
       'min-height': '100vh',
+      width: `calc(100% - ${drawerWidth})`,
       backgroundColor: '#F4F6F8',
     },
     fxEnd: {

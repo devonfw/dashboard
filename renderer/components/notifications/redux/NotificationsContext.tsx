@@ -53,8 +53,6 @@ interface NotificationsProps {
 export function NotificationsProvider(props: NotificationsProps): JSX.Element {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
-  console.log('provider value');
-  console.log(value);
   return (
     <NotificationsContext.Provider value={value}>
       {props.children}

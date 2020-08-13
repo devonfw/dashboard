@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { StepperContext } from '../redux/stepperContext';
+import { StepperContext } from '../../../redux/stepper/stepperContext';
 import STEPS_MAP from './StackSteps';
 
 const useStyles = () => ({
@@ -18,8 +18,7 @@ interface DataStepProps {
 class DataStep extends Component<DataStepProps> {
   render(): JSX.Element {
     const { classes } = this.props;
-    let stack: string = this.context.state.stack;
-    stack = stack ? stack : '';
+    const stack: string = this.context.state.projectData.type;
 
     return (
       <>

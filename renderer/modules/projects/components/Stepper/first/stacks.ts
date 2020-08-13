@@ -18,7 +18,7 @@ export const stacksMap: StackMap = {
     id: 0,
     image: '/assets/stacks/angular-logo.svg',
     text: 'DEVON ANGULAR',
-    command: 'ng',
+    command: 'angular',
   },
   java: {
     id: 1,

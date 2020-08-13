@@ -1,7 +1,7 @@
 const EXECUTION_CONTANTS = {
   PROJECT_CREATION_INFO: {
     projectCreation: 'Project Creation',
-    inprogress: 'In Progress...',
+    inProgress: 'In Progress...',
     success: 'Successfully Created',
     error:
       'Error Occurred while creating a project. Sorry for the inconvenience.',
@@ -28,3 +28,18 @@ const EXECUTION_CONTANTS = {
 };
 
 export default EXECUTION_CONTANTS;
+
+export function projectCreationProgress(
+  loading: boolean,
+  success: boolean
+): string {
+  if (loading) {
+    return EXECUTION_CONTANTS.PROJECT_CREATION_INFO.inProgress;
+  }
+
+  if (success) {
+    return EXECUTION_CONTANTS.PROJECT_CREATION_INFO.success;
+  }
+
+  return EXECUTION_CONTANTS.PROJECT_CREATION_INFO.error;
+}

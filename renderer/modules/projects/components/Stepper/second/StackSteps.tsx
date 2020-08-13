@@ -60,7 +60,7 @@ const nodeStep = () => {
 };
 
 const STEPS_MAP: { [key: string]: JSX.Element } = {
-  ng: ngStep(),
+  angular: ngStep(),
   java: javaStep(),
   node: nodeStep(),
 };

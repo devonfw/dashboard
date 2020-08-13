@@ -10,9 +10,10 @@ import {
 import * as util from 'util';
 import * as child from 'child_process';
 import {
-  ProjectDetails,
   ProcessState,
+  ProjectDetails,
 } from '../../models/project-details.model';
+import { SaveDetails } from './save-details';
 import { exec } from 'child_process';
 
 const utilExec = util.promisify(child.exec);
@@ -20,7 +21,7 @@ const utilReaddir = util.promisify(fs.readdir);
 const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
-export class DevonInstancesService {
+export class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',
@@ -247,9 +248,13 @@ export class DevonInstancesService {
   async openIdeExecutionCommandForVscode(
     project: ProjectDetails
   ): Promise<ProcessState> {
-    return await utilExec(this.findCommand(project.domain), {
-      cwd: project.path,
-    });
+    try {
+      return await utilExec(this.findCommand(project.domain), {
+        cwd: project.path,
+      });
+    } catch(error) {
+      console.log(error);
+    }
   }
 
   openIdeExecutionCommand(project: ProjectDetails): Promise<ProcessState> {

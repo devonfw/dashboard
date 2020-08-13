@@ -11,8 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { ProjectDetails } from '../../modules/projects/components/Stepper/redux/data.model';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
+import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
+import MenuList from './MenuList';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
@@ -65,6 +66,7 @@ export default function DashboardProjects(props: {
     event: React.MouseEvent<HTMLDivElement>,
     project: ProjectDetails
   ) => {
+    console.log(state.project);
     event.preventDefault();
     setState({
       mouseX: event.clientX - 2,
@@ -83,14 +85,14 @@ export default function DashboardProjects(props: {
     setState(initialState);
   };
 
-  const deleteProject = (project: ProjectDetails) => {
+  const deleteProject = () => {
     setOpen(true);
     global.ipcRenderer.send('delete:project', state.project);
     setState(initialState);
   }
 
-  const openProjectDirectory = (path: string) => {
-    global.ipcRenderer.send('open:projectDirectory', path);
+  const openProjectDirectory = () => {
+    global.ipcRenderer.send('open:projectDirectory', state.project.path);
   }
 
   return (
@@ -101,7 +103,7 @@ export default function DashboardProjects(props: {
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={6} md={4} lg={3}>
         <NextLink href="/start" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
@@ -120,7 +122,14 @@ export default function DashboardProjects(props: {
       {props.projects && props.projects.length
         ? props.projects.map((project: ProjectDetails, index: number) => {
             return (
-              <Grid item xs={3} key={index} className={classes.ProjectGrid}>
+              <Grid
+                item
+                xs={6}
+                md={4}
+                lg={3}
+                key={index}
+                className={classes.ProjectGrid}
+              >
                 <Card>
                   <div
                     onContextMenu={(event) => handleClick(event, project)}
@@ -154,10 +163,10 @@ export default function DashboardProjects(props: {
                         <MenuItem onClick={openProjectInIde}>
                           Show in terminal
                         </MenuItem>
-                        <MenuItem onClick={() => openProjectDirectory(project.path)}>
+                        <MenuItem onClick={openProjectDirectory}>
                           Enclosing Folder
                         </MenuItem>
-                        <MenuItem onClick={() => deleteProject(project)}>
+                        <MenuItem onClick={deleteProject}>
                           Delete
                         </MenuItem>
                       </Menu>

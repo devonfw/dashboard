@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { getOptions } from '../terminal/terminal-utils';
-import { promiseChildProcess } from '../shared/handle-child-process';
-import { readdirPromise } from '../shared/promised';
+import { promiseChildProcess } from '../../modules/shared/utils/handle-child-process';
+import { readdirPromise } from '../../modules/shared/utils/promised';
 import {
   IdeConfig,
   DevonfwConfig,

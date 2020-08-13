@@ -2,7 +2,7 @@ import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
 import { Button } from '@material-ui/core';
-import { StepperContext } from '../../redux/stepperContext';
+import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
   INodeInitializerForm,
   FormControls,
@@ -13,6 +13,7 @@ import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType } from '../../../../../../models/dashboard/FormType';
+import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 
 interface NodeStyle {
   classes: {
@@ -29,33 +30,22 @@ class NodeInitializer extends Component<NodeStyle> {
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData: INodeInitializerForm = this.state;
+
     this.context.dispatch({
-      type: 'SET_STACK_CMD',
+      type: 'SET_PROJECT_DATA',
       payload: {
-        stackCmd: `devon node create ${formData.formControls.name.value.toLowerCase()} -n --skip-install`,
-      },
-    });
-    this.context.dispatch({
-      type: 'SET_STACK_CWD',
-      payload: {
-        stackCwd: `${formData.formControls.devonInstances.value}`,
-      },
-    });
-    this.context.dispatch({
-      type: 'NEXT_STEP',
-    });
-    this.context.dispatch({
-      type: 'PROJECT_DETAILS',
-      payload: {
-        projectDetails: {
+        projectData: {
           name: formData.formControls.name.value.toLowerCase(),
-          domain: 'node',
-          path: `${
-            formData.formControls.devonInstances.value
-          }\\${formData.formControls.name.value.toLowerCase()}`,
+          path: formData.formControls.devonInstances.value,
+          specificArgs: {
+            '-routing': null,
+            '--skip-install': null,
+          },
         },
       },
     });
+
+    this.context.dispatch(new NextStepAction());
   };
 
   handleDevonInstancesSelection = (option: string) => {

@@ -10,7 +10,6 @@ const Records = (props: RecordsProps): JSX.Element => {
 
   return (
     <div>
-      <pre>Hello this is a terminal</pre>
       {props.previous.map((prevCmd: { cwd: string; cmd: string }) => (
         <>
           <pre className={`${terminalPath} ${mb0} ${colorGreen}`}>
