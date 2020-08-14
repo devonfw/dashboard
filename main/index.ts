@@ -15,10 +15,17 @@ import { CommandRetrieverService } from './services/command-retriever/command-re
 import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
+import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
+import {
+  getBase64Img,
+  setDashboardProfile,
+  checkProfileStatus,
+  getDashboardProfile,
+} from './modules/profile-setup/handle-profile-setup';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
 
@@ -39,15 +46,29 @@ app.on('ready', async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  const url = isDev
-    ? 'http://localhost:8000/start'
-    : format({
-        pathname: join(__dirname, '../../renderer/start.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
+  try {
+    const profileExists = await new ProfileSetupService().checkProfile();
+    const startPage = profileExists ? 'home' : 'intro';
+    const url = isDev
+      ? 'http://localhost:8000/' + startPage
+      : format({
+          pathname: join(__dirname, '../../renderer/' + startPage + '.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
 
-  mainWindow.loadURL(url);
+    mainWindow.loadURL(url);
+  } catch (error) {
+    const url = isDev
+      ? 'http://localhost:8000/intro'
+      : format({
+          pathname: join(__dirname, '../../renderer/intro.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
+
+    mainWindow.loadURL(url);
+  }
 
   mainWindow.webContents.session.on('will-download', downloadHandler);
 });
@@ -281,7 +302,7 @@ const openProjectInIde = (project: ProjectDetails) => {
 
 /* terminal service */
 const terminalService = new TerminalService();
-terminalService.openDialog();
+terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 ipcMain.on('powershell/installation/packages', installEventHandler);
@@ -312,3 +333,7 @@ ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.on('open:projectInIde', (e, option) => {
   openProjectInIde(option);
 });
+ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
+ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg, mainWindow));
+ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
+ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));
