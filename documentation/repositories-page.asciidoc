@@ -1,0 +1,20 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+
+
+= Repositories
+
+This page contains the different repositories under devonfw organization, you can check them clicking on *Open repository* or get their github url to clone it directly.

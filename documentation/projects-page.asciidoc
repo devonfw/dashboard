@@ -1,0 +1,55 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+
+= Projects
+
+Clicking on *Projects* on the sidebar allows to navigate to the projects window, that helps you manage your current projects and create new ones.
+
+== Your projects
+
+Here are the different projects that you have in your machine. You can open them with your favorite IDE, show its enclosing folder or delete them.
+
+
+Also, you can filter them by different criteria.
+
+Clicking on *Add new project* will get you to the creation page.
+
+== Project creation
+
+The project creation is dividen in tree simple steps:
+
+=== 1. Project type
+
+Here you can choose the technology used (Angular, Java, Node, ...).
+You can click *back* to go back to your projects.
+
+=== 2. Project data
+
+Once the technology has been set, it is necessary to add some data depending to the project. The version of devonfw-ide that is going to be used is the one set on the topbar.
+
+=== 3. Execution
+
+In this step starts the creation of the files that conform your projects. It is divided in two sections: Creation and Setup installation.
+
+==== 3.1 Creation
+
+Creates only source code. You'll be notified if the creation fails or is a success. If it fails you can retry it.
+
+==== 3.2 Setup installation
+
+Allows you to install the dependencies of your application (maven modules for java, node modules for node, ...). You can *Proceed* or *skip* the installation.
+
+Click on *Finish* to go back to your projects.
