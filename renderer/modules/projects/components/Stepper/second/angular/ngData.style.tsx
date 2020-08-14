@@ -1,21 +1,12 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
-const projectCardStyle = (theme: Theme) =>
+const projectCardStyle = () =>
   createStyles({
     root: {
-      '& > *': {
-        marginLeft: theme.spacing(2),
-      },
       display: 'flex',
       'flex-direction': 'column',
       '& .MuiFormControl-root': {
-        width: '40em',
-      },
-      '& .formControl': {
-        marginTop: '1em',
-      },
-      '& .project': {
-        paddingLeft: '8px',
+        width: '100%',
       },
     },
     action: {
