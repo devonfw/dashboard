@@ -5,8 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -21,6 +19,7 @@ import { AlertType } from '../../models/alert/alert.model';
 import Renderer from '../../modules/shared/services/renderer/renderer.service';
 import { ProcessState } from '../../models/dashboard/ProcessState';
 import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
+import ProjectDetail from './project-detail';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
@@ -153,45 +152,15 @@ export default function DashboardProjects(props: {
                 className={classes.ProjectGrid}
               >
                 <Card>
-                  <div
-                    onContextMenu={(event) => handleClick(event, project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <CardMedia
-                      className={classes.newProject}
-                      image={`/assets/${project.domain}.png`}
-                      title={project.domain}
-                    />
-                    <CardContent>
-                      <Typography component="h6" variant="h6">
-                        <div style={{ color: '#FFFFFF' }}>{project.name}</div>
-                        <div
-                          style={{ color: '#4CBDEC' }}
-                        >{`Last Updated ${project.date}`}</div>
-                      </Typography>
-                      <Menu
-                        keepMounted
-                        open={state.mouseY !== null}
-                        anchorReference="anchorPosition"
-                        anchorPosition={
-                          state.mouseY !== null && state.mouseX !== null
-                            ? { top: state.mouseY, left: state.mouseX }
-                            : undefined
-                        }
-                        MenuListProps={{
-                          onMouseLeave: handleClose,
-                        }}
-                      >
-                        <MenuItem onClick={openProjectInIde}>
-                          Show in terminal
-                        </MenuItem>
-                        <MenuItem onClick={openProjectDirectory}>
-                          Enclosing Folder
-                        </MenuItem>
-                        <MenuItem onClick={deleteProject}>Delete</MenuItem>
-                      </Menu>
-                    </CardContent>
-                  </div>
+                  <ProjectDetail
+                    project={project}
+                    handleClose={handleClose}
+                    openProjectInIde={openProjectInIde}
+                    openProjectDirectory={openProjectDirectory}
+                    deleteProject={deleteProject}
+                    state={state}
+                    handleClick={handleClick}
+                  />
                 </Card>
               </Grid>
             );
