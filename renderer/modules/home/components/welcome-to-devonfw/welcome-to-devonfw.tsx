@@ -7,7 +7,7 @@ import Spinner from '../../../shared/components/spinner/spinner';
 import AcceptButton from '../../../shared/components/accept-button/accept-button';
 import WelcomeSnippet from '../welcome-snippet/welcome-snippet';
 
-import { ProfileData } from '../../../../models/dashboard/ProfileData';
+import { ProfileData } from '../../../../models/dashboard/profile-data';
 
 const DASHBOARD_DOWNLOAD_URL =
   'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';

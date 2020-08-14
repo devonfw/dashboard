@@ -5,7 +5,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import { useProfilePictureStyles } from './profile-picture.styles';
-import { ProfileData } from '../../../../models/dashboard/ProfileData';
+import { ProfileData } from '../../../../models/dashboard/profile-data';
 
 export default function ProfilePicture(): JSX.Element {
   const classes: { [key: string]: string } = useProfilePictureStyles();

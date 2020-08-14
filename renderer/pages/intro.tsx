@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { IpcRendererEvent } from 'electron';
 import router from 'next/router';
-import ToolbarContainer from '../modules/intro/components/ToolbarContainer/ToolbarContainer';
+import ToolbarContainer from '../modules/intro/components/toolbar-container/toolbar-container';
 
 export default class Intro extends Component {
   componentDidMount(): void {

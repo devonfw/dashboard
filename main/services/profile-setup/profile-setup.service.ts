@@ -24,7 +24,7 @@ export class ProfileSetupService {
   }
 
   checkProfile(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       fs.access(this.profileFilePath, fs.constants.F_OK, (err) => {
         if (err) resolve(false);
         resolve(true);

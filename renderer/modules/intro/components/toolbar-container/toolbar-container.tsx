@@ -1,31 +1,16 @@
+import { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Background from '../../../home/components/background/background';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import { useState } from 'react';
-import LandingPage from '../LandingPage/LandingPage';
-import ProfileSetup from '../ProfileSetup/ProfileSetup';
+import LandingPage from '../landing-page/landing-page';
+import ProfileSetup from '../profile-setup/profile-setup';
+import useToolbarStyles from './toolbar-container.style';
 
 const ToolbarContainer = (): JSX.Element => {
   const [displayProfileForm, setDisplayProfileForm] = useState(false);
 
-  const toolbarStyle = (theme: Theme) =>
-    createStyles({
-      appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        backgroundColor: '#0075B3',
-      },
-      logo: {
-        width: 169,
-        height: 32,
-      },
-      pageContent: {
-        minHeight: '100vh',
-      },
-    });
+  const classes = useToolbarStyles();
 
-  const useStyles = makeStyles(toolbarStyle);
-  const classes = useStyles();
   const navigateHandler = () => {
     setDisplayProfileForm(true);
   };

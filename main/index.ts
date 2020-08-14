@@ -20,6 +20,12 @@ import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
+import {
+  getBase64Img,
+  setDashboardProfile,
+  checkProfileStatus,
+  getDashboardProfile,
+} from './modules/profile-setup/handle-profile-setup';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
 
@@ -91,54 +97,6 @@ const downloadHandler = (_, item) => {
     }
   });
 };
-
-// Get base64 image when user selects profile picture
-function getBase64Img(src: string) {
-  new ProfileSetupService()
-    .getBase64Img(src)
-    .then((outputImg) => {
-      mainWindow.webContents.send('get:base64Img', outputImg);
-    })
-    .catch((error) => {
-      mainWindow.webContents.send('get:base64Img', '');
-    });
-}
-
-// Create or update Dashboard user profile
-function setDashboardProfile(data: string) {
-  new ProfileSetupService()
-    .setProfile(data)
-    .then((status) => {
-      mainWindow.webContents.send('get:profileCreationStatus', status);
-    })
-    .catch((error) => {
-      mainWindow.webContents.send('get:profileCreationStatus', error);
-    });
-}
-
-// Check if dashboard profile file exists
-function checkProfileStatus() {
-  new ProfileSetupService()
-    .checkProfile()
-    .then((exists) => {
-      mainWindow.webContents.send('get:profileStatus', exists);
-    })
-    .catch((error) => {
-      mainWindow.webContents.send('get:profileStatus', false);
-    });
-}
-
-// Check if dashboard profile file exists
-function getDashboardProfile() {
-  new ProfileSetupService()
-    .getProfile()
-    .then((data) => {
-      mainWindow.webContents.send('get:profile', data);
-    })
-    .catch((error) => {
-      mainWindow.webContents.send('get:profile', {});
-    });
-}
 
 // Get all devon-ide-scripts from maven repository
 function getDevonIdeScripts() {
@@ -375,7 +333,7 @@ ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.on('open:projectInIde', (e, option) => {
   openProjectInIde(option);
 });
-ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg));
-ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg));
-ipcMain.on('find:profileStatus', checkProfileStatus);
-ipcMain.on('find:profile', getDashboardProfile);
+ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
+ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg, mainWindow));
+ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
+ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));

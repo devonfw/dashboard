@@ -1,27 +1,8 @@
 import { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import IdeDialog from './IdeDialog';
-
-const useStyles = makeStyles({
-  root: {
-    padding: '6rem 0 2rem 1rem',
-    color: '#FFFFFF',
-    marginLeft: '100px',
-    width: '500px',
-  },
-  welcomeImage: {
-    width: '400px',
-  },
-  welcomeText: {
-    width: '400px',
-  },
-  button: {
-    backgroundColor: '#0075B3',
-    color: '#FFFFFF',
-  },
-});
+import IdeDialog from '../ide-dialog/ide-dialog';
+import useLandingPageStyles from './landing-page.style';
 
 interface LandingPageProps {
   navigateHandler: () => void;
@@ -38,7 +19,7 @@ export interface IdeInstallations {
 }
 
 export default function LandingPage(props: LandingPageProps): JSX.Element {
-  const classes = useStyles();
+  const classes = useLandingPageStyles();
 
   const [IDEs, setIDEs] = useState<IdeInstallations[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
