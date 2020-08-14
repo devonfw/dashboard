@@ -12,53 +12,53 @@ import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
-import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
-import MenuList from './MenuList';
+import {
+  ProjectDetails,
+  ProjectDeleteUpdates,
+} from '../../modules/projects/redux/stepper/data.model';
+import Alerts from '../../modules/shared/components/alerts/alerts';
+import { AlertType } from '../../models/alert/alert.model';
+import Renderer from '../../modules/shared/services/renderer/renderer.service';
+import { ProcessState } from '../../models/dashboard/ProcessState';
+import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
-  setProject: (project: ProjectDetails[]) => void
+  setProject: (project: ProjectDetails[]) => void;
 }): JSX.Element {
+  const renderer = new Renderer();
   const classes = useDashboardProjectsStyles({});
-
   const initialState = {
     mouseX: null,
     mouseY: null,
-    project: {
-      name: '',
-      domain: '',
-      date: '',
-      path: '',
-    },
+    project: { name: '', domain: '', date: '', path: '' },
+  };
+  const initialAlertState = {
+    alertSeverity: '',
+    message: '',
+    operation: false,
   };
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<{
-    mouseX: null | number;
-    mouseY: null | number;
-    project: ProjectDetails;
-  }>(initialState);
+  const [state, setState] = useState<ProjectMenuType>(initialState);
+
+  const closeAlert = () => {
+    setAlertMessage((prevState: AlertType) => {
+      return {
+        ...prevState,
+        operation: false,
+      };
+    });
+  };
+
+  const [alertMessage, setAlertMessage] = useState<AlertType>(
+    initialAlertState
+  );
 
   useEffect(() => {
-    global.ipcRenderer.on(
-      'open:projectInIde',
-      (
-        _: IpcRendererEvent,
-        data: {
-          stdout: string;
-          stderr: string;
-        }
-      ) => {
-        setOpen(false);
-      }
-    );
-    global.ipcRenderer.on('delete:project', (_: IpcRendererEvent, data: ProjectDetails[]) => {
-      setOpen(false);
-      props.setProject(data);
-    });
+    renderer.on('open:projectInIde', ideHandler);
+    renderer.on('delete:project', deleteHandler);
     return () => {
-      global.ipcRenderer.removeAllListeners('open:projectInIde');
-      global.ipcRenderer.removeAllListeners('delete:project');
-      global.ipcRenderer.removeAllListeners('open:projectDirectory');
+      renderer.removeAll();
     };
   }, []);
 
@@ -66,13 +66,35 @@ export default function DashboardProjects(props: {
     event: React.MouseEvent<HTMLDivElement>,
     project: ProjectDetails
   ) => {
-    console.log(state.project);
     event.preventDefault();
     setState({
       mouseX: event.clientX - 2,
       mouseY: event.clientY - 4,
       project: project,
     });
+  };
+
+  const ideHandler = (_: IpcRendererEvent, data: ProcessState) => {
+    setOpen(false);
+  };
+
+  const deleteHandler = (_: IpcRendererEvent, data: ProjectDeleteUpdates) => {
+    setOpen(false);
+    if (data.message === 'success') {
+      props.setProject(data.projects);
+      setAlertMessage({
+        alertSeverity: 'success',
+        message: 'Successfully deleted project',
+        operation: true,
+      });
+    } else {
+      setAlertMessage({
+        alertSeverity: 'error',
+        message:
+          'Failed to delete project due to technical issue / network issue',
+        operation: true,
+      });
+    }
   };
 
   const handleClose = () => {
@@ -89,11 +111,11 @@ export default function DashboardProjects(props: {
     setOpen(true);
     global.ipcRenderer.send('delete:project', state.project);
     setState(initialState);
-  }
+  };
 
   const openProjectDirectory = () => {
     global.ipcRenderer.send('open:projectDirectory', state.project.path);
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -157,7 +179,7 @@ export default function DashboardProjects(props: {
                             : undefined
                         }
                         MenuListProps={{
-                          onMouseLeave: handleClose
+                          onMouseLeave: handleClose,
                         }}
                       >
                         <MenuItem onClick={openProjectInIde}>
@@ -166,9 +188,7 @@ export default function DashboardProjects(props: {
                         <MenuItem onClick={openProjectDirectory}>
                           Enclosing Folder
                         </MenuItem>
-                        <MenuItem onClick={deleteProject}>
-                          Delete
-                        </MenuItem>
+                        <MenuItem onClick={deleteProject}>Delete</MenuItem>
                       </Menu>
                     </CardContent>
                   </div>
@@ -180,6 +200,12 @@ export default function DashboardProjects(props: {
       <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Alerts
+        close={closeAlert}
+        alertSeverity={alertMessage.alertSeverity}
+        message={alertMessage.message}
+        operation={alertMessage.operation}
+      />
     </div>
   );
 }

@@ -280,19 +280,26 @@ const openProjectInIde = (project: ProjectDetails) => {
 };
 
 const deleteProject = (project: ProjectDetails) => {
-  new DevonInstancesService().deleteProject(project).then(projects => {
-    console.log(projects);
-    mainWindow.webContents.send('delete:project', projects);
-  })
-  .catch(error => {
-    console.log(error);
-    // mainWindow.webContents.send('delete:project', []);
-  });
-}
+  new DevonInstancesService()
+    .deleteProject(project)
+    .then((projects) => {
+      mainWindow.webContents.send('delete:project', {
+        projects: projects,
+        message: 'success',
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      mainWindow.webContents.send('delete:project', {
+        projects: [],
+        message: 'error',
+      });
+    });
+};
 
 const openProjectDirectory = (path: string) => {
   shell.showItemInFolder(path);
-}
+};
 
 /* terminal service */
 const terminalService = new TerminalService();

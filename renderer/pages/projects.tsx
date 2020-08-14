@@ -33,12 +33,12 @@ export default function Projects(): JSX.Element {
 
   const setProject = (projects: ProjectDetails[]): void => {
     setProjects(projects);
-  }
+  };
 
   return (
     <Layout>
       <SpaceAround bgColor={'#F4F6F8'}>
-        <DashboardProjects projects={projects} setProject={setProject}/>
+        <DashboardProjects projects={projects} setProject={setProject} />
       </SpaceAround>
     </Layout>
   );

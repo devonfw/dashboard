@@ -231,16 +231,19 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  async deleteProjectFolder(projectPath) {
-    let entries = await utilReaddir(projectPath, { withFileTypes: true });
-    let results = await Promise.all(entries.map(entry => {
-        let fullPath = path.join(projectPath, entry.name);
-        let task = entry.isDirectory() ? this.deleteProjectFolder(fullPath) : unlink(fullPath);
-        return task.catch(error => ({ error }));
-    }));
-    results.forEach(result => {
-        // Ignore missing files/directories; bail on other errors
-        if (result && result.error.code !== 'ENOENT') throw result.error;
+  async deleteProjectFolder(projectPath: string) {
+    const entries = await utilReaddir(projectPath, { withFileTypes: true });
+    const results = await Promise.all(
+      entries.map((entry) => {
+        const fullPath = path.join(projectPath, entry.name);
+        const task = entry.isDirectory()
+          ? this.deleteProjectFolder(fullPath)
+          : unlink(fullPath);
+        return task.catch((error) => ({ error }));
+      })
+    );
+    results.forEach((result) => {
+      if (result && result.error.code !== 'ENOENT') throw result.error;
     });
     await rmdir(projectPath);
   }
@@ -252,7 +255,7 @@ export class DevonInstancesService implements SaveDetails {
       return await utilExec(this.findCommand(project.domain), {
         cwd: project.path,
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
@@ -295,15 +298,20 @@ export class DevonInstancesService implements SaveDetails {
 
   deleteProject(projectDetail: ProjectDetails): Promise<ProjectDetails[]> {
     return new Promise<ProjectDetails[]>((resolve, reject) => {
-      this.deleteProjectFolder(projectDetail.path).then(async (data) => {
-        const projects = await this.readFile();
-        const updatedProjects = projects.filter(project => project.name !== projectDetail.name);
-        this.writeFile(updatedProjects);
-        return updatedProjects.length ? resolve(updatedProjects) : resolve([]);
-      })
-      .catch(error => {
-        reject([]);
-      })
+      this.deleteProjectFolder(projectDetail.path)
+        .then(async () => {
+          const projects = await this.readFile();
+          const updatedProjects = projects.filter(
+            (project) => project.name !== projectDetail.name
+          );
+          this.writeFile(updatedProjects);
+          return updatedProjects.length
+            ? resolve(updatedProjects)
+            : resolve([]);
+        })
+        .catch(() => {
+          reject([]);
+        });
     });
   }
 }
