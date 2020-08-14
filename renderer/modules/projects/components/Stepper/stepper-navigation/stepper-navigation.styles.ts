@@ -1,10 +1,6 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-export const useExecutionStepStyles = makeStyles({
-  stepperButtons: {
-    marginTop: 28,
-    display: 'flex',
-  },
+export const useStepperNavigationStyles = makeStyles({
   cancelButton: {
     marginRight: 12,
   },

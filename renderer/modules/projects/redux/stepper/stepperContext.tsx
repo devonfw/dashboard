@@ -14,9 +14,9 @@ export interface StepperState {
     success: boolean;
   };
   projectData: {
-    name?: string;
-    type?: string;
-    path?: string;
+    name: string;
+    type: string;
+    path: string;
     specificArgs?: {
       [key: string]: string | boolean | null | undefined;
     };
