@@ -1,0 +1,34 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+
+
+= Settings
+
+== Account settings
+
+Here there is a screen that allows users to create a profile. This is useful if you want to have multiple dashboards with different roles, names, ...
+
+Fill the data and click on *Save* if you want to create the profile.
+
+== Installed versions
+
+The installed versions subsection allows you to manage the different versions of devonfw-ide available.
+
+* If you want an specific version, you can search it here and *Install* it.
+* For the installed versions, you can upgrade its components clicking on *Upgrade*.
+* You can also remove an installed version.
+
+

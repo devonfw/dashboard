@@ -1,0 +1,31 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+
+= Home page
+
+This is the main page that you will find after your profile creation and the page where you will start from henceforth.
+
+It contains an small introduction, a button to download the latest version and a counter of your projects.
+
+Click on *Download latest version* to start creating projects.
+
+== Topbar
+
+In the bar at the bottom of the page, there is a selector where you can use the devonfw-ide that you want to use as base for your projects.
+
+== Sidebar
+
+The sidebar contains links to access to different sections of the dashboard. There's also a button to update the components inside an specific devonfw-ide version.
