@@ -3,16 +3,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
-import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
-import MenuList from './menu-list';
 
 export default function ProjectDetail(props: {
   project: ProjectDetails;
-  handleClose: () => void;
-  openProjectInIde: () => void;
-  openProjectDirectory: () => void;
-  deleteProject: () => void;
-  state: ProjectMenuType;
   handleClick: (
     event: React.MouseEvent<HTMLDivElement>,
     project: ProjectDetails
@@ -36,13 +29,6 @@ export default function ProjectDetail(props: {
             style={{ color: '#4CBDEC' }}
           >{`Last Updated ${props.project.date}`}</div>
         </Typography>
-        <MenuList
-          state={props.state}
-          handleClose={props.handleClose}
-          openProjectInIde={props.openProjectInIde}
-          openProjectDirectory={props.openProjectDirectory}
-          deleteProject={props.deleteProject}
-        />
       </CardContent>
     </div>
   );

@@ -20,6 +20,7 @@ import Renderer from '../../modules/shared/services/renderer/renderer.service';
 import { ProcessState } from '../../models/dashboard/ProcessState';
 import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
+import MenuList from './menu-list';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
@@ -73,8 +74,18 @@ export default function DashboardProjects(props: {
     });
   };
 
-  const ideHandler = (_: IpcRendererEvent, data: ProcessState) => {
+  const ideHandler = (
+    _: IpcRendererEvent,
+    data: { data: ProcessState; message: string }
+  ) => {
     setOpen(false);
+    if (data.message !== 'success') {
+      setAlertMessage({
+        alertSeverity: 'error',
+        message: data.message,
+        operation: true,
+      });
+    }
   };
 
   const deleteHandler = (_: IpcRendererEvent, data: ProjectDeleteUpdates) => {
@@ -100,9 +111,12 @@ export default function DashboardProjects(props: {
     setState(initialState);
   };
 
-  const openProjectInIde = () => {
+  const openProjectInIde = (ide: string) => {
     setOpen(true);
-    global.ipcRenderer.send('open:projectInIde', state.project);
+    global.ipcRenderer.send('open:projectInIde', {
+      project: state.project,
+      ide: ide,
+    });
     setState(initialState);
   };
 
@@ -152,20 +166,20 @@ export default function DashboardProjects(props: {
                 className={classes.ProjectGrid}
               >
                 <Card>
-                  <ProjectDetail
-                    project={project}
-                    handleClose={handleClose}
-                    openProjectInIde={openProjectInIde}
-                    openProjectDirectory={openProjectDirectory}
-                    deleteProject={deleteProject}
-                    state={state}
-                    handleClick={handleClick}
-                  />
+                  <ProjectDetail project={project} handleClick={handleClick} />
                 </Card>
               </Grid>
             );
           })
         : null}
+      <MenuList
+        project={state.project}
+        state={state}
+        handleClose={handleClose}
+        openProjectInIde={openProjectInIde}
+        openProjectDirectory={openProjectDirectory}
+        deleteProject={deleteProject}
+      />
       <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>

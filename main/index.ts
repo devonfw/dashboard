@@ -21,6 +21,8 @@ import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
+import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
+import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -228,6 +230,12 @@ const projectListener = new ProjectCreationListener(
 );
 projectListener.listen();
 
+// Deleting a project process
+new ProjectDeleteListener(new DevonInstancesService()).listen();
+
+// Open a project in IDE process
+new OpenProjectIDEListener(new DevonInstancesService()).listen();
+
 /* Installation powershell */
 const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   const cwd = eventArgs[1];
@@ -261,40 +269,6 @@ const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
 
   terminal.stdin.write('npm install' + '\n');
   terminal.stdin.end();
-};
-
-const openProjectInIde = (project: ProjectDetails) => {
-  if (project.domain !== 'java') {
-    new DevonInstancesService()
-      .openIdeExecutionCommandForVscode(project)
-      .then((data: ProcessState) => {
-        mainWindow.webContents.send('open:projectInIde', data);
-      });
-  } else {
-    new DevonInstancesService()
-      .openIdeExecutionCommand(project)
-      .then((data: ProcessState) => {
-        mainWindow.webContents.send('open:projectInIde', data);
-      });
-  }
-};
-
-const deleteProject = (project: ProjectDetails) => {
-  new DevonInstancesService()
-    .deleteProject(project)
-    .then((projects) => {
-      mainWindow.webContents.send('delete:project', {
-        projects: projects,
-        message: 'success',
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-      mainWindow.webContents.send('delete:project', {
-        projects: [],
-        message: 'error',
-      });
-    });
 };
 
 const openProjectDirectory = (path: string) => {
@@ -331,12 +305,6 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
-ipcMain.on('open:projectInIde', (e, option) => {
-  openProjectInIde(option);
-});
-ipcMain.on('delete:project', (e, option) => {
-  deleteProject(option);
-});
 ipcMain.on('open:projectDirectory', (e, path) => {
   openProjectDirectory(path);
 });

@@ -249,20 +249,24 @@ export class DevonInstancesService implements SaveDetails {
   }
 
   async openIdeExecutionCommandForVscode(
-    project: ProjectDetails
+    project: ProjectDetails,
+    ide: string
   ): Promise<ProcessState> {
     try {
-      return await utilExec(this.findCommand(project.domain), {
+      return await utilExec(this.findCommand(ide), {
         cwd: project.path,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
-  openIdeExecutionCommand(project: ProjectDetails): Promise<ProcessState> {
+  openIdeExecutionCommand(
+    project: ProjectDetails,
+    ide: string
+  ): Promise<ProcessState> {
     return new Promise<ProcessState>((resolve, reject) => {
-      const terminal = exec(this.findCommand(project.domain), {
+      const terminal = exec(this.findCommand(ide), {
         cwd: project.path,
       });
 
@@ -286,12 +290,11 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  findCommand(domain: string): string {
-    switch (domain) {
-      case 'java':
+  findCommand(ide: string): string {
+    switch (ide) {
+      case 'eclipse':
         return 'devon eclipse';
-      case 'angular':
-      case 'node':
+      case 'vscode':
         return 'devon vscode';
     }
   }

@@ -1,14 +1,34 @@
+import { useState } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Divider from '@material-ui/core/Divider';
 import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
+import { menuStyles } from './menu-list.styles';
+import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
 
 export default function MenuList(props: {
   state: ProjectMenuType;
   handleClose: () => void;
-  openProjectInIde: () => void;
+  openProjectInIde: (ide: string) => void;
   openProjectDirectory: () => void;
   deleteProject: () => void;
+  project: ProjectDetails;
 }): JSX.Element {
+  const classes = menuStyles();
+  const [open, setOpen] = useState<boolean>(false);
+  const openIdeExpandHandler = () => {
+    setOpen(!open);
+  };
+  const handleCloseMenu = () => {
+    props.handleClose();
+    setOpen(false);
+  };
   return (
     <Menu
       keepMounted
@@ -19,13 +39,53 @@ export default function MenuList(props: {
           ? { top: props.state.mouseY, left: props.state.mouseX }
           : undefined
       }
+      PaperProps={{
+        style: {
+          width: 200,
+        },
+      }}
       MenuListProps={{
-        onMouseLeave: props.handleClose,
+        onMouseLeave: handleCloseMenu,
       }}
     >
-      <MenuItem onClick={props.openProjectInIde}>Show in IDE</MenuItem>
-      <MenuItem onClick={props.openProjectDirectory}>Enclosing Folder</MenuItem>
-      <MenuItem onClick={props.deleteProject}>Delete</MenuItem>
+      <MenuItem className={classes.menuItemRoot}>
+        <List className={classes.list}>
+          <ListItem onClick={openIdeExpandHandler} className={classes.listItem}>
+            <ListItemText primary="Open" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List className={classes.sublist}>
+              <ListItem button>
+                <div onClick={() => props.openProjectInIde('vscode')}>
+                  In Visual Studio Code
+                </div>
+              </ListItem>
+              {props.project &&
+              props.project.domain !== '' &&
+              props.project.domain !== 'angular' &&
+              props.project.domain !== 'node' ? (
+                <>
+                  <Divider />
+                  <ListItem button>
+                    <div onClick={() => props.openProjectInIde('eclipse')}>
+                      In Eclipse
+                    </div>
+                  </ListItem>
+                </>
+              ) : null}
+            </List>
+          </Collapse>
+        </List>
+      </MenuItem>
+      <Divider />
+      <MenuItem className={classes.item} onClick={props.openProjectDirectory}>
+        Enclosing Folder
+      </MenuItem>
+      <Divider />
+      <MenuItem className={classes.item} onClick={props.deleteProject}>
+        Delete
+      </MenuItem>
     </Menu>
   );
 }
