@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { IpcRendererEvent } from 'electron';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
+import { useState, useEffect } from 'react';
+import { IpcRendererEvent } from 'electron';
 import { useProfilePictureStyles } from './profile-picture.styles';
 import { ProfileData } from '../../../../models/dashboard/profile-data';
 
 export default function ProfilePicture(): JSX.Element {
-  const classes: { [key: string]: string } = useProfilePictureStyles();
+  const classes = useProfilePictureStyles();
 
   const [data, setData] = useState<ProfileData>({
     name: 'Unknown User',

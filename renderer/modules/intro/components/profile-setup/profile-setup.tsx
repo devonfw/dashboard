@@ -1,18 +1,23 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useRouter } from 'next/router';
 import { IpcRendererEvent } from 'electron';
-import router from 'next/router';
-import Button from '@material-ui/core/Button';
-
-import useStyles from './profile-setup.style';
 import { ProfileData } from '../../../../models/dashboard/profile-data';
+import { useState, useEffect, ChangeEvent } from 'react';
 
+import Button from '@material-ui/core/Button';
+import useStyles from './profile-setup.style';
 import FormControlName from './form-control-name/form-control-name';
+import FormControlRole from './form-control-role/form-control-role';
 import FormControlImage from './form-control-image/form-control-image';
 import FormControlGender from './form-control-gender/form-control-gender';
-import FormControlRole from './form-control-role/form-control-role';
 
-export default function ProfileSetup(): JSX.Element {
+interface ProfileSetupProps {
+  accept?: string;
+  cancel?: string;
+}
+
+export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   const classes = useStyles();
+  const router = useRouter();
   const [data, setData] = useState<ProfileData>({
     name: '',
     image: '',
@@ -72,16 +77,8 @@ export default function ProfileSetup(): JSX.Element {
     );
   };
 
-  const createProfile = (create: boolean) => {
-    const profileData: ProfileData = create
-      ? { ...data }
-      : {
-          name: '',
-          image: '',
-          gender: '',
-          role: '',
-        };
-    global.ipcRenderer.send('set:profile', JSON.stringify(profileData));
+  const createProfile = () => {
+    global.ipcRenderer.send('set:profile', JSON.stringify(data));
   };
 
   return (
@@ -106,12 +103,12 @@ export default function ProfileSetup(): JSX.Element {
           variant="contained"
           color="primary"
           disabled={checkFormValidity()}
-          onClick={() => createProfile(true)}
+          onClick={createProfile}
         >
-          Create My Profile
+          {props.accept ? props.accept : 'Create My Profile'}
         </Button>
-        <Button variant="outlined" onClick={() => createProfile(false)}>
-          Will Do It Later
+        <Button variant="outlined" onClick={() => router.push('/home')}>
+          {props.cancel ? props.cancel : 'Will Do It Later'}
         </Button>
       </form>
     </div>

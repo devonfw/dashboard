@@ -1,8 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import { ComposedStyles } from '../../../modules/shared/types/types';
 
-type Style = { [key: string]: string | Style };
-
-const reversedColors: Style = {
+const reversedColors: ComposedStyles = {
   backgroundColor: '#0075B3',
   '& .MuiTypography-colorTextSecondary': {
     color: '#FFFFFF',

@@ -7,7 +7,7 @@ module.exports = {
       '/start': { page: '/start' },
       '/home': { page: '/home' },
       '/ides': { page: '/ides' },
-      '/installations': { page: '/installations' },
+      '/settings/installed-versions': { page: '/settings/installed-versions' },
       '/projects': { page: '/projects' },
       '/repositories': { page: '/repositories' },
       '/wiki': { page: '/wiki' },

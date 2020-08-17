@@ -55,13 +55,13 @@ export const drawerLinks: DrawerLink[] = [
       {
         id: 7,
         section: 'Account settings',
-        sectionPath: '/settings/installations',
+        sectionPath: '/settings/account',
         icon: <AccountBoxIcon />,
       },
       {
         id: 8,
         section: 'Installed versions',
-        sectionPath: '/settings/installations',
+        sectionPath: '/settings/installed-versions',
         icon: <BuildOutlinedIcon />,
       },
     ],
