@@ -11,8 +11,6 @@ import prepareNext from 'electron-next';
 
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
-import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
-import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
@@ -306,21 +304,6 @@ terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 ipcMain.on('powershell/installation/packages', installEventHandler);
-
-/* command retriever service */
-const commandRetrieverService = new CommandRetrieverService();
-commandRetrieverService.getCommandsByIdeConfig(
-  devonfwConfig.distributions[0].ideConfig
-);
-commandRetrieverService.getWorkspacesByIdeConfig(
-  devonfwConfig.distributions[0].ideConfig
-);
-commandRetrieverService.getAllDistributions(devonfwConfig);
-commandRetrieverService.addNewDistribution(
-  devonfwConfig,
-  'C:\\Proyectos\\devonfw-ide\\',
-  '3.3.0'
-);
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
