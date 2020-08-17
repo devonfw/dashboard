@@ -1,5 +1,6 @@
 import { ProfileSetupService } from '../../services/profile-setup/profile-setup.service';
 import { BrowserWindow } from 'electron';
+import { UserProfile } from '../shared/models/user-profile';
 
 // Get base64 image when user selects profile picture
 export function getBase64Img(src: string, mainWindow: BrowserWindow): void {
@@ -8,18 +9,18 @@ export function getBase64Img(src: string, mainWindow: BrowserWindow): void {
     .then((outputImg) => {
       mainWindow.webContents.send('get:base64Img', outputImg);
     })
-    .catch((error) => {
+    .catch(() => {
       mainWindow.webContents.send('get:base64Img', '');
     });
 }
 
 // Create or update Dashboard user profile
 export function setDashboardProfile(
-  data: string,
+  profile: UserProfile,
   mainWindow: BrowserWindow
 ): void {
   new ProfileSetupService()
-    .setProfile(data)
+    .setProfile(profile)
     .then((status) => {
       mainWindow.webContents.send('get:profileCreationStatus', status);
     })
@@ -35,19 +36,14 @@ export function checkProfileStatus(mainWindow: BrowserWindow): void {
     .then((exists) => {
       mainWindow.webContents.send('get:profileStatus', exists);
     })
-    .catch((error) => {
+    .catch(() => {
       mainWindow.webContents.send('get:profileStatus', false);
     });
 }
 
 // Check if dashboard profile file exists
 export function getDashboardProfile(mainWindow: BrowserWindow): void {
-  new ProfileSetupService()
-    .getProfile()
-    .then((data) => {
-      mainWindow.webContents.send('get:profile', data);
-    })
-    .catch((error) => {
-      mainWindow.webContents.send('get:profile', {});
-    });
+  new ProfileSetupService().getProfile().then((data) => {
+    mainWindow.webContents.send('get:profile', data);
+  });
 }

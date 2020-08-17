@@ -26,6 +26,7 @@ import {
 } from './modules/profile-setup/handle-profile-setup';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
+import { UserProfile } from './modules/shared/models/user-profile';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -72,7 +73,13 @@ app.on('ready', async () => {
 });
 
 // Quit the app once all windows are closed
-app.on('window-all-closed', app.quit);
+app.on('window-all-closed', async () => {
+  const profileExists = await new ProfileSetupService().checkProfile();
+  if (!profileExists) {
+    await new ProfileSetupService().createDefaultProfile();
+  }
+  app.quit();
+});
 
 /* Manage all downloads */
 const downloadHandler = (_, item) => {
@@ -317,6 +324,8 @@ ipcMain.on('open:projectInIde', (e, option) => {
   openProjectInIde(option);
 });
 ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
-ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg, mainWindow));
+ipcMain.on('set:profile', (e, profile: UserProfile) =>
+  setDashboardProfile(profile, mainWindow)
+);
 ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
 ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));

@@ -1,6 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import platform from 'os';
+import { UserProfile } from '../../modules/shared/models/user-profile';
+
+const defaultUser: UserProfile = {
+  name: 'Unknown User',
+  image: '/assets/user.png',
+  gender: 'male',
+  role: 'Undefined Role',
+};
 
 export class ProfileSetupService {
   private profileFilePath = path.resolve(
@@ -8,6 +16,10 @@ export class ProfileSetupService {
     '.devon',
     'dashboard-profile.json'
   );
+
+  createDefaultProfile(): Promise<string> {
+    return this.setProfile(defaultUser);
+  }
 
   getBase64Img(src: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -32,20 +44,22 @@ export class ProfileSetupService {
     });
   }
 
-  setProfile(profileData: string): Promise<string> {
+  setProfile(profileData: UserProfile): Promise<string> {
+    const profile = JSON.stringify(profileData);
+
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.profileFilePath, profileData, (err) => {
+      fs.writeFile(this.profileFilePath, profile, (err) => {
         if (err) reject('error: ' + err);
         resolve('success');
       });
     });
   }
 
-  getProfile(): Promise<unknown> {
-    return new Promise((resolve, reject) => {
+  getProfile(): Promise<UserProfile> {
+    return new Promise((resolve) => {
       fs.readFile(this.profileFilePath, (err, data) => {
-        if (err) reject(err);
-        const profileData = JSON.parse(data.toString());
+        if (err) resolve(defaultUser);
+        const profileData = data ? JSON.parse(data.toString()) : defaultUser;
         resolve(profileData);
       });
     });

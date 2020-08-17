@@ -10,7 +10,7 @@ import { ProfileData } from '../../../../models/dashboard/profile-data';
 export default function ProfilePicture(): JSX.Element {
   const classes = useProfilePictureStyles();
 
-  const [data, setData] = useState<ProfileData>({
+  const [profile, setProfile] = useState<ProfileData>({
     name: 'Unknown User',
     image: '/assets/user.png',
     gender: 'male',
@@ -22,9 +22,7 @@ export default function ProfilePicture(): JSX.Element {
 
     global.ipcRenderer.on(
       'get:profile',
-      (_: IpcRendererEvent, data: ProfileData) => {
-        if (data.name !== '') setData(data);
-      }
+      (_: IpcRendererEvent, profile: ProfileData) => setProfile(profile)
     );
     return () => {
       global.ipcRenderer.removeAllListeners('get:profile');
@@ -36,7 +34,7 @@ export default function ProfilePicture(): JSX.Element {
       <Card className={classes.customDrawerRoot}>
         <CardMedia
           className={classes.customDrawerCover}
-          image={data.image}
+          image={profile.image}
           title="User"
         />
         <div>
@@ -44,9 +42,9 @@ export default function ProfilePicture(): JSX.Element {
             <Typography component="h6" variant="h6">
               <div className={classes.user}>
                 <span style={{ fontWeight: 'bold', color: '#0075B3' }}>
-                  {data.name}
+                  {profile.name}
                 </span>
-                <span className={classes.role}>{data.role}</span>
+                <span className={classes.role}>{profile.role}</span>
               </div>
             </Typography>
           </CardContent>
