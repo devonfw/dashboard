@@ -10,6 +10,7 @@ import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
@@ -173,38 +174,42 @@ const NgData = (): JSX.Element => {
   const step = (
     <div>
       <form className={classes.root} noValidate autoComplete="off">
-        <div
-          className={`project ${
-            data.name.error && data.name.touched ? classes.invalid : ''
-          }`}
-        >
-          <FormControl>
-            <TextField
-              id="component-simple"
-              value={data.name.value}
-              label="Project name *"
-              type="search"
-              variant="outlined"
-              onChange={handleChange}
-              onBlur={handleblur}
-            />
-          </FormControl>
-          {data.name.error && data.name.touched ? (
-            <div className={classes.error}>{data.name.error}</div>
-          ) : null}
-        </div>
-        <div className="formControl">
-          <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
-        </div>
-        <div className="formControl">
-          <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
-        </div>
-        <div className="formControl">
-          <NgDataDevonInstances
-            onSelected={handleDevonInstancesSelection}
-            devonWorkspace={setDevonWorkspace}
-          ></NgDataDevonInstances>
-        </div>
+        <Grid container spacing={4}>
+          <Grid
+            item
+            xs={12}
+            className={
+              data.name.error && data.name.touched ? classes.invalid : ''
+            }
+          >
+            <FormControl>
+              <TextField
+                id="component-simple"
+                value={data.name.value}
+                label="Project name *"
+                type="search"
+                variant="outlined"
+                onChange={handleChange}
+                onBlur={handleblur}
+              />
+            </FormControl>
+            {data.name.error && data.name.touched ? (
+              <div className={classes.error}>{data.name.error}</div>
+            ) : null}
+          </Grid>
+          <Grid item xs={12}>
+            <NgDataRouting onSelected={handleRouterSelection}></NgDataRouting>
+          </Grid>
+          <Grid item xs={12}>
+            <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
+          </Grid>
+          <Grid item xs={12}>
+            <NgDataDevonInstances
+              onSelected={handleDevonInstancesSelection}
+              devonWorkspace={setDevonWorkspace}
+            ></NgDataDevonInstances>
+          </Grid>
+        </Grid>
       </form>
       <div className={classes.action}>
         <Link href="/start">

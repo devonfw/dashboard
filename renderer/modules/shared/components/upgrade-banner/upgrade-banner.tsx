@@ -3,7 +3,7 @@ import Info from '@material-ui/icons/Info';
 import Button from '@material-ui/core/Button';
 
 export default function UpgradeBanner(): JSX.Element {
-  const classes: { [key: string]: string } = useUpgradeBannerStyles();
+  const classes = useUpgradeBannerStyles();
   return (
     <div className={classes.upgrade}>
       <div>

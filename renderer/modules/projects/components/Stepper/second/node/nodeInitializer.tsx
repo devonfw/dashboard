@@ -1,7 +1,8 @@
 import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
   INodeInitializerForm,
@@ -119,38 +120,38 @@ class NodeInitializer extends Component<NodeStyle> {
     }
     const form = (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
-        {formElementsArray.map((formElement) => {
-          return formElement.id !== 'devonInstances' ? (
-            <div className="formControl" key={formElement.id}>
-              <Input
-                elementType={formElement.config.elementType}
-                elementConfig={formElement.config.elementConfig}
-                value={formElement.config.value}
-                invalid={!formElement.config.valid}
-                shouldValidate={formElement.config.validation}
-                touched={formElement.config.touched}
-                disabled={formElement.config.disabled}
-                changed={(event: ChangeEvent<HTMLInputElement>) =>
-                  this.eventHandler(formElement.id, event.target.value)
-                }
-              />
-              {formElement.config.error ? (
-                <div className={classes.error}>{formElement.config.error}</div>
-              ) : null}
-            </div>
-          ) : (
-            <div
-              key={formElement.id}
-              className="formControl"
-              style={{ marginLeft: '8px' }}
-            >
-              <NgDataDevonInstances
-                onSelected={this.handleDevonInstancesSelection}
-                devonWorkspace={this.setDevonWorkspace}
-              ></NgDataDevonInstances>
-            </div>
-          );
-        })}
+        <Grid container spacing={4}>
+          {formElementsArray.map((formElement) => {
+            return formElement.id !== 'devonInstances' ? (
+              <Grid item xs={12} key={formElement.id}>
+                <Input
+                  elementType={formElement.config.elementType}
+                  elementConfig={formElement.config.elementConfig}
+                  value={formElement.config.value}
+                  invalid={!formElement.config.valid}
+                  shouldValidate={formElement.config.validation}
+                  touched={formElement.config.touched}
+                  disabled={formElement.config.disabled}
+                  changed={(event: ChangeEvent<HTMLInputElement>) =>
+                    this.eventHandler(formElement.id, event.target.value)
+                  }
+                />
+                {formElement.config.error ? (
+                  <div className={classes.error}>
+                    {formElement.config.error}
+                  </div>
+                ) : null}
+              </Grid>
+            ) : (
+              <Grid item xs={12} key={formElement.id}>
+                <NgDataDevonInstances
+                  onSelected={this.handleDevonInstancesSelection}
+                  devonWorkspace={this.setDevonWorkspace}
+                ></NgDataDevonInstances>
+              </Grid>
+            );
+          })}
+        </Grid>
         <div className={classes.action}>
           <Link href="/start">
             <div>

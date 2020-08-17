@@ -17,7 +17,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
     <div>
       <div className={props.classes.toolbar} />
       <ProfilePicture></ProfilePicture>
-      <List>
+      <List component="nav">
         {drawerLinks.map((link: DrawerLink) => {
           return (
             <SectionLink
@@ -26,6 +26,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
               sectionPath={link.sectionPath}
               isActive={router.pathname == link.sectionPath}
               icon={link.icon}
+              submenu={link.submenu}
             ></SectionLink>
           );
         })}

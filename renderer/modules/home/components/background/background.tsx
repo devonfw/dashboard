@@ -5,7 +5,7 @@ interface BackgroundProps {
 }
 
 export default function Background(props: BackgroundProps): JSX.Element {
-  const classes: { [key: string]: string } = useBackgroundStyles();
+  const classes = useBackgroundStyles();
 
   return (
     <div className={classes.root}>

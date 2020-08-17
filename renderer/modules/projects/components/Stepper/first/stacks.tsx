@@ -1,9 +1,17 @@
-type Technologies = 'angular' | 'java' | 'node';
+import NgData from '../second/angular/NgData';
+import JavaInitializer from '../second/java/javaInitializer';
+import NodeInitializer from '../second/node/nodeInitializer';
+
+export type Technologies = 'angular' | 'java' | 'node';
 
 export const stackKeys: Technologies[] = ['angular', 'java', 'node'];
 
 type StackMap = {
   [stackKey in Technologies]: Stack;
+};
+
+type StackJSXMap = {
+  [stackKey in Technologies]: JSX.Element;
 };
 
 export interface Stack {
@@ -32,4 +40,10 @@ export const stacksMap: StackMap = {
     text: 'DEVON NODE',
     command: 'node',
   },
+};
+
+export const stacksJSXMap: StackJSXMap = {
+  angular: <NgData></NgData>,
+  java: <JavaInitializer></JavaInitializer>,
+  node: <NodeInitializer></NodeInitializer>,
 };

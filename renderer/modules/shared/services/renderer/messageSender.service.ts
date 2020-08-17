@@ -22,8 +22,15 @@ export default class MessageSenderService extends Renderer {
     super();
   }
 
-  async sendOpenDialog(): Promise<DialogStatus> {
-    const message = await super.send<DialogStatus>('terminal/open-dialog');
+  async sendOpenDialog(
+    dialogType: string[],
+    dialogFilters: { name: string; extensions: string[] }[]
+  ): Promise<DialogStatus> {
+    const message = await super.send<DialogStatus>(
+      'terminal/open-dialog',
+      dialogType,
+      dialogFilters
+    );
     return message;
   }
 

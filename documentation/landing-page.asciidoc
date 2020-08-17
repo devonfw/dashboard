@@ -1,0 +1,35 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+:listing-caption: Listing
+
+= Landing page
+
+This is the entry point of the devonfw dashboard. Click on *get started* to start using it.
+
+== Your devonfw distributions
+
+The first time you open the application you will get a dialog with all the devonfw distributions found installed in your machine. Click on *got it* to continue.
+
+== Profile form
+
+Here there is a screen that allows users to create a profile. This is useful if you want to have multiple dashboards with different roles, names, ...
+
+Fill the data and click on *Create my profile* if you want to create the profile at the moment or *Will do it later* to skip the creation.
+
+
+
+
+

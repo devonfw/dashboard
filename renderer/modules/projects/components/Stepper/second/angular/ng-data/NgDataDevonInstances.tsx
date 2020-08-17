@@ -1,21 +1,8 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import { IpcRendererEvent } from 'electron';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    selectEmpty: {
-      marginTop: theme.spacing(2),
-    },
-  })
-);
 
 interface Props {
   onSelected: (option: string) => void;
@@ -29,7 +16,6 @@ interface InstancePath {
 }
 
 const NgDataDevonInstances = (props: Props): JSX.Element => {
-  const classes = useStyles();
   const [devonInstances, setDevonInstances] = useState({ value: '' });
   const [allDevonInstances, setAllDevonInstances] = useState<string[]>([]);
   useEffect(() => {
@@ -75,7 +61,7 @@ const NgDataDevonInstances = (props: Props): JSX.Element => {
 
   const step = (
     <>
-      <FormControl className={classes.formControl}>
+      <FormControl>
         <TextField
           id="select-instance-label"
           select

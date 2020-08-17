@@ -1,0 +1,25 @@
+= devonfw dashboard
+
+== Landing page
+
+include::landing-page[leveloffset=2]
+
+== Home
+
+include::home-page[leveloffset=2]
+
+== Projects
+
+include::projects-page[leveloffset=2]
+
+== Repositories
+
+include::repositories-page[leveloffset=2]
+
+== Wiki
+
+include::wiki-page[leveloffset=2]
+
+== Settings
+
+include::settings-page[leveloffset=2]

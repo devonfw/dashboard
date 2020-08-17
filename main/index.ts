@@ -11,14 +11,19 @@ import prepareNext from 'electron-next';
 
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
-import { CommandRetrieverService } from './services/command-retriever/command-retriever.service';
-import { devonfwConfig } from './devonfw.config';
 import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
+import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
 import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
+import {
+  getBase64Img,
+  setDashboardProfile,
+  checkProfileStatus,
+  getDashboardProfile,
+} from './modules/profile-setup/handle-profile-setup';
 import { ProcessState, ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
@@ -41,15 +46,29 @@ app.on('ready', async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  const url = isDev
-    ? 'http://localhost:8000/start'
-    : format({
-        pathname: join(__dirname, '../../renderer/start.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
+  try {
+    const profileExists = await new ProfileSetupService().checkProfile();
+    const startPage = profileExists ? 'home' : 'intro';
+    const url = isDev
+      ? 'http://localhost:8000/' + startPage
+      : format({
+          pathname: join(__dirname, '../../renderer/' + startPage + '.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
 
-  mainWindow.loadURL(url);
+    mainWindow.loadURL(url);
+  } catch (error) {
+    const url = isDev
+      ? 'http://localhost:8000/intro'
+      : format({
+          pathname: join(__dirname, '../../renderer/intro.html'),
+          protocol: 'file:',
+          slashes: true,
+        });
+
+    mainWindow.loadURL(url);
+  }
 
   mainWindow.webContents.session.on('will-download', downloadHandler);
 });
@@ -277,25 +296,10 @@ const openProjectDirectory = (path: string) => {
 
 /* terminal service */
 const terminalService = new TerminalService();
-terminalService.openDialog();
+terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
 ipcMain.on('terminal/powershell', eventHandler);
 ipcMain.on('powershell/installation/packages', installEventHandler);
-
-/* command retriever service */
-const commandRetrieverService = new CommandRetrieverService();
-commandRetrieverService.getCommandsByIdeConfig(
-  devonfwConfig.distributions[0].ideConfig
-);
-commandRetrieverService.getWorkspacesByIdeConfig(
-  devonfwConfig.distributions[0].ideConfig
-);
-commandRetrieverService.getAllDistributions(devonfwConfig);
-commandRetrieverService.addNewDistribution(
-  devonfwConfig,
-  'C:\\Proyectos\\devonfw-ide\\',
-  '3.3.0'
-);
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
@@ -308,3 +312,7 @@ ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.on('open:projectDirectory', (e, path) => {
   openProjectDirectory(path);
 });
+ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
+ipcMain.on('set:profile', (e, arg) => setDashboardProfile(arg, mainWindow));
+ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
+ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));
