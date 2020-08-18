@@ -31,3 +31,8 @@ export interface ProjectDetails {
   date: string;
   path: string;
 }
+
+export interface ProjectDeleteUpdates {
+  projects: ProjectDetails[];
+  message: string;
+}

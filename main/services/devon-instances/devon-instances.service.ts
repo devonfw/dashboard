@@ -17,6 +17,9 @@ import { SaveDetails } from './save-details';
 import { exec } from 'child_process';
 
 const utilExec = util.promisify(child.exec);
+const utilReaddir = util.promisify(fs.readdir);
+const rmdir = util.promisify(fs.rmdir);
+const unlink = util.promisify(fs.unlink);
 
 export class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
@@ -194,10 +197,12 @@ export class DevonInstancesService implements SaveDetails {
     this.getData(data, (data: ProjectDetails) => {
       this.readFile()
         .then((details: ProjectDetails[]) => {
-          if (details.length) {
+          if (details && details.length) {
             const projectDetails = details.splice(0);
             projectDetails.push(data);
             this.writeFile(projectDetails);
+          } else if (details && details.length === 0) {
+            this.writeFile([data]);
           }
         })
         .catch((error) => {
@@ -226,17 +231,42 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  async openIdeExecutionCommandForVscode(
-    project: ProjectDetails
-  ): Promise<ProcessState> {
-    return await utilExec(this.findCommand(project.domain), {
-      cwd: project.path,
+  async deleteProjectFolder(projectPath: string) {
+    const entries = await utilReaddir(projectPath, { withFileTypes: true });
+    const results = await Promise.all(
+      entries.map((entry) => {
+        const fullPath = path.join(projectPath, entry.name);
+        const task = entry.isDirectory()
+          ? this.deleteProjectFolder(fullPath)
+          : unlink(fullPath);
+        return task.catch((error) => ({ error }));
+      })
+    );
+    results.forEach((result) => {
+      if (result && result.error.code !== 'ENOENT') throw result.error;
     });
+    await rmdir(projectPath);
   }
 
-  openIdeExecutionCommand(project: ProjectDetails): Promise<ProcessState> {
+  async openIdeExecutionCommandForVscode(
+    project: ProjectDetails,
+    ide: string
+  ): Promise<ProcessState> {
+    try {
+      return await utilExec(this.findCommand(ide), {
+        cwd: project.path,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  openIdeExecutionCommand(
+    project: ProjectDetails,
+    ide: string
+  ): Promise<ProcessState> {
     return new Promise<ProcessState>((resolve, reject) => {
-      const terminal = exec(this.findCommand(project.domain), {
+      const terminal = exec(this.findCommand(ide), {
         cwd: project.path,
       });
 
@@ -260,13 +290,31 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  findCommand(domain: string): string {
-    switch (domain) {
-      case 'java':
+  findCommand(ide: string): string {
+    switch (ide) {
+      case 'eclipse':
         return 'devon eclipse';
-      case 'angular':
-      case 'node':
+      case 'vscode':
         return 'devon vscode';
     }
+  }
+
+  deleteProject(projectDetail: ProjectDetails): Promise<ProjectDetails[]> {
+    return new Promise<ProjectDetails[]>((resolve, reject) => {
+      this.deleteProjectFolder(projectDetail.path)
+        .then(async () => {
+          const projects = await this.readFile();
+          const updatedProjects = projects.filter(
+            (project) => project.name !== projectDetail.name
+          );
+          this.writeFile(updatedProjects);
+          return updatedProjects.length
+            ? resolve(updatedProjects)
+            : resolve([]);
+        })
+        .catch(() => {
+          reject([]);
+        });
+    });
   }
 }

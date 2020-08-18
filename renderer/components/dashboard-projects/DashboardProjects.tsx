@@ -5,53 +5,60 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
-import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
+import {
+  ProjectDetails,
+  ProjectDeleteUpdates,
+} from '../../modules/projects/redux/stepper/data.model';
+import Alerts from '../../modules/shared/components/alerts/alerts';
+import { AlertType } from '../../models/alert/alert.model';
+import Renderer from '../../modules/shared/services/renderer/renderer.service';
+import { ProcessState } from '../../models/dashboard/ProcessState';
+import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
+import ProjectDetail from './project-detail';
+import MenuList from './menu-list';
 
 export default function DashboardProjects(props: {
   projects: ProjectDetails[];
+  setProject: (project: ProjectDetails[]) => void;
 }): JSX.Element {
+  const renderer = new Renderer();
   const classes = useDashboardProjectsStyles({});
-
   const initialState = {
     mouseX: null,
     mouseY: null,
-    project: {
-      name: '',
-      domain: '',
-      date: '',
-      path: '',
-    },
+    project: { name: '', domain: '', date: '', path: '' },
+  };
+  const initialAlertState = {
+    alertSeverity: '',
+    message: '',
+    operation: false,
   };
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<{
-    mouseX: null | number;
-    mouseY: null | number;
-    project: ProjectDetails;
-  }>(initialState);
+  const [state, setState] = useState<ProjectMenuType>(initialState);
+
+  const closeAlert = () => {
+    setAlertMessage((prevState: AlertType) => {
+      return {
+        ...prevState,
+        operation: false,
+      };
+    });
+  };
+
+  const [alertMessage, setAlertMessage] = useState<AlertType>(
+    initialAlertState
+  );
 
   useEffect(() => {
-    global.ipcRenderer.on(
-      'open:projectInIde',
-      (
-        _: IpcRendererEvent,
-        data: {
-          stdout: string;
-          stderr: string;
-        }
-      ) => {
-        console.log('I am -> ', data);
-        setOpen(false);
-      }
-    );
+    renderer.on('open:projectInIde', ideHandler);
+    renderer.on('delete:project', deleteHandler);
     return () => {
-      global.ipcRenderer.removeAllListeners('open:projectInIde');
+      renderer.removeAll();
     };
   }, []);
 
@@ -67,14 +74,60 @@ export default function DashboardProjects(props: {
     });
   };
 
+  const ideHandler = (
+    _: IpcRendererEvent,
+    data: { data: ProcessState; message: string }
+  ) => {
+    setOpen(false);
+    if (data.message !== 'success') {
+      setAlertMessage({
+        alertSeverity: 'error',
+        message: data.message,
+        operation: true,
+      });
+    }
+  };
+
+  const deleteHandler = (_: IpcRendererEvent, data: ProjectDeleteUpdates) => {
+    setOpen(false);
+    if (data.message === 'success') {
+      props.setProject(data.projects);
+      setAlertMessage({
+        alertSeverity: 'success',
+        message: 'Successfully deleted project',
+        operation: true,
+      });
+    } else {
+      setAlertMessage({
+        alertSeverity: 'error',
+        message:
+          'Failed to delete project due to technical issue / network issue',
+        operation: true,
+      });
+    }
+  };
+
   const handleClose = () => {
     setState(initialState);
   };
 
-  const openProjectInIde = () => {
-    setState(initialState);
+  const openProjectInIde = (ide: string) => {
     setOpen(true);
-    global.ipcRenderer.send('open:projectInIde', state.project);
+    global.ipcRenderer.send('open:projectInIde', {
+      project: state.project,
+      ide: ide,
+    });
+    setState(initialState);
+  };
+
+  const deleteProject = () => {
+    setOpen(true);
+    global.ipcRenderer.send('delete:project', state.project);
+    setState(initialState);
+  };
+
+  const openProjectDirectory = () => {
+    global.ipcRenderer.send('open:projectDirectory', state.project.path);
   };
 
   return (
@@ -113,47 +166,29 @@ export default function DashboardProjects(props: {
                 className={classes.ProjectGrid}
               >
                 <Card>
-                  <div
-                    onContextMenu={(event) => handleClick(event, project)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <CardMedia
-                      className={classes.newProject}
-                      image={`/assets/${project.domain}.png`}
-                      title={project.domain}
-                    />
-                    <CardContent>
-                      <Typography component="h6" variant="h6">
-                        <div style={{ color: '#FFFFFF' }}>{project.name}</div>
-                        <div
-                          style={{ color: '#4CBDEC' }}
-                        >{`Last Updated ${project.date}`}</div>
-                      </Typography>
-                      <Menu
-                        keepMounted
-                        open={state.mouseY !== null}
-                        onClose={handleClose}
-                        anchorReference="anchorPosition"
-                        anchorPosition={
-                          state.mouseY !== null && state.mouseX !== null
-                            ? { top: state.mouseY, left: state.mouseX }
-                            : undefined
-                        }
-                      >
-                        <MenuItem onClick={openProjectInIde}>
-                          Show in terminal
-                        </MenuItem>
-                      </Menu>
-                    </CardContent>
-                  </div>
+                  <ProjectDetail project={project} handleClick={handleClick} />
                 </Card>
               </Grid>
             );
           })
         : null}
+      <MenuList
+        project={state.project}
+        state={state}
+        handleClose={handleClose}
+        openProjectInIde={openProjectInIde}
+        openProjectDirectory={openProjectDirectory}
+        deleteProject={deleteProject}
+      />
       <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
+      <Alerts
+        close={closeAlert}
+        alertSeverity={alertMessage.alertSeverity}
+        message={alertMessage.message}
+        operation={alertMessage.operation}
+      />
     </div>
   );
 }

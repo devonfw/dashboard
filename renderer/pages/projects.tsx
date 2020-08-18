@@ -17,7 +17,6 @@ export default function Projects(): JSX.Element {
       router.push('/start');
       return;
     }
-
     global.ipcRenderer.send('find:projectDetails');
     global.ipcRenderer.on(
       'get:projectDetails',
@@ -32,10 +31,14 @@ export default function Projects(): JSX.Element {
     };
   }, []);
 
+  const setProject = (projects: ProjectDetails[]): void => {
+    setProjects(projects);
+  };
+
   return (
     <Layout>
       <SpaceAround bgColor={'#F4F6F8'}>
-        <DashboardProjects projects={projects} />
+        <DashboardProjects projects={projects} setProject={setProject} />
       </SpaceAround>
     </Layout>
   );

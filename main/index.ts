@@ -24,8 +24,10 @@ import {
   checkProfileStatus,
   getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
-import { ProcessState, ProjectDetails } from './models/project-details.model';
+import { ProjectDetails } from './models/project-details.model';
 import { projectDate } from './modules/shared/utils/project-date';
+import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
+import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
 
 let mainWindow;
@@ -254,6 +256,12 @@ const projectListener = new ProjectCreationListener(
 );
 projectListener.listen();
 
+// Deleting a project process
+new ProjectDeleteListener(new DevonInstancesService()).listen();
+
+// Open a project in IDE process
+new OpenProjectIDEListener(new DevonInstancesService()).listen();
+
 /* Installation powershell */
 const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   const cwd = eventArgs[1];
@@ -289,20 +297,8 @@ const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
   terminal.stdin.end();
 };
 
-const openProjectInIde = (project: ProjectDetails) => {
-  if (project.domain !== 'java') {
-    new DevonInstancesService()
-      .openIdeExecutionCommandForVscode(project)
-      .then((data: ProcessState) => {
-        mainWindow.webContents.send('open:projectInIde', data);
-      });
-  } else {
-    new DevonInstancesService()
-      .openIdeExecutionCommand(project)
-      .then((data: ProcessState) => {
-        mainWindow.webContents.send('open:projectInIde', data);
-      });
-  }
+const openProjectDirectory = (path: string) => {
+  shell.showItemInFolder(path);
 };
 
 /* terminal service */
@@ -320,8 +316,8 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
-ipcMain.on('open:projectInIde', (e, option) => {
-  openProjectInIde(option);
+ipcMain.on('open:projectDirectory', (e, path) => {
+  openProjectDirectory(path);
 });
 ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
 ipcMain.on('set:profile', (e, profile: UserProfile) =>
