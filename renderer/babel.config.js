@@ -1,4 +1,4 @@
-const { devDependencies } = require('../package.json')
+import { devDependencies } from '../package.json';
 
 module.exports = {
   presets: [
@@ -9,12 +9,12 @@ module.exports = {
           targets: {
             electron: devDependencies.electron.replace(/^\^|~/, ''),
           },
-        }
+        },
       },
     ],
   ],
 
   plugins: [
-    ["styled-components", { "ssr": true, "displayName": true, "preprocess": false }]
-  ]
-}
+    ['styled-components', { ssr: true, displayName: true, preprocess: false }],
+  ],
+};
