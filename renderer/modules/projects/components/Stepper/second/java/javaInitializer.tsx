@@ -11,7 +11,6 @@ import {
   FormControls,
 } from '../../../../../../models/dashboard/IJavaInitializer';
 import javaInitializerStyle from './javaInitializerStyle';
-import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
 import javaProjectConfig from './javaInitializerFormConfig';
 import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
@@ -21,8 +20,9 @@ import {
 } from '../../../../../../models/dashboard/FormType';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
+import { WorkspaceService } from '../../../../services/workspace.service';
 
-interface JavaStyle {
+interface JavaInitializerProps {
   classes: {
     root: string;
     error: string;
@@ -30,9 +30,32 @@ interface JavaStyle {
   };
 }
 
-class JavaInitializer extends Component<JavaStyle> {
-  static contextType = StepperContext;
+class JavaInitializer extends Component<JavaInitializerProps> {
   state: IJavaInitializerForm = javaProjectConfig;
+  workspaceService: WorkspaceService;
+
+  constructor(props: JavaInitializerProps) {
+    super(props);
+    this.workspaceService = new WorkspaceService(
+      this.setDevonfwWorkspaces.bind(this)
+    );
+  }
+
+  componentDidMount(): void {
+    this.workspaceService.getProjectsInWorkspace(
+      this.context.state.projectData.path
+    );
+  }
+
+  componentWillUnMount(): void {
+    this.workspaceService.closeListener();
+  }
+
+  setDevonfwWorkspaces(dirs: string): void {
+    this.setState({
+      workspaceDir: dirs,
+    });
+  }
 
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,7 +64,6 @@ class JavaInitializer extends Component<JavaStyle> {
     this.context.dispatch(
       new ProjectDataActionData({
         name: formData.formControls.artifact.value,
-        path: formData.formControls.devonInstances.value,
         specificArgs: this.specificArgs(),
       })
     );
@@ -118,10 +140,6 @@ class JavaInitializer extends Component<JavaStyle> {
     });
   };
 
-  handleDevonInstancesSelection = (option: string) => {
-    this.eventHandler('devonInstances', option);
-  };
-
   eventHandler(identifier: string, value: string): void {
     const formState: FormControls = {
       ...this.state.formControls,
@@ -152,13 +170,6 @@ class JavaInitializer extends Component<JavaStyle> {
           args.event ? args.event.target.value : args.value ? args.value : ''
         );
     }
-  };
-
-  setDevonWorkspace = (dir: string[]): void => {
-    this.resetForm();
-    this.setState({
-      workspaceDir: dir,
-    });
   };
 
   setActiveState = (): void => {
@@ -211,7 +222,7 @@ class JavaInitializer extends Component<JavaStyle> {
         });
       }
     }
-    const form = (
+    return (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         <Grid container spacing={4}>
           {formElementsArray.map((formElement) => {
@@ -238,14 +249,7 @@ class JavaInitializer extends Component<JavaStyle> {
                   </div>
                 ) : null}
               </Grid>
-            ) : (
-              <Grid item xs={12} key={formElement.id}>
-                <NgDataDevonInstances
-                  onSelected={this.handleDevonInstancesSelection}
-                  devonWorkspace={this.setDevonWorkspace}
-                ></NgDataDevonInstances>
-              </Grid>
-            );
+            ) : null;
           })}
           <Grid item xs={12}>
             <FormControlLabel
@@ -281,7 +285,8 @@ class JavaInitializer extends Component<JavaStyle> {
         </div>
       </form>
     );
-    return <div>{form}</div>;
   }
 }
+JavaInitializer.contextType = StepperContext;
+
 export default withStyles(javaInitializerStyle)(JavaInitializer);
