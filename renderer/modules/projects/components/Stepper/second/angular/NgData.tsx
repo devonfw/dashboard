@@ -146,20 +146,6 @@ export default function NgData(): JSX.Element {
     });
   };
 
-  const resetForm = () => {
-    setData((prevState: INgData) => {
-      return {
-        ...prevState,
-        name: {
-          value: '',
-          valid: false,
-          error: '',
-          touched: false,
-        },
-      };
-    });
-  };
-
   const handleblur = () => {
     validateExistingProject({});
   };

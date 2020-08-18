@@ -188,29 +188,6 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     this.setState({ formControls: formState });
   };
 
-  resetForm = (): void => {
-    const formState: FormControls = {
-      ...this.state.formControls,
-    };
-    for (const key in formState) {
-      if (formState[key].elementType === 'search') {
-        const control: FormType = formState[key];
-        control.value = '';
-        if (control.touched) {
-          control.touched = false;
-        }
-        if (control.error) {
-          control.error = '';
-        }
-        if (control.valid) {
-          control.valid = false;
-        }
-        formState[key] = control;
-      }
-    }
-    this.setState({ formControls: formState, formIsValid: false });
-  };
-
   render() {
     const { classes } = this.props;
     const formElementsArray = [];

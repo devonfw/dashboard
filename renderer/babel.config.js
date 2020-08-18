@@ -1,4 +1,5 @@
-import { devDependencies } from '../package.json';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { devDependencies } = require('../package.json');
 
 module.exports = {
   presets: [
