@@ -78,7 +78,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   };
 
   const createProfile = () => {
-    global.ipcRenderer.send('set:profile', JSON.stringify(data));
+    global.ipcRenderer.send('set:profile', data);
   };
 
   return (
