@@ -58,18 +58,17 @@ export default function MenuList(props: MenuListProps): JSX.Element {
           </ListItem>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List className={classes.sublist}>
-              <ListItem button>
-                <div onClick={() => props.openProjectInIde('vscode')}>
-                  In Visual Studio Code
-                </div>
+              <ListItem button onClick={() => props.openProjectInIde('vscode')}>
+                <div>In Visual Studio Code</div>
               </ListItem>
               {!['', 'angular', 'node'].includes(props.project?.domain) ? (
                 <>
                   <Divider />
-                  <ListItem button>
-                    <div onClick={() => props.openProjectInIde('eclipse')}>
-                      In Eclipse
-                    </div>
+                  <ListItem
+                    button
+                    onClick={() => props.openProjectInIde('eclipse')}
+                  >
+                    <div>In Eclipse</div>
                   </ListItem>
                 </>
               ) : null}
