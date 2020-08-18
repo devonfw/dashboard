@@ -4,13 +4,15 @@ import Typography from '@material-ui/core/Typography';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
 
-export default function ProjectDetail(props: {
+interface ProjectDetailProps {
   project: ProjectDetails;
   handleClick: (
     event: React.MouseEvent<HTMLDivElement>,
     project: ProjectDetails
   ) => void;
-}): JSX.Element {
+}
+
+export default function ProjectDetail(props: ProjectDetailProps): JSX.Element {
   const classes = useDashboardProjectsStyles({});
   return (
     <div

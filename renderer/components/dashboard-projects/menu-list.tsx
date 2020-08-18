@@ -12,14 +12,16 @@ import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
 import { menuStyles } from './menu-list.styles';
 import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
 
-export default function MenuList(props: {
+interface MenuListProps {
   state: ProjectMenuType;
   handleClose: () => void;
   openProjectInIde: (ide: string) => void;
   openProjectDirectory: () => void;
   deleteProject: () => void;
   project: ProjectDetails;
-}): JSX.Element {
+}
+
+export default function MenuList(props: MenuListProps): JSX.Element {
   const classes = menuStyles();
   const [open, setOpen] = useState<boolean>(false);
   const openIdeExpandHandler = () => {
@@ -61,10 +63,7 @@ export default function MenuList(props: {
                   In Visual Studio Code
                 </div>
               </ListItem>
-              {props.project &&
-              props.project.domain !== '' &&
-              props.project.domain !== 'angular' &&
-              props.project.domain !== 'node' ? (
+              {!['', 'angular', 'node'].includes(props.project?.domain) ? (
                 <>
                   <Divider />
                   <ListItem button>
