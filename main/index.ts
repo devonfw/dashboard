@@ -25,6 +25,7 @@ import {
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
+import RepositoriesListener from './modules/repositories/repositories-listener';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -192,14 +193,14 @@ function getProjectDetails() {
 
 /* Enable services */
 
-const installEventListener = new InstallListener(new SpawnTerminalFactory());
-installEventListener.listen();
+new InstallListener(new SpawnTerminalFactory()).listen();
 
-const projectListener = new ProjectCreationListener(
+new ProjectCreationListener(
   new SpawnTerminalFactory(),
   new DevonInstancesService()
-);
-projectListener.listen();
+).listen();
+
+new RepositoriesListener().listen();
 
 // Deleting a project process
 new ProjectDeleteListener(new DevonInstancesService()).listen();
