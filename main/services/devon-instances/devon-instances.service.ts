@@ -46,52 +46,29 @@ export class DevonInstancesService implements SaveDetails {
 
   /* Finding out total count of projects available in each DEVON ide instances */
   getCreatedDevonInstancesCount(instances: DevonfwConfig): Promise<number> {
-    const promiseInstances = [];
-    return new Promise<number>((resolve, reject) => {
-      for (const distribution of instances.distributions) {
-        if (distribution.id) {
-          promiseInstances.push(this.getInstances(distribution.id));
-        }
-      }
-      this.countInstance(promiseInstances)
-        .then((count) => resolve(count))
-        .catch((error) => reject(error));
-    });
-  }
-
-  /* Calculating all the projects of available DEVON IDE instances and
-    returning total count of projects
-  */
-  countInstance(intances: Promise<number>[]): Promise<number> {
-    let instanceCount = 0;
-    if (intances.length) {
-      return new Promise<number>((resolve, reject) => {
-        Promise.all(intances)
-          .then((results) => {
-            for (const result of results) {
-              instanceCount = instanceCount + result;
+    let count = 0;
+    return new Promise<number>(async (resolve, reject) => {
+      try {
+        const projectDetails = await this.readFile();
+        if (projectDetails.length) {
+          for (const distribution of instances.distributions) {
+            if (distribution.id) {
+              count =
+                count +
+                projectDetails.filter((data) =>
+                  data.path.includes(distribution.id)
+                ).length;
             }
-            resolve(instanceCount);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      });
-    }
-  }
-
-  /* Get the total count of projects avaiable in each workspace   */
-  getInstances(instancepath: string): Promise<number> {
-    const devonInstances = new Promise<number>((resolve, reject) => {
-      fs.readdir(path.resolve(instancepath, 'workspaces'), (error, files) => {
-        if (error) reject(resolve(0));
-        if (files) {
-          resolve(files.length);
+          }
+          resolve(count);
+        } else {
+          resolve(0);
         }
-      });
+      } catch (error) {
+        console.error(error);
+        reject(error);
+      }
     });
-    return devonInstances;
   }
 
   /* Finding all DEVON instances created by USER */
