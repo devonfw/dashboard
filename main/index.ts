@@ -29,6 +29,7 @@ import { projectDate } from './modules/shared/utils/project-date';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
+import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/devon-ide-projects';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -261,6 +262,8 @@ new ProjectDeleteListener(new DevonInstancesService()).listen();
 
 // Open a project in IDE process
 new OpenProjectIDEListener(new DevonInstancesService()).listen();
+
+new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 
 /* Installation powershell */
 const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
