@@ -12,7 +12,9 @@ interface InstancePath {
   };
 }
 
-export default function DevonfwIdeSelector(): JSX.Element {
+export default function DevonfwIdeSelector(
+  props: React.HTMLAttributes<HTMLDivElement>
+): JSX.Element {
   const [devonIdeInstances, setDevonIdeInstances] = useState<string[]>([]);
   const { state, dispatch } = useContext(StepperContext);
 
@@ -41,25 +43,23 @@ export default function DevonfwIdeSelector(): JSX.Element {
     selectInstance(devonInstancesOpt);
   };
 
-  const step = (
-    <>
-      <FormControl>
-        <WhiteTextField
-          id="select-instance-label"
-          select
-          label="CHOOSE YOUR DEVONFW INSTANCE"
-          value={state.projectData.path}
-          onChange={handleChange}
-          variant="outlined"
-        >
-          {devonIdeInstances.map((path) => (
-            <MenuItem key={path} value={path}>
-              {path}
-            </MenuItem>
-          ))}
-        </WhiteTextField>
-      </FormControl>
-    </>
+  return (
+    <FormControl className={props.className}>
+      <WhiteTextField
+        id="select-instance-label"
+        select
+        label="CHOOSE YOUR DEVONFW INSTANCE"
+        value={state.projectData.path}
+        onChange={handleChange}
+        variant="outlined"
+      >
+        {devonIdeInstances.map((path) => (
+          <MenuItem key={path} value={path}>
+            {path}
+          </MenuItem>
+        ))}
+      </WhiteTextField>
+    </FormControl>
   );
   return step;
 }

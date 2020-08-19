@@ -15,7 +15,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
 
   return (
     <div>
-      <div className={props.classes.toolbar} />
+      <div className={props.classes.topSpace} />
       <ProfilePicture></ProfilePicture>
       <List component="nav">
         {drawerLinks.map((link: DrawerLink) => {
