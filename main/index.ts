@@ -114,6 +114,17 @@ function getDevonIdeScripts() {
     });
 }
 
+function getLatestDevonIdeScript() {
+  new DevonInstancesService()
+    .getLatestDevonIdeScriptsFromMaven()
+    .then((instance) => {
+      mainWindow.webContents.send('get:latestDevonIdeScript', instance);
+    })
+    .catch(() => {
+      mainWindow.webContents.send('get:latestDevonIdeScript', null);
+    });
+}
+
 // Finding out Devonfw Ide Instances
 function countInstance() {
   new DevonInstancesService()
@@ -220,6 +231,7 @@ terminalService.allCommands(null, null);
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
 ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
+ipcMain.on('find:latestDevonIdeScript', getLatestDevonIdeScript);
 ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });

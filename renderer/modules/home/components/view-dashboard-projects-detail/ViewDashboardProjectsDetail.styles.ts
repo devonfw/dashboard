@@ -11,6 +11,7 @@ export const useDashboardDetailsStyles = makeStyles({
     justifyContent: 'space-evenly',
     color: '#0075B3',
     paddingTop: '1em',
+    marginTop: '2em',
   },
   showChartIcon: {
     fontWeight: 'bold',
