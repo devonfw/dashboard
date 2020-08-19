@@ -1,9 +1,9 @@
 import CustomDrawer from './custom-drawer/custom-drawer';
 import Drawer from '@material-ui/core/Drawer';
-import responsiveDrawerStyle from '../drawer.style';
+import useDawerStyles from '../drawer.style';
 
 interface NavigationProps {
-  classes: ReturnType<typeof responsiveDrawerStyle>;
+  classes: ReturnType<typeof useDawerStyles>;
 }
 
 const Navigation = (props: NavigationProps): JSX.Element => {

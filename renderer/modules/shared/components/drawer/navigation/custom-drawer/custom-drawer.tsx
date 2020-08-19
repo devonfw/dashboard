@@ -2,12 +2,12 @@ import { useRouter } from 'next/router';
 import { drawerLinks, DrawerLink } from './drawer-links';
 import List from '@material-ui/core/List';
 import SectionLink from '../section-link/section-link';
-import responsiveDrawerStyle from '../../drawer.style';
+import useDawerStyles from '../../drawer.style';
 import UpgradeBanner from '../../../upgrade-banner/upgrade-banner';
 import ProfilePicture from '../../../profile-picture/profile-picture';
 
 interface CustomDrawerProps {
-  classes: ReturnType<typeof responsiveDrawerStyle>;
+  classes: ReturnType<typeof useDawerStyles>;
 }
 
 export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
