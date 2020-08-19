@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 const drawerWidth = '260px';
 
-const drawerStyle = (theme: Theme) =>
+const useDawerStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -15,34 +15,35 @@ const drawerStyle = (theme: Theme) =>
         flexDirection: 'column',
         position: 'relative',
       },
-      '& .MuiDrawer-root': {
-        height: '100%',
-      },
-      '& .MuiAppBar-root': {
-        margin: '0 auto',
-      },
-      '& .MuiAppBar-positionFixed': {
-        right: 'auto',
-      },
     },
     drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
+      width: drawerWidth,
+      flexShrink: 0,
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       color: '#FFFFFF',
       backgroundColor: '#0075B3',
     },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.up('sm')]: {
-        display: 'none',
+    toolbar: {
+      '&.MuiToolbar-gutters': {
+        paddingLeft: 0,
+        paddingRight: 0,
       },
     },
-    toolbar: theme.mixins.toolbar,
+    title: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+    logo: {
+      height: 30,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      marginRight: 'auto',
+    },
+    topSpace: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
       paddingTop: '2em',
@@ -53,40 +54,11 @@ const drawerStyle = (theme: Theme) =>
       width: `calc(100% - ${drawerWidth})`,
       backgroundColor: '#F4F6F8',
     },
-    fxEnd: {
+    ideSelector: {
       marginLeft: 'auto',
+      marginRight: theme.spacing(2),
     },
-    cardRoot: {
-      display: 'flex',
-      backgroundColor: 'none',
-    },
-    cardDetails: {
-      display: 'flex',
-      flexDirection: 'column',
-      color: '#FFFFFF',
-      '& .MuiPaper-root': {
-        backgroundColor: '#0075B3',
-      },
-      '& .MuiPaper-elevation1': {
-        boxShadow: 'none',
-      },
-    },
-    cardContent: {
-      padding: 19,
-      marginLeft: '3.2em',
-      backgroundColor: 'none',
-      '& h6': {
-        color: '#FFFFFF',
-      },
-    },
-    cardCover: {
-      width: 169,
-      height: 32,
-      position: 'relative',
-      top: 17,
-    },
-  });
+  })
+);
 
-const responsiveDrawerStyle = makeStyles(drawerStyle);
-
-export default responsiveDrawerStyle;
+export default useDawerStyles;

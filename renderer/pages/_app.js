@@ -24,7 +24,7 @@ export default class MyApp extends App {
     return (
       <React.Fragment>
         <Head>
-          <title>My page</title>
+          <title>devonfw dashboard</title>
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />

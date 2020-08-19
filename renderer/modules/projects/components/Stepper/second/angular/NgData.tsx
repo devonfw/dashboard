@@ -1,4 +1,4 @@
-import { useContext, useState, ChangeEvent } from 'react';
+import { useContext, useState, ChangeEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
@@ -8,18 +8,18 @@ import {
 } from '../../../../redux/stepper/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
-import NgDataDevonInstances from './ng-data/NgDataDevonInstances';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
+import { WorkspaceService } from '../../../../services/workspace.service';
 
-const NgData = (): JSX.Element => {
+export default function NgData(): JSX.Element {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
   const classes = ngDataStyle();
-  const { dispatch } = useContext(StepperContext);
+  const { state, dispatch } = useContext(StepperContext);
   const ERRORMSG = {
     projectAlreadyExists: 'Project already exits with this name',
     projectRequired: 'Please provide project name',
@@ -43,19 +43,13 @@ const NgData = (): JSX.Element => {
     },
   });
 
-  const handleDevonInstancesSelection = (option: string) => {
-    setData((prevState: INgData) => {
-      return {
-        ...prevState,
-        devonInstances: { value: option },
-      };
-    });
-  };
-
-  const setDevonWorkspace = (dir: string[]) => {
-    setWorkspaceDir(dir);
-    resetForm();
-  };
+  useEffect(() => {
+    const workspaceService = new WorkspaceService(setWorkspaceDir);
+    workspaceService.getProjectsInWorkspace(state.projectData.path);
+    return () => {
+      workspaceService.closeListener();
+    };
+  }, []);
 
   const handleNg = () => {
     const ngData: INgData = data;
@@ -63,7 +57,6 @@ const NgData = (): JSX.Element => {
       dispatch(
         new ProjectDataActionData({
           name: ngData.name.value,
-          path: ngData.devonInstances.value,
           specificArgs: {
             '--routing': ngData.routing.value,
             '--style': ngData.styling.value,
@@ -153,20 +146,6 @@ const NgData = (): JSX.Element => {
     });
   };
 
-  const resetForm = () => {
-    setData((prevState: INgData) => {
-      return {
-        ...prevState,
-        name: {
-          value: '',
-          valid: false,
-          error: '',
-          touched: false,
-        },
-      };
-    });
-  };
-
   const handleblur = () => {
     validateExistingProject({});
   };
@@ -203,12 +182,6 @@ const NgData = (): JSX.Element => {
           <Grid item xs={12}>
             <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
           </Grid>
-          <Grid item xs={12}>
-            <NgDataDevonInstances
-              onSelected={handleDevonInstancesSelection}
-              devonWorkspace={setDevonWorkspace}
-            ></NgDataDevonInstances>
-          </Grid>
         </Grid>
       </form>
       <div className={classes.action}>
@@ -232,6 +205,4 @@ const NgData = (): JSX.Element => {
     </div>
   );
   return step;
-};
-
-export default NgData;
+}

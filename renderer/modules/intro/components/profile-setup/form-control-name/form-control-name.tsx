@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react';
 import ProfileFormControl from '../profile-form-control/profile-form-control';
-import WhiteTextField from '../white-textfield';
-
+import WhiteTextField from '../../../../shared/components/white-text-field/white-text-field';
 interface FormControlNameProps {
   value: string;
   changeHandler: (event: ChangeEvent<HTMLInputElement>) => void;

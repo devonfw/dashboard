@@ -9,14 +9,14 @@ import {
   FormControls,
 } from '../../../../../../models/dashboard/INodeInitializer';
 import nodeInitializerStyle from './nodeInitializerStyle';
-import NgDataDevonInstances from '../angular/ng-data/NgDataDevonInstances';
 import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
 import { FormType } from '../../../../../../models/dashboard/FormType';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
+import { WorkspaceService } from '../../../../services/workspace.service';
 
-interface NodeStyle {
+interface NodeInitializerProps {
   classes: {
     root: string;
     error: string;
@@ -24,9 +24,32 @@ interface NodeStyle {
   };
 }
 
-class NodeInitializer extends Component<NodeStyle> {
-  static contextType = StepperContext;
+class NodeInitializer extends Component<NodeInitializerProps> {
   state: INodeInitializerForm = nodeProjectConfig;
+  workspaceService: WorkspaceService;
+
+  constructor(props: NodeInitializerProps) {
+    super(props);
+    this.workspaceService = new WorkspaceService(
+      this.setDevonfwWorkspaces.bind(this)
+    );
+  }
+
+  componentDidMount(): void {
+    this.workspaceService.getProjectsInWorkspace(
+      this.context.state.projectData.path
+    );
+  }
+
+  componentWillUnMount(): void {
+    this.workspaceService.closeListener();
+  }
+
+  setDevonfwWorkspaces(dirs: string): void {
+    this.setState({
+      workspaceDir: dirs,
+    });
+  }
 
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,7 +60,6 @@ class NodeInitializer extends Component<NodeStyle> {
       payload: {
         projectData: {
           name: formData.formControls.name.value.toLowerCase(),
-          path: formData.formControls.devonInstances.value,
           specificArgs: {
             '-n': null,
             '--skip-install': null,
@@ -47,10 +69,6 @@ class NodeInitializer extends Component<NodeStyle> {
     });
 
     this.context.dispatch(new NextStepAction());
-  };
-
-  handleDevonInstancesSelection = (option: string) => {
-    this.eventHandler('devonInstances', option);
   };
 
   eventHandler(identifier: string, value: string) {
@@ -71,40 +89,10 @@ class NodeInitializer extends Component<NodeStyle> {
     });
   }
 
-  setDevonWorkspace = (dir: string[]) => {
-    this.resetForm();
-    this.setState({
-      workspaceDir: dir,
-    });
-  };
-
   setActiveState = () => {
     this.context.dispatch({
       type: 'RESET_STEP',
     });
-  };
-
-  resetForm = (): void => {
-    const formState: FormControls = {
-      ...this.state.formControls,
-    };
-    for (const key in formState) {
-      if (formState[key].elementType === 'search') {
-        const control: FormType = formState[key];
-        control.value = '';
-        if (control.touched) {
-          control.touched = false;
-        }
-        if (control.error) {
-          control.error = '';
-        }
-        if (control.valid) {
-          control.valid = false;
-        }
-        formState[key] = control;
-      }
-    }
-    this.setState({ formControls: formState, formIsValid: false });
   };
 
   render() {
@@ -118,7 +106,7 @@ class NodeInitializer extends Component<NodeStyle> {
         });
       }
     }
-    const form = (
+    return (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         <Grid container spacing={4}>
           {formElementsArray.map((formElement) => {
@@ -142,14 +130,7 @@ class NodeInitializer extends Component<NodeStyle> {
                   </div>
                 ) : null}
               </Grid>
-            ) : (
-              <Grid item xs={12} key={formElement.id}>
-                <NgDataDevonInstances
-                  onSelected={this.handleDevonInstancesSelection}
-                  devonWorkspace={this.setDevonWorkspace}
-                ></NgDataDevonInstances>
-              </Grid>
-            );
+            ) : null;
           })}
         </Grid>
         <div className={classes.action}>
@@ -172,7 +153,9 @@ class NodeInitializer extends Component<NodeStyle> {
         </div>
       </form>
     );
-    return <div>{form}</div>;
   }
 }
+
+NodeInitializer.contextType = StepperContext;
+
 export default withStyles(nodeInitializerStyle)(NodeInitializer);
