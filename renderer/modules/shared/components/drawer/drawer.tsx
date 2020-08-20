@@ -36,10 +36,10 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
       </AppBar>
 
       <Navigation classes={classes} />
-      <main className={classes.content}>
+      <div className={classes.content}>
         <div className={classes.topSpace} />
-        {props.children}
-      </main>
+        <main>{props.children}</main>
+      </div>
     </div>
   );
 }

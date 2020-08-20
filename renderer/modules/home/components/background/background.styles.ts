@@ -2,6 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 export const useBackgroundStyles = makeStyles({
   root: {
+    height: '100%',
     backgroundColor: '#4CBDEC',
     backgroundImage: 'url("/assets/mask_logo.png")',
     backgroundPosition: 'right',
