@@ -14,6 +14,7 @@ export const useDashboardDetailsStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-evenly',
       color: '#0075B3',
       paddingTop: '1em',
+      marginTop: '2em',
       width: '100%',
       [theme.breakpoints.up('sm')]: {
         width: 300,

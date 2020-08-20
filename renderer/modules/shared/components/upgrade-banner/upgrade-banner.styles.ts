@@ -2,7 +2,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 
 export const useUpgradeBannerStyles = makeStyles({
   updateAction: {
-    '& button': {
+    '& a': {
       marginTop: '16px',
       backgroundColor: '#0075B3',
       color: '#FFFFFF',
