@@ -7,6 +7,7 @@ import { StepperProvider } from '../modules/projects/redux/stepper/stepperContex
 import { CreatorProvider } from '../modules/projects/redux/creator/creator';
 import { InstallerProvider } from '../modules/projects/redux/installer/installer';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '../modules/shared/components/drawer/drawer';
 import theme from '../styles/theme';
 
 export default class MyApp extends App {
@@ -29,11 +30,13 @@ export default class MyApp extends App {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <StepperProvider>
-            <InstallerProvider>
-              <CreatorProvider>
-                <Component {...pageProps} />
-              </CreatorProvider>
-            </InstallerProvider>
+            <Drawer>
+              <InstallerProvider>
+                <CreatorProvider>
+                  <Component {...pageProps} />
+                </CreatorProvider>
+              </InstallerProvider>
+            </Drawer>
           </StepperProvider>
         </ThemeProvider>
       </React.Fragment>

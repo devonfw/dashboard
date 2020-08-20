@@ -61,5 +61,4 @@ export default function DevonfwIdeSelector(
       </WhiteTextField>
     </FormControl>
   );
-  return step;
 }

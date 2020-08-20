@@ -10,9 +10,12 @@ export class ProjectDeleteListener implements ProjectListener {
     ipcMain.on('delete:project', this.eventHandler.bind(this));
   }
 
-  eventHandler(event: IpcMainEvent, project: ProjectDetails): void {
+  eventHandler(
+    event: IpcMainEvent,
+    args: { project: ProjectDetails; dirPath: string } | any
+  ): void {
     this.devonInstance
-      .deleteProject(project)
+      .deleteProject(args.project, args.dirPath)
       .then((projects) => {
         event.sender.send('delete:project', {
           projects: projects,

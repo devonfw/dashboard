@@ -43,7 +43,11 @@ export default function Projects(): JSX.Element {
   return (
     <Layout>
       <SpaceAround bgColor={'#F4F6F8'}>
-        <DashboardProjects projects={projects} setProject={setProject} />
+        <DashboardProjects
+          projects={projects}
+          setProject={setProject}
+          dirPath={state.projectData.path}
+        />
       </SpaceAround>
     </Layout>
   );
