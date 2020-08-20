@@ -22,6 +22,7 @@ import {
   checkProfileStatus,
   getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
+import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updates';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
@@ -220,6 +221,7 @@ terminalService.allCommands(null, null);
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
 ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
+ipcMain.on('find:checkForUpdates', () => checkForDevonUpdates(mainWindow));
 ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });
