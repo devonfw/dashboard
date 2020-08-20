@@ -1,4 +1,3 @@
-import Grid from '@material-ui/core/Grid';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import { useDashboardDetailsStyles } from './ViewDashboardProjectsDetail.styles';
 
@@ -13,16 +12,14 @@ export default function ViewDashboardProjectsDetail(props: {
 }): JSX.Element {
   const classes = useDashboardDetailsStyles();
   return (
-    <Grid item xs={4}>
-      <div className={classes.ideDetails}>
-        <div className={classes.projectDetails}>
-          <span style={{ fontWeight: 'bold' }}>{props.title}</span>
-          <span>{props.total}</span>
-        </div>
-        <div>
-          <ShowChartIcon className={classes.showChartIcon} fontSize="large" />
-        </div>
+    <div className={classes.ideDetails}>
+      <div className={classes.projectDetails}>
+        <span style={{ fontWeight: 'bold' }}>{props.title}</span>
+        <span>{props.total}</span>
       </div>
-    </Grid>
+      <div>
+        <ShowChartIcon className={classes.showChartIcon} fontSize="large" />
+      </div>
+    </div>
   );
 }

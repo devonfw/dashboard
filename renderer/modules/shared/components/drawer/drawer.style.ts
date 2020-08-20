@@ -53,6 +53,9 @@ const useDawerStyles = makeStyles((theme: Theme) =>
       'min-height': '100vh',
       width: `calc(100% - ${drawerWidth})`,
       backgroundColor: '#F4F6F8',
+      display: 'grid',
+      gridTemplateRows: `fit-content(64px)`,
+      gridTemplateColumns: `1fr`,
     },
     ideSelector: {
       marginLeft: 'auto',
