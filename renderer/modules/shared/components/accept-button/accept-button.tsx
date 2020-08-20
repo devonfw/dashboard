@@ -12,6 +12,7 @@ export default function AcceptButton(props: ButtonProps): JSX.Element {
       className={`${button} ${props.className}`}
       href={props.href}
       onClick={props.onClick}
+      startIcon={props.startIcon}
       disableElevation
     >
       {props.children}

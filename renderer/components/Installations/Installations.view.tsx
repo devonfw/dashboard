@@ -13,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import GetApp from '@material-ui/icons/GetApp';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { DevonIdeScripts } from './Installations.contoller';
+import AcceptButton from '../../modules/shared/components/accept-button/accept-button';
 
 interface InstallationsViewProps {
   query: string;
@@ -90,20 +91,12 @@ export default function InstallationsView(
                 <TableCell>{installation.version}</TableCell>
                 <TableCell>{installation.updated}</TableCell>
                 <TableCell align="center">
-                  <Button
-                    className={classes.button}
-                    variant="contained"
-                    color="primary"
-                  >
-                    Update
-                  </Button>
+                  <AcceptButton className={classes.button}>Update</AcceptButton>
                 </TableCell>
                 <TableCell align="center">
                   {!installation.downloading && (
-                    <Button
+                    <AcceptButton
                       className={classes.button}
-                      variant="contained"
-                      color="primary"
                       disabled={installation.installed}
                       startIcon={<GetApp />}
                       onClick={() => props.downloadHandler(installation.id)}
@@ -116,7 +109,7 @@ export default function InstallationsView(
                       }
                     >
                       Download
-                    </Button>
+                    </AcceptButton>
                   )}
                   {installation.downloading && <CircularProgress size={24} />}
                 </TableCell>
