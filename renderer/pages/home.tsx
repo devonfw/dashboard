@@ -24,10 +24,12 @@ export default function Home(): JSX.Element {
         <SpaceAround>
           <>
             <WelcomeToDevonfw></WelcomeToDevonfw>
-            <ViewDashboardProjectsDetail
-              title="PROJECT CREATED"
-              total={totalInstances}
-            />
+            <div style={{ marginTop: 40 }}>
+              <ViewDashboardProjectsDetail
+                title="PROJECT CREATED"
+                total={totalInstances}
+              />
+            </div>
           </>
         </SpaceAround>
       </Background>

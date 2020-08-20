@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import RepositoryCard from '../repository-card/RepositoryCard';
 import GithubService from '../../services/github/github.service';
 import Repository from '../../services/github/models/repository.model';
-import LinkOpenerService from '../../services/link-opener/link-opener.service';
+import LinkOpenerService from '../../../shared/services/link-opener/link-opener.service';
 import SearchCard from '../search-card/search-card';
 
 const DELAY_TIME = 1000;
