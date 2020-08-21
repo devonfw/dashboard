@@ -3,10 +3,9 @@ import { messageSender } from '../../../shared/services/renderer/messageSender.s
 import { StepperContext } from '../stepper/stepperContext';
 import { InstallModulesActionData } from '../stepper/actions/install-modules-action';
 import { useContext } from 'react';
-import { Channel } from '../../../shared/services/renderer/renderer.service';
 
 export interface IInstallerContext {
-  logMessages: Channel[];
+  logMessages: string[];
   triggerInstallation: (path: string) => void;
 }
 
@@ -21,19 +20,15 @@ interface InstallerProviderProps {
 }
 
 export function InstallerProvider(props: InstallerProviderProps): JSX.Element {
-  const [logMessages, setLogMessages] = React.useState<Channel[]>([]);
+  const [logMessages, setLogMessages] = React.useState<string[]>([]);
   const { dispatch } = useContext(StepperContext);
 
   const triggerInstallation = (path: string) => {
     setLogMessages([]);
     const observable = messageSender.installModules(path);
     observable.subscribe(
-      (message) => {
-        setLogMessages((prev) => [...prev, { status: 'data', data: message }]);
-      },
-      (err) => {
-        setLogMessages((prev) => [...prev, { status: 'error', data: err }]);
-      },
+      (message) => setLogMessages((prev) => [...prev, message]),
+      (err) => setLogMessages((prev) => [...prev, err]),
       (finishedWithError) => {
         dispatch(new InstallModulesActionData(false, !finishedWithError));
         observable.unsubscribe();

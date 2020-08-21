@@ -45,7 +45,7 @@ export default function InstallationsView(
             className={classes.textField}
           />
         </form>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" component="p">
           INSTALLED TOOLS
         </Typography>
         <Typography gutterBottom variant="h5" component="h2">
