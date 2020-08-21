@@ -21,9 +21,6 @@ export const useAccordionStyles = makeStyles((theme: Theme) =>
         margin: 0,
       },
     },
-    error: {
-      color: theme.palette.error.main,
-    },
     success: {
       color: theme.palette.success.main,
     },

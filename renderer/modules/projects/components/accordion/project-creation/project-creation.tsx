@@ -42,7 +42,7 @@ export default function ProjectCreation(): JSX.Element {
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
         {!state.create.loading && !state.create.success ? (
-          <Typography align="center" className={classes.error}>
+          <Typography align="center" color="error">
             Project creation failed
             <AcceptButton className={classes.accept} onClick={load}>
               Retry

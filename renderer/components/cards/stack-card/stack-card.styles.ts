@@ -27,8 +27,5 @@ export const useStackCardStyles = makeStyles((theme: Theme) =>
       margin: '0 1vw 0 1vw',
     },
     bgColor: reversedColors(theme),
-    textCenter: {
-      textAlign: 'center',
-    },
   })
 );
