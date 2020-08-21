@@ -8,7 +8,7 @@ export default function Account(): JSX.Element {
     <Drawer>
       <Background>
         <SpaceAround>
-          <ProfileSetup accept="Accept" cancel="Cancel"></ProfileSetup>
+          <ProfileSetup settingsPage={true}></ProfileSetup>
         </SpaceAround>
       </Background>
     </Drawer>

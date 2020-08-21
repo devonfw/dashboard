@@ -45,7 +45,8 @@ export class ProfileSetupService {
   }
 
   setProfile(profileData: UserProfile): Promise<string> {
-    const profile = JSON.stringify(profileData);
+    const validatedProfile = this.validateProfile(profileData);
+    const profile = JSON.stringify(validatedProfile);
 
     return new Promise((resolve, reject) => {
       fs.writeFile(this.profileFilePath, profile, (err) => {
@@ -63,5 +64,15 @@ export class ProfileSetupService {
         resolve(profileData);
       });
     });
+  }
+
+  validateProfile(profile: UserProfile): UserProfile {
+    const validatedProfile: UserProfile = {
+      name: profile.name || defaultUser.name,
+      image: profile.image || defaultUser.image,
+      gender: profile.gender || defaultUser.gender,
+      role: profile.role || defaultUser.role,
+    };
+    return validatedProfile;
   }
 }

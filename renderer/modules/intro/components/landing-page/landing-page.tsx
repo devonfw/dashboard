@@ -36,6 +36,10 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
         }
       }
     );
+
+    return () => {
+      global.ipcRenderer.removeAllListeners('get:devoninstances');
+    };
   }, []);
 
   const closeDialog = (): void => {

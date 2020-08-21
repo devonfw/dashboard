@@ -11,8 +11,7 @@ import FormControlImage from './form-control-image/form-control-image';
 import FormControlGender from './form-control-gender/form-control-gender';
 
 interface ProfileSetupProps {
-  accept?: string;
-  cancel?: string;
+  settingsPage?: boolean;
 }
 
 export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
@@ -24,8 +23,19 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
     gender: '',
     role: '',
   });
+  const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
+    if (props.settingsPage) global.ipcRenderer.send('find:profile');
+
+    global.ipcRenderer.on(
+      'get:profile',
+      (_: IpcRendererEvent, profile: ProfileData) => {
+        const sanitizedData = sanitizeData(profile);
+        setData(sanitizedData);
+      }
+    );
+
     global.ipcRenderer.on(
       'get:base64Img',
       (_: IpcRendererEvent, value: string) => {
@@ -33,17 +43,22 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
           const newState: ProfileData = { ...prevSate, image: value };
           return newState;
         });
+        if (props.settingsPage) setButtonsDisabled(false);
       }
     );
+
     global.ipcRenderer.on(
       'get:profileCreationStatus',
       (_: IpcRendererEvent, status: string) => {
         if (status === 'success') {
-          router.push('/home');
+          if (props.settingsPage) global.ipcRenderer.send('find:profile');
+          else navigateToHome();
         }
       }
     );
+
     return () => {
+      global.ipcRenderer.removeAllListeners('get:profile');
       global.ipcRenderer.removeAllListeners('get:base64Img');
       global.ipcRenderer.removeAllListeners('get:profileCreationStatus');
     };
@@ -55,7 +70,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
     setData((prevSate: ProfileData) => {
       return { ...prevSate, [inputname]: value };
     });
-    checkFormValidity();
+    setButtonsDisabled(false);
   };
 
   const handleRadioImageClick = (value: string) => {
@@ -65,24 +80,48 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
         gender: value,
       };
     });
-    checkFormValidity();
+    setButtonsDisabled(false);
   };
 
-  const checkFormValidity = (): boolean => {
+  const formEmpty = (): boolean => {
     return (
-      data.name === '' ||
-      data.image === '' ||
-      data.gender === '' ||
+      data.name === '' &&
+      data.image === '' &&
+      data.gender === '' &&
       data.role === ''
     );
   };
 
   const createProfile = () => {
-    global.ipcRenderer.send('set:profile', data);
+    if (formEmpty()) {
+      navigateToHome();
+    } else {
+      global.ipcRenderer.send('set:profile', data);
+    }
+    setButtonsDisabled(true);
+  };
+
+  const onCancel = () => {
+    global.ipcRenderer.send('find:profile');
+    setButtonsDisabled(true);
+  };
+
+  const navigateToHome = () => {
+    router.push('/home');
+  };
+
+  const sanitizeData = (profile: ProfileData): ProfileData => {
+    const sanitizedData: ProfileData = {
+      name: profile.name === 'Unknown User' ? '' : profile.name,
+      role: profile.role === 'Undefined Role' ? '' : profile.role,
+      gender: profile.gender,
+      image: profile.image,
+    };
+    return sanitizedData;
   };
 
   return (
-    <div className={classes.root}>
+    <div className={props.settingsPage ? classes.rootSettings : classes.root}>
       <form noValidate autoComplete="off">
         <FormControlName
           value={data.name}
@@ -102,14 +141,24 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
           className={classes.button}
           variant="contained"
           color="primary"
-          disabled={checkFormValidity()}
+          disabled={props.settingsPage ? buttonsDisabled : false}
           onClick={createProfile}
         >
-          {props.accept ? props.accept : 'Create My Profile'}
+          {props.settingsPage ? 'Save' : 'Create My Profile'}
         </Button>
-        <Button variant="outlined" onClick={() => router.push('/home')}>
-          {props.cancel ? props.cancel : 'Will Do It Later'}
-        </Button>
+        {props.settingsPage ? (
+          <Button
+            variant="outlined"
+            disabled={buttonsDisabled}
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+        ) : (
+          <Button variant="outlined" onClick={() => router.push('/home')}>
+            Will Do It Later
+          </Button>
+        )}
       </form>
     </div>
   );

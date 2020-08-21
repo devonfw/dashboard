@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '100px',
       width: '560px',
     },
+    rootSettings: {
+      padding: '1rem 0 2rem 1rem',
+      width: '560px',
+    },
     button: {
       backgroundColor: '#0075B3',
       color: '#FFFFFF',
