@@ -22,10 +22,15 @@ import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
 import MenuList from './menu-list';
 
-export default function DashboardProjects(props: {
+interface DashboardProjectsProps {
   projects: ProjectDetails[];
   setProject: (project: ProjectDetails[]) => void;
-}): JSX.Element {
+  dirPath: string;
+}
+
+export default function DashboardProjects(
+  props: DashboardProjectsProps
+): JSX.Element {
   const renderer = new Renderer();
   const classes = useDashboardProjectsStyles({});
   const initialState = {
@@ -122,7 +127,10 @@ export default function DashboardProjects(props: {
 
   const deleteProject = () => {
     setOpen(true);
-    global.ipcRenderer.send('delete:project', state.project);
+    global.ipcRenderer.send('delete:project', {
+      project: state.project,
+      dirPath: props.dirPath,
+    });
     setState(initialState);
   };
 
