@@ -28,7 +28,6 @@ export default function WelcomeToDevonfw(): JSX.Element {
       (_: IpcRendererEvent, arg: { total: number; received: number }) => {
         setTotal(arg.total);
         setReceived(arg.received);
-        setDownloadProgress(true);
         setDownloadStatusMsg('');
       }
     );
@@ -36,12 +35,14 @@ export default function WelcomeToDevonfw(): JSX.Element {
     global.ipcRenderer.on(
       'download completed',
       (_: IpcRendererEvent, arg: string) => {
-        setDownloadProgress(false);
-        setDownloadStatusMsg('Download was ' + arg + '.');
-        if (arg === 'completed') {
-          setDownloadStatusMsgColor('success.main');
-        } else {
-          setDownloadStatusMsgColor('error.main');
+        if (downloadProgress) {
+          setDownloadProgress(false);
+          setDownloadStatusMsg('Download was ' + arg + '.');
+          if (arg === 'completed') {
+            setDownloadStatusMsgColor('success.main');
+          } else {
+            setDownloadStatusMsgColor('error.main');
+          }
         }
       }
     );
@@ -57,7 +58,7 @@ export default function WelcomeToDevonfw(): JSX.Element {
         }
       }
     );
-  }, []);
+  });
 
   return (
     <Grid container spacing={3} style={{ fontSize: '16px' }}>
@@ -68,15 +69,17 @@ export default function WelcomeToDevonfw(): JSX.Element {
         <>
           <WelcomeSnippet></WelcomeSnippet>
           <AcceptButton
+            onClick={() => setDownloadProgress(true)}
             href={DASHBOARD_DOWNLOAD_URL}
             disabled={downloadProgress}
           >
             Download latest version
           </AcceptButton>
           <Spinner inProgress={downloadProgress}></Spinner>
-          <Box component="p" color={downloadStatusMsgColor}>
+          {/* TODO: implement alternative way to handle download */}
+          {/* <Box component="p" color={downloadStatusMsgColor}>
             {downloadStatusMsg}
-          </Box>
+          </Box> */}
         </>
       </Grid>
     </Grid>

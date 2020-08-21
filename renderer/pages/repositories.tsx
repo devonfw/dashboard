@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
-import Repository from '../modules/shared/services/github/models/repository.model';
-import Searcher from '../components/Searcher/Searcher.controller';
+import Repository from '../modules/repositories/services/github/models/repository.model';
+import Searcher from '../modules/repositories/components/searcher/searcher';
 
 interface HomeProps {
   data: Repository[];

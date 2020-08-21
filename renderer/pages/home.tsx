@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Grid } from '@material-ui/core';
 import { IpcRendererEvent } from 'electron';
-
-import Grid from '@material-ui/core/Grid';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import ViewDashboardProjectsDetail from '../modules/home/components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
 import Background from '../modules/home/components/background/background';

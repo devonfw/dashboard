@@ -1,8 +1,6 @@
 // Native
 import { join } from 'path';
 import { format } from 'url';
-import { IpcMainEvent } from 'electron';
-import { spawn, StdioOptions, SpawnOptions } from 'child_process';
 
 // Packages
 import { BrowserWindow, app, ipcMain, shell } from 'electron';
@@ -24,12 +22,12 @@ import {
   checkProfileStatus,
   getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
-import { ProjectDetails } from './models/project-details.model';
-import { projectDate } from './modules/shared/utils/project-date';
+import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updates';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
 import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/devon-ide-projects';
+import RepositoriesListener from './modules/repositories/repositories-listener';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -197,65 +195,14 @@ function getProjectDetails() {
 
 /* Enable services */
 
-/**
- * @deprecated. You should use listeners inside
- * modules/projects/listeners/ or create a new one
- */
-/* terminal powershell */
-const eventHandler = (
-  event: IpcMainEvent,
-  projectDetails: ProjectDetails,
-  ...eventArgs: string[]
-) => {
-  const command = eventArgs[0];
-  const cwd = eventArgs[1];
-  let isError = false;
-  if (!command) event.sender.send('terminal/powershell', '');
+new InstallListener(new SpawnTerminalFactory()).listen();
 
-  const stdioOptions: StdioOptions = ['pipe', 'pipe', 'pipe'];
-
-  let options: SpawnOptions = { stdio: stdioOptions };
-  options = cwd ? { ...options, cwd } : options;
-  const terminal = spawn(`powershell.exe`, [], options);
-
-  terminal.stdout.on('data', (data) => {
-    isError = false;
-    console.log('sending data: ' + data.toString());
-  });
-  terminal.stderr.on('data', (data) => {
-    console.error(data.toString());
-    isError = true;
-  });
-
-  terminal.on('close', () => {
-    console.log('closed stream');
-    if (!isError) {
-      event.sender.send('terminal/powershell', 'success');
-      saveProjectDetails(projectDetails);
-    } else {
-      event.sender.send('terminal/powershell', 'error');
-    }
-  });
-
-  terminal.stdin.write(command + '\n');
-  terminal.stdin.end();
-};
-
-const saveProjectDetails = (projectDetails: ProjectDetails): void => {
-  if (projectDetails) {
-    projectDetails.date = projectDate();
-    new DevonInstancesService().saveProjectDetails(projectDetails);
-  }
-};
-
-const installEventListener = new InstallListener(new SpawnTerminalFactory());
-installEventListener.listen();
-
-const projectListener = new ProjectCreationListener(
+new ProjectCreationListener(
   new SpawnTerminalFactory(),
   new DevonInstancesService()
-);
-projectListener.listen();
+).listen();
+
+new RepositoriesListener().listen();
 
 // Deleting a project process
 new ProjectDeleteListener(new DevonInstancesService()).listen();
@@ -263,42 +210,8 @@ new ProjectDeleteListener(new DevonInstancesService()).listen();
 // Open a project in IDE process
 new OpenProjectIDEListener(new DevonInstancesService()).listen();
 
+// Getting all the project depebding on Devonfw IDE selector
 new DevonIdeProjectsListener(new DevonInstancesService()).listen();
-
-/* Installation powershell */
-const installEventHandler = (event: IpcMainEvent, ...eventArgs: string[]) => {
-  const cwd = eventArgs[1];
-  let isError = false;
-
-  let options: SpawnOptions = { stdio: 'pipe', shell: true };
-  options = cwd ? { ...options, cwd } : options;
-  const terminal = spawn(`powershell.exe`, [], options);
-
-  terminal.stdout.on('data', (data) => {
-    isError = false;
-    console.log('sending data: ' + data.toString());
-    event.sender.send('powershell/installation/packages', data.toString());
-  });
-  terminal.stderr.on('data', (data) => {
-    console.error(data.toString());
-    isError = true;
-  });
-
-  terminal.on('exit', (code) => {
-    console.log('exit code ->', code);
-  });
-  terminal.on('close', () => {
-    console.log('closed stream');
-    if (!isError) {
-      event.sender.send('powershell/installation/packages', 'success');
-    } else {
-      event.sender.send('powershell/installation/packages', 'error');
-    }
-  });
-
-  terminal.stdin.write('npm install' + '\n');
-  terminal.stdin.end();
-};
 
 const openProjectDirectory = (path: string) => {
   shell.showItemInFolder(path);
@@ -308,12 +221,11 @@ const openProjectDirectory = (path: string) => {
 const terminalService = new TerminalService();
 terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
-ipcMain.on('terminal/powershell', eventHandler);
-ipcMain.on('powershell/installation/packages', installEventHandler);
 
 // Finding out Devonfw Ide
 ipcMain.on('find:devonfw', countInstance);
 ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
+ipcMain.on('find:checkForUpdates', () => checkForDevonUpdates(mainWindow));
 ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });

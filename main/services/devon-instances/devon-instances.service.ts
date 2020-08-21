@@ -156,6 +156,35 @@ export class DevonInstancesService implements SaveDetails {
     return ideScriptsPromise;
   }
 
+  getLatestDevonIdeScriptsFromMaven(): Promise<DevonIdeScripts> {
+    let ideScript: DevonIdeScripts;
+    let data = '';
+    const ideScriptPromise = new Promise<DevonIdeScripts>((resolve, reject) => {
+      https
+        .get(
+          'https://search.maven.org/classic/solrsearch/select?q=a%3A%22devonfw-ide-scripts%22&rows=20&wt=json',
+          (res) => {
+            res.on('data', (d) => {
+              data += d;
+            });
+            res.on('end', () => {
+              const jsonData = JSON.parse(data);
+              const latestIdeScript = jsonData['response']['docs'][0];
+              ideScript = {
+                version: latestIdeScript.latestVersion,
+                updated: latestIdeScript.timestamp,
+              };
+              resolve(ideScript);
+            });
+          }
+        )
+        .on('error', (e) => {
+          reject('error: ' + e);
+        });
+    });
+    return ideScriptPromise;
+  }
+
   /* Checking projectinfo.json is exists?, if exits overriding data or 
     creating a json file with project details
   */
