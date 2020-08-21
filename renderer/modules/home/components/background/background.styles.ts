@@ -14,11 +14,18 @@ export const useBackgroundStyles = makeStyles((theme: Theme) =>
       backgroundPositionY: '1em',
     },
     dashboardInfo: {
-      backgroundImage: 'url("/assets/delivery-lifecycle.png")',
+      backgroundImage: 'none',
       backgroundPosition: 'right',
       backgroundRepeat: 'no-repeat',
-      backgroundSize: '700px 535px',
-      backgroundPositionY: '7em',
+      '@media (min-width: 1200px)': {
+        backgroundImage: 'url("/assets/delivery-lifecycle.png")',
+        backgroundSize: 'calc(700px * 0.8) calc(535px * 0.8)',
+        backgroundPositionY: '20em',
+      },
+      '@media (min-width: 1450px)': {
+        backgroundSize: '700px 535px',
+        backgroundPositionY: '7em',
+      },
     },
   })
 );

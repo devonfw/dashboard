@@ -65,7 +65,7 @@ export default function WelcomeToDevonfw(): JSX.Element {
       <Grid item xs={12}>
         <img src={'/assets/' + avatar} alt="admin" />
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={12} md={7}>
         <>
           <WelcomeSnippet></WelcomeSnippet>
           <AcceptButton
