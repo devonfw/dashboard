@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Grid } from '@material-ui/core';
 import { IpcRendererEvent } from 'electron';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import ViewDashboardProjectsDetail from '../modules/home/components/view-dashboard-projects-detail/ViewDashboardProjectsDetail';
@@ -23,12 +22,12 @@ export default function Home(): JSX.Element {
       <SpaceAround>
         <>
           <WelcomeToDevonfw></WelcomeToDevonfw>
-          <Grid container spacing={3}>
+          <div style={{ marginTop: 40 }}>
             <ViewDashboardProjectsDetail
               title="PROJECT CREATED"
               total={totalInstances}
             />
-          </Grid>
+          </div>
         </>
       </SpaceAround>
     </Background>
