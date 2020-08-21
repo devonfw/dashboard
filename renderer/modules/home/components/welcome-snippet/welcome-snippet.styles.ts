@@ -6,10 +6,12 @@ const useWelcomeSnippetStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
       fontWeight: theme.typography.fontWeightBold,
+      color: theme.palette.primary.contrastText,
       marginBottom: theme.spacing(4),
     },
     description: {
       fontWeight: theme.typography.fontWeightRegular,
+      color: theme.palette.primary.contrastText,
       marginBottom: theme.spacing(3),
     },
     link: {
@@ -17,6 +19,7 @@ const useWelcomeSnippetStyles = makeStyles((theme: Theme) =>
     },
     links: {
       marginBottom: theme.spacing(5),
+      color: theme.palette.primary.contrastText,
     },
   })
 );

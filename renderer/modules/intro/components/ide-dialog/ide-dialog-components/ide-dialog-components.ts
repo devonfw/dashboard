@@ -7,8 +7,8 @@ export const DialogTitle = withStyles((theme: Theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-    backgroundColor: '#0075B3',
-    color: '#FFFFFF',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
   },
 }))(MuiDialogTitle);
 
@@ -22,6 +22,6 @@ export const DialogActions = withStyles((theme: Theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-    backgroundColor: '#0075B3',
+    backgroundColor: theme.palette.primary.main,
   },
 }))(MuiDialogActions);

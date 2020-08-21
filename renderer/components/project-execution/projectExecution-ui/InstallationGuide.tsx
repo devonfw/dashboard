@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { Button } from '@material-ui/core';
-import { StepperContext } from '../../../modules/projects/components/Stepper/redux/stepperContext';
 import EXECUTION_CONTANTS from './ExecutionContants';
+import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
 
 interface IstallationProps {
   installEventHandler: () => void;
@@ -27,7 +27,6 @@ export default class InstallationGuide extends Component<IstallationProps> {
             </Button>
           </div>
           <Button
-            style={{ backgroundColor: '#0075B3' }}
             size="small"
             variant="contained"
             color="primary"

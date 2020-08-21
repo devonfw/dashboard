@@ -56,7 +56,6 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
       </p>
       <Button
         onClick={props.navigateHandler}
-        className={classes.button}
         variant="contained"
         color="primary"
       >

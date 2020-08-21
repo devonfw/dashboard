@@ -5,7 +5,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 export const useSectionLinkStyles = makeStyles((theme: Theme) =>
   createStyles({
     active: {
-      color: '#0075B3',
+      color: theme.palette.primary.main,
       fontWeight: 'bold',
     },
     nested: {

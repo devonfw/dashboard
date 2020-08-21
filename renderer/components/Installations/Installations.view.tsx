@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from 'react';
-import { TextField, Card, Button, Typography } from '@material-ui/core';
+import { DevonIdeScripts } from './Installations.contoller';
+import { TextField, Card, Typography } from '@material-ui/core';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -11,9 +12,9 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import GetApp from '@material-ui/icons/GetApp';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { DevonIdeScripts } from './Installations.contoller';
+
 import AcceptButton from '../../modules/shared/components/accept-button/accept-button';
+import useInstallationsStyles from './installations.styles';
 
 interface InstallationsViewProps {
   query: string;
@@ -29,25 +30,7 @@ interface InstallationsViewProps {
 export default function InstallationsView(
   props: InstallationsViewProps
 ): JSX.Element {
-  const useSearcherStyles = makeStyles((theme: Theme) =>
-    createStyles({
-      header: {
-        padding: theme.spacing(2),
-      },
-      button: {
-        backgroundColor: '#0075B3',
-        color: '#FFFFFF',
-      },
-      form: {
-        float: 'right',
-        width: '50%',
-      },
-      textField: {
-        width: '100%',
-      },
-    })
-  );
-  const classes = useSearcherStyles();
+  const classes = useInstallationsStyles();
 
   return (
     <Card>
@@ -91,12 +74,11 @@ export default function InstallationsView(
                 <TableCell>{installation.version}</TableCell>
                 <TableCell>{installation.updated}</TableCell>
                 <TableCell align="center">
-                  <AcceptButton className={classes.button}>Update</AcceptButton>
+                  <AcceptButton>Update</AcceptButton>
                 </TableCell>
                 <TableCell align="center">
                   {!installation.downloading && (
                     <AcceptButton
-                      className={classes.button}
                       disabled={installation.installed}
                       startIcon={<GetApp />}
                       onClick={() => props.downloadHandler(installation.id)}

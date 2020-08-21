@@ -5,8 +5,7 @@ const useDawerStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      backgroundColor: '#FFFFFF',
-      color: '#FFFFFF',
+      backgroundColor: theme.palette.secondary.main,
       margin: '0 auto',
       overflowX: 'hidden',
       '& .MuiDrawer-paper': {
@@ -22,8 +21,7 @@ const useDawerStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      color: '#FFFFFF',
-      backgroundColor: '#0075B3',
+      color: theme.palette.primary.contrastText,
     },
     toolbar: {
       '&.MuiToolbar-gutters': {
@@ -45,7 +43,7 @@ const useDawerStyles = makeStyles((theme: Theme) =>
     topSpace: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
-      paddingTop: '2em',
+      paddingTop: theme.spacing(4),
     },
     content: {
       flexGrow: 1,
@@ -54,7 +52,7 @@ const useDawerStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#F4F6F8',
       display: 'grid',
       gridTemplateRows: `fit-content(64px)`,
-      gridTemplateColumns: `1fr`,
+      gridTemplateColumns: '1fr',
     },
     ideSelector: {
       marginRight: theme.spacing(2),

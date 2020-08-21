@@ -13,7 +13,7 @@ interface ProjectDetailProps {
 }
 
 export default function ProjectDetail(props: ProjectDetailProps): JSX.Element {
-  const classes = useDashboardProjectsStyles({});
+  const classes = useDashboardProjectsStyles();
   return (
     <div
       onContextMenu={(event) => props.handleClick(event, props.project)}
@@ -26,9 +26,9 @@ export default function ProjectDetail(props: ProjectDetailProps): JSX.Element {
       />
       <CardContent>
         <Typography component="h6" variant="h6">
-          <div style={{ color: '#FFFFFF' }}>{props.project.name}</div>
+          <div className={classes.name}>{props.project.name}</div>
           <div
-            style={{ color: '#4CBDEC' }}
+            className={classes.updateDate}
           >{`Last Updated ${props.project.date}`}</div>
         </Typography>
       </CardContent>

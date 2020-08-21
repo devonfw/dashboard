@@ -41,9 +41,7 @@ export default function ProfilePicture(): JSX.Element {
           <CardContent className={classes.customDrawerContent}>
             <Typography component="h6" variant="h6">
               <div className={classes.user}>
-                <span style={{ fontWeight: 'bold', color: '#0075B3' }}>
-                  {profile.name}
-                </span>
+                <span className={classes.name}>{profile.name}</span>
                 <span className={classes.role}>{profile.role}</span>
               </div>
             </Typography>

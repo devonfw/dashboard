@@ -28,7 +28,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
           {router !== '/intro' ? (
             <div className={classes.dashboard}>
               <Typography variant="h6" className={classes.title} noWrap>
-                Devonfw Dashboard
+                Dashboard
               </Typography>
               <div>
                 <DevonfwIdeSelector className={classes.ideSelector} />

@@ -28,8 +28,8 @@ export default function FormControGender(
       >
         <Radio
           value="male"
-          icon={<RadioButtonUncheckedIcon className={classes.checkedIcon} />}
-          checkedIcon={<CheckCircleIcon className={classes.checkedIcon} />}
+          icon={<RadioButtonUncheckedIcon color="primary" />}
+          checkedIcon={<CheckCircleIcon color="primary" />}
         />
         <img
           className={classes.radioImage}
@@ -38,8 +38,8 @@ export default function FormControGender(
         />
         <Radio
           value="female"
-          icon={<RadioButtonUncheckedIcon className={classes.checkedIcon} />}
-          checkedIcon={<CheckCircleIcon className={classes.checkedIcon} />}
+          icon={<RadioButtonUncheckedIcon color="primary" />}
+          checkedIcon={<CheckCircleIcon color="primary" />}
         />
         <img
           className={classes.radioImage}

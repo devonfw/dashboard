@@ -1,19 +1,19 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
-const inputStyle = () =>
+const inputStyle = (theme: Theme) =>
   createStyles({
     inputElement: {
-      color: 'red',
+      color: theme.palette.error.main,
     },
     invalid: {
       '& label': {
-        color: 'red !important',
+        color: `${theme.palette.error.main} !important`,
       },
       '& input': {
-        color: 'red !important',
+        color: `${theme.palette.error.main} !important`,
       },
       '& fieldset': {
-        border: '1px solid red !important',
+        border: `1px solid ${theme.palette.error.main} !important`,
       },
     },
   });
