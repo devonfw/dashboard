@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Navigation from './navigation/navigation';
-import DevonfwIdeSelector from '../../../projects/components/Stepper/second/angular/ng-data/DevonfwIdeSelector';
+import DevonfwIdeSelector from '../../../shared/components/devonfw-ide-selector/DevonfwIdeSelector';
 
 export default function Drawer(props: { children: JSX.Element }): JSX.Element {
   const classes = useDawerStyles();

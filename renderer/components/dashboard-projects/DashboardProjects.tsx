@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { IpcRendererEvent } from 'electron';
 import NextLink from '../../modules/shared/components/nextjs-link/NextLink';
 import Grid from '@material-ui/core/Grid';
