@@ -15,7 +15,7 @@ const Layout = (props: { children: JSX.Element }): JSX.Element => (
       <title>devonfw dashboard</title>
     </Head>
 
-    <Drawer>{props.children}</Drawer>
+    <div>{props.children}</div>
   </div>
 );
 
