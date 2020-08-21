@@ -33,7 +33,7 @@ export default function CustomStepper(): JSX.Element {
   return (
     <>
       <MaterialStepper steps={steps} />
-      <p style={{ color: '#495057', paddingBottom: '2rem' }}>
+      <p style={{ paddingBottom: '2rem' }}>
         Choose the technology in the below section, dolor sit amet, consectetur
         adipiscing elit. Phasellus non tincidunt velit. Quisque laoreet, lectus
         id tincidunt fringilla, eros est bibendum felis, sit amet lobortis ante

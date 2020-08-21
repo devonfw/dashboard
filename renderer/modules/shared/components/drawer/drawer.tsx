@@ -24,7 +24,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
             className={classes.logo}
           />
           <Typography variant="h6" className={classes.title} noWrap>
-            Devonfw Dashboard
+            Dashboard
           </Typography>
           <DevonfwIdeSelector className={classes.ideSelector} />
           <Tooltip title="Help">

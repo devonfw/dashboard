@@ -5,7 +5,7 @@ const WhiteTextField = withStyles((theme: Theme) =>
   createStyles({
     root: {
       '& label': {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: theme.palette.secondary.main,
       },
       '& label.MuiFormLabel-filled': {
         padding: '0.2em 0.5em',
@@ -16,7 +16,7 @@ const WhiteTextField = withStyles((theme: Theme) =>
         borderRadius: '4px',
       },
       '& .MuiOutlinedInput-root': {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: theme.palette.secondary.main,
       },
       '& .MuiOutlinedInput-input': {
         paddingTop: theme.spacing(2),

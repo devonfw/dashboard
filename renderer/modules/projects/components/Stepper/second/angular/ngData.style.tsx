@@ -1,6 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 
-const projectCardStyle = () =>
+const projectCardStyle = (theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
@@ -10,11 +10,11 @@ const projectCardStyle = () =>
       },
     },
     action: {
-      marginTop: '1em',
-      marginLeft: '24px',
+      marginTop: theme.spacing(2),
+      marginLeft: theme.spacing(3),
       display: 'flex',
       '& button': {
-        marginRight: '1em',
+        marginRight: theme.spacing(2),
         width: '75px',
       },
       '& .MuiButton-containedSizeSmall': {
@@ -23,17 +23,17 @@ const projectCardStyle = () =>
     },
     invalid: {
       '& label': {
-        color: 'red !important',
+        color: `${theme.palette.error.main} !important`,
       },
       '& input': {
-        color: 'red !important',
+        color: `${theme.palette.error.main} !important`,
       },
       '& fieldset': {
-        border: '1px solid red !important',
+        border: `1px solid ${theme.palette.error.main} !important`,
       },
     },
     error: {
-      color: 'red',
+      color: theme.palette.error.main,
     },
   });
 
