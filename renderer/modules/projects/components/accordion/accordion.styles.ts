@@ -12,7 +12,7 @@ export const useAccordionStyles = makeStyles((theme: Theme) =>
       fontWeight: theme.typography.fontWeightRegular,
     },
     installation: {
-      paddingTop: 32,
+      paddingTop: theme.spacing(4),
     },
     summary: {
       '& .MuiAccordionSummary-content': {
@@ -21,21 +21,18 @@ export const useAccordionStyles = makeStyles((theme: Theme) =>
         margin: 0,
       },
     },
-    error: {
-      color: '#E01600',
-    },
     success: {
-      color: '#81CF08',
+      color: theme.palette.success.main,
     },
     details: {
       display: 'block',
       background: '#F6F6F6',
     },
     accept: {
-      marginLeft: 8,
+      marginLeft: theme.spacing(1),
     },
     cancel: {
-      marginRight: 8,
+      marginRight: theme.spacing(1),
     },
     noPad: {
       padding: 0,

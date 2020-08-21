@@ -10,7 +10,7 @@ import { StepperContext } from '../../../redux/stepper/stepperContext';
 import { useContext, useEffect } from 'react';
 import { CreateProjectActionData } from '../../../redux/stepper/actions/create-project-action';
 import { CreatorContext } from '../../../redux/creator/creator';
-import { projectCreationProgress } from '../../../../../components/project-execution/projectExecution-ui/ExecutionContants';
+import { projectCreationProgress } from './execution-contants';
 
 export default function ProjectCreation(): JSX.Element {
   const classes = useAccordionStyles();
@@ -42,7 +42,7 @@ export default function ProjectCreation(): JSX.Element {
       </AccordionSummary>
       <AccordionDetails className={classes.details}>
         {!state.create.loading && !state.create.success ? (
-          <Typography align="center" className={classes.error}>
+          <Typography align="center" color="error">
             Project creation failed
             <AcceptButton className={classes.accept} onClick={load}>
               Retry

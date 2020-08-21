@@ -1,7 +1,7 @@
 import { useUpgradeBannerStyles } from './upgrade-banner.styles';
 import Info from '@material-ui/icons/Info';
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import AcceptButton from '../accept-button/accept-button';
 
 export interface UpgradeBannerProps {
   version: string;
@@ -26,14 +26,7 @@ export default function UpgradeBanner(props: UpgradeBannerProps): JSX.Element {
           <div>Get IDE fixes and more Features </div>
         </div>
         <div className={classes.updateAction}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            href={DASHBOARD_DOWNLOAD_URL}
-          >
-            UPDATE NOW
-          </Button>
+          <AcceptButton href={DASHBOARD_DOWNLOAD_URL}>UPDATE NOW</AcceptButton>
         </div>
       </div>
     </div>

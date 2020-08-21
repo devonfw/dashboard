@@ -26,7 +26,6 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
     header: {
       display: 'flex',
       justifyContent: 'space-between',
-      color: '#495057',
       padding: '0 3em 3em 0',
       '& h3': {
         margin: 0,
@@ -43,7 +42,7 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
     },
     ProjectGrid: {
       position: 'relative',
-      marginBottom: '2em',
+      marginBottom: theme.spacing(4),
       '& .MuiCardContent-root': {
         position: 'absolute',
         top: '90px',
@@ -51,12 +50,18 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
     },
     alignCenter: {
       textAlign: 'center',
-      marginTop: '1em',
-      marginLeft: '2em',
+      marginTop: theme.spacing(2),
+      marginLeft: theme.spacing(4),
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
-      color: '#fff',
+      color: theme.palette.primary.contrastText,
+    },
+    name: {
+      color: theme.palette.primary.contrastText,
+    },
+    updateDate: {
+      color: theme.palette.primary.light,
     },
   })
 );

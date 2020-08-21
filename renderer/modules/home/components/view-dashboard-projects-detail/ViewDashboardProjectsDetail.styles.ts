@@ -6,13 +6,13 @@ export const useDashboardDetailsStyles = makeStyles((theme: Theme) =>
   createStyles({
     ideDetails: {
       minHeight: 100,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: theme.palette.primary.contrastText,
       boxShadow: '0px 3px 6px #00000029',
       borderRadius: '6px',
       display: 'flex',
       fontSize: '20px',
       justifyContent: 'space-evenly',
-      color: '#0075B3',
+      color: theme.palette.primary.main,
       paddingTop: '1em',
       marginTop: '2em',
       width: '100%',
@@ -22,12 +22,12 @@ export const useDashboardDetailsStyles = makeStyles((theme: Theme) =>
     },
     showChartIcon: {
       fontWeight: 'bold',
-      color: '#4CBDEC',
+      color: theme.palette.primary.light,
     },
     projectDetails: {
       display: 'flex',
       flexDirection: 'column',
-      color: '#0075B3',
+      color: theme.palette.primary.main,
       width: '60%',
     },
   })

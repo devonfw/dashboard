@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
 
     notification: {
-      backgroundColor: '#0075B3',
+      backgroundColor: theme.palette.primary.main,
       width: 350,
       position: 'absolute',
       top: 50,
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
-      color: '#fff',
+      color: theme.palette.primary.contrastText,
     },
   })
 );

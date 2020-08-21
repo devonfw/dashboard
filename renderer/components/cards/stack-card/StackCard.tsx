@@ -27,7 +27,7 @@ export default function StackCard(props: StackProps): JSX.Element {
             variant="body2"
             color="textSecondary"
             component="p"
-            className={classes.textCenter}
+            align="center"
           >
             {text}
           </Typography>

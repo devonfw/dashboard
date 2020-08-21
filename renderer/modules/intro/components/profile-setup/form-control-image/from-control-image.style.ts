@@ -3,12 +3,12 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 const useProfileControlImageStyles = makeStyles((theme: Theme) =>
   createStyles({
     imageUploadButton: {
-      padding: '0',
+      padding: 0,
       width: theme.spacing(12),
       height: theme.spacing(12),
     },
     imageUploadIcon: {
-      color: '#0075B3',
+      color: theme.palette.primary.main,
       width: theme.spacing(12),
       height: theme.spacing(12),
       border: '1px solid',

@@ -87,7 +87,9 @@ const reducer = (
     }
 
     case 'RESET_STEPPER': {
-      return getInitialState();
+      const projectData = { ...state.projectData };
+      projectData.path = state.projectData.path;
+      return { ...getInitialState(), projectData: projectData };
     }
 
     default:

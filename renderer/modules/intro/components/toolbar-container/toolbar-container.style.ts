@@ -4,7 +4,6 @@ const toolbarStyle = (theme: Theme) =>
   createStyles({
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
-      backgroundColor: '#0075B3',
     },
     logo: {
       width: 169,

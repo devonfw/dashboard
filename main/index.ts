@@ -26,6 +26,7 @@ import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updat
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
+import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/devon-ide-projects';
 import RepositoriesListener from './modules/repositories/repositories-listener';
 
 let mainWindow;
@@ -208,6 +209,9 @@ new ProjectDeleteListener(new DevonInstancesService()).listen();
 
 // Open a project in IDE process
 new OpenProjectIDEListener(new DevonInstancesService()).listen();
+
+// Getting all the project depebding on Devonfw IDE selector
+new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 
 const openProjectDirectory = (path: string) => {
   shell.showItemInFolder(path);

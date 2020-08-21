@@ -1,31 +1,30 @@
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import createStyles from '@material-ui/core/styles/createStyles';
 
-export const useUpgradeBannerStyles = makeStyles({
-  updateAction: {
-    '& a': {
-      marginTop: '16px',
-      backgroundColor: '#0075B3',
-      color: '#FFFFFF',
+export const useUpgradeBannerStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    updateAction: {
+      '& a': {
+        marginTop: theme.spacing(2),
+      },
     },
-    '& .MuiButton-containedPrimary': {
-      backgroundColor: '#0075B3',
+    upgrade: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginTop: theme.spacing(4),
+      marginBottom: theme.spacing(10),
     },
-  },
-  upgrade: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '2em',
-    marginBottom: '5em',
-  },
-  uppercase: {
-    textTransform: 'uppercase',
-    marginBottom: 2,
-    display: 'flex',
-    justifyContent: 'space-between',
-    '& .MuiSvgIcon-root': {
-      color: '#0075B3',
-      position: 'relative',
-      top: '-1px',
+    uppercase: {
+      textTransform: 'uppercase',
+      marginBottom: theme.spacing(0.25),
+      display: 'flex',
+      justifyContent: 'space-between',
+      '& .MuiSvgIcon-root': {
+        color: theme.palette.primary.main,
+        position: 'relative',
+        top: '-1px',
+      },
     },
-  },
-});
+  })
+);
