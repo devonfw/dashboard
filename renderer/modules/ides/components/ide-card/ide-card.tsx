@@ -1,41 +1,32 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import MessageSenderService from '../../../shared/services/renderer/messageSender.service';
+import AcceptButton from '../../../shared/components/accept-button/accept-button';
+import useIdeCardStyles from './ide-card.styles';
 
-const useStyles = makeStyles({
-  card: {
-    maxWidth: 300,
-    margin: '0 1rem 1rem 0',
-    paddingTop: '1rem',
-  },
-  media: {
-    height: 120,
-  },
-
-  containImg: {
-    'background-size': 'contain',
-    margin: '0 1rem',
-  },
-});
-
-interface IdeCardsProps {
+interface IdeCardProps {
+  name: string;
   image: string;
   title: string;
   description: string;
-  onClick: () => void;
-  loading: boolean;
 }
 
-export default function IdeCard(props: IdeCardsProps): JSX.Element {
-  const classes = useStyles();
-  const { image, title, description, onClick, loading } = props;
+export default function IdeCard(props: IdeCardProps): JSX.Element {
+  const { image, title, description, name } = props;
+  const [loading, setLoading] = useState(false);
+  const classes = useIdeCardStyles();
+
+  const handleOpenIde = async () => {
+    setLoading(true);
+    await new MessageSenderService().openIDE(name);
+    setLoading(false);
+  };
 
   return (
     <Card className={classes.card}>
@@ -55,14 +46,7 @@ export default function IdeCard(props: IdeCardsProps): JSX.Element {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={onClick}
-        >
-          Open
-        </Button>
+        <AcceptButton onClick={handleOpenIde}>Open</AcceptButton>
         {loading ? <CircularProgress size={28} /> : null}
       </CardActions>
     </Card>

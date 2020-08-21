@@ -147,7 +147,7 @@ export default function DashboardProjects(
         </div>
       </Grid>
       <Grid item xs={6} md={4} lg={3}>
-        <NextLink href="/start" className={classes.link}>
+        <NextLink href="/project-creation" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
               className={classes.newProject}

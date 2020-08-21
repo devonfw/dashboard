@@ -2,15 +2,13 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import CustomStepper from '../modules/projects/components/Stepper/CustomStepper';
+import Card from '@material-ui/core/Card/Card';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      backgroundColor: theme.palette.secondary.main,
-      marginRight: theme.spacing(2),
-      paddingTop: theme.spacing(2),
+    content: {
       paddingRight: theme.spacing(4),
-      paddingBottom: theme.spacing(2),
+      paddingBottom: theme.spacing(4),
       paddingLeft: theme.spacing(4),
     },
     header: {
@@ -34,9 +32,9 @@ export default function Start(): JSX.Element {
           <span>Projects &gt;</span> New Project
         </h3>
         <SpaceAround bgColor={'#F4F6F8'}>
-          <div className={classes.container}>
+          <Card className={classes.content}>
             <CustomStepper />
-          </div>
+          </Card>
         </SpaceAround>
       </>
     </Layout>

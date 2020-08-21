@@ -1,7 +1,7 @@
 import { Styles } from '../types/types';
 
 const styles: Styles = {
-  padding: '2rem 0 2rem 1rem',
+  padding: '2rem 2rem 2rem 2rem',
 };
 
 interface SpaceAroundProps {

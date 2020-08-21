@@ -3,7 +3,7 @@ import { StepperContext } from '../../../redux/stepper/stepperContext';
 import { Stack, stacksMap, stacksJSXMap, Technologies } from '../first/stacks';
 import { Grid } from '@material-ui/core';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import StackCard from '../../../../../components/cards/stack-card/StackCard';
+import StackCard from '../../stack-card/StackCard';
 
 const useDataStepStyles = makeStyles({
   dataContainer: {

@@ -14,7 +14,7 @@ export default function Projects(): JSX.Element {
 
   useEffect(() => {
     if (state.creatingProject) {
-      router.push('/start');
+      router.push('/project-creation');
       return;
     }
     global.ipcRenderer.on('ide:projects', ideProjectsHandler);

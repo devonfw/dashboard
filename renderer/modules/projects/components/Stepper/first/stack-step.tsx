@@ -1,4 +1,4 @@
-import StackCard from '../../../../../components/cards/stack-card/StackCard';
+import StackCard from '../../stack-card/StackCard';
 import Grid from '@material-ui/core/Grid';
 import StepperNavigation from '../stepper-navigation/stepper-navigation';
 import { useContext, useState } from 'react';

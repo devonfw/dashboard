@@ -243,7 +243,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
           </Grid>
         </Grid>
         <div className={classes.action}>
-          <Link href="/start">
+          <Link href="/project-creation">
             <div>
               <Button variant="outlined" onClick={this.setActiveState}>
                 Back
