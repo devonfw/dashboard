@@ -1,10 +1,10 @@
 import { useEffect, useState, ChangeEvent, useContext } from 'react';
 import { IpcRendererEvent } from 'electron';
-import { StepperContext } from '../../../../../redux/stepper/stepperContext';
-import { ProjectDataActionData } from '../../../../../redux/stepper/actions/project-data-action';
+import { StepperContext } from '../../../projects/redux/stepper/stepperContext';
+import { ProjectDataActionData } from '../../../projects/redux/stepper/actions/project-data-action';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import WhiteTextField from '../../../../../../shared/components/white-text-field/white-text-field';
+import WhiteTextField from '../white-text-field/white-text-field';
 
 interface InstancePath {
   ideConfig: {
@@ -61,5 +61,4 @@ export default function DevonfwIdeSelector(
       </WhiteTextField>
     </FormControl>
   );
-  return step;
 }

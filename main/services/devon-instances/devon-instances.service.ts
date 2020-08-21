@@ -305,20 +305,29 @@ export class DevonInstancesService implements SaveDetails {
     }
   }
 
-  deleteProject(projectDetail: ProjectDetails): Promise<ProjectDetails[]> {
+  deleteProject(
+    projectDetail: ProjectDetails,
+    dirPath: string
+  ): Promise<ProjectDetails[]> {
     return new Promise<ProjectDetails[]>((resolve, reject) => {
       this.deleteProjectFolder(projectDetail.path)
         .then(async () => {
           const projects = await this.readFile();
-          const updatedProjects = projects.filter(
-            (project) => project.name !== projectDetail.name
+          const relatedDirProjects = projects.filter(
+            (project) =>
+              project.name !== projectDetail.name &&
+              project.path.includes(dirPath)
           );
-          this.writeFile(updatedProjects);
-          return updatedProjects.length
-            ? resolve(updatedProjects)
+          const otherDirProjects = projects.filter(
+            (project) => !project.path.includes(dirPath)
+          );
+          this.writeFile([...relatedDirProjects, ...otherDirProjects]);
+          return relatedDirProjects.length
+            ? resolve(relatedDirProjects)
             : resolve([]);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           reject([]);
         });
     });

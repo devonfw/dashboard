@@ -17,19 +17,24 @@ export default function Projects(): JSX.Element {
       router.push('/start');
       return;
     }
-    global.ipcRenderer.send('find:projectDetails');
-    global.ipcRenderer.on(
-      'get:projectDetails',
-      (_: IpcRendererEvent, projects: ProjectDetails[]) => {
-        setProjects(projects);
-      }
-    );
-
+    global.ipcRenderer.on('ide:projects', ideProjectsHandler);
     return () => {
-      global.ipcRenderer.removeAllListeners('find:projectDetails');
-      global.ipcRenderer.removeAllListeners('get:projectDetails');
+      global.ipcRenderer.removeAllListeners('ide:projects');
     };
   }, []);
+
+  useEffect(() => {
+    if (state.projectData.path) {
+      global.ipcRenderer.send('ide:projects', state.projectData.path);
+    }
+  }, [state]);
+
+  const ideProjectsHandler = (
+    _: IpcRendererEvent,
+    data: { message: string; projects: ProjectDetails[] }
+  ) => {
+    setProject(data.projects);
+  };
 
   const setProject = (projects: ProjectDetails[]): void => {
     setProjects(projects);
@@ -38,7 +43,11 @@ export default function Projects(): JSX.Element {
   return (
     <Layout>
       <SpaceAround bgColor={'#F4F6F8'}>
-        <DashboardProjects projects={projects} setProject={setProject} />
+        <DashboardProjects
+          projects={projects}
+          setProject={setProject}
+          dirPath={state.projectData.path}
+        />
       </SpaceAround>
     </Layout>
   );
