@@ -30,7 +30,7 @@ export const drawerLinks: DrawerLink[] = [
   },
   {
     id: 2,
-    section: 'IDE',
+    section: `IDE's`,
     sectionPath: '/ides',
     icon: <DesktopWindowsOutlinedIcon />,
   },

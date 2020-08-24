@@ -5,21 +5,22 @@ import { Theme } from '@material-ui/core/styles/createMuiTheme';
 const useIdeCardStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      paddingTop: theme.spacing(2),
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(2),
       display: 'flex',
       justifyContent: 'space-between',
       flexDirection: 'column',
     },
     media: {
-      height: 120,
+      height: 88,
     },
-
+    actions: {
+      justifyContent: 'center',
+    },
     containImg: {
       backgroundSize: 'contain',
-      marginTop: 0,
-      marginRight: theme.spacing(2),
-      marginBottom: 0,
-      marginLeft: theme.spacing(2),
+      maxWidth: '25%',
+      margin: 'auto',
     },
   })
 );

@@ -8,7 +8,7 @@ interface IDE {
 const ides: IDE[] = [
   {
     name: 'eclipse',
-    image: '/assets/eclipse.png',
+    image: '/assets/ides/eclipse.svg',
     title: 'Eclipse IDE',
     description:
       'Eclipse contains a base workspace and an extensible plug-in system for customizing the environment.',
@@ -16,14 +16,14 @@ const ides: IDE[] = [
 
   {
     name: 'intellij',
-    image: '/assets/intellij.png',
+    image: '/assets/ides/intellij.svg',
     title: 'Intellij',
     description:
       'Its powerful static code analysis and ergonomic design makes development a productive and enjoyable experience.',
   },
   {
     name: 'vscode',
-    image: '/assets/vscode.png',
+    image: '/assets/ides/vscode.svg',
     title: 'VS Code',
     description:
       'Eclipse contains a base workspace and an extensible plug-in system for customizing the environment.',

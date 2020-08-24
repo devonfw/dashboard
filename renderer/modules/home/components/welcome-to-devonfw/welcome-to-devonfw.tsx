@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
 
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Spinner from '../../../shared/components/spinner/spinner';
 import AcceptButton from '../../../shared/components/accept-button/accept-button';
 import WelcomeSnippet from '../welcome-snippet/welcome-snippet';
@@ -17,10 +16,8 @@ export default function WelcomeToDevonfw(): JSX.Element {
   const [, setTotal] = useState(0);
   const [, setReceived] = useState(0);
   const [downloadProgress, setDownloadProgress] = useState(false);
-  const [downloadStatusMsg, setDownloadStatusMsg] = useState('');
-  const [downloadStatusMsgColor, setDownloadStatusMsgColor] = useState(
-    'error.main'
-  );
+  const [, setDownloadStatusMsg] = useState('');
+  const [, setDownloadStatusMsgColor] = useState('error.main');
 
   useEffect(() => {
     global.ipcRenderer.on(
