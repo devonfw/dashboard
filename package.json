@@ -3,6 +3,11 @@
   "productName": "ElectronNext",
   "version": "1.0.0",
   "main": "main/out/index.js",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devonfw/devonfw-dashboard"
+  },
   "scripts": {
     "build-main": "tsc -p main",
     "start-all": "npm run build-main && electron .",

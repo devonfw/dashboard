@@ -2,19 +2,21 @@ import { Terminal } from '../terminal/terminal';
 import { TerminalFactory } from '../terminal/terminal-factory';
 import { Command } from '../commands/command';
 import { IpcMainEvent, ipcMain } from 'electron';
+import { ListenerErrorHandler } from './listener-error-handler';
 
 type RendererEvent = IpcMainEvent;
 
 export abstract class RendererListener<T> {
-  terminal: Terminal | null;
-  event: RendererEvent;
-  errorMessage: string;
+  protected terminal: Terminal | null;
+  protected event: RendererEvent;
+  protected errorHandler: ListenerErrorHandler;
 
   constructor(
     private channel: string,
     private terminalFactory: TerminalFactory
   ) {
     this.terminal = null;
+    this.errorHandler = new ListenerErrorHandler();
   }
 
   listen(): void {
@@ -40,21 +42,21 @@ export abstract class RendererListener<T> {
 
   protected onData(): void {
     this.terminal.stdout.on('data', (data) => {
-      this.unsetFinishedWitError();
+      this.errorHandler.setSuccess();
       this.send('data', data);
     });
   }
 
   protected onError(): void {
     this.terminal.stderr.on('data', (data) => {
-      this.setFinishedWithError();
+      this.errorHandler.setError();
       this.send('error', data);
     });
   }
 
   protected onClose(): void {
     this.terminal.on('close', () => {
-      this.send('end', this.errorMessage);
+      this.send('end', this.getErrorStatus());
     });
   }
 
@@ -67,11 +69,7 @@ export abstract class RendererListener<T> {
     });
   }
 
-  private setFinishedWithError() {
-    this.errorMessage = 'error';
-  }
-
-  private unsetFinishedWitError() {
-    this.errorMessage = '';
+  protected getErrorStatus(): string {
+    return this.errorHandler.getStatus();
   }
 }

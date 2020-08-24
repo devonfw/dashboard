@@ -13,16 +13,17 @@ interface IdeCardProps {
   image: string;
   title: string;
   description: string;
+  devonfwIde: string;
 }
 
 export default function IdeCard(props: IdeCardProps): JSX.Element {
-  const { image, title, description, name } = props;
+  const { image, title, description, name, devonfwIde } = props;
   const [loading, setLoading] = useState(false);
   const classes = useIdeCardStyles();
 
   const handleOpenIde = async () => {
     setLoading(true);
-    await new MessageSenderService().openIDE(name);
+    await new MessageSenderService().openIDE(name, devonfwIde);
     setLoading(false);
   };
 

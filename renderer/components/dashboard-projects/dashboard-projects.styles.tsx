@@ -26,7 +26,7 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
     header: {
       display: 'flex',
       justifyContent: 'space-between',
-      padding: '0 3em 3em 0',
+      padding: '0 3em 2em 0',
       '& h3': {
         margin: 0,
       },

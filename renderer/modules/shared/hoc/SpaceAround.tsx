@@ -7,6 +7,7 @@ const styles: Styles = {
 interface SpaceAroundProps {
   children: JSX.Element;
   bgColor?: string;
+  top?: number;
 }
 
 export default function SpaceAround(props: SpaceAroundProps): JSX.Element {
@@ -16,6 +17,13 @@ export default function SpaceAround(props: SpaceAroundProps): JSX.Element {
     spaceAroundStyles = {
       ...spaceAroundStyles,
       backgroundColor: props.bgColor,
+    };
+  }
+
+  if (props.top) {
+    spaceAroundStyles = {
+      ...spaceAroundStyles,
+      paddingTop: `${props.top}rem`,
     };
   }
 
