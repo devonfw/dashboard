@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StepperActions } from './actions/stepper-actions';
 import { updateProjectDataState } from './utils/utils';
+import { ProjectData } from './project-data.model';
 
 export interface StepperState {
   activeStep: number;
@@ -13,14 +14,7 @@ export interface StepperState {
     loading: boolean;
     success: boolean;
   };
-  projectData: {
-    name: string;
-    type: string;
-    path: string;
-    specificArgs?: {
-      [key: string]: string | boolean | null | undefined;
-    };
-  };
+  projectData: ProjectData;
 }
 
 const getInitialState = () => ({
