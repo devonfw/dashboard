@@ -92,7 +92,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
   };
 
   groupHandler = (value: string): void => {
-    const updatedForm: FormControls = {
+    const updatedForm = {
       ...this.state.formControls,
     };
     const artifact: FormType = { ...updatedForm.artifact };
@@ -117,7 +117,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
   };
 
   artifactHandler = (value: string) => {
-    const updatedForm: FormControls = {
+    const updatedForm = {
       ...this.state.formControls,
     };
     const artifact: FormType = { ...updatedForm.artifact };
@@ -141,7 +141,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
   };
 
   eventHandler(identifier: string, value: string): void {
-    const formState: FormControls = {
+    const formState = {
       ...this.state.formControls,
     };
     const element: FormType = { ...formState[identifier] };
