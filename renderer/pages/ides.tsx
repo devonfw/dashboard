@@ -1,7 +1,8 @@
-import React from 'react';
+import { useContext } from 'react';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { StepperContext } from '../modules/projects/redux/stepper/stepperContext';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ides from '../modules/ides/ides';
 import IdeCard from '../modules/ides/components/ide-card/ide-card';
 import TitleCounter from '../modules/shared/components/title-counter/title-counter';
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function IDES(): JSX.Element {
   const classes = useStyles();
+  const { state } = useContext(StepperContext);
 
   return (
     <Layout>
@@ -31,7 +33,11 @@ export default function IDES(): JSX.Element {
           </TitleCounter>
           <div className={classes.cardsContainer}>
             {ides.map((ide) => (
-              <IdeCard key={ide.name} {...ide} />
+              <IdeCard
+                key={ide.name}
+                devonfwIde={state.projectData.path}
+                {...ide}
+              />
             ))}
           </div>
         </>

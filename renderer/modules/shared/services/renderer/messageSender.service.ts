@@ -34,8 +34,8 @@ export default class MessageSenderService extends Renderer {
     return message;
   }
 
-  openIDE(ide: string): Promise<string> {
-    return super.send<string>('terminal/all-commands', `devon ${ide}`);
+  openIDE(ide: string, cwd?: string): Promise<string> {
+    return super.send<string>('terminal/all-commands', `devon ${ide}`, cwd);
   }
 
   installModules(path: string): ChannelObservable {
