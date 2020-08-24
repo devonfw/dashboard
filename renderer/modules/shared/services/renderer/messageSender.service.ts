@@ -1,20 +1,10 @@
 import Renderer from './renderer.service';
 import { ChannelObservable } from '../../utils/observation/observable';
+import { ProjectData } from '../../../projects/redux/stepper/project-data.model';
 
 interface DialogStatus {
   filePaths: string[];
   canceled?: boolean;
-}
-
-interface SpecificArgs {
-  [key: string]: string | boolean | null | undefined;
-}
-
-export interface ProjectData {
-  name: string;
-  type: string;
-  path: string;
-  specificArgs: SpecificArgs;
 }
 
 export default class MessageSenderService extends Renderer {
