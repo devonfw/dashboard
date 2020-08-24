@@ -2,15 +2,14 @@ import React from 'react';
 import Layout from '../modules/shared/hoc/Layout';
 import SpaceAround from '../modules/shared/hoc/SpaceAround';
 import { makeStyles } from '@material-ui/core/styles';
-import EclipseCard from '../components/cards/ide-cards/eclipse/eclipse-card.view';
-import VSCodeCard from '../components/cards/ide-cards/vscode-card/vscode-card.view';
-import IntellijCard from '../components/cards/ide-cards/intellij/intellij-card.view';
+import ides from '../modules/ides/ides';
+import IdeCard from '../modules/ides/components/ide-card/ide-card';
 
 const useStyles = makeStyles({
   cardsContainer: {
-    display: 'flex',
-    'flex-wrap': 'wrap',
-    'justify-content': 'space-evenly',
+    display: 'grid',
+    gridGap: 16,
+    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
   },
 });
 
@@ -21,9 +20,9 @@ export default function IDES(): JSX.Element {
     <Layout>
       <SpaceAround>
         <div className={classes.cardsContainer}>
-          <EclipseCard></EclipseCard>
-          <VSCodeCard></VSCodeCard>
-          <IntellijCard></IntellijCard>
+          {ides.map((ide) => (
+            <IdeCard key={ide.name} {...ide} />
+          ))}
         </div>
       </SpaceAround>
     </Layout>

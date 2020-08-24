@@ -1,4 +1,3 @@
-import Drawer from '../components/drawer/drawer';
 import Head from 'next/head';
 
 const Layout = (props: { children: JSX.Element }): JSX.Element => (
@@ -15,7 +14,7 @@ const Layout = (props: { children: JSX.Element }): JSX.Element => (
       <title>devonfw dashboard</title>
     </Head>
 
-    <div>{props.children}</div>
+    {props.children}
   </div>
 );
 

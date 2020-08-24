@@ -115,21 +115,18 @@ export default class Installations extends Component<
   };
 
   downloadCompleteHandler = (): void => {
-    global.ipcRenderer.on(
-      'download completed',
-      (event: IpcRendererEvent, arg: string) => {
-        const installations = this.state.installations.map(
-          (i: DevonIdeScripts) => {
-            i.downloading = false;
-            return i;
-          }
-        );
-        this.setState({ installations });
-      }
-    );
+    global.ipcRenderer.on('download completed', () => {
+      const installations = this.state.installations.map(
+        (i: DevonIdeScripts) => {
+          i.downloading = false;
+          return i;
+        }
+      );
+      this.setState({ installations });
+    });
   };
 
-  handlePageChange = (event: unknown, newPage: number) => {
+  handlePageChange = (event: unknown, newPage: number): void => {
     const tableState: TableState = {
       page: newPage,
       rowsPerPage: this.state.tableState.rowsPerPage,
@@ -137,7 +134,7 @@ export default class Installations extends Component<
     this.setState({ tableState });
   };
 
-  handleRowsPerPageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  handleRowsPerPageChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const tableState: TableState = {
       page: 0,
       rowsPerPage: parseInt(event.target.value, 10),
