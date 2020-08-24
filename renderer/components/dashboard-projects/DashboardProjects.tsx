@@ -21,6 +21,7 @@ import { ProcessState } from '../../models/dashboard/ProcessState';
 import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
 import MenuList from './menu-list';
+import TitleCounter from '../../modules/shared/components/title-counter/title-counter';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
@@ -141,7 +142,7 @@ export default function DashboardProjects(
   return (
     <div className={classes.root}>
       <Grid item xs={12} className={classes.header}>
-        <h2>{`${props.projects.length} Projects`}</h2>
+        <TitleCounter count={props.projects.length}> Projects</TitleCounter>
         <div className="search">
           <TextField id="outlined-basic" label="Search" variant="outlined" />
         </div>

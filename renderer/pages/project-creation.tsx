@@ -12,9 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: theme.spacing(4),
     },
     header: {
-      paddingLeft: theme.spacing(2),
-      paddingTop: theme.spacing(2),
-      marginBottom: 0,
+      marginBottom: theme.spacing(4),
       '& > span': {
         color: theme.palette.primary.main,
       },
@@ -27,16 +25,16 @@ export default function Start(): JSX.Element {
 
   return (
     <Layout>
-      <>
-        <h3 className={classes.header}>
-          <span>Projects &gt;</span> New Project
-        </h3>
-        <SpaceAround bgColor={'#F4F6F8'}>
+      <SpaceAround bgColor={'#F4F6F8'} top={1}>
+        <>
+          <h3 className={classes.header}>
+            <span>Projects &gt;</span> New Project
+          </h3>
           <Card className={classes.content}>
             <CustomStepper />
           </Card>
-        </SpaceAround>
-      </>
+        </>
+      </SpaceAround>
     </Layout>
   );
 }
