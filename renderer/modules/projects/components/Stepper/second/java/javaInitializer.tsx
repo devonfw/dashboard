@@ -144,7 +144,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     const formState = {
       ...this.state.formControls,
     };
-    const element: FormType = { ...formState[identifier] };
+    const element = { ...formState[identifier] };
     element.touched = true;
     element.value = value;
     if (element.validation) {

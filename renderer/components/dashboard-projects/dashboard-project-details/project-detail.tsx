@@ -2,7 +2,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
-import { ProjectDetails } from '../../modules/projects/redux/stepper/data.model';
+import { ProjectDetails } from '../../../modules/projects/redux/stepper/data.model';
 
 interface ProjectDetailProps {
   project: ProjectDetails;

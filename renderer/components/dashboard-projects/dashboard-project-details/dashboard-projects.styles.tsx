@@ -23,20 +23,6 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
       width: '211px',
       height: '159px',
     },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: '0 3em 2em 0',
-      '& h3': {
-        margin: 0,
-      },
-      '& .search': {
-        width: '250px',
-      },
-      '& .MuiFormControl-root': {
-        width: '100%',
-      },
-    },
     link: {
       textDecoration: 'none',
     },
