@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  useEffect,
-  MutableRefObject,
-} from 'react';
+import React, { ChangeEvent, MutableRefObject } from 'react';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -15,22 +10,18 @@ interface DashboardFilterProps {
 }
 
 export const DashboardFilter = (props: DashboardFilterProps): JSX.Element => {
-  const [filterValue, setFilterValue] = useState<string>('');
   const onChangeFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setFilterValue(event.target.value);
     props.filterHandler(event);
   };
-  useEffect(() => {
-    setFilterValue(props.value);
-  }, [props.value]);
   return (
     <FormControl variant="outlined">
       <TextField
         select
-        value={filterValue}
+        value={props.value}
         variant="outlined"
         inputRef={props.filterRef}
         onChange={onChangeFilterHandler}
+        label="Filter"
         inputProps={{
           id: 'filter',
         }}

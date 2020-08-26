@@ -2,45 +2,59 @@ import React, {
   ChangeEvent,
   useState,
   useEffect,
-  useRef,
+  useContext,
   MutableRefObject,
 } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { useDashboardSearchStyles } from './dashboard-search.styles';
-import {
-  ProjectDetails,
-  SearchForm,
-} from '../../../modules/projects/redux/stepper/data.model';
+import { SearchForm } from '../../../modules/projects/redux/stepper/data.model';
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
+import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
 
 interface DashboardSearchProps {
   searchRef: MutableRefObject<HTMLInputElement>;
   filterRef: MutableRefObject<HTMLInputElement>;
-  value: SearchForm;
-  projects: ProjectDetails[];
+  totalProjects: number;
   searchHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
-  const classes = useDashboardSearchStyles({});
-  const [searchValue, setSearchValue] = useState<string>('');
-  const onChangeSearchHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    props.searchHandler(event);
+  const initialSearchFormState = {
+    searchValue: '',
+    filterValue: 'name',
   };
-  const onChangeFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    props.searchHandler(event);
-  };
+  const { state } = useContext(StepperContext);
   useEffect(() => {
-    setSearchValue(props.value.searchValue);
-  }, [props.value.searchValue]);
+    if (state.projectData.path) {
+      setDashboardSearch(initialSearchFormState);
+    }
+  }, [state]);
+  const classes = useDashboardSearchStyles({});
+  const [dashboardSearch, setDashboardSearch] = useState<SearchForm>(
+    initialSearchFormState
+  );
+  const onChangeSearchHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.id === 'search') {
+      setDashboardSearch({
+        ...dashboardSearch,
+        searchValue: event.target.value,
+      });
+    } else {
+      setDashboardSearch({
+        ...dashboardSearch,
+        filterValue: event.target.value,
+      });
+    }
+    props.searchHandler(event);
+  };
+
   return (
     <div className={classes.header}>
-      <h2>{`${props.projects.length} Projects`}</h2>
+      <h2>{`${props.totalProjects} Projects`}</h2>
       <div className={classes.filter}>
         <DashboardFilter
-          value={props.value.filterValue}
-          filterHandler={onChangeFilterHandler}
+          value={dashboardSearch.filterValue}
+          filterHandler={onChangeSearchHandler}
           filterRef={props.filterRef}
         />
         <div className="search">
@@ -49,7 +63,7 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
             id="outlined-basic"
             label="Search"
             variant="outlined"
-            value={searchValue}
+            value={dashboardSearch.searchValue}
             inputRef={props.searchRef}
             onChange={onChangeSearchHandler}
             inputProps={{

@@ -4,7 +4,6 @@ import {
   ChangeEvent,
   useRef,
   MutableRefObject,
-  useContext,
 } from 'react';
 import { IpcRendererEvent } from 'electron';
 import NextLink from '../../../modules/shared/components/nextjs-link/NextLink';
@@ -30,7 +29,6 @@ import { ProjectMenuType } from '../../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
 import MenuList from '../menu-list/menu-list';
 import { DashboardSearch } from '../dashboard-search/dashboard-search';
-import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
@@ -43,7 +41,6 @@ interface DashboardProjectsProps {
 export default function DashboardProjects(
   props: DashboardProjectsProps
 ): JSX.Element {
-  // const { state } = useContext(StepperContext);
   const renderer = new Renderer();
   const classes = useDashboardProjectsStyles({});
   const initialState = {
@@ -56,12 +53,10 @@ export default function DashboardProjects(
     message: '',
     operation: false,
   };
-  const initialSearchForm = {
-    searchValue: '',
-    filterValue: 'name',
-  };
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<ProjectMenuType>(initialState);
+  const [projectState, setProjectState] = useState<ProjectMenuType>(
+    initialState
+  );
   const [alertMessage, setAlertMessage] = useState<AlertType>(
     initialAlertState
   );
@@ -81,10 +76,6 @@ export default function DashboardProjects(
     });
   };
 
-  const [searchFormState, setSearchFormState] = useState<SearchForm>(
-    initialSearchForm
-  );
-
   useEffect(() => {
     renderer.on('open:projectInIde', ideHandler);
     renderer.on('delete:project', deleteHandler);
@@ -98,7 +89,7 @@ export default function DashboardProjects(
     project: ProjectDetails
   ) => {
     event.preventDefault();
-    setState({
+    setProjectState({
       mouseX: event.clientX - 2,
       mouseY: event.clientY - 4,
       project: project,
@@ -140,29 +131,29 @@ export default function DashboardProjects(
   };
 
   const handleClose = () => {
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const openProjectInIde = (ide: string) => {
     setOpen(true);
     global.ipcRenderer.send('open:projectInIde', {
-      project: state.project,
+      project: projectState.project,
       ide: ide,
     });
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const deleteProject = () => {
     setOpen(true);
     global.ipcRenderer.send('delete:project', {
-      project: state.project,
+      project: projectState.project,
       dirPath: props.dirPath,
     });
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const openProjectDirectory = () => {
-    global.ipcRenderer.send('open:projectDirectory', state.project.path);
+    global.ipcRenderer.send('open:projectDirectory', projectState.project.path);
   };
 
   const searchHandler = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -187,9 +178,8 @@ export default function DashboardProjects(
         <DashboardSearch
           searchRef={searchElement}
           filterRef={filterElement}
-          value={searchFormState}
           searchHandler={searchHandler}
-          projects={props.projects}
+          totalProjects={props.projects.length}
         />
       </Grid>
       <Grid item xs={6} md={4} lg={3}>
@@ -227,8 +217,8 @@ export default function DashboardProjects(
           })
         : null}
       <MenuList
-        project={state.project}
-        state={state}
+        project={projectState.project}
+        state={projectState}
         handleClose={handleClose}
         openProjectInIde={openProjectInIde}
         openProjectDirectory={openProjectDirectory}
