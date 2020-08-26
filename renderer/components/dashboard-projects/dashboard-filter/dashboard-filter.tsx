@@ -1,10 +1,16 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, {
+  useState,
+  ChangeEvent,
+  useEffect,
+  MutableRefObject,
+} from 'react';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
 interface DashboardFilterProps {
   value: string;
+  filterRef: MutableRefObject<HTMLInputElement>;
   filterHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,6 +29,7 @@ export const DashboardFilter = (props: DashboardFilterProps): JSX.Element => {
         select
         value={filterValue}
         variant="outlined"
+        inputRef={props.filterRef}
         onChange={onChangeFilterHandler}
         inputProps={{
           id: 'filter',

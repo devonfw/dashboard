@@ -1,4 +1,11 @@
-import { useState, useEffect } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  useRef,
+  MutableRefObject,
+  useContext,
+} from 'react';
 import { IpcRendererEvent } from 'electron';
 import NextLink from '../../../modules/shared/components/nextjs-link/NextLink';
 import Grid from '@material-ui/core/Grid';
@@ -13,6 +20,7 @@ import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 import {
   ProjectDetails,
   ProjectDeleteUpdates,
+  SearchForm,
 } from '../../../modules/projects/redux/stepper/data.model';
 import Alerts from '../../../modules/shared/components/alerts/alerts';
 import { AlertType } from '../../../models/alert/alert.model';
@@ -21,11 +29,13 @@ import { ProcessState } from '../../../models/dashboard/ProcessState';
 import { ProjectMenuType } from '../../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
 import MenuList from '../menu-list/menu-list';
+import { DashboardSearch } from '../dashboard-search/dashboard-search';
+import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
   allProjects: ProjectDetails[];
-  setProject: (project: ProjectDetails[]) => void;
+  setProject: (searchForm: SearchForm, projects: ProjectDetails[]) => void;
   setAllProject: (project: ProjectDetails[]) => void;
   dirPath: string;
 }
@@ -33,6 +43,7 @@ interface DashboardProjectsProps {
 export default function DashboardProjects(
   props: DashboardProjectsProps
 ): JSX.Element {
+  // const { state } = useContext(StepperContext);
   const renderer = new Renderer();
   const classes = useDashboardProjectsStyles({});
   const initialState = {
@@ -45,11 +56,21 @@ export default function DashboardProjects(
     message: '',
     operation: false,
   };
+  const initialSearchForm = {
+    searchValue: '',
+    filterValue: 'name',
+  };
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<ProjectMenuType>(initialState);
   const [alertMessage, setAlertMessage] = useState<AlertType>(
     initialAlertState
   );
+  const searchElement = useRef<HTMLInputElement>() as MutableRefObject<
+    HTMLInputElement
+  >;
+  const filterElement = useRef<HTMLInputElement>() as MutableRefObject<
+    HTMLInputElement
+  >;
 
   const closeAlert = () => {
     setAlertMessage((prevState: AlertType) => {
@@ -59,6 +80,10 @@ export default function DashboardProjects(
       };
     });
   };
+
+  const [searchFormState, setSearchFormState] = useState<SearchForm>(
+    initialSearchForm
+  );
 
   useEffect(() => {
     renderer.on('open:projectInIde', ideHandler);
@@ -97,7 +122,7 @@ export default function DashboardProjects(
   const deleteHandler = (_: IpcRendererEvent, data: ProjectDeleteUpdates) => {
     setOpen(false);
     if (data.message === 'success') {
-      props.setProject(data.projects);
+      props.setProject(getFilteredValue(), data.projects);
       props.setAllProject(data.projects);
       setAlertMessage({
         alertSeverity: 'success',
@@ -140,10 +165,35 @@ export default function DashboardProjects(
     global.ipcRenderer.send('open:projectDirectory', state.project.path);
   };
 
+  const searchHandler = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.id === 'search') {
+      props.setProject(getFilteredValue(), props.allProjects);
+    } else {
+      filterElement.current.value = event.target.value;
+      props.setProject(getFilteredValue(), props.allProjects);
+    }
+  };
+
+  const getFilteredValue = (): SearchForm => {
+    return {
+      searchValue: searchElement.current?.value,
+      filterValue: filterElement.current.value,
+    };
+  };
+
   return (
     <div className={classes.root}>
+      <Grid item xs={12}>
+        <DashboardSearch
+          searchRef={searchElement}
+          filterRef={filterElement}
+          value={searchFormState}
+          searchHandler={searchHandler}
+          projects={props.projects}
+        />
+      </Grid>
       <Grid item xs={6} md={4} lg={3}>
-        <NextLink href="/start" className={classes.link}>
+        <NextLink href="/project-creation" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
               className={classes.newProject}

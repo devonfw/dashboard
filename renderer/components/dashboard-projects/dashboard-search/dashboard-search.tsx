@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, {
+  ChangeEvent,
+  useState,
+  useEffect,
+  useRef,
+  MutableRefObject,
+} from 'react';
 import TextField from '@material-ui/core/TextField';
 import { useDashboardSearchStyles } from './dashboard-search.styles';
 import {
@@ -8,6 +14,8 @@ import {
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
 
 interface DashboardSearchProps {
+  searchRef: MutableRefObject<HTMLInputElement>;
+  filterRef: MutableRefObject<HTMLInputElement>;
   value: SearchForm;
   projects: ProjectDetails[];
   searchHandler: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -20,6 +28,9 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
     setSearchValue(event.target.value);
     props.searchHandler(event);
   };
+  const onChangeFilterHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    props.searchHandler(event);
+  };
   useEffect(() => {
     setSearchValue(props.value.searchValue);
   }, [props.value.searchValue]);
@@ -29,7 +40,8 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
       <div className={classes.filter}>
         <DashboardFilter
           value={props.value.filterValue}
-          filterHandler={props.searchHandler}
+          filterHandler={onChangeFilterHandler}
+          filterRef={props.filterRef}
         />
         <div className="search">
           <TextField
@@ -38,6 +50,7 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
             label="Search"
             variant="outlined"
             value={searchValue}
+            inputRef={props.searchRef}
             onChange={onChangeSearchHandler}
             inputProps={{
               id: 'search',

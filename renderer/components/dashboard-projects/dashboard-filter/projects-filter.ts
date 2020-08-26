@@ -8,7 +8,6 @@ export function applyFilter(
   allProjects: ProjectDetails[]
 ): ProjectDetails[] {
   const { searchValue, filterValue } = searchFormState;
-  console.log('filter -> ', searchFormState);
   let result: ProjectDetails[] = [];
   let selectedFilteredValue = '';
   if (filterValue) {
@@ -24,18 +23,24 @@ export function applyFilter(
         break;
     }
   }
-  if (searchValue) {
-    result = allProjects.filter((project: ProjectDetails | any) => {
-      if (selectedFilteredValue === 'domain') {
-        return (
-          project.domain.indexOf(filterValue) !== -1 &&
-          project.name.indexOf(searchValue) !== -1
-        );
-      }
-      return project[selectedFilteredValue].includes(searchValue);
-    });
+  if (selectedFilteredValue === 'domain' && !searchValue) {
+    result = allProjects.filter(
+      (project: ProjectDetails) => project.domain.indexOf(filterValue) !== -1
+    );
   } else {
-    result = allProjects;
+    if (searchValue) {
+      result = allProjects.filter((project: ProjectDetails | any) => {
+        if (selectedFilteredValue === 'domain') {
+          return (
+            project.domain.indexOf(filterValue) !== -1 &&
+            project.name.indexOf(searchValue) !== -1
+          );
+        }
+        return project[selectedFilteredValue].indexOf(searchValue) !== -1;
+      });
+    } else {
+      result = allProjects;
+    }
   }
   return result;
 }
