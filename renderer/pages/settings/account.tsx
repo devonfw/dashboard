@@ -6,7 +6,7 @@ export default function Account(): JSX.Element {
   return (
     <Background>
       <SpaceAround>
-        <ProfileSetup accept="Accept" cancel="Cancel"></ProfileSetup>
+          <ProfileSetup settingsPage={true}></ProfileSetup>
       </SpaceAround>
     </Background>
   );
