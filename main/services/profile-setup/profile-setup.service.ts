@@ -35,7 +35,7 @@ export class ProfileSetupService {
     });
   }
 
-  checkProfile(): Promise<boolean> {
+  doesProfileExist(): Promise<boolean> {
     return new Promise((resolve) => {
       fs.access(this.profileFilePath, fs.constants.F_OK, (err) => {
         if (err) resolve(false);
