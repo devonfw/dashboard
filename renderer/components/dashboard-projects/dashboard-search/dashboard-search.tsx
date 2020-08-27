@@ -10,7 +10,6 @@ import { useDashboardSearchStyles } from './dashboard-search.styles';
 import { SearchForm } from '../../../modules/projects/redux/stepper/data.model';
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
 import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
-import { debounce } from '@material-ui/core';
 
 interface DashboardSearchProps {
   searchRef: MutableRefObject<HTMLInputElement>;
