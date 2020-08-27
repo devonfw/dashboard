@@ -5,7 +5,7 @@ import { UserProfile } from '../../modules/shared/models/user-profile';
 
 const defaultUser: UserProfile = {
   name: 'Unknown User',
-  image: '/assets/user.png',
+  image: '/static/assets/user.png',
   gender: 'male',
   role: 'Undefined Role',
 };

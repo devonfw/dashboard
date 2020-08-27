@@ -21,7 +21,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <img
-            src="/assets/devonfw.svg"
+            src="/static/assets/devonfw.svg"
             alt="devonfw logo"
             className={classes.logo}
           />

@@ -21,7 +21,7 @@ export default function ProjectDetail(props: ProjectDetailProps): JSX.Element {
     >
       <CardMedia
         className={classes.newProject}
-        image={`/assets/${props.project.domain}.png`}
+        image={`/static/assets/${props.project.domain}.png`}
         title={props.project.domain}
       />
       <CardContent>
