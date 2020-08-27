@@ -2,6 +2,7 @@ import React, { ChangeEvent, MutableRefObject } from 'react';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import { technologies } from './technologies-list';
 
 interface DashboardFilterProps {
   value: string;
@@ -38,9 +39,11 @@ export const DashboardFilter = (props: DashboardFilterProps): JSX.Element => {
         >
           By Technology
         </MenuItem>
-        <MenuItem value={'node'}>Node</MenuItem>
-        <MenuItem value={'angular'}>Angular</MenuItem>
-        <MenuItem value={'java'}>Java</MenuItem>
+        {technologies.map((technology) => (
+          <MenuItem key={technology.value} value={technology.value}>
+            {technology.name}
+          </MenuItem>
+        ))}
       </TextField>
     </FormControl>
   );

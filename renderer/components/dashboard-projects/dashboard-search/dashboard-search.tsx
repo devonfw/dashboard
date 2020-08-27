@@ -10,6 +10,7 @@ import { useDashboardSearchStyles } from './dashboard-search.styles';
 import { SearchForm } from '../../../modules/projects/redux/stepper/data.model';
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
 import { StepperContext } from '../../../modules/projects/redux/stepper/stepperContext';
+import { debounce } from '@material-ui/core';
 
 interface DashboardSearchProps {
   searchRef: MutableRefObject<HTMLInputElement>;
@@ -50,7 +51,9 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
 
   return (
     <div className={classes.header}>
-      <h2>{`${props.totalProjects} Projects`}</h2>
+      <h2
+        className={classes.totalProjects}
+      >{`${props.totalProjects} Projects`}</h2>
       <div className={classes.filter}>
         <DashboardFilter
           value={dashboardSearch.filterValue}

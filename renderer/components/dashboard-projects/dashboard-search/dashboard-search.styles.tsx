@@ -11,15 +11,27 @@ export const useDashboardSearchStyles = makeStyles((theme: Theme) =>
         margin: 0,
       },
       '& .search': {
-        width: '30em',
+        minWidth: '40%',
         marginLeft: '2em',
       },
       '& .MuiFormControl-root': {
-        width: '100%',
+        minWidth: '40%',
       },
+      [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column',
+      },
+    },
+    totalProjects: {
+      minWidth: '20%',
+      marginRight: '1em',
     },
     filter: {
       display: 'flex',
+      minWidth: '80%',
+      justifyContent: 'flex-end',
+      [theme.breakpoints.down('sm')]: {
+        justifyContent: 'start',
+      },
     },
     searchBox: {
       width: '100%',

@@ -157,12 +157,10 @@ export default function DashboardProjects(
   };
 
   const searchHandler = (event: ChangeEvent<HTMLInputElement>): void => {
-    if (event.target.id === 'search') {
-      props.setProject(getFilteredValue(), props.allProjects);
-    } else {
+    if (event.target.id !== 'search') {
       filterElement.current.value = event.target.value;
-      props.setProject(getFilteredValue(), props.allProjects);
     }
+    props.setProject(getFilteredValue(), props.allProjects);
   };
 
   const getFilteredValue = (): SearchForm => {

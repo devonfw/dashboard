@@ -9,7 +9,7 @@ import {
 } from '../modules/projects/redux/stepper/data.model';
 import { useRouter } from 'next/router';
 import { StepperContext } from '../modules/projects/redux/stepper/stepperContext';
-import { applyFilter } from '../components/dashboard-projects/dashboard-filter/projects-filter';
+import { ProjectsFilter } from '../components/dashboard-projects/dashboard-filter/projects-filter';
 
 export default function Projects(): JSX.Element {
   const [projects, setProjects] = useState<ProjectDetails[]>([]);
@@ -17,7 +17,6 @@ export default function Projects(): JSX.Element {
   const router = useRouter();
   // this state is required for the search operation in DashboardProjects component
   const [allProjects, setAllProjects] = useState<ProjectDetails[]>([]);
-
   useEffect(() => {
     if (state.creatingProject) {
       router.push('/project-creation');
@@ -60,7 +59,7 @@ export default function Projects(): JSX.Element {
     searchForm: SearchForm,
     projects: ProjectDetails[]
   ): void => {
-    setProjects(applyFilter(searchForm, projects));
+    setProjects(new ProjectsFilter(projects).applyFilter(searchForm));
   };
 
   return (
