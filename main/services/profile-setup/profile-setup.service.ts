@@ -5,7 +5,7 @@ import { UserProfile } from '../../modules/shared/models/user-profile';
 
 const defaultUser: UserProfile = {
   name: 'Unknown User',
-  image: '/assets/user.png',
+  image: '/static/assets/user.png',
   gender: 'male',
   role: 'Undefined Role',
 };
@@ -35,7 +35,7 @@ export class ProfileSetupService {
     });
   }
 
-  checkProfile(): Promise<boolean> {
+  doesProfileExist(): Promise<boolean> {
     return new Promise((resolve) => {
       fs.access(this.profileFilePath, fs.constants.F_OK, (err) => {
         if (err) resolve(false);

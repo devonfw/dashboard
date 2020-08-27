@@ -185,7 +185,7 @@ export default function DashboardProjects(
           <Card className={classes.ProjectGrid}>
             <CardMedia
               className={classes.newProject}
-              image="/assets/add_new_project.png"
+              image="/static/assets/add_new_project.png"
               title="Add new Project"
             />
             <CardContent className={classes.alignCenter}>

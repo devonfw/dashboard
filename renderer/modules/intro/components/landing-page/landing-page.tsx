@@ -48,7 +48,7 @@ export default function LandingPage(props: LandingPageProps): JSX.Element {
 
   return (
     <div className={classes.root}>
-      <img className={classes.welcomeImage} src="/assets/welcome.svg" />
+      <img className={classes.welcomeImage} src="/static/assets/welcome.svg" />
       <h1>Welcome to devonfw-dashboard!</h1>
       <p className={classes.welcomeText}>
         Let&apos;s get your profile setup and desribe your dev environment as

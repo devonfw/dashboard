@@ -46,41 +46,43 @@ app.on('ready', async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  try {
-    const profileExists = await new ProfileSetupService().checkProfile();
-    const startPage = profileExists ? 'home' : 'intro';
-    const url = isDev
-      ? 'http://localhost:8000/' + startPage
-      : format({
-          pathname: join(__dirname, '../../renderer/' + startPage + '.html'),
-          protocol: 'file:',
-          slashes: true,
-        });
-
-    mainWindow.loadURL(url);
-  } catch (error) {
-    const url = isDev
-      ? 'http://localhost:8000/intro'
-      : format({
-          pathname: join(__dirname, '../../renderer/intro.html'),
-          protocol: 'file:',
-          slashes: true,
-        });
-
-    mainWindow.loadURL(url);
-  }
-
+  mainWindow.loadURL(await getWindowUrl());
   mainWindow.webContents.session.on('will-download', downloadHandler);
+  mainWindow.webContents.on('did-fail-load', async () =>
+    mainWindow.loadURL(await getWindowUrl())
+  );
 });
 
 // Quit the app once all windows are closed
 app.on('window-all-closed', async () => {
-  const profileExists = await new ProfileSetupService().checkProfile();
+  const profileExists = await new ProfileSetupService().doesProfileExist();
   if (!profileExists) {
     await new ProfileSetupService().createDefaultProfile();
   }
   app.quit();
 });
+
+async function getWindowUrl(): Promise<string> {
+  const profileSetup = new ProfileSetupService();
+  let startPage = 'intro';
+  let url = '';
+
+  if (await profileSetup.doesProfileExist()) {
+    startPage = 'home';
+  }
+
+  if (isDev) {
+    url = `http://localhost:8000/${startPage}`;
+  } else {
+    url = format({
+      pathname: join(__dirname, '../../renderer/out', `${startPage}.html`),
+      protocol: 'file:',
+      slashes: true,
+    });
+  }
+
+  return url;
+}
 
 /* Manage all downloads */
 const downloadHandler = (_, item) => {

@@ -1,7 +1,9 @@
 {
   "name": "devonfw-dashboard",
-  "productName": "ElectronNext",
+  "productName": "devonfw dashboard",
   "version": "1.0.0",
+  "author": "devonfw core team",
+  "description": "devonfw dashboard",
   "main": "main/out/index.js",
   "license": "Apache-2.0",
   "repository": {
@@ -9,28 +11,32 @@
     "url": "https://github.com/devonfw/devonfw-dashboard"
   },
   "scripts": {
+    "start": "tsc-watch -p main --onSuccess \"npm run start-no-reload\"",
+    "start-no-reload": "npm run build-main && electron .",
+    "build": "npm run build-main && npm run build-renderer",
     "build-main": "tsc -p main",
-    "start-all": "npm run build-main && electron .",
-    "build": "npm run build-main && next build renderer && next export renderer",
-    "dist": "npm run build && electron-builder --dir",
-    "start": "tsc-watch -p main --onSuccess \"npm run start-all\"",
+    "build-renderer": "next build renderer && next export renderer",
+    "dist": "npm run build && electron-builder",
+    "dist-unpacked": "npm run dist -- --dir",
     "lint": "eslint main/**/*.ts renderer/**/*.ts renderer/**/*.tsx",
-    "lint:fix": "eslint main/**/*.ts renderer/**/*.ts renderer/**/*.tsx --fix",
+    "lint-fix": "npm run lint -- --fix",
     "prettier-format": "prettier --config .prettierrc \"./main/**/*.ts\" \"./renderer/**/*.{ts,tsx}\" --write"
   },
   "build": {
     "asar": false,
-    "extraResources": [
-      {
-        "from": "renderer/out",
-        "to": "app/renderer"
-      }
-    ]
+    "icon": "resources/devon_logo.png",
+    "files": [
+      "main/out",
+      "renderer/out"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    }
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "npm run lint"
+      "pre-push": "npm run lint-fix"
     }
   },
   "devDependencies": {
@@ -40,27 +46,27 @@
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "babel-plugin-styled-components": "^1.10.7",
-    "electron": "^7.2.4",
+    "electron": "^8.2.0",
     "electron-builder": "^22.8.1",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.20.3",
     "husky": "^4.2.5",
-    "next": "latest",
+    "next": "9.5.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
     "tsc-watch": "^4.0.0",
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "@material-ui/core": "^4.8.3",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "electron-is-dev": "^1.0.1",
     "electron-next": "^3.1.5",
-    "isomorphic-unfetch": "^3.0.0"
+    "isomorphic-unfetch": "^3.0.0",
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.56"
   }
 }
