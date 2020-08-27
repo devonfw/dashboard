@@ -31,14 +31,9 @@ export function setDashboardProfile(
 
 // Check if dashboard profile file exists
 export function checkProfileStatus(mainWindow: BrowserWindow): void {
-  new ProfileSetupService()
-    .checkProfile()
-    .then((exists) => {
-      mainWindow.webContents.send('get:profileStatus', exists);
-    })
-    .catch(() => {
-      mainWindow.webContents.send('get:profileStatus', false);
-    });
+  new ProfileSetupService().doesProfileExist().then((exists) => {
+    mainWindow.webContents.send('get:profileStatus', exists);
+  });
 }
 
 // Check if dashboard profile file exists

@@ -12,7 +12,7 @@ export default function ProfilePicture(): JSX.Element {
 
   const [profile, setProfile] = useState<ProfileData>({
     name: 'Unknown User',
-    image: '/assets/user.png',
+    image: '/static/assets/user.png',
     gender: 'male',
     role: 'Undefined Role',
   });

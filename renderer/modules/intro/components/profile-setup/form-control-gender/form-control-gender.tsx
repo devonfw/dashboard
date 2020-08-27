@@ -34,7 +34,7 @@ export default function FormControGender(
         <img
           className={classes.radioImage}
           onClick={() => props.imageClickHandler('male')}
-          src="/assets/male.svg"
+          src="/static/assets/male.svg"
         />
         <Radio
           value="female"
@@ -44,7 +44,7 @@ export default function FormControGender(
         <img
           className={classes.radioImage}
           onClick={() => props.imageClickHandler('female')}
-          src="/assets/female.svg"
+          src="/static/assets/female.svg"
         />
       </RadioGroup>
     </ProfileFormControl>

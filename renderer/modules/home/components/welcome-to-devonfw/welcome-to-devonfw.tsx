@@ -60,7 +60,7 @@ export default function WelcomeToDevonfw(): JSX.Element {
   return (
     <Grid container spacing={3} style={{ fontSize: '16px' }}>
       <Grid item xs={12}>
-        <img src={'/assets/' + avatar} alt="admin" />
+        <img src={'/static/assets/' + avatar} alt="admin" />
       </Grid>
       <Grid item xs={12} md={7}>
         <>
