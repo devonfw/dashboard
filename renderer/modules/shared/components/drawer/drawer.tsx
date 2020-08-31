@@ -30,7 +30,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
               <Typography variant="h6" className={classes.title} noWrap>
                 Dashboard
               </Typography>
-              <div>
+              <div className={classes.ideTools}>
                 <DevonfwIdeSelector className={classes.ideSelector} />
                 <Tooltip title="Help">
                   <IconButton color="inherit" aria-label="Help">

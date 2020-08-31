@@ -1,31 +1,40 @@
-import { useState, useEffect } from 'react';
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  useRef,
+  MutableRefObject,
+} from 'react';
 import { IpcRendererEvent } from 'electron';
-import NextLink from '../../modules/shared/components/nextjs-link/NextLink';
+import NextLink from '../../../modules/shared/components/nextjs-link/NextLink';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 import {
   ProjectDetails,
   ProjectDeleteUpdates,
-} from '../../modules/projects/redux/stepper/data.model';
-import Alerts from '../../modules/shared/components/alerts/alerts';
-import { AlertType } from '../../models/alert/alert.model';
-import Renderer from '../../modules/shared/services/renderer/renderer.service';
-import { ProcessState } from '../../models/dashboard/ProcessState';
-import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
+  SearchForm,
+} from '../../../modules/projects/redux/stepper/data.model';
+import Alerts from '../../../modules/shared/components/alerts/alerts';
+import { AlertType } from '../../../models/alert/alert.model';
+import Renderer from '../../../modules/shared/services/renderer/renderer.service';
+import { ProcessState } from '../../../models/dashboard/ProcessState';
+import { ProjectMenuType } from '../../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
-import MenuList from './menu-list';
-import TitleCounter from '../../modules/shared/components/title-counter/title-counter';
+import MenuList from '../menu-list/menu-list';
+import { DashboardSearch } from '../dashboard-search/dashboard-search';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
-  setProject: (project: ProjectDetails[]) => void;
+  allProjects: ProjectDetails[];
+  setProject: (searchForm: SearchForm, projects: ProjectDetails[]) => void;
+  setAllProject: (project: ProjectDetails[]) => void;
   dirPath: string;
 }
 
@@ -45,7 +54,18 @@ export default function DashboardProjects(
     operation: false,
   };
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<ProjectMenuType>(initialState);
+  const [projectState, setProjectState] = useState<ProjectMenuType>(
+    initialState
+  );
+  const [alertMessage, setAlertMessage] = useState<AlertType>(
+    initialAlertState
+  );
+  const searchElement = useRef<HTMLInputElement>() as MutableRefObject<
+    HTMLInputElement
+  >;
+  const filterElement = useRef<HTMLInputElement>() as MutableRefObject<
+    HTMLInputElement
+  >;
 
   const closeAlert = () => {
     setAlertMessage((prevState: AlertType) => {
@@ -55,10 +75,6 @@ export default function DashboardProjects(
       };
     });
   };
-
-  const [alertMessage, setAlertMessage] = useState<AlertType>(
-    initialAlertState
-  );
 
   useEffect(() => {
     renderer.on('open:projectInIde', ideHandler);
@@ -73,7 +89,7 @@ export default function DashboardProjects(
     project: ProjectDetails
   ) => {
     event.preventDefault();
-    setState({
+    setProjectState({
       mouseX: event.clientX - 2,
       mouseY: event.clientY - 4,
       project: project,
@@ -97,7 +113,8 @@ export default function DashboardProjects(
   const deleteHandler = (_: IpcRendererEvent, data: ProjectDeleteUpdates) => {
     setOpen(false);
     if (data.message === 'success') {
-      props.setProject(data.projects);
+      props.setProject(getFilteredValue(), data.projects);
+      props.setAllProject(data.projects);
       setAlertMessage({
         alertSeverity: 'success',
         message: 'Successfully deleted project',
@@ -114,38 +131,54 @@ export default function DashboardProjects(
   };
 
   const handleClose = () => {
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const openProjectInIde = (ide: string) => {
     setOpen(true);
     global.ipcRenderer.send('open:projectInIde', {
-      project: state.project,
+      project: projectState.project,
       ide: ide,
     });
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const deleteProject = () => {
     setOpen(true);
     global.ipcRenderer.send('delete:project', {
-      project: state.project,
+      project: projectState.project,
       dirPath: props.dirPath,
     });
-    setState(initialState);
+    setProjectState(initialState);
   };
 
   const openProjectDirectory = () => {
-    global.ipcRenderer.send('open:projectDirectory', state.project.path);
+    global.ipcRenderer.send('open:projectDirectory', projectState.project.path);
+  };
+
+  const searchHandler = (event: ChangeEvent<HTMLInputElement>): void => {
+    if (event.target.id !== 'search') {
+      filterElement.current.value = event.target.value;
+    }
+    props.setProject(getFilteredValue(), props.allProjects);
+  };
+
+  const getFilteredValue = (): SearchForm => {
+    return {
+      searchValue: searchElement.current?.value,
+      filterValue: filterElement.current.value,
+    };
   };
 
   return (
     <div className={classes.root}>
-      <Grid item xs={12} className={classes.header}>
-        <TitleCounter count={props.projects.length}> Projects</TitleCounter>
-        <div className="search">
-          <TextField id="outlined-basic" label="Search" variant="outlined" />
-        </div>
+      <Grid item xs={12}>
+        <DashboardSearch
+          searchRef={searchElement}
+          filterRef={filterElement}
+          searchHandler={searchHandler}
+          totalProjects={props.projects.length}
+        />
       </Grid>
       <Grid item xs={6} md={4} lg={3}>
         <NextLink href="/project-creation" className={classes.link}>
@@ -182,8 +215,8 @@ export default function DashboardProjects(
           })
         : null}
       <MenuList
-        project={state.project}
-        state={state}
+        project={projectState.project}
+        state={projectState}
         handleClose={handleClose}
         openProjectInIde={openProjectInIde}
         openProjectDirectory={openProjectDirectory}
