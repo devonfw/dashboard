@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import GetApp from '@material-ui/icons/GetApp';
 
-import AcceptButton from '../../modules/shared/components/accept-button/accept-button';
+import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import useInstallationsStyles from './installations.styles';
 
 interface InstallationsViewProps {

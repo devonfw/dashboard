@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { IpcRendererEvent } from 'electron';
-import NextLink from '../../modules/shared/components/nextjs-link/NextLink';
+import NextLink from '../../../../shared/components/nextjs-link/NextLink';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -13,15 +13,15 @@ import { useDashboardProjectsStyles } from './dashboard-projects.styles';
 import {
   ProjectDetails,
   ProjectDeleteUpdates,
-} from '../../modules/projects/redux/stepper/data.model';
-import Alerts from '../../modules/shared/components/alerts/alerts';
-import { AlertType } from '../../models/alert/alert.model';
-import Renderer from '../../modules/shared/services/renderer/renderer.service';
-import { ProcessState } from '../../models/dashboard/ProcessState';
-import { ProjectMenuType } from '../../models/dashboard/ProjectMenuType';
+} from '../../../redux/stepper/data.model';
+import Alerts from '../../../../shared/components/alerts/alerts';
+import { AlertType } from '../../../../../models/alert/alert.model';
+import Renderer from '../../../../shared/services/renderer/renderer.service';
+import { ProcessState } from '../../../../../models/dashboard/ProcessState';
+import { ProjectMenuType } from '../../../../../models/dashboard/ProjectMenuType';
 import ProjectDetail from './project-detail';
 import MenuList from './menu-list';
-import TitleCounter from '../../modules/shared/components/title-counter/title-counter';
+import TitleCounter from '../../../../shared/components/title-counter/title-counter';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
@@ -148,7 +148,7 @@ export default function DashboardProjects(
         </div>
       </Grid>
       <Grid item xs={6} md={4} lg={3}>
-        <NextLink href="/project-creation" className={classes.link}>
+        <NextLink href="/projects/creation" className={classes.link}>
           <Card className={classes.ProjectGrid}>
             <CardMedia
               className={classes.newProject}
