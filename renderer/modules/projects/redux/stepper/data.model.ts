@@ -36,3 +36,8 @@ export interface ProjectDeleteUpdates {
   projects: ProjectDetails[];
   message: string;
 }
+
+export interface SearchForm {
+  searchValue: string;
+  filterValue: string;
+}

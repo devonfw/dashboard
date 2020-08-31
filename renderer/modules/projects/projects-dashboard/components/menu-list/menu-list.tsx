@@ -8,9 +8,9 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
-import { ProjectMenuType } from '../../../../../models/dashboard/ProjectMenuType';
-import { menuStyles } from './menu-list.styles';
 import { ProjectDetails } from '../../../redux/stepper/data.model';
+import { menuStyles } from './menu-list.styles';
+import { ProjectMenuType } from '../../../../../models/dashboard/ProjectMenuType';
 
 interface MenuListProps {
   state: ProjectMenuType;

@@ -34,6 +34,9 @@ const useDawerStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       flexDirection: 'column',
+      [theme.breakpoints.down('sm')]: {
+        display: 'none',
+      },
     },
     logo: {
       height: 30,
@@ -56,7 +59,7 @@ const useDawerStyles = makeStyles((theme: Theme) =>
     },
     ideSelector: {
       marginRight: theme.spacing(2),
-      width: '500px',
+      minWidth: `calc(60% - ${drawerWidth}) !important`,
       padding: '1em 0 !important',
       '& .MuiSelect-select:focus': {
         backgroundColor: 'transparent',
@@ -67,6 +70,11 @@ const useDawerStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
       width: '100%',
       marginLeft: theme.spacing(2),
+    },
+    ideTools: {
+      width: '80%',
+      display: 'flex',
+      justifyContent: 'flex-end',
     },
   })
 );

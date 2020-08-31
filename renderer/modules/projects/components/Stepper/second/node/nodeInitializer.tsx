@@ -4,10 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
-import {
-  INodeInitializerForm,
-  FormControls,
-} from '../../../../../../models/dashboard/INodeInitializer';
+import { INodeInitializerForm } from '../../../../../../models/dashboard/INodeInitializer';
 import nodeInitializerStyle from './nodeInitializerStyle';
 import nodeProjectConfig from './nodeInitializerFormConfig';
 import Input from '../input/Input';
@@ -72,7 +69,7 @@ class NodeInitializer extends Component<NodeInitializerProps> {
   };
 
   eventHandler(identifier: string, value: string) {
-    const formState: FormControls = {
+    const formState = {
       ...this.state.formControls,
     };
     const element: FormType = { ...formState[identifier] };

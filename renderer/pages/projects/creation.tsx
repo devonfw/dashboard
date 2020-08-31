@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Start(): JSX.Element {
+export default function ProjectCreation(): JSX.Element {
   const classes = useStyles();
 
   return (
