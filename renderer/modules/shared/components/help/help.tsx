@@ -1,30 +1,13 @@
 import { useState } from 'react';
-import { Theme, makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import HelpContent from './help-content/help-content';
-
-const useStylesHtmlTooltip = makeStyles((theme: Theme) => ({
-  arrow: {
-    color: theme.palette.secondary.main,
-  },
-  tooltip: {
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(4),
-    paddingBottom: theme.spacing(2),
-    paddingLeft: theme.spacing(4),
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-    maxWidth: 500,
-    fontSize: theme.typography.pxToRem(12),
-    borderRadius: '8px',
-  },
-}));
+import useHelpStyles from './help.styles';
 
 export default function Help(): JSX.Element {
-  const classes = useStylesHtmlTooltip();
+  const classes = useHelpStyles();
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {

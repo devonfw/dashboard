@@ -1,101 +1,38 @@
-import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
+import HomeModule from '../../../../home/home.module';
+import ProjectsModule from '../../../../projects/projects-dashboard/projects.module';
+import ProjectCreationModule from '../../../../projects/project-creation.module';
+import RepositoriesModule from '../../../../repositories/repositories.module';
+import AccountModule from '../../../../settings/account/account.module';
+import InstallationsModule from '../../../../settings/installations/installations.module';
 
 export default function HelpContent(): JSX.Element {
   const router = useRouter();
 
   const help = (route: string) => {
     switch (route) {
-      case '/home':
-        return <HomeHelp />;
-      case '/projects':
-        return <ProjectsHelp />;
-      case '/repositories':
-        return <RepositoriesHelp />;
-      case '/settings/account':
-        return <AccountHelp />;
-      case '/settings/installed-versions':
-        return <InstalledVersionHelp />;
+      case HomeModule.route.path:
+        return HomeModule.help();
+
+      case ProjectsModule.route.path:
+        return ProjectsModule.help();
+
+      case ProjectCreationModule.route.path:
+        return ProjectCreationModule.help();
+
+      case RepositoriesModule.route.path:
+        return RepositoriesModule.help();
+
+      case AccountModule.route.path:
+        return AccountModule.help();
+
+      case InstallationsModule.route.path:
+        return InstallationsModule.help();
+
       default:
         return 'No help available';
     }
   };
 
   return <>{help(router.route)}</>;
-}
-
-function HomeHelp(): JSX.Element {
-  return (
-    <>
-      <Typography variant="h6" component="h2">
-        Welcome to devonfw dashboard
-      </Typography>
-
-      <Typography>To create projects you need a devonfw version.</Typography>
-      <ul>
-        <Typography component="li">
-          Click on <strong>Download latest version</strong>
-        </Typography>
-      </ul>
-    </>
-  );
-}
-
-function ProjectsHelp(): JSX.Element {
-  return (
-    <>
-      <Typography variant="h6" component="h2">
-        Projects
-      </Typography>
-
-      <Typography>Here are your devonfw projects. You can:</Typography>
-      <ul>
-        <Typography component="li">Open a project</Typography>
-        <Typography component="li">Delete a project</Typography>
-        <Typography component="li">or create a new one</Typography>
-      </ul>
-    </>
-  );
-}
-
-function RepositoriesHelp(): JSX.Element {
-  return (
-    <Typography>
-      Check the projects under devonfw organization.
-      <ul>
-        <Typography component="li">Open a project in your browser</Typography>
-        <Typography component="li">
-          Copy its link so you can clone it
-        </Typography>
-      </ul>
-    </Typography>
-  );
-}
-
-function InstalledVersionHelp(): JSX.Element {
-  return (
-    <>
-      <Typography variant="h6" component="h2">
-        Installed versions
-      </Typography>
-      <Typography>Configure your installed devonfw-ide versions</Typography>
-      <ul>
-        <Typography component="li">
-          Upgrade the software included in a specific version
-        </Typography>
-        <Typography component="li">Unistall a version</Typography>
-      </ul>
-    </>
-  );
-}
-
-function AccountHelp(): JSX.Element {
-  return (
-    <>
-      <Typography variant="h6" component="h2">
-        Account
-      </Typography>
-      <Typography component="li">Update your profile</Typography>
-    </>
-  );
 }
