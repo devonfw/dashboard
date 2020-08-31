@@ -15,6 +15,13 @@ const useHelpStyles = makeStyles((theme: Theme) => ({
     fontSize: theme.typography.pxToRem(12),
     borderRadius: '8px',
   },
+  list: {
+    margin: 0,
+    paddingLeft: theme.spacing(4),
+  },
+  title: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 export default useHelpStyles;

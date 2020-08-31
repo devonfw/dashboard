@@ -22,7 +22,7 @@ export default function Help(): JSX.Element {
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <Tooltip
         arrow
-        classes={classes}
+        classes={{ arrow: classes.arrow, tooltip: classes.tooltip }}
         PopperProps={{ disablePortal: true }}
         onClose={handleTooltipClose}
         open={open}
