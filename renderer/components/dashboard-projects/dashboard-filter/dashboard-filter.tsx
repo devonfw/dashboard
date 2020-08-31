@@ -2,7 +2,7 @@ import React, { ChangeEvent, MutableRefObject } from 'react';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import { technologies } from './technologies-list';
+import { stackKeys } from '../../../modules/projects/components/Stepper/first/stacks';
 
 interface DashboardFilterProps {
   value: string;
@@ -39,9 +39,9 @@ export const DashboardFilter = (props: DashboardFilterProps): JSX.Element => {
         >
           By Technology
         </MenuItem>
-        {technologies.map((technology) => (
-          <MenuItem key={technology.value} value={technology.value}>
-            {technology.name}
+        {stackKeys.map((technology) => (
+          <MenuItem key={technology} value={technology}>
+            <div style={{ textTransform: 'capitalize' }}>{technology}</div>
           </MenuItem>
         ))}
       </TextField>

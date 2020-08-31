@@ -2,7 +2,7 @@ import { FormType } from './FormType';
 
 export interface INodeInitializerForm {
   workspaceDir: string[];
-  formControls: FormControls | any;
+  formControls: FormControls;
   formIsValid: boolean;
 }
 

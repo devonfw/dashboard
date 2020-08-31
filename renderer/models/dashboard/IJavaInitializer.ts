@@ -2,7 +2,7 @@ import { FormType } from './FormType';
 
 export interface IJavaInitializerForm {
   workspaceDir: string[];
-  formControls: FormControls | any;
+  formControls: FormControls;
   formIsValid: boolean;
 }
 
