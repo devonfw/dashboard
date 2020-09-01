@@ -11,10 +11,10 @@ export default function ProjectsHelp(): JSX.Element {
       </Typography>
 
       <Typography>Here are your devonfw projects. You can:</Typography>
-      <ul className={classes.title}>
+      <ul className={classes.list}>
         <Typography component="li">Open a project</Typography>
         <Typography component="li">Delete a project</Typography>
-        <Typography component="li">or create a new one</Typography>
+        <Typography component="li">...or create a new one</Typography>
       </ul>
     </>
   );

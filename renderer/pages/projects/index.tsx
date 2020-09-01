@@ -19,7 +19,7 @@ export default function Projects(): JSX.Element {
   const [allProjects, setAllProjects] = useState<ProjectDetails[]>([]);
   useEffect(() => {
     if (state.creatingProject) {
-      router.push('/project-creation');
+      router.push('/projects/creation');
       return;
     }
     global.ipcRenderer.on('ide:projects', ideProjectsHandler);

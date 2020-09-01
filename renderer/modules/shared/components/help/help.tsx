@@ -4,10 +4,8 @@ import IconButton from '@material-ui/core/IconButton';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import HelpContent from './help-content/help-content';
-import useHelpStyles from './help.styles';
 
 export default function Help(): JSX.Element {
-  const classes = useHelpStyles();
   const [open, setOpen] = useState(false);
 
   const handleTooltipClose = () => {
@@ -22,7 +20,6 @@ export default function Help(): JSX.Element {
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <Tooltip
         arrow
-        classes={{ arrow: classes.arrow, tooltip: classes.tooltip }}
         PopperProps={{ disablePortal: true }}
         onClose={handleTooltipClose}
         open={open}

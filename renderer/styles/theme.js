@@ -24,6 +24,21 @@ const theme = createMuiTheme({
       main: '#81CF08',
     },
   },
+  overrides: {
+    MuiTooltip: {
+      arrow: {
+        color: '#FFFFFF',
+      },
+      tooltip: {
+        padding: '16px 32px',
+        backgroundColor: '#FFFFFF',
+        color: '#495057',
+        maxWidth: 500,
+        fontSize: '0.75rem',
+        borderRadius: '8px',
+      },
+    },
+  },
 });
 
 export default theme;
