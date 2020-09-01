@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DrawerLink } from '../custom-drawer/drawer-links';
 import { useRouter } from 'next/router';
 import { useSectionLinkStyles } from './section-link.styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,13 +9,14 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import NextLink from '../../../nextjs-link/NextLink';
 import Collapse from '@material-ui/core/Collapse';
 import List from '@material-ui/core/List';
+import Route from '../../../../models/route.model';
 
 interface SectionLinkProps {
   section: string;
-  sectionPath: string;
+  path: string;
   isActive: boolean;
   icon: JSX.Element;
-  submenu?: DrawerLink[];
+  submenu?: Route[];
 }
 
 export default function SectionLink(props: SectionLinkProps): JSX.Element {
@@ -34,7 +34,7 @@ export default function SectionLink(props: SectionLinkProps): JSX.Element {
       <ListItem
         button
         component={NextLink}
-        href={props.sectionPath}
+        href={props.path}
         onClick={props.submenu ? toggleSubmenu : undefined}
       >
         <ListItemIcon className={activeClass}>{props.icon}</ListItemIcon>
@@ -44,12 +44,12 @@ export default function SectionLink(props: SectionLinkProps): JSX.Element {
       {props.submenu ? (
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" className={classes.nested}>
-            {props.submenu.map((link: DrawerLink) => (
+            {props.submenu.map((link: Route) => (
               <SectionLink
                 key={link.id}
                 section={link.section}
-                sectionPath={link.sectionPath}
-                isActive={router.pathname == link.sectionPath}
+                path={link.path}
+                isActive={router.pathname == link.path}
                 icon={link.icon}
                 submenu={link.submenu}
               />

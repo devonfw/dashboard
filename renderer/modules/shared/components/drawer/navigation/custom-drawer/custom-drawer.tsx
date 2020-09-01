@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { drawerLinks, DrawerLink } from './drawer-links';
+import { drawerLinks } from './drawer-links';
 import List from '@material-ui/core/List';
 import SectionLink from '../section-link/section-link';
 import useDawerStyles from '../../drawer.style';
@@ -9,6 +9,7 @@ import UpgradeBanner, {
 } from '../../../upgrade-banner/upgrade-banner';
 import ProfilePicture from '../../../profile-picture/profile-picture';
 import { IpcRendererEvent } from 'electron';
+import Route from '../../../../models/route.model';
 
 interface CustomDrawerProps {
   classes: ReturnType<typeof useDawerStyles>;
@@ -62,13 +63,13 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
       <div className={props.classes.topSpace} />
       <ProfilePicture></ProfilePicture>
       <List component="nav">
-        {drawerLinks.map((link: DrawerLink) => {
+        {drawerLinks.map((link: Route) => {
           return (
             <SectionLink
               key={link.id}
               section={link.section}
-              sectionPath={link.sectionPath}
-              isActive={router.pathname == link.sectionPath}
+              path={link.path}
+              isActive={router.pathname == link.path}
               icon={link.icon}
               submenu={link.submenu}
             ></SectionLink>

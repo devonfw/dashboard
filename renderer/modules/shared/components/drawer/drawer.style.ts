@@ -58,8 +58,8 @@ const useDawerStyles = makeStyles((theme: Theme) =>
       gridTemplateColumns: '1fr',
     },
     ideSelector: {
-      marginRight: theme.spacing(2),
-      minWidth: `calc(60% - ${drawerWidth}) !important`,
+      marginRight: `${theme.spacing(2)}px !important`,
+      width: '320px',
       padding: '1em 0 !important',
       '& .MuiSelect-select:focus': {
         backgroundColor: 'transparent',
@@ -74,7 +74,9 @@ const useDawerStyles = makeStyles((theme: Theme) =>
     ideTools: {
       width: '80%',
       display: 'flex',
+      alignItems: 'center',
       justifyContent: 'flex-end',
+      marginLeft: 'auto',
     },
   })
 );

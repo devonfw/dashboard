@@ -2,14 +2,12 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
 import useDawerStyles from './drawer.style';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Navigation from './navigation/navigation';
 import DevonfwIdeSelector from '../../../shared/components/devonfw-ide-selector/DevonfwIdeSelector';
+import Help from '../help/help';
 
 export default function Drawer(props: { children: JSX.Element }): JSX.Element {
   const classes = useDawerStyles();
@@ -32,11 +30,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
               </Typography>
               <div className={classes.ideTools}>
                 <DevonfwIdeSelector className={classes.ideSelector} />
-                <Tooltip title="Help">
-                  <IconButton color="inherit" aria-label="Help">
-                    <HelpOutlineIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
+                <Help />
               </div>
             </div>
           ) : null}
