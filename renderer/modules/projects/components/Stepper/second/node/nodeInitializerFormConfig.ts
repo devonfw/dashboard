@@ -19,10 +19,6 @@ const nodeProjectConfig: INodeInitializerForm = {
       touched: false,
       error: '',
     },
-    devonInstances: {
-      elementType: 'select',
-      value: '',
-    },
   },
   formIsValid: false,
 };

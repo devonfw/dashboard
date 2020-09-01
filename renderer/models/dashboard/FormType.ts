@@ -1,11 +1,10 @@
 import { ChangeEvent } from 'react';
 
 export interface FormType {
-  elementType?: string;
-  elementConfig?: {
+  elementType: string;
+  elementConfig: {
     label: string;
     id: string;
-    options?: SelectOptionType[];
   };
   value: string;
   validation?: {
@@ -13,9 +12,9 @@ export interface FormType {
     pattern?: RegExp;
     existing?: boolean;
   };
-  valid?: boolean;
-  touched?: boolean;
-  error?: string;
+  valid: boolean;
+  touched: boolean;
+  error: string;
   disabled?: boolean;
 }
 

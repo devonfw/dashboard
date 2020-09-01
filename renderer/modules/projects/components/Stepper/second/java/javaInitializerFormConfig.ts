@@ -42,6 +42,9 @@ const javaProjectConfig: IJavaInitializerForm = {
       },
       value: '',
       disabled: true,
+      touched: true,
+      error: '',
+      valid: true,
     },
     version: {
       elementType: 'search',
@@ -62,27 +65,14 @@ const javaProjectConfig: IJavaInitializerForm = {
       elementConfig: {
         label: 'Database',
         id: 'db',
-        options: [
-          {
-            value: 'h2',
-            displayValue: 'H2',
-          },
-          {
-            value: 'sql',
-            displayValue: 'SQL',
-          },
-          {
-            value: 'oracle',
-            displayValue: 'ORACLE',
-          },
-        ],
       },
+      valid: true,
+      touched: true,
       value: 'h2',
+      error: '',
     },
-    devonInstances: {
-      elementType: 'select',
-      value: '',
-    },
+  },
+  batchProcessControl: {
     batch: false,
   },
   formIsValid: false,
