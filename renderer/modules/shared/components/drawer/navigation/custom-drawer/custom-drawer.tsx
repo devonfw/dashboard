@@ -69,7 +69,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
               key={link.id}
               section={link.section}
               path={link.path}
-              isActive={router.pathname == link.path}
+              isActive={router.pathname.includes(link.path)}
               icon={link.icon}
               submenu={link.submenu}
             ></SectionLink>
