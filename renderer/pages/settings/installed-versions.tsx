@@ -1,5 +1,5 @@
 import SpaceAround from '../../modules/shared/hoc/SpaceAround';
-import Installations from '../../components/Installations/Installations.contoller';
+import Installations from '../../modules/settings/installations/components/Installations/Installations.contoller';
 
 export default function InstalledVersions(): JSX.Element {
   return (

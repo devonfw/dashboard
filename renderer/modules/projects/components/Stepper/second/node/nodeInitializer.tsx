@@ -115,7 +115,7 @@ class NodeInitializer extends Component<NodeInitializerProps> {
           </Grid>
         </Grid>
         <div className={classes.action}>
-          <Link href="/project-creation">
+          <Link href="/projects/creation">
             <div>
               <Button variant="outlined" onClick={this.setActiveState}>
                 Back
