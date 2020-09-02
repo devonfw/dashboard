@@ -1,0 +1,128 @@
+import React, { HTMLAttributes } from 'react';
+import Asciidoctor from 'asciidoctor';
+
+const demoContent = `
+= Changelog of devonfw-ide
+
+This file documents all notable changes to https://github.com/devonfw/ide[devonfw-ide].
+
+== 2020.08.001
+
+Update with the following bugfixes and improvements:
+
+* https://github.com/devonfw/ide/pull/454[#454]: update to eclipse 2020.06
+* https://github.com/devonfw/ide/pull/442[#442]: update nodejs and vscode
+* https://github.com/devonfw/ide/issues/432[#432]: vsCode settings are not updated
+* https://github.com/devonfw/ide/issues/446[#446]: intellij: doConfigureEclipse: command not found
+* https://github.com/devonfw/ide/issues/440[#440]: Software update may lead to inconsistent state due to windows file locks
+* https://github.com/devonfw/ide/issues/427[#427]: release: keep leading zeros
+* https://github.com/devonfw/ide/issues/450[#450]: update settings
+* https://github.com/devonfw/ide/issues/431[#431]: devon build command not working correct for yarn or npm
+* https://github.com/devonfw/ide/issues/449[#449]: update to devon4j 2020.08.001
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/12?closed=1[milestone 2020.08.001].
+
+== 2020.04.004
+
+Minor update with the following bugfixes and improvements:
+
+* https://github.com/devonfw/ide/issues/433[#433]: Windows: devon command line sets wrong environment variables (with tilde symbol)
+* https://github.com/devonfw/ide/pull/435[#435]: fix variable resolution on bash
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/14?closed=1[milestone 2020.04.004].
+
+== 2020.04.003
+
+Minor update with the following bugfixes and improvements:
+
+* https://github.com/devonfw/ide/issues/395[#395]: variable from devon.properites unset if value is in double quotes
+* https://github.com/devonfw/ide/pull/429[#429]: Added script to create a meta file in the users directory after setup
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/13?closed=1[milestone 2020.04.003].
+
+== 2020.04.002
+
+Minor update with the following bugfixes and improvements:
+
+* https://github.com/devonfw/ide/issues/418[#418]: Make projects optional
+* https://github.com/devonfw/ide/pull/421[#421]: update devon4j to 2020.04.002
+* https://github.com/devonfw/ide/issues/413[#413]: Update Eclipse to 2020-03
+* https://github.com/devonfw/ide/issues/424[#424]: Strange errors on windows if devon.properties contains mixed line endings
+* https://github.com/devonfw/ide/issues/399[#399]: launching of Intellij fails with No such file or directory error.
+* https://github.com/devonfw/ide/pull/410[#410]: fix jsonmerge for boolean and null values
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/11?closed=1[milestone 2020.04.002].
+
+== 2020.04.001
+
+Starting with this release we have changed the versioning schema in \`devonfw\` to \`yyyy.mm.NNN\` where \`yyyy.mm\` is the date of the planned milestone release and \`NNN\` is a running number increased with every bug- or security-fix update.
+
+* https://github.com/devonfw/ide/issues/394[#394] variable from devon.properties not set if not terminated with newline
+* https://github.com/devonfw/ide/issues/399[#399] launching of Intellij fails with No such file or directory error.
+* https://github.com/devonfw/ide/issues/371[#371] Eclipse plugin installation broke
+* https://github.com/devonfw/ide/issues/390[#390] maven get/set-version buggy
+* https://github.com/devonfw/ide/issues/397[#397] migration support for devon4j 2020.04.001
+* https://github.com/devonfw/ide/pull/400[#400] allow custom args for release
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/9?closed=1[milestone 2020.04.001].
+
+== 3.3.1
+
+New release with bugfixes and new ide plugin feature:
+
+* https://github.com/devonfw/ide/issues/343[#343]: Setup can't find Bash nor Git
+* https://github.com/devonfw/ide/issues/369[#369]: Fix flattening of POMs
+* https://github.com/devonfw/ide/pull/386[#386]: Feature/clone recursive
+* https://github.com/devonfw/ide/issues/379[#379]: Use own extensions folder in devonfw-ide
+* https://github.com/devonfw/ide/pull/381[#381]: Add ability to configure VS Code plugins via settings
+* https://github.com/devonfw/ide/issues/376[#376]: Improve Eclipse plugin configuration
+* https://github.com/devonfw/ide/pull/373[#373]: Fix project import on windows
+* https://github.com/devonfw/ide/pull/374[#374]: Rework build on import
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/10?closed=1[milestone 3.3.1].
+
+== 3.3.0
+
+New release with bugfixes and new project import feature:
+
+* https://github.com/devonfw/ide/pull/343[#343]: Detect non-admin GitForWindows and Cygwin
+* https://github.com/devonfw/ide/issues/175[#175]: Ability to clone projects and import into Eclipse automatically
+* https://github.com/devonfw/ide/issues/346[#346]: devon eclipse add-plugin parameters swapped
+* https://github.com/devonfw/ide/issues/363[#363]: devon ide update does not pull latest project settings
+* https://github.com/devonfw/ide/pull/366[#366]: update java versions to latest fix releases
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/5?closed=1[milestone 3.3.0].
+
+== 3.2.4
+
+Bugfix release with new features such as CobiGen CLI:
+
+* https://github.com/devonfw/ide/issues/335[#335]: Update to recent LTS versions of node.js and VSCode
+* https://github.com/devonfw/ide/issues/339[#339]: Properties not updated after settings cloned or changed
+* https://github.com/devonfw/ide/issues/59[#59]: Integrate CobiGen CLI as commandlet
+* https://github.com/devonfw/ide/issues/21[#21]: Improve OS Support
+* https://github.com/devonfw/ide/pull/313[#313]: Improve keyboard layout for MacOS
+* https://github.com/devonfw/ide/issues/259[#259]: mvn package runs into test failures on Windows
+
+The full list of changes for this release can be found in https://github.com/devonfw/ide/milestone/2?closed=1[milestone 3.2.4].
+
+== 3.2.3
+
+This version marks the first fully official release.
+Changes for this release can be found in https://github.com/devonfw/ide/milestone/8?closed=1[milestone 3.2.3].
+Prior versions can be found in according milestones and release tags on github.
+However, the history before this release is considered legacy and is therefore not reflected here.
+`;
+
+export default function AsciidocViewer(
+  props: HTMLAttributes<HTMLDivElement>
+): JSX.Element {
+  return (
+    <div
+      {...props}
+      dangerouslySetInnerHTML={{
+        __html: Asciidoctor().convert(demoContent) as string,
+      }}
+    />
+  );
+}
