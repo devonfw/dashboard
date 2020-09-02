@@ -26,7 +26,6 @@ export const JavaFormBuider = (props: JavaFormBuiderProps): JSX.Element => {
         value={props.formControls.group.value}
         invalid={!props.formControls.group.valid}
         touched={props.formControls.group.touched}
-        disabled={props.formControls.group.disabled}
         changed={formChangeHandler}
         inputProps={{ id: props.formControls.group.elementConfig.id }}
       />
@@ -37,7 +36,6 @@ export const JavaFormBuider = (props: JavaFormBuiderProps): JSX.Element => {
         value={props.formControls.artifact.value}
         invalid={!props.formControls.artifact.valid}
         touched={props.formControls.artifact.touched}
-        disabled={props.formControls.artifact.disabled}
         changed={formChangeHandler}
         inputProps={{ id: props.formControls.artifact.elementConfig.id }}
       />
@@ -55,7 +53,6 @@ export const JavaFormBuider = (props: JavaFormBuiderProps): JSX.Element => {
         value={props.formControls.version.value}
         invalid={!props.formControls.version.valid}
         touched={props.formControls.version.touched}
-        disabled={props.formControls.version.disabled}
         inputProps={{ id: props.formControls.version.elementConfig.id }}
         changed={formChangeHandler}
       />
