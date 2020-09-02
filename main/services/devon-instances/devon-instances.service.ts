@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import fetch from 'cross-fetch';
 import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
-  DevonIdeScript,
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
@@ -15,8 +13,6 @@ import {
 } from '../../models/project-details.model';
 import { SaveDetails } from './save-details';
 import { exec } from 'child_process';
-import formatDate from '../../modules/shared/utils/date-formatter';
-import getChangelog from '../../modules/settings/installed-versions/services/fetch-changelog';
 
 const utilExec = util.promisify(child.exec);
 const utilReaddir = util.promisify(fs.readdir);
@@ -139,59 +135,6 @@ export class DevonInstancesService implements SaveDetails {
         workspaces: path.resolve(singlepath, 'workspaces'),
       },
     };
-  }
-
-  async getDevonIdeScriptsFromMaven(): Promise<DevonIdeScript[]> {
-    const url =
-      'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json';
-
-    try {
-      const idesJson = await fetch(url);
-      const ides = await idesJson.json();
-      const installedVersions = await this.getInstalledVersions();
-
-      const devonfwIdes: DevonIdeScript[] = await Promise.all(
-        ides.response.docs.map(
-          async (ide: { v: string; timestamp: string }) => {
-            return {
-              id: ide.v,
-              version: ide.v,
-              changelog: await getChangelog(ide.v),
-              updated: formatDate(ide.timestamp),
-              installed: installedVersions.includes(ide.v),
-              downloading: false,
-            };
-          }
-        )
-      );
-      return devonfwIdes;
-    } catch (error) {
-      return [];
-    }
-  }
-
-  async getLatestDevonIdeScriptsFromMaven(): Promise<DevonIdeScript> {
-    const url =
-      'https://search.maven.org/classic/solrsearch/select?q=a%3A%22devonfw-ide-scripts%22&rows=20&wt=json';
-
-    try {
-      const idesJson = await fetch(url);
-      const ides = await idesJson.json();
-      const latestIde = ides.response.docs[0];
-      const installedVersions = await this.getInstalledVersions();
-
-      const latestDevonfwIde: DevonIdeScript = {
-        id: latestIde.latestVersion,
-        version: latestIde.latestVersion,
-        updated: formatDate(latestIde.timestamp),
-        installed: installedVersions.includes(latestIde.latestVersion),
-        changelog: null,
-        downloading: false,
-      };
-      return latestDevonfwIde;
-    } catch (error) {
-      throw new Error(`error: ${error.toString()}`);
-    }
   }
 
   /* Checking projectinfo.json is exists?, if exits overriding data or 

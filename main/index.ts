@@ -28,6 +28,8 @@ import { OpenProjectIDEListener } from './modules/projects/classes/listeners/ope
 import { UserProfile } from './modules/shared/models/user-profile';
 import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/devon-ide-projects';
 import RepositoriesListener from './modules/repositories/repositories-listener';
+import IDEsInstallationStatus from './modules/settings/installed-versions/services/ides-installation-status.service';
+import DevonfwIdesService from './modules/settings/installed-versions/services/devonfw-ides.service';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -108,8 +110,10 @@ const downloadHandler = (_, item) => {
 
 // Get all devon-ide-scripts from maven repository
 function getDevonIdeScripts() {
-  new DevonInstancesService()
-    .getDevonIdeScriptsFromMaven()
+  const instancesService = new DevonInstancesService();
+  const devonfwIdes = new DevonfwIdesService();
+  new IDEsInstallationStatus(instancesService, devonfwIdes)
+    .getDevonfwIDEsStatus()
     .then((instances) => {
       mainWindow.webContents.send('get:devonIdeScripts', instances);
     })

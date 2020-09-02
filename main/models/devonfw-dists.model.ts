@@ -18,7 +18,9 @@ export interface DevonIdeScript {
   id: string;
   version: string;
   updated: string;
-  installed: boolean;
-  changelog: string | null;
+}
+
+export interface IdeInstallationStatus extends DevonIdeScript {
   downloading: boolean;
+  installed: boolean;
 }

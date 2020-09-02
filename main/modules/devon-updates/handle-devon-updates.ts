@@ -2,10 +2,11 @@ import { DevonInstancesService } from '../../services/devon-instances/devon-inst
 import { DevonfwConfig } from '../../models/devonfw-dists.model';
 import { BrowserWindow } from 'electron';
 import { DevonUpdateResponse } from '../shared/models/devon-update-response';
+import DevonfwIdesService from '../settings/installed-versions/services/devonfw-ides.service';
 
 export function checkForDevonUpdates(mainWindow: BrowserWindow): void {
-  new DevonInstancesService()
-    .getLatestDevonIdeScriptsFromMaven()
+  new DevonfwIdesService()
+    .getLatestDevonfwIDE()
     .then((instance) => {
       getLocalInstalledVersions(mainWindow, instance.version);
     })
