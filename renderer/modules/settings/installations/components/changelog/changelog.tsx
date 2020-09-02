@@ -58,6 +58,8 @@ const DialogActions = withStyles((theme: Theme) => ({
 }))(MuiDialogActions);
 
 interface ChangelogProps {
+  title: string;
+  content: string;
   open: boolean;
   onClose: () => void;
 }
@@ -71,9 +73,9 @@ export default function Changelog(props: ChangelogProps): JSX.Element {
       aria-labelledby="customized-dialog-title"
       open={props.open}
     >
-      <DialogTitle id="customized-dialog-title">Modal title</DialogTitle>
+      <DialogTitle id="customized-dialog-title">{props.title}</DialogTitle>
       <DialogContent dividers>
-        <AsciidocViewer className={classes.link} />
+        <AsciidocViewer className={classes.link} content={props.content} />
       </DialogContent>
       <DialogActions>
         <Button

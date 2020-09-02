@@ -64,9 +64,9 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "asciidoctor": "^2.2.0",
+    "cross-fetch": "^3.0.5",
     "electron-is-dev": "^1.0.1",
     "electron-next": "^3.1.5",
-    "isomorphic-unfetch": "^3.0.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   }

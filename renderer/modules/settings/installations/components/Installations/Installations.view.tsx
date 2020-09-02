@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { DevonIdeScripts } from './Installations.contoller';
+import { DevonIdeScript } from './Installations.contoller';
 import { TextField, Card, Typography } from '@material-ui/core';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -19,8 +19,8 @@ import Changelog from '../changelog/changelog';
 interface InstallationsViewProps {
   query: string;
   queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
-  downloadHandler: (index: number) => void;
-  installations: DevonIdeScripts[];
+  downloadHandler: (index: string) => void;
+  installations: DevonIdeScript[];
   page: number;
   rowsPerPage: number;
   handlePageChange: (event: unknown, newPage: number) => void;
@@ -32,9 +32,16 @@ export default function InstallationsView(
 ): JSX.Element {
   const classes = useInstallationsStyles();
   const [openChangelog, setOpenChangelog] = useState(false);
+  const [dialog, setDialog] = useState({
+    title: '',
+    content: '',
+  });
 
-  const handleClickOpenChangelog = () => {
-    setOpenChangelog(true);
+  const handleClickOpenChangelog = (title: string, content: string) => {
+    return () => {
+      setDialog({ title, content });
+      setOpenChangelog(true);
+    };
   };
   const handleCloseChangelog = () => {
     setOpenChangelog(false);
@@ -79,17 +86,22 @@ export default function InstallationsView(
                     props.page * props.rowsPerPage + props.rowsPerPage
                   )
                 : props.installations
-              ).map((installation: DevonIdeScripts, index: number) => (
+              ).map((installation: DevonIdeScript, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{installation.version}</TableCell>
                   <TableCell>{installation.updated}</TableCell>
                   <TableCell>
-                    <button
-                      className={classes.link}
-                      onClick={handleClickOpenChangelog}
-                    >
-                      Consolidated list of features
-                    </button>
+                    {installation.changelog ? (
+                      <button
+                        className={classes.link}
+                        onClick={handleClickOpenChangelog(
+                          installation.version,
+                          installation.changelog
+                        )}
+                      >
+                        Consolidated list of features
+                      </button>
+                    ) : null}
                   </TableCell>
                   <TableCell align="center">
                     <AcceptButton>UPDATE</AcceptButton>
@@ -108,7 +120,7 @@ export default function InstallationsView(
                           '.tar.gz'
                         }
                       >
-                        DOWWNLOAD
+                        DOWNLOAD
                       </AcceptButton>
                     )}
                     {installation.downloading && <CircularProgress size={24} />}
@@ -131,7 +143,12 @@ export default function InstallationsView(
           </Table>
         </TableContainer>
       </Card>
-      <Changelog open={openChangelog} onClose={handleCloseChangelog} />
+      <Changelog
+        title={dialog.title}
+        content={dialog.content}
+        open={openChangelog}
+        onClose={handleCloseChangelog}
+      />
     </>
   );
 }
