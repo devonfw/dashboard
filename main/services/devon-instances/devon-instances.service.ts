@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import https from 'https';
 import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
-  DevonIdeScripts,
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
@@ -21,7 +19,7 @@ const utilReaddir = util.promisify(fs.readdir);
 const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
-export class DevonInstancesService implements SaveDetails {
+export default class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',
@@ -78,14 +76,24 @@ export class DevonInstancesService implements SaveDetails {
         path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
         'utf8',
         (err, data) => {
-          if (err) reject('No instances find out');
+          if (err) reject('No instances found');
           this.devonfwInstance(data)
             .then((instances: DevonfwConfig) => resolve(instances))
-            .catch((error) => console.log(error));
+            .catch(() => reject('No instances found'));
         }
       );
     });
     return instancesDirReader;
+  }
+
+  async getInstalledVersions(): Promise<string[]> {
+    const devonfwConfig: DevonfwConfig = await this.getAllUserCreatedDevonInstances();
+    const distributions: IdeDistribution[] = devonfwConfig.distributions;
+    const versions: string[] = distributions.map(
+      (distribution: IdeDistribution) => distribution.ideConfig.version
+    );
+
+    return versions;
   }
 
   async devonfwInstance(data: string): Promise<DevonfwConfig> {
@@ -102,7 +110,7 @@ export class DevonInstancesService implements SaveDetails {
               .replace(/\//g, path.sep);
           }
           try {
-            const { stdout, stderr } = await utilExec('devon -v', {
+            const { stdout } = await utilExec('devon -v', {
               cwd: path.resolve(singlepath, 'scripts'),
             });
             instances.distributions.push(
@@ -127,62 +135,6 @@ export class DevonInstancesService implements SaveDetails {
         workspaces: path.resolve(singlepath, 'workspaces'),
       },
     };
-  }
-
-  getDevonIdeScriptsFromMaven(): Promise<any> {
-    let ideScripts: DevonIdeScripts[] = [];
-    let data = '';
-    const ideScriptsPromise = new Promise<any>((resolve, reject) => {
-      https
-        .get(
-          'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json',
-          (res) => {
-            res.on('data', (d) => {
-              data += d;
-            });
-            res.on('end', () => {
-              const jsonData = JSON.parse(data);
-              ideScripts = jsonData['response']['docs'].map((i) => {
-                return { version: i.v, updated: i.timestamp };
-              });
-              resolve(ideScripts);
-            });
-          }
-        )
-        .on('error', (e) => {
-          reject('error: ' + e);
-        });
-    });
-    return ideScriptsPromise;
-  }
-
-  getLatestDevonIdeScriptsFromMaven(): Promise<DevonIdeScripts> {
-    let ideScript: DevonIdeScripts;
-    let data = '';
-    const ideScriptPromise = new Promise<DevonIdeScripts>((resolve, reject) => {
-      https
-        .get(
-          'https://search.maven.org/classic/solrsearch/select?q=a%3A%22devonfw-ide-scripts%22&rows=20&wt=json',
-          (res) => {
-            res.on('data', (d) => {
-              data += d;
-            });
-            res.on('end', () => {
-              const jsonData = JSON.parse(data);
-              const latestIdeScript = jsonData['response']['docs'][0];
-              ideScript = {
-                version: latestIdeScript.latestVersion,
-                updated: latestIdeScript.timestamp,
-              };
-              resolve(ideScript);
-            });
-          }
-        )
-        .on('error', (e) => {
-          reject('error: ' + e);
-        });
-    });
-    return ideScriptPromise;
   }
 
   /* Checking projectinfo.json is exists?, if exits overriding data or 
@@ -237,7 +189,7 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  async deleteProjectFolder(projectPath: string) {
+  async deleteProjectFolder(projectPath: string): Promise<void> {
     const entries = await utilReaddir(projectPath, { withFileTypes: true });
     const results = await Promise.all(
       entries.map((entry) => {

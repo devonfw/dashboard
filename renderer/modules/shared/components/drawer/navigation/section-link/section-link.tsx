@@ -22,7 +22,7 @@ interface SectionLinkProps {
 export default function SectionLink(props: SectionLinkProps): JSX.Element {
   const router = useRouter();
   const classes = useSectionLinkStyles();
-  const activeClass = props.isActive ? classes.active : '';
+  const activeClass = props.isActive && !props.submenu ? classes.active : '';
   const [open, setOpen] = useState(false);
 
   const toggleSubmenu = () => {

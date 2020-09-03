@@ -9,7 +9,7 @@ import prepareNext from 'electron-next';
 
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
-import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
+import DevonInstancesService from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
@@ -28,6 +28,9 @@ import { OpenProjectIDEListener } from './modules/projects/classes/listeners/ope
 import { UserProfile } from './modules/shared/models/user-profile';
 import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/devon-ide-projects';
 import RepositoriesListener from './modules/repositories/repositories-listener';
+import IDEsInstallationStatus from './modules/settings/installed-versions/services/ides-installation-status.service';
+import DevonfwIdesService from './modules/settings/installed-versions/services/devonfw-ides.service';
+import ChangelogListener from './modules/settings/installed-versions/services/listeners/changelog.listener';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -108,11 +111,12 @@ const downloadHandler = (_, item) => {
 
 // Get all devon-ide-scripts from maven repository
 function getDevonIdeScripts() {
-  new DevonInstancesService()
-    .getDevonIdeScriptsFromMaven()
-    .then((instances) => {
-      mainWindow.webContents.send('get:devonIdeScripts', instances);
-    })
+  const instancesService = new DevonInstancesService();
+  const devonfwIdes = new DevonfwIdesService();
+  new IDEsInstallationStatus(instancesService, devonfwIdes)
+    .getDevonfwIDEsStatus((instances) =>
+      mainWindow.webContents.send('get:devonIdeScripts', instances)
+    )
     .catch(() => {
       mainWindow.webContents.send('get:devonIdeScripts', []);
     });
@@ -218,6 +222,9 @@ new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 const openProjectDirectory = (path: string) => {
   shell.showItemInFolder(path);
 };
+
+const changelogListener = new ChangelogListener();
+changelogListener.listen();
 
 /* terminal service */
 const terminalService = new TerminalService();

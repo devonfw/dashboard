@@ -60,7 +60,6 @@ const useDawerStyles = makeStyles((theme: Theme) =>
     ideSelector: {
       marginRight: `${theme.spacing(2)}px !important`,
       width: '320px',
-      padding: '1em 0 !important',
       '& .MuiSelect-select:focus': {
         backgroundColor: 'transparent',
       },
