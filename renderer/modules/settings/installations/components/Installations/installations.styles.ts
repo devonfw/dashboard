@@ -12,16 +12,6 @@ const useInstallationsStyles = makeStyles((theme: Theme) =>
     textField: {
       width: '100%',
     },
-    link: {
-      textDecoration: 'underline',
-      color: theme.palette.primary.main,
-      fontWeight: theme.typography.fontWeightBold,
-      padding: 0,
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      outline: 'none',
-    },
   })
 );
 

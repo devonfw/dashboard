@@ -30,6 +30,7 @@ import { DevonIdeProjectsListener } from './modules/projects/classes/listeners/d
 import RepositoriesListener from './modules/repositories/repositories-listener';
 import IDEsInstallationStatus from './modules/settings/installed-versions/services/ides-installation-status.service';
 import DevonfwIdesService from './modules/settings/installed-versions/services/devonfw-ides.service';
+import ChangelogListener from './modules/settings/installed-versions/services/listeners/changelog.listener';
 
 let mainWindow;
 // Prepare the renderer once the app is ready
@@ -222,6 +223,9 @@ new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 const openProjectDirectory = (path: string) => {
   shell.showItemInFolder(path);
 };
+
+const changelogListener = new ChangelogListener();
+changelogListener.listen();
 
 /* terminal service */
 const terminalService = new TerminalService();

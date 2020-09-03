@@ -1,12 +1,4 @@
-import {
-  CMD_LS,
-  CMD_DIR,
-  Command,
-  CMD_XCOPY,
-  CMD_CP,
-} from './terminal-commands';
-
-const WINDOWS_OS = 'win32';
+import { ChildProcessWithoutNullStreams } from 'child_process';
 
 export interface JSMap {
   [key: string]: string | number;
@@ -20,28 +12,6 @@ export function dirStringToArray(dirs: string): string[] {
   return dirs.split('\n').filter(isNotEmpty);
 }
 
-export function lsOS(): Command {
-  const isWin = process.platform === WINDOWS_OS;
-  let cmd = CMD_LS;
-
-  if (isWin) {
-    cmd = CMD_DIR;
-  }
-
-  return cmd;
-}
-
-export function cpOS(): Command {
-  const isWin = process.platform === WINDOWS_OS;
-  let cmd = CMD_CP;
-
-  if (isWin) {
-    cmd = CMD_XCOPY;
-  }
-
-  return cmd;
-}
-
 export function getOptions(opts: JSMap): JSMap | undefined {
   const options = {};
 
@@ -53,4 +23,27 @@ export function getOptions(opts: JSMap): JSMap | undefined {
   }
 
   return options ? options : undefined;
+}
+
+export function spawnHandler(
+  spawn: ChildProcessWithoutNullStreams
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    let result = '';
+    let error = '';
+    spawn.stdout.on('data', (data) => {
+      result += data;
+    });
+    spawn.stderr.on('data', (data) => {
+      error += data;
+    });
+    spawn.on('close', () => {
+      if (error) {
+        reject(result + error);
+      } else {
+        resolve(result + error);
+      }
+    });
+    spawn.stdin.end();
+  });
 }

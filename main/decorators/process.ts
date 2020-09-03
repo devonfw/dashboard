@@ -1,6 +1,6 @@
 import { ipcMain, IpcMainEvent } from 'electron';
 
-function Process(path: string) {
+function Process(path: string, verbose = true) {
   // this is the decorator factory
   return function (
     _: unknown,
@@ -15,9 +15,11 @@ function Process(path: string) {
           const r = JSON.stringify(result);
 
           const params = eventArgs.map((a) => JSON.stringify(a)).join();
-          console.log(
-            `Path: ${path}\t---> Call: ${propertyName}(${params}) => ${r}`
-          );
+          if (verbose) {
+            console.log(
+              `Path: ${path}\t---> Call: ${propertyName}(${params}) => ${r}`
+            );
+          }
           event.sender.send(path, result);
         });
       };

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { DevonIdeScript } from './Installations.contoller';
 import { TextField, Card, Typography } from '@material-ui/core';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -31,21 +31,6 @@ export default function InstallationsView(
   props: InstallationsViewProps
 ): JSX.Element {
   const classes = useInstallationsStyles();
-  const [openChangelog, setOpenChangelog] = useState(false);
-  const [dialog, setDialog] = useState({
-    title: '',
-    content: '',
-  });
-
-  const handleClickOpenChangelog = (title: string, content: string) => {
-    return () => {
-      setDialog({ title, content });
-      setOpenChangelog(true);
-    };
-  };
-  const handleCloseChangelog = () => {
-    setOpenChangelog(false);
-  };
 
   return (
     <>
@@ -92,15 +77,7 @@ export default function InstallationsView(
                   <TableCell>{installation.updated}</TableCell>
                   <TableCell>
                     {installation.changelog ? (
-                      <button
-                        className={classes.link}
-                        onClick={handleClickOpenChangelog(
-                          installation.version,
-                          installation.changelog
-                        )}
-                      >
-                        Consolidated list of features
-                      </button>
+                      <Changelog version={installation.version} />
                     ) : null}
                   </TableCell>
                   <TableCell align="center">
@@ -143,12 +120,6 @@ export default function InstallationsView(
           </Table>
         </TableContainer>
       </Card>
-      <Changelog
-        title={dialog.title}
-        content={dialog.content}
-        open={openChangelog}
-        onClose={handleCloseChangelog}
-      />
     </>
   );
 }

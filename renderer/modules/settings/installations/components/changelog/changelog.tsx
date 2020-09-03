@@ -1,92 +1,57 @@
-import React from 'react';
-import {
-  createStyles,
-  Theme,
-  withStyles,
-  WithStyles,
-} from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { useChangelogStyles } from './changelog.styles';
+import { DialogTitle, DialogContent, DialogActions } from './dialog';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
 import AsciidocViewer from '../asciidoct-viewer/asciidoc-viewer';
-import { useChangelogStyles } from './changelog.styles';
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      paddingTop: theme.spacing(3),
-      paddingRight: theme.spacing(5),
-      paddingBottom: theme.spacing(3),
-      paddingLeft: theme.spacing(5),
-    },
-  });
-
-export interface DialogTitleProps extends WithStyles<typeof styles> {
-  id: string;
-  children: React.ReactNode;
-}
-
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme: Theme) => ({
-  root: {
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(5),
-    paddingBottom: theme.spacing(2),
-    paddingLeft: theme.spacing(5),
-  },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles((theme: Theme) => ({
-  root: {
-    margin: 0,
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(2.5),
-    paddingBottom: theme.spacing(2),
-    paddingLeft: theme.spacing(2.5),
-  },
-}))(MuiDialogActions);
+import ChangelogService from '../../services/changelog.service';
+import ButtonLink from '../../../../shared/components/button-link/button-link';
 
 interface ChangelogProps {
-  title: string;
-  content: string;
-  open: boolean;
-  onClose: () => void;
+  version: string;
 }
 
 export default function Changelog(props: ChangelogProps): JSX.Element {
   const classes = useChangelogStyles();
+  const changelogService = new ChangelogService();
+  const [content, setContent] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const handleOpenChangelog = (title: string) => {
+    return async () => {
+      const content = await changelogService.getChangelog(title);
+      setContent(content);
+      setOpen(true);
+    };
+  };
+
+  const handleCloseChangelog = () => {
+    setOpen(false);
+  };
 
   return (
-    <Dialog
-      onClose={props.onClose}
-      aria-labelledby="customized-dialog-title"
-      open={props.open}
-    >
-      <DialogTitle id="customized-dialog-title">{props.title}</DialogTitle>
-      <DialogContent dividers>
-        <AsciidocViewer className={classes.link} content={props.content} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          autoFocus
-          onClick={props.onClose}
-          variant="outlined"
-          color="secondary"
-        >
-          OKAY GOT IT
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <>
+      <ButtonLink onClick={handleOpenChangelog(props.version)}></ButtonLink>
+      <Dialog
+        onClose={handleCloseChangelog}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle id="customized-dialog-title">{props.version}</DialogTitle>
+        <DialogContent dividers>
+          <AsciidocViewer className={classes.link} content={content} />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            autoFocus
+            onClick={handleCloseChangelog}
+            variant="outlined"
+            color="secondary"
+          >
+            OKAY GOT IT
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
