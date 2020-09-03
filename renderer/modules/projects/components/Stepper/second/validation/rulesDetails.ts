@@ -1,7 +1,7 @@
 interface Rules {
-  required?: string;
-  pattern?: string;
-  existing?: string;
+  required: string;
+  pattern: string;
+  existing: string;
 }
 
 const rulesDetails: { [key: string]: Rules } = {
@@ -13,6 +13,7 @@ const rulesDetails: { [key: string]: Rules } = {
   group: {
     required: 'Please provide a value',
     pattern: 'Group name should be like ( ex: com.example.group )',
+    existing: '',
   },
   artifact: {
     required: 'Please provide a value',
@@ -21,6 +22,8 @@ const rulesDetails: { [key: string]: Rules } = {
   },
   version: {
     required: 'Please provide a value',
+    pattern: '',
+    existing: '',
   },
 };
 

@@ -1,5 +1,7 @@
 import { FormType } from '../../../../../../models/dashboard/FormType';
 import rulesDetails from './rulesDetails';
+import { JavaFormControls } from '../../../../../../models/dashboard/IJavaInitializer';
+import { NodeFormControls } from '../../../../../../models/dashboard/INodeInitializer';
 
 class ValidateForm {
   static checkValidity(
@@ -36,13 +38,19 @@ class ValidateForm {
     control.valid = isValid;
   }
 
-  static formStateValidity(formControls: { [key: string]: FormType }): boolean {
+  static javaFormStateValidity(formControls: JavaFormControls): boolean {
     let formIsValid = true;
-    for (const inputIdentifier in formControls) {
-      if (formControls[inputIdentifier].valid !== undefined) {
-        formIsValid = formControls[inputIdentifier].valid && formIsValid;
-      }
-    }
+    Object.values(formControls).map((formControl: FormType) => {
+      formIsValid = formControl.valid && formIsValid;
+    });
+    return formIsValid;
+  }
+
+  static nodeFormStateValidity(formControls: NodeFormControls): boolean {
+    let formIsValid = true;
+    Object.values(formControls).map((formControl: FormType) => {
+      formIsValid = formControl.valid && formIsValid;
+    });
     return formIsValid;
   }
 }

@@ -7,11 +7,11 @@ import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import { INodeInitializerForm } from '../../../../../../models/dashboard/INodeInitializer';
 import nodeInitializerStyle from './nodeInitializerStyle';
 import nodeProjectConfig from './nodeInitializerFormConfig';
-import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
-import { FormType } from '../../../../../../models/dashboard/FormType';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { WorkspaceService } from '../../../../services/workspace.service';
+import { ErrorHandler } from '../validation/error-handler/error-handler';
+import Input from '../form-inputs/input/Input';
 
 interface NodeInitializerProps {
   classes: {
@@ -68,23 +68,25 @@ class NodeInitializer extends Component<NodeInitializerProps> {
     this.context.dispatch(new NextStepAction());
   };
 
-  eventHandler(identifier: string, value: string) {
+  eventHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const formState = {
       ...this.state.formControls,
     };
-    const element: FormType = { ...formState[identifier] };
-    element.touched = true;
-    element.value = value;
-    if (element.validation) {
-      ValidateForm.checkValidity(element, identifier, this.state.workspaceDir);
+    if (event.target.id === 'name') {
+      const element = { ...formState.name };
+      element.touched = true;
+      element.value = event.target.value;
+      if (element.validation) {
+        ValidateForm.checkValidity(element, event.target.id);
+      }
+      formState.name = element;
     }
-    formState[identifier] = element;
 
     this.setState({
       formControls: formState,
-      formIsValid: ValidateForm.formStateValidity(formState),
+      formIsValid: ValidateForm.nodeFormStateValidity(formState),
     });
-  }
+  };
 
   setActiveState = () => {
     this.context.dispatch({
@@ -94,41 +96,23 @@ class NodeInitializer extends Component<NodeInitializerProps> {
 
   render() {
     const { classes } = this.props;
-    const formElementsArray = [];
-    for (const key in this.state.formControls) {
-      if (this.state.formControls[key].elementType) {
-        formElementsArray.push({
-          id: key,
-          config: this.state.formControls[key],
-        });
-      }
-    }
     return (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         <Grid container spacing={4}>
-          {formElementsArray.map((formElement) => {
-            return formElement.id !== 'devonInstances' ? (
-              <Grid item xs={12} key={formElement.id}>
-                <Input
-                  elementType={formElement.config.elementType}
-                  elementConfig={formElement.config.elementConfig}
-                  value={formElement.config.value}
-                  invalid={!formElement.config.valid}
-                  shouldValidate={formElement.config.validation}
-                  touched={formElement.config.touched}
-                  disabled={formElement.config.disabled}
-                  changed={(event: ChangeEvent<HTMLInputElement>) =>
-                    this.eventHandler(formElement.id, event.target.value)
-                  }
-                />
-                {formElement.config.error ? (
-                  <div className={classes.error}>
-                    {formElement.config.error}
-                  </div>
-                ) : null}
-              </Grid>
-            ) : null;
-          })}
+          <Grid item xs={12}>
+            <Input
+              elementConfig={this.state.formControls.name.elementConfig}
+              value={this.state.formControls.name.value}
+              invalid={!this.state.formControls.name.valid}
+              touched={this.state.formControls.name.touched}
+              disabled={this.state.formControls.name.disabled}
+              changed={this.eventHandler}
+              inputProps={{
+                id: this.state.formControls.name.elementConfig.id,
+              }}
+            />
+            <ErrorHandler formControl={this.state.formControls.name} />
+          </Grid>
         </Grid>
         <div className={classes.action}>
           <Link href="/projects/creation">

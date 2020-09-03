@@ -1,7 +1,10 @@
-const nodeInitializerStyle = () => ({
+const nodeInitializerStyle = {
   root: {
     '& .MuiFormControl-root': {
       width: '100%',
+    },
+    '& .error': {
+      color: 'red',
     },
   },
   action: {
@@ -15,9 +18,6 @@ const nodeInitializerStyle = () => ({
       padding: '7px 10px',
     },
   },
-  error: {
-    color: 'red',
-  },
-});
+};
 
 export default nodeInitializerStyle;

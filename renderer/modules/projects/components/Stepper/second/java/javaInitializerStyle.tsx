@@ -1,7 +1,12 @@
-const javaInitializerStyle = () => ({
+const javaInitializerStyle = {
   root: {
     '& .MuiFormControl-root': {
       width: '100%',
+      marginBottom: '0.5em',
+    },
+    '& .error': {
+      color: 'red',
+      paddingBottom: '1.5em',
     },
   },
   action: {
@@ -15,9 +20,12 @@ const javaInitializerStyle = () => ({
       padding: '7px 10px',
     },
   },
-  error: {
-    color: 'red',
+  batch: {
+    paddingTop: '0 !important',
   },
-});
+  content: {
+    paddingBottom: '0 !important',
+  },
+};
 
 export default javaInitializerStyle;

@@ -2,11 +2,10 @@ import { FormType } from './FormType';
 
 export interface INodeInitializerForm {
   workspaceDir: string[];
-  formControls: FormControls;
+  formControls: NodeFormControls;
   formIsValid: boolean;
 }
 
-export interface FormControls {
+export interface NodeFormControls {
   name: FormType;
-  devonInstances: FormType;
 }
