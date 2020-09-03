@@ -6,13 +6,9 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
-import {
-  IJavaInitializerForm,
-  FormControls,
-} from '../../../../../../models/dashboard/IJavaInitializer';
+import { IJavaInitializerForm } from '../../../../../../models/dashboard/IJavaInitializer';
 import javaInitializerStyle from './javaInitializerStyle';
 import javaProjectConfig from './javaInitializerFormConfig';
-import Input from '../input/Input';
 import ValidateForm from '../validation/ValidateForm';
 import {
   FormType,
@@ -21,12 +17,15 @@ import {
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
 import { WorkspaceService } from '../../../../services/workspace.service';
+import { JavaFormBuider } from './java-form-buider';
 
 interface JavaInitializerProps {
   classes: {
     root: string;
     error: string;
     action: string;
+    content: string;
+    batch: string;
   };
 }
 
@@ -84,7 +83,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
       '-Dpackage': `"${formData.formControls.packageName.value}"`,
     };
 
-    if (formData.formControls.batch) {
+    if (formData.batchProcessControl.batch) {
       specificArgs['-Dbatch'] = 'batch';
     }
 
@@ -112,7 +111,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     updatedForm.packageName = packageName;
     this.setState({
       formControls: updatedForm,
-      formIsValid: ValidateForm.formStateValidity(updatedForm),
+      formIsValid: ValidateForm.javaFormStateValidity(updatedForm),
     });
   };
 
@@ -136,7 +135,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     updatedForm.packageName = packageName;
     this.setState({
       formControls: updatedForm,
-      formIsValid: ValidateForm.formStateValidity(updatedForm),
+      formIsValid: ValidateForm.javaFormStateValidity(updatedForm),
     });
   };
 
@@ -144,30 +143,42 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     const formState = {
       ...this.state.formControls,
     };
-    const element = { ...formState[identifier] };
-    element.touched = true;
-    element.value = value;
-    if (element.validation) {
-      ValidateForm.checkValidity(element, identifier);
+    if (identifier === 'version') {
+      const element = { ...formState.version };
+      element.touched = true;
+      element.value = value;
+      if (element.validation) {
+        ValidateForm.checkValidity(element, identifier);
+      }
+      formState.version = element;
     }
-    formState[identifier] = element;
+
+    if (identifier === 'db') {
+      const element = { ...formState.db };
+      element.value = value;
+      formState.db = element;
+    }
 
     this.setState({
       formControls: formState,
-      formIsValid: ValidateForm.formStateValidity(formState),
+      formIsValid: ValidateForm.javaFormStateValidity(formState),
     });
   }
 
-  updateFormState = (args: ValueType): void => {
-    switch (args.identifier) {
+  updateFormState = (formChangeState: ValueType): void => {
+    switch (formChangeState.identifier) {
       case 'group':
-        return this.groupHandler(args.event ? args.event.target.value : '');
+        return this.groupHandler(
+          formChangeState.event ? formChangeState.event.target.value : ''
+        );
       case 'artifact':
-        return this.artifactHandler(args.event ? args.event.target.value : '');
+        return this.artifactHandler(
+          formChangeState.event ? formChangeState.event.target.value : ''
+        );
       default:
         return this.eventHandler(
-          args.identifier,
-          args.event ? args.event.target.value : args.value ? args.value : ''
+          formChangeState.identifier,
+          formChangeState.event ? formChangeState.event.target.value : ''
         );
     }
   };
@@ -179,60 +190,31 @@ class JavaInitializer extends Component<JavaInitializerProps> {
   };
 
   handleBatchChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const formState: FormControls = {
-      ...this.state.formControls,
+    const formState: { batch: boolean } = {
+      ...this.state.batchProcessControl,
     };
-    let batchControl = this.state.formControls.batch;
+    let batchControl = this.state.batchProcessControl.batch;
     batchControl = event.target.checked;
     formState.batch = batchControl;
-    this.setState({ formControls: formState });
+    this.setState({ batchProcessControl: formState });
   };
 
   render() {
     const { classes } = this.props;
-    const formElementsArray = [];
-    for (const key in this.state.formControls) {
-      if (this.state.formControls[key].elementType) {
-        formElementsArray.push({
-          id: key,
-          config: this.state.formControls[key],
-        });
-      }
-    }
     return (
       <form className={classes.root} onSubmit={this.createProjectHandler}>
         <Grid container spacing={4}>
-          {formElementsArray.map((formElement) => {
-            return formElement.id !== 'devonInstances' ? (
-              <Grid item xs={12} key={formElement.id}>
-                <Input
-                  elementType={formElement.config.elementType}
-                  elementConfig={formElement.config.elementConfig}
-                  value={formElement.config.value}
-                  invalid={!formElement.config.valid}
-                  shouldValidate={formElement.config.validation}
-                  touched={formElement.config.touched}
-                  disabled={formElement.config.disabled}
-                  changed={(event: ChangeEvent<HTMLInputElement>) =>
-                    this.updateFormState({
-                      event: event,
-                      identifier: formElement.id,
-                    })
-                  }
-                />
-                {formElement.config.error ? (
-                  <div className={classes.error}>
-                    {formElement.config.error}
-                  </div>
-                ) : null}
-              </Grid>
-            ) : null;
-          })}
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.content}>
+            <JavaFormBuider
+              formControls={this.state.formControls}
+              updateFormState={this.updateFormState}
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.batch}>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={this.state.formControls.batch}
+                  checked={this.state.batchProcessControl.batch}
                   onChange={this.handleBatchChange}
                   name="batch"
                   color="primary"
