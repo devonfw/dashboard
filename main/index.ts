@@ -9,7 +9,7 @@ import prepareNext from 'electron-next';
 
 // Other dependencies
 import { TerminalService } from './services/terminal/terminal.service';
-import { DevonInstancesService } from './services/devon-instances/devon-instances.service';
+import DevonInstancesService from './services/devon-instances/devon-instances.service';
 import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
@@ -114,10 +114,9 @@ function getDevonIdeScripts() {
   const instancesService = new DevonInstancesService();
   const devonfwIdes = new DevonfwIdesService();
   new IDEsInstallationStatus(instancesService, devonfwIdes)
-    .getDevonfwIDEsStatus()
-    .then((instances) => {
-      mainWindow.webContents.send('get:devonIdeScripts', instances);
-    })
+    .getDevonfwIDEsStatus((instances) =>
+      mainWindow.webContents.send('get:devonIdeScripts', instances)
+    )
     .catch(() => {
       mainWindow.webContents.send('get:devonIdeScripts', []);
     });

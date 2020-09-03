@@ -18,7 +18,7 @@ interface TableState {
 
 interface InstallationsState {
   query?: string;
-  installations?: DevonIdeScript[];
+  installations: DevonIdeScript[];
   tableState?: TableState;
 }
 
@@ -54,9 +54,12 @@ export default class Installations extends Component<
     global.ipcRenderer.send('fetch:devonIdeScripts');
     global.ipcRenderer.on(
       'get:devonIdeScripts',
-      (event: IpcRendererEvent, installations: any) => {
-        this.setState({ installations });
-        this.allInstallations.push(...installations);
+      (_: IpcRendererEvent, installations: DevonIdeScript) => {
+        this.setState((prev) => ({
+          installations: [...prev.installations, installations],
+          query: '',
+        }));
+        this.allInstallations.push(installations);
       }
     );
   };

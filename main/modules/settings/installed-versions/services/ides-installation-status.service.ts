@@ -1,38 +1,31 @@
-import {
-  DevonIdeScript,
-  IdeInstallationStatus,
-} from '../../../../models/devonfw-dists.model';
+import { IdeVersions } from '../../../../models/devonfw-dists.model';
 import ChangelogService from './changelog.service';
-
-interface IdeVersions {
-  getInstalledVersions(): Promise<string[]>;
-}
-
-interface DevonfwIDEsRetriever {
-  getDevonfwIDEs(): Promise<DevonIdeScript[]>;
-}
+import DevonInstancesService from '../../../../services/devon-instances/devon-instances.service';
+import DevonfwIdesService from './devonfw-ides.service';
 
 export default class IDEsInstallationStatus {
   private changelogService: ChangelogService;
 
   constructor(
-    private versions: IdeVersions,
-    private idesRetriever: DevonfwIDEsRetriever
+    private versions: DevonInstancesService,
+    private idesRetriever: DevonfwIdesService
   ) {
     this.changelogService = new ChangelogService();
   }
 
-  async getDevonfwIDEsStatus(): Promise<IdeInstallationStatus[]> {
+  async getDevonfwIDEsStatus(
+    onNotify: (instances: IdeVersions) => void
+  ): Promise<void> {
     const versions = await this.versions.getInstalledVersions();
     const ides = await this.idesRetriever.getDevonfwIDEs();
 
-    return Promise.all(
-      ides.map(async (ide) => ({
+    for (const ide of ides) {
+      onNotify({
         ...ide,
         installed: versions.includes(ide.version),
         changelog: await this.changelogService.hasChangelog(ide.version),
         downloading: false,
-      }))
-    );
+      });
+    }
   }
 }

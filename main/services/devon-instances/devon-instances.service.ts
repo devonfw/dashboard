@@ -19,7 +19,7 @@ const utilReaddir = util.promisify(fs.readdir);
 const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
-export class DevonInstancesService implements SaveDetails {
+export default class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',

@@ -1,5 +1,5 @@
 import { IpcMainEvent, ipcMain } from 'electron';
-import { DevonInstancesService } from '../../../../services/devon-instances/devon-instances.service';
+import DevonInstancesService from '../../../../services/devon-instances/devon-instances.service';
 import { ProjectListener } from '../../../../services/devon-instances/project-listener';
 import { ProjectDetails } from '../../../../models/project-details.model';
 

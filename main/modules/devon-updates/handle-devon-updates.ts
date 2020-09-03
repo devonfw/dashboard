@@ -1,4 +1,4 @@
-import { DevonInstancesService } from '../../services/devon-instances/devon-instances.service';
+import DevonInstancesService from '../../services/devon-instances/devon-instances.service';
 import { DevonfwConfig } from '../../models/devonfw-dists.model';
 import { BrowserWindow } from 'electron';
 import { DevonUpdateResponse } from '../shared/models/devon-update-response';

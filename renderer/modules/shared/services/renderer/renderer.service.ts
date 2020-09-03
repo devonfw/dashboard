@@ -1,6 +1,5 @@
 import { IpcRendererEvent } from 'electron';
 import MainMessage from '../../../../models/main-message';
-import { ProjectDetails } from '../../../projects/redux/stepper/data.model';
 import { ChannelObservable } from '../../utils/observation/observable';
 
 type HandlerFunction<T> = (event: IpcRendererEvent, data: T) => void;
@@ -9,6 +8,8 @@ export interface Channel {
   status: string;
   data: string;
 }
+
+export type StopListener = () => void;
 
 class Renderer {
   private channels: string[] = [];
@@ -33,23 +34,11 @@ class Renderer {
     this.channels = [];
   }
 
-  sendMultiple(
-    channel: string,
-    projectDetails?: ProjectDetails,
-    ...args: ChannelArgs[]
-  ): void {
-    global.ipcRenderer.send(
-      channel,
-      projectDetails ? projectDetails : '',
-      ...args
-    );
-  }
-
-  send<Body>(channel: string, ...args: ChannelArgs[]): Promise<Body> {
-    const result = new Promise<Body>((resolve, reject) => {
+  send<Response>(channel: string, ...args: ChannelArgs[]): Promise<Response> {
+    const result = new Promise<Response>((resolve, reject) => {
       global.ipcRenderer.once(
         channel,
-        (_: IpcRendererEvent, message: MainMessage<Body>) => {
+        (_: IpcRendererEvent, message: MainMessage<Response>) => {
           if (message.error) {
             reject(message.body);
           } else {
@@ -61,6 +50,22 @@ class Renderer {
       global.ipcRenderer.send(channel, ...args);
     });
     return result;
+  }
+
+  sendMultiple<Response>(
+    channel: string,
+    handler: (data?: Response) => void,
+    ...args: ChannelArgs[]
+  ): StopListener {
+    const channelHandler = (_: unknown, data: Response) => handler(data);
+    global.ipcRenderer.on(channel, channelHandler);
+    global.ipcRenderer.send(channel, ...args);
+
+    const stopListener = () => {
+      global.ipcRenderer.removeAllListeners(channel);
+    };
+
+    return stopListener;
   }
 
   sendObservable<T>(channelName: string, channelData: T): ChannelObservable {
@@ -76,7 +81,7 @@ class Renderer {
 
         if (channel.status === 'end') {
           end(channel.data === 'error');
-          this.removeAllInChannel(channelName);
+          global.ipcRenderer.removeAllListeners(channelName);
         }
       });
       global.ipcRenderer.send(channelName, channelData);

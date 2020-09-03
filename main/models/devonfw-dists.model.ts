@@ -20,7 +20,8 @@ export interface DevonIdeScript {
   updated: string;
 }
 
-export interface IdeInstallationStatus extends DevonIdeScript {
+export interface IdeVersions extends DevonIdeScript {
+  changelog: boolean;
   downloading: boolean;
   installed: boolean;
 }
