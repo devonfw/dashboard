@@ -17,17 +17,14 @@ import { ProjectMenuType } from '../../../../../models/dashboard/ProjectMenuType
 import { AlertType } from '../../../../../models/alert/alert.model';
 import { ProcessState } from '../../../../../models/dashboard/ProcessState';
 import { DashboardSearch } from '../dashboard-search/dashboard-search';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import NextLink from '../../../../shared/components/nextjs-link/NextLink';
 import ProjectDetail from './project-detail';
 import Alerts from '../../../../shared/components/alerts/alerts';
 import MenuList from '../menu-list/menu-list';
+import NewProject from '../new-project/new-project';
 
 interface DashboardProjectsProps {
   projects: ProjectDetails[];
@@ -171,48 +168,28 @@ export default function DashboardProjects(
 
   return (
     <div className={classes.root}>
-      <Grid item xs={12}>
-        <DashboardSearch
-          searchRef={searchElement}
-          filterRef={filterElement}
-          searchHandler={searchHandler}
-          totalProjects={props.projects.length}
-        />
-      </Grid>
-      <Grid item xs={6} md={4} lg={3}>
+      <DashboardSearch
+        searchRef={searchElement}
+        filterRef={filterElement}
+        searchHandler={searchHandler}
+        totalProjects={props.projects.length}
+      />
+      <div className={classes.cardsContainer}>
         <NextLink href="/projects/creation" className={classes.link}>
-          <Card className={classes.ProjectGrid}>
-            <CardMedia
-              className={classes.newProject}
-              image="/static/assets/add_new_project.png"
-              title="Add new Project"
-            />
-            <CardContent className={classes.alignCenter}>
-              <Typography component="h6" variant="h6">
-                Add New Project
-              </Typography>
-            </CardContent>
-          </Card>
+          <NewProject />
         </NextLink>
-      </Grid>
-      {props.projects && props.projects.length
-        ? props.projects.map((project: ProjectDetails, index: number) => {
-            return (
-              <Grid
-                item
-                xs={6}
-                md={4}
-                lg={3}
-                key={index}
-                className={classes.ProjectGrid}
-              >
-                <Card>
-                  <ProjectDetail project={project} handleClick={handleClick} />
-                </Card>
-              </Grid>
-            );
-          })
-        : null}
+        {props.projects && props.projects.length
+          ? props.projects.map((project: ProjectDetails) => {
+              return (
+                <ProjectDetail
+                  key={`${project.path}${project.name}`}
+                  project={project}
+                  handleClick={handleClick}
+                />
+              );
+            })
+          : null}
+      </div>
       <MenuList
         project={projectState.project}
         state={projectState}
