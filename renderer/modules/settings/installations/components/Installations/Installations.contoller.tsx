@@ -2,12 +2,13 @@ import { Component, ChangeEvent } from 'react';
 import InstallationsView from './Installations.view';
 import { IpcRendererEvent } from 'electron';
 
-export interface DevonIdeScripts {
-  id: number;
+export interface DevonIdeScript {
+  id: string;
   version: string;
   updated: string;
-  downloading?: boolean;
-  installed?: boolean;
+  installed: boolean;
+  changelog: string | null;
+  downloading: boolean;
 }
 
 interface TableState {
@@ -17,7 +18,7 @@ interface TableState {
 
 interface InstallationsState {
   query?: string;
-  installations?: DevonIdeScripts[];
+  installations: DevonIdeScript[];
   tableState?: TableState;
 }
 
@@ -33,7 +34,7 @@ export default class Installations extends Component<
       rowsPerPage: 5,
     },
   };
-  allInstallations: DevonIdeScripts[] = [];
+  allInstallations: DevonIdeScript[] = [];
 
   constructor(props: unknown) {
     super(props);
@@ -46,57 +47,26 @@ export default class Installations extends Component<
 
   componentWillUnmount(): void {
     global.ipcRenderer.removeAllListeners('get:devonIdeScripts');
-    global.ipcRenderer.removeAllListeners('get:devoninstances');
     global.ipcRenderer.removeAllListeners('download completed');
-  }
-
-  getFormattedDate(d: Date): string {
-    const releaseDate = new Date(d);
-    return (
-      releaseDate.toLocaleString('default', { day: '2-digit' }) +
-      '-' +
-      releaseDate.toLocaleString('default', { month: 'short' }) +
-      '-' +
-      releaseDate.getFullYear()
-    );
   }
 
   getInstallations = (): void => {
     global.ipcRenderer.send('fetch:devonIdeScripts');
     global.ipcRenderer.on(
       'get:devonIdeScripts',
-      (event: IpcRendererEvent, arg: any) => {
-        const installations = arg.map((a: any, index: number) => {
-          a.id = index;
-          a.downloading = false;
-          a.installed = false;
-          a.updated = this.getFormattedDate(a.updated);
-          return a;
-        });
-        this.updateDownloadedInstallations(installations);
-      }
-    );
-  };
-
-  updateDownloadedInstallations = (mavenScripts: any): void => {
-    global.ipcRenderer.send('find:devonfwInstances');
-    global.ipcRenderer.on(
-      'get:devoninstances',
-      (event: IpcRendererEvent, arg: any) => {
-        const installedVersions = arg.map((a: any) => a.ideConfig.version);
-        const installations = mavenScripts.map((a: any) => {
-          a.installed = installedVersions.includes(a.version);
-          return a;
-        });
-        this.setState({ installations });
-        this.allInstallations.push(...installations);
+      (_: IpcRendererEvent, installations: DevonIdeScript) => {
+        this.setState((prev) => ({
+          installations: [...prev.installations, installations],
+          query: '',
+        }));
+        this.allInstallations.push(installations);
       }
     );
   };
 
   queryHandler = (event: ChangeEvent<{ value: unknown }>): void => {
     const query: string = event.target.value as string;
-    const installations: DevonIdeScripts[] = this.allInstallations.filter((i) =>
+    const installations: DevonIdeScript[] = this.allInstallations.filter((i) =>
       i.version.includes(query)
     );
     const tableState: TableState = {
@@ -106,8 +76,8 @@ export default class Installations extends Component<
     this.setState({ query, installations, tableState });
   };
 
-  downloadHandler = (index: number): void => {
-    const installations = this.state.installations.map((i: DevonIdeScripts) => {
+  downloadHandler = (index: string): void => {
+    const installations = this.state.installations.map((i: DevonIdeScript) => {
       i.downloading = i.id === index;
       return i;
     });
@@ -117,7 +87,7 @@ export default class Installations extends Component<
   downloadCompleteHandler = (): void => {
     global.ipcRenderer.on('download completed', () => {
       const installations = this.state.installations.map(
-        (i: DevonIdeScripts) => {
+        (i: DevonIdeScript) => {
           i.downloading = false;
           return i;
         }
@@ -126,7 +96,7 @@ export default class Installations extends Component<
     });
   };
 
-  handlePageChange = (event: unknown, newPage: number): void => {
+  handlePageChange = (_: unknown, newPage: number): void => {
     const tableState: TableState = {
       page: newPage,
       rowsPerPage: this.state.tableState.rowsPerPage,
