@@ -119,8 +119,7 @@ export default function DashboardProjects(
     } else {
       setAlertMessage({
         alertSeverity: 'error',
-        message:
-          'Failed to delete project due to technical issue / network issue',
+        message: 'Failed to delete project',
         operation: true,
       });
     }
@@ -179,15 +178,13 @@ export default function DashboardProjects(
           <NewProject />
         </NextLink>
         {props.projects && props.projects.length
-          ? props.projects.map((project: ProjectDetails) => {
-              return (
-                <ProjectDetail
-                  key={`${project.path}${project.name}`}
-                  project={project}
-                  handleClick={handleClick}
-                />
-              );
-            })
+          ? props.projects.map((project) => (
+              <ProjectDetail
+                key={project.path}
+                project={project}
+                handleClick={handleClick}
+              />
+            ))
           : null}
       </div>
       <MenuList

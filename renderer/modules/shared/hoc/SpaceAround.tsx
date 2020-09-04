@@ -5,7 +5,7 @@ const styles: Styles = {
 };
 
 interface SpaceAroundProps {
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
   bgColor?: string;
   top?: number;
 }

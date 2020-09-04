@@ -1,30 +1,49 @@
-import React, { MouseEvent } from 'react';
+import React, { useEffect } from 'react';
 import TablePagination from '@material-ui/core/TablePagination';
 
-export default function TablePaginationDemo(): JSX.Element {
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+const MIN_ROWS = 2;
+export const PAGINATION_MIN_ROWS = MIN_ROWS;
 
-  const handleChangePage = (
-    event: MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
+interface ProjectsPaginationProps {
+  count: number;
+  onPageChange: (page: number) => void;
+  onRowsPerPageChange: (page: number) => void;
+}
+
+export default function ProjectsPagination(
+  props: ProjectsPaginationProps
+): JSX.Element {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(MIN_ROWS);
+
+  useEffect(() => {
+    setRowsPerPage(rowsPerPage);
+    setPage(0);
+  }, [props.count]);
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    props.onPageChange(newPage);
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const selectedRowsPerPage = parseInt(event.target.value);
+    props.onRowsPerPageChange(selectedRowsPerPage);
+    props.onPageChange(0);
+    setRowsPerPage(selectedRowsPerPage);
     setPage(0);
   };
 
   return (
     <TablePagination
       component="div"
-      count={100}
+      labelRowsPerPage="Projects per page:"
+      count={props.count}
       page={page}
       onChangePage={handleChangePage}
+      rowsPerPageOptions={[MIN_ROWS, 4, 6, 10]}
       rowsPerPage={rowsPerPage}
       onChangeRowsPerPage={handleChangeRowsPerPage}
     />
