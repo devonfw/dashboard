@@ -27,6 +27,11 @@ export class DevonInstancesService implements SaveDetails {
     '.devon',
     'projectinfo.json'
   );
+  private idePathsFilePath = path.resolve(
+    process.env.USERPROFILE,
+    '.devon',
+    'ide-paths'
+  );
 
   /* Find out DEVON ide instances  */
   getAvailableDevonIdeInstances(): Promise<number> {
@@ -74,18 +79,36 @@ export class DevonInstancesService implements SaveDetails {
   /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
-      fs.readFile(
-        path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
-        'utf8',
-        (err, data) => {
-          if (err) reject('No instances find out');
-          this.devonfwInstance(data)
-            .then((instances: DevonfwConfig) => resolve(instances))
-            .catch((error) => console.log(error));
-        }
-      );
+      fs.readFile(this.idePathsFilePath, 'utf8', (err, data) => {
+        if (err) reject('No instances find out');
+        this.devonfwInstance(data)
+          .then((instances: DevonfwConfig) => resolve(instances))
+          .catch((error) => console.log(error));
+      });
     });
     return instancesDirReader;
+  }
+
+  updateUserCreatedDevonInstances(data: DevonfwConfig): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const formattedData =
+        data.distributions
+          .map((ide) => ide.ideConfig.basepath)
+          .map((basepath) => this.formatPathFromWindows(basepath))
+          .join('\n') + '\n';
+      fs.writeFile(this.idePathsFilePath, formattedData, (err) => {
+        if (err) reject(err);
+        else resolve('Successs');
+      });
+    });
+  }
+
+  formatPathToWindows(dirPath: string): string {
+    return dirPath.replace('/', '').replace('/', ':/').replace(/\//g, path.sep);
+  }
+
+  formatPathFromWindows(dirPath: string): string {
+    return dirPath.replace('', '/').replace(':', '').replace(/\\/g, '/');
   }
 
   async devonfwInstance(data: string): Promise<DevonfwConfig> {
@@ -96,13 +119,10 @@ export class DevonInstancesService implements SaveDetails {
       for (let singlepath of paths) {
         if (singlepath) {
           if (process.platform === 'win32') {
-            singlepath = singlepath
-              .replace('/', '')
-              .replace('/', ':/')
-              .replace(/\//g, path.sep);
+            singlepath = this.formatPathToWindows(singlepath);
           }
           try {
-            const { stdout, stderr } = await utilExec('devon -v', {
+            const { stdout } = await utilExec('devon -v', {
               cwd: path.resolve(singlepath, 'scripts'),
             });
             instances.distributions.push(
@@ -129,30 +149,32 @@ export class DevonInstancesService implements SaveDetails {
     };
   }
 
-  getDevonIdeScriptsFromMaven(): Promise<any> {
+  getDevonIdeScriptsFromMaven(): Promise<DevonIdeScripts[]> {
     let ideScripts: DevonIdeScripts[] = [];
     let data = '';
-    const ideScriptsPromise = new Promise<any>((resolve, reject) => {
-      https
-        .get(
-          'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json',
-          (res) => {
-            res.on('data', (d) => {
-              data += d;
-            });
-            res.on('end', () => {
-              const jsonData = JSON.parse(data);
-              ideScripts = jsonData['response']['docs'].map((i) => {
-                return { version: i.v, updated: i.timestamp };
+    const ideScriptsPromise = new Promise<DevonIdeScripts[]>(
+      (resolve, reject) => {
+        https
+          .get(
+            'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json',
+            (res) => {
+              res.on('data', (d) => {
+                data += d;
               });
-              resolve(ideScripts);
-            });
-          }
-        )
-        .on('error', (e) => {
-          reject('error: ' + e);
-        });
-    });
+              res.on('end', () => {
+                const jsonData = JSON.parse(data);
+                ideScripts = jsonData['response']['docs'].map((i) => {
+                  return { version: i.v, updated: i.timestamp };
+                });
+                resolve(ideScripts);
+              });
+            }
+          )
+          .on('error', (e) => {
+            reject('error: ' + e);
+          });
+      }
+    );
     return ideScriptsPromise;
   }
 

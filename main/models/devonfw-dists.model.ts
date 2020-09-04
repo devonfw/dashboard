@@ -18,3 +18,10 @@ export interface DevonIdeScripts {
   version: string;
   updated: Date;
 }
+
+export interface InstalledVersions {
+  version: string;
+  path?: string;
+  updated: string;
+  url?: string;
+}

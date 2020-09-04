@@ -10,7 +10,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import GetApp from '@material-ui/icons/GetApp';
 
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
@@ -18,13 +19,14 @@ import useInstallationsStyles from './installations.styles';
 
 interface InstallationsViewProps {
   query: string;
-  queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
-  downloadHandler: (index: number) => void;
   installations: DevonIdeScripts[];
   page: number;
   rowsPerPage: number;
-  handlePageChange: (event: unknown, newPage: number) => void;
-  handleRowsPerPageChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  uninstallHandler: (idePath?: string) => void;
+  viewIdeHandler: (idePath?: string) => void;
+  queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
+  pageChangehandler: (event: unknown, newPage: number) => void;
+  rowsPerPageChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InstallationsView(
@@ -57,6 +59,7 @@ export default function InstallationsView(
           <TableHead>
             <TableRow>
               <TableCell>Version</TableCell>
+              <TableCell></TableCell>
               <TableCell>Release Date</TableCell>
               <TableCell align="center">Update</TableCell>
               <TableCell align="center">Download</TableCell>
@@ -72,28 +75,36 @@ export default function InstallationsView(
             ).map((installation: DevonIdeScripts, index: number) => (
               <TableRow key={index}>
                 <TableCell>{installation.version}</TableCell>
+                <TableCell>
+                  {installation.path ? (
+                    <IconButton
+                      onClick={() => {
+                        props.viewIdeHandler(installation.path);
+                      }}
+                    >
+                      <VisibilityIcon fontSize="small" />
+                    </IconButton>
+                  ) : null}
+                </TableCell>
                 <TableCell>{installation.updated}</TableCell>
                 <TableCell align="center">
                   <AcceptButton>Update</AcceptButton>
                 </TableCell>
                 <TableCell align="center">
-                  {!installation.downloading && (
+                  {installation.url ? (
                     <AcceptButton
-                      disabled={installation.installed}
                       startIcon={<GetApp />}
-                      onClick={() => props.downloadHandler(installation.id)}
-                      href={
-                        'https://search.maven.org/classic/remotecontent?filepath=com/devonfw/tools/ide/devonfw-ide-scripts/' +
-                        installation.version +
-                        '/devonfw-ide-scripts-' +
-                        installation.version +
-                        '.tar.gz'
-                      }
+                      href={installation.url}
                     >
                       Download
                     </AcceptButton>
+                  ) : (
+                    <AcceptButton
+                      onClick={() => props.uninstallHandler(installation.path)}
+                    >
+                      Uninstall
+                    </AcceptButton>
                   )}
-                  {installation.downloading && <CircularProgress size={24} />}
                 </TableCell>
               </TableRow>
             ))}
@@ -105,8 +116,8 @@ export default function InstallationsView(
                 count={props.installations.length}
                 rowsPerPage={props.rowsPerPage}
                 page={props.page}
-                onChangePage={props.handlePageChange}
-                onChangeRowsPerPage={props.handleRowsPerPageChange}
+                onChangePage={props.pageChangehandler}
+                onChangeRowsPerPage={props.rowsPerPageChangeHandler}
               />
             </TableRow>
           </TableFooter>

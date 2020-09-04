@@ -23,6 +23,11 @@ import {
   getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
 import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updates';
+import {
+  getInstalledVersions,
+  uninstallIde,
+  openIdeInSystemExplorer,
+} from './modules/installed-versions/installed-versions';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
 import { OpenProjectIDEListener } from './modules/projects/classes/listeners/open-project-ide-listener';
 import { UserProfile } from './modules/shared/models/user-profile';
@@ -233,6 +238,9 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
+ipcMain.handle('get:installedVersions', getInstalledVersions);
+ipcMain.handle('uninstall:ide', (e, path) => uninstallIde(path));
+ipcMain.handle('view:ide', (e, path) => openIdeInSystemExplorer(path));
 ipcMain.on('open:projectDirectory', (e, path) => {
   openProjectDirectory(path);
 });

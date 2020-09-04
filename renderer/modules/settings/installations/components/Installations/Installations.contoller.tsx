@@ -1,13 +1,13 @@
 import { Component, ChangeEvent } from 'react';
 import InstallationsView from './Installations.view';
 import { IpcRendererEvent } from 'electron';
+import ConfirmDialog from '../../../../shared/components/confirm-dialog/confirm-dialog';
 
 export interface DevonIdeScripts {
-  id: number;
   version: string;
-  updated: string;
-  downloading?: boolean;
-  installed?: boolean;
+  path?: string;
+  updated: Date;
+  url?: string;
 }
 
 interface TableState {
@@ -19,6 +19,8 @@ interface InstallationsState {
   query?: string;
   installations?: DevonIdeScripts[];
   tableState?: TableState;
+  openConfirmDialog?: boolean;
+  uninstallIdePath?: string;
 }
 
 export default class Installations extends Component<
@@ -32,6 +34,8 @@ export default class Installations extends Component<
       page: 0,
       rowsPerPage: 5,
     },
+    openConfirmDialog: false,
+    uninstallIdePath: '',
   };
   allInstallations: DevonIdeScripts[] = [];
 
@@ -39,62 +43,27 @@ export default class Installations extends Component<
     super(props);
   }
 
+  dialogTitle = 'Uninstalling IDE';
+  dialogContent =
+    'Devonfw Dashboard will no longer keep track of this IDE. Are you sure?';
+
   componentDidMount(): void {
     this.getInstallations();
-    this.downloadCompleteHandler();
   }
 
   componentWillUnmount(): void {
-    global.ipcRenderer.removeAllListeners('get:devonIdeScripts');
-    global.ipcRenderer.removeAllListeners('get:devoninstances');
-    global.ipcRenderer.removeAllListeners('download completed');
-  }
-
-  getFormattedDate(d: Date): string {
-    const releaseDate = new Date(d);
-    return (
-      releaseDate.toLocaleString('default', { day: '2-digit' }) +
-      '-' +
-      releaseDate.toLocaleString('default', { month: 'short' }) +
-      '-' +
-      releaseDate.getFullYear()
-    );
+    global.ipcRenderer.removeAllListeners('get:installedVersions');
   }
 
   getInstallations = (): void => {
-    global.ipcRenderer.send('fetch:devonIdeScripts');
-    global.ipcRenderer.on(
-      'get:devonIdeScripts',
-      (event: IpcRendererEvent, arg: any) => {
-        const installations = arg.map((a: any, index: number) => {
-          a.id = index;
-          a.downloading = false;
-          a.installed = false;
-          a.updated = this.getFormattedDate(a.updated);
-          return a;
-        });
-        this.updateDownloadedInstallations(installations);
-      }
-    );
+    global.ipcRenderer.invoke('get:installedVersions').then((result) => {
+      const installations = [...result];
+      this.setState({ installations });
+      this.allInstallations.push(...installations);
+    });
   };
 
-  updateDownloadedInstallations = (mavenScripts: any): void => {
-    global.ipcRenderer.send('find:devonfwInstances');
-    global.ipcRenderer.on(
-      'get:devoninstances',
-      (event: IpcRendererEvent, arg: any) => {
-        const installedVersions = arg.map((a: any) => a.ideConfig.version);
-        const installations = mavenScripts.map((a: any) => {
-          a.installed = installedVersions.includes(a.version);
-          return a;
-        });
-        this.setState({ installations });
-        this.allInstallations.push(...installations);
-      }
-    );
-  };
-
-  queryHandler = (event: ChangeEvent<{ value: unknown }>): void => {
+  handleQuery = (event: ChangeEvent<{ value: unknown }>): void => {
     const query: string = event.target.value as string;
     const installations: DevonIdeScripts[] = this.allInstallations.filter((i) =>
       i.version.includes(query)
@@ -104,26 +73,6 @@ export default class Installations extends Component<
       rowsPerPage: this.state.tableState.rowsPerPage,
     };
     this.setState({ query, installations, tableState });
-  };
-
-  downloadHandler = (index: number): void => {
-    const installations = this.state.installations.map((i: DevonIdeScripts) => {
-      i.downloading = i.id === index;
-      return i;
-    });
-    this.setState({ installations });
-  };
-
-  downloadCompleteHandler = (): void => {
-    global.ipcRenderer.on('download completed', () => {
-      const installations = this.state.installations.map(
-        (i: DevonIdeScripts) => {
-          i.downloading = false;
-          return i;
-        }
-      );
-      this.setState({ installations });
-    });
   };
 
   handlePageChange = (event: unknown, newPage: number): void => {
@@ -142,18 +91,53 @@ export default class Installations extends Component<
     this.setState({ tableState });
   };
 
+  confirmUninstall = (idePath: string): void => {
+    this.setState({ openConfirmDialog: true, uninstallIdePath: idePath });
+  };
+
+  handleCloseDialog = (confirm: boolean): void => {
+    this.setState({ openConfirmDialog: false });
+    if (confirm) this.uninstallIde(this.state.uninstallIdePath);
+    else this.setState({ uninstallIdePath: '' });
+  };
+
+  uninstallIde = (idePath: string): void => {
+    global.ipcRenderer
+      .invoke('uninstall:ide', idePath)
+      .then((success: boolean) => {
+        if (success) {
+          this.getInstallations();
+          global.ipcRenderer.send('find:devonfwInstances');
+        }
+      });
+    this.setState({ uninstallIdePath: '' });
+  };
+
+  handleViewIde = (idePath: string): void => {
+    global.ipcRenderer.invoke('view:ide', idePath);
+  };
+
   render(): JSX.Element {
     return (
-      <InstallationsView
-        queryHandler={this.queryHandler}
-        query={this.state.query}
-        installations={this.state.installations}
-        downloadHandler={this.downloadHandler}
-        page={this.state.tableState.page}
-        rowsPerPage={this.state.tableState.rowsPerPage}
-        handlePageChange={this.handlePageChange}
-        handleRowsPerPageChange={this.handleRowsPerPageChange}
-      ></InstallationsView>
+      <>
+        <InstallationsView
+          query={this.state.query}
+          installations={this.state.installations}
+          page={this.state.tableState.page}
+          rowsPerPage={this.state.tableState.rowsPerPage}
+          uninstallHandler={this.confirmUninstall}
+          viewIdeHandler={this.handleViewIde}
+          queryHandler={this.handleQuery}
+          pageChangehandler={this.handlePageChange}
+          rowsPerPageChangeHandler={this.handleRowsPerPageChange}
+        ></InstallationsView>
+        <ConfirmDialog
+          title={this.dialogTitle}
+          content={this.dialogContent}
+          openDialog={this.state.openConfirmDialog}
+          onClose={this.handleCloseDialog}
+        ></ConfirmDialog>
+      </>
     );
   }
 }
