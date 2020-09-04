@@ -38,6 +38,12 @@ const theme = createMuiTheme({
         borderRadius: '8px',
       },
     },
+    MuiDialogTitle: {
+      root: { color: '#FFFFFF', backgroundColor: '#0075B3' },
+    },
+    MuiDialogActions: {
+      root: { color: '#FFFFFF', backgroundColor: '#0075B3' },
+    },
   },
 });
 

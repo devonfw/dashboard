@@ -10,6 +10,7 @@ import { useDashboardSearchStyles } from './dashboard-search.styles';
 import { SearchForm } from '../../../redux/stepper/data.model';
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
 import { StepperContext } from '../../../redux/stepper/stepperContext';
+import TitleCounter from '../../../../shared/components/title-counter/title-counter';
 
 interface DashboardSearchProps {
   searchRef: MutableRefObject<HTMLInputElement>;
@@ -50,9 +51,7 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
 
   return (
     <div className={classes.header}>
-      <h2
-        className={classes.totalProjects}
-      >{`${props.totalProjects} Projects`}</h2>
+      <TitleCounter count={props.totalProjects}>Projects</TitleCounter>
       <div className={classes.filter}>
         <DashboardFilter
           value={dashboardSearch.filterValue}

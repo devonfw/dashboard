@@ -21,10 +21,6 @@ export const useDashboardSearchStyles = makeStyles((theme: Theme) =>
         flexDirection: 'column',
       },
     },
-    totalProjects: {
-      minWidth: '20%',
-      marginRight: '1em',
-    },
     filter: {
       display: 'flex',
       minWidth: '80%',

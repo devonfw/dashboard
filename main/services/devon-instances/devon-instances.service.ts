@@ -1,11 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import https from 'https';
 import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
-  DevonIdeScripts,
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
@@ -21,7 +19,7 @@ const utilReaddir = util.promisify(fs.readdir);
 const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
-export class DevonInstancesService implements SaveDetails {
+export default class DevonInstancesService implements SaveDetails {
   private devonFilePath = path.resolve(
     platform.homedir(),
     '.devon',
@@ -80,10 +78,10 @@ export class DevonInstancesService implements SaveDetails {
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
       fs.readFile(this.idePathsFilePath, 'utf8', (err, data) => {
-        if (err) reject('No instances find out');
+        if (err) reject('No instances found');
         this.devonfwInstance(data)
           .then((instances: DevonfwConfig) => resolve(instances))
-          .catch((error) => console.log(error));
+          .catch(() => reject('No instances found'));
       });
     });
     return instancesDirReader;
@@ -109,6 +107,16 @@ export class DevonInstancesService implements SaveDetails {
 
   formatPathFromWindows(dirPath: string): string {
     return dirPath.replace('', '/').replace(':', '').replace(/\\/g, '/');
+  }
+  
+  async getInstalledVersions(): Promise<string[]> {
+    const devonfwConfig: DevonfwConfig = await this.getAllUserCreatedDevonInstances();
+    const distributions: IdeDistribution[] = devonfwConfig.distributions;
+    const versions: string[] = distributions.map(
+      (distribution: IdeDistribution) => distribution.ideConfig.version
+    );
+
+    return versions;
   }
 
   async devonfwInstance(data: string): Promise<DevonfwConfig> {
@@ -259,7 +267,7 @@ export class DevonInstancesService implements SaveDetails {
     });
   }
 
-  async deleteProjectFolder(projectPath: string) {
+  async deleteProjectFolder(projectPath: string): Promise<void> {
     const entries = await utilReaddir(projectPath, { withFileTypes: true });
     const results = await Promise.all(
       entries.map((entry) => {

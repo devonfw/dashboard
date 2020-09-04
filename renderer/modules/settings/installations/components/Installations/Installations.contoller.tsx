@@ -8,6 +8,7 @@ export interface DevonIdeScripts {
   path?: string;
   updated: Date;
   url?: string;
+  changelog: string | null;
 }
 
 interface TableState {
@@ -17,7 +18,7 @@ interface TableState {
 
 interface InstallationsState {
   query?: string;
-  installations?: DevonIdeScripts[];
+  installations: DevonIdeScript[];
   tableState?: TableState;
   openConfirmDialog?: boolean;
   uninstallIdePath?: string;
@@ -37,7 +38,7 @@ export default class Installations extends Component<
     openConfirmDialog: false,
     uninstallIdePath: '',
   };
-  allInstallations: DevonIdeScripts[] = [];
+  allInstallations: DevonIdeScript[] = [];
 
   constructor(props: unknown) {
     super(props);
@@ -65,7 +66,7 @@ export default class Installations extends Component<
 
   handleQuery = (event: ChangeEvent<{ value: unknown }>): void => {
     const query: string = event.target.value as string;
-    const installations: DevonIdeScripts[] = this.allInstallations.filter((i) =>
+    const installations: DevonIdeScript[] = this.allInstallations.filter((i) =>
       i.version.includes(query)
     );
     const tableState: TableState = {

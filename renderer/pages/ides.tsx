@@ -29,7 +29,7 @@ export default function IDES(): JSX.Element {
       <SpaceAround>
         <>
           <TitleCounter count={ides.length} className={classes.header}>
-            Projects
+            IDEs
           </TitleCounter>
           <div className={classes.cardsContainer}>
             {ides.map((ide) => (

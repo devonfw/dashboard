@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-unfetch';
+import fetch from 'cross-fetch';
 import Repository from './models/repository.model';
 
 interface ResType {
