@@ -13,6 +13,7 @@ import ProjectsPagination, {
 } from '../../modules/projects/projects-dashboard/components/pagination/pagination';
 import { ProjectFilterBuilder } from '../../modules/projects/projects-dashboard/components/dashboard-filter/project-filter-builder';
 import Paginator from '../../modules/shared/classes/paginator';
+import Box from '@material-ui/core/Box';
 
 export default function Projects(): JSX.Element {
   const [projects, setProjects] = useState<ProjectDetails[]>([]);
@@ -81,11 +82,13 @@ export default function Projects(): JSX.Element {
           setAllProject={setAllProjects}
           dirPath={state.projectData.path}
         />
-        <ProjectsPagination
-          count={projects.length}
-          onPageChange={handlePageChange}
-          onRowsPerPageChange={handleItemsPerPageChange}
-        />
+        <Box mt="auto">
+          <ProjectsPagination
+            count={projects.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleItemsPerPageChange}
+          />
+        </Box>
       </SpaceAround>
     </Layout>
   );

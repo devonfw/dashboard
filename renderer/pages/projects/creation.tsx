@@ -25,15 +25,18 @@ export default function ProjectCreation(): JSX.Element {
 
   return (
     <Layout>
-      <SpaceAround bgColor={'#F4F6F8'} top={1}>
-        <>
-          <h3 className={classes.header}>
-            <span>Projects &gt;</span> New Project
-          </h3>
-          <Card className={classes.content}>
-            <CustomStepper />
-          </Card>
-        </>
+      <SpaceAround
+        mt={16}
+        style={{
+          backgroundColor: '#F4F6F8',
+        }}
+      >
+        <h3 className={classes.header}>
+          <span>Projects &gt;</span> New Project
+        </h3>
+        <Card className={classes.content}>
+          <CustomStepper />
+        </Card>
       </SpaceAround>
     </Layout>
   );

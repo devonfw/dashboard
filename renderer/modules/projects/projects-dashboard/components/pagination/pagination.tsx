@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import TablePagination from '@material-ui/core/TablePagination';
 
-const MIN_ROWS = 2;
+const MIN_ROWS = 10;
 export const PAGINATION_MIN_ROWS = MIN_ROWS;
 
 interface ProjectsPaginationProps {
@@ -43,7 +43,7 @@ export default function ProjectsPagination(
       count={props.count}
       page={page}
       onChangePage={handleChangePage}
-      rowsPerPageOptions={[MIN_ROWS, 4, 6, 10]}
+      rowsPerPageOptions={[MIN_ROWS, 15, 20, 30]}
       rowsPerPage={rowsPerPage}
       onChangeRowsPerPage={handleChangeRowsPerPage}
     />

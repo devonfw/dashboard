@@ -13,7 +13,7 @@ export const useUpgradeBannerStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       justifyContent: 'center',
       marginTop: theme.spacing(4),
-      marginBottom: theme.spacing(10),
+      marginBottom: theme.spacing(4),
     },
     uppercase: {
       textTransform: 'uppercase',
