@@ -1,20 +1,18 @@
-import { ProjectDetails } from '../../../../redux/stepper/data.model';
-
-export default class ProjectsPaginator {
+export default class Paginator<T> {
   private page: number;
 
-  constructor(public projects: ProjectDetails[], private itemsPerPage: number) {
+  constructor(public items: T[], private itemsPerPage: number) {
     this.itemsPerPage = itemsPerPage;
     this.page = 0;
-    this.projects = projects;
+    this.items = items;
   }
 
   changePage(page: number): void {
     this.page = page;
   }
 
-  getItemsInPage(): ProjectDetails[] {
-    return this.projects.slice(
+  getItemsInPage(): T[] {
+    return this.items.slice(
       this.page * this.itemsPerPage,
       this.page * this.itemsPerPage + this.itemsPerPage
     );
@@ -29,8 +27,8 @@ export default class ProjectsPaginator {
     this.resetPage();
   }
 
-  setProjects(projects: ProjectDetails[]): void {
-    this.projects = projects;
+  setItems(items: T[]): void {
+    this.items = items;
     this.resetPage();
   }
 }

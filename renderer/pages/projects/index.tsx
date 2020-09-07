@@ -8,17 +8,19 @@ import {
 import Layout from '../../modules/shared/hoc/Layout';
 import SpaceAround from '../../modules/shared/hoc/SpaceAround';
 import DashboardProjects from '../../modules/projects/projects-dashboard/components/dashboard-project-details/DashboardProjects';
-import ProjectsPaginator from '../../modules/projects/projects-dashboard/components/pagination/classes/projects-paginator';
 import ProjectsPagination, {
   PAGINATION_MIN_ROWS,
 } from '../../modules/projects/projects-dashboard/components/pagination/pagination';
 import { ProjectFilterBuilder } from '../../modules/projects/projects-dashboard/components/dashboard-filter/project-filter-builder';
+import Paginator from '../../modules/shared/classes/paginator';
 
 export default function Projects(): JSX.Element {
   const [projects, setProjects] = useState<ProjectDetails[]>([]);
   const [allProjects, setAllProjects] = useState<ProjectDetails[]>([]);
-  const [paginator] = useState(new ProjectsPaginator([], PAGINATION_MIN_ROWS));
   const [page, setPage] = useState<ProjectDetails[]>([]);
+  const [paginator] = useState(
+    new Paginator<ProjectDetails>([], PAGINATION_MIN_ROWS)
+  );
   const { state } = useContext(StepperContext);
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function Projects(): JSX.Element {
     filterProjects({ searchValue: '', filterValue: '' }, data.projects);
     setAllProjects(data.projects);
     setProjects(data.projects);
-    paginator.setProjects(data.projects);
+    paginator.setItems(data.projects);
     setPage(paginator.getItemsInPage());
   };
 
@@ -56,7 +58,7 @@ export default function Projects(): JSX.Element {
   ): void => {
     const filtered = new ProjectFilterBuilder(projects).applyFilter(searchForm);
     setProjects(filtered);
-    paginator.setProjects(filtered);
+    paginator.setItems(filtered);
     setPage(paginator.getItemsInPage());
   };
 
