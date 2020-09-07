@@ -1,31 +1,15 @@
-import { Styles } from '../types/types';
-
-const styles: Styles = {
-  padding: '2rem 2rem 2rem 2rem',
-};
+import Box, { BoxProps } from '@material-ui/core/Box';
 
 interface SpaceAroundProps {
-  children: JSX.Element;
   bgColor?: string;
-  top?: number;
 }
 
-export default function SpaceAround(props: SpaceAroundProps): JSX.Element {
-  let spaceAroundStyles = styles;
-
-  if (props.bgColor) {
-    spaceAroundStyles = {
-      ...spaceAroundStyles,
-      backgroundColor: props.bgColor,
-    };
-  }
-
-  if (props.top) {
-    spaceAroundStyles = {
-      ...spaceAroundStyles,
-      paddingTop: `${props.top}rem`,
-    };
-  }
-
-  return <div style={spaceAroundStyles}>{props.children}</div>;
+export default function SpaceAround(
+  props: SpaceAroundProps & BoxProps
+): JSX.Element {
+  return (
+    <Box display="flex" flexDirection="column" height={1} p={4} {...props}>
+      {props.children}
+    </Box>
+  );
 }

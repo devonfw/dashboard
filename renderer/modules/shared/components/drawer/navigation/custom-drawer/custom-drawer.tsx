@@ -59,7 +59,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
   }, []);
 
   return (
-    <div>
+    <>
       <div className={props.classes.topSpace} />
       <ProfilePicture></ProfilePicture>
       <List component="nav">
@@ -69,7 +69,7 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
               key={link.id}
               section={link.section}
               path={link.path}
-              isActive={router.pathname.includes(link.path)}
+              isActive={router.pathname.startsWith(link.path)}
               icon={link.icon}
               submenu={link.submenu}
             ></SectionLink>
@@ -82,6 +82,6 @@ export default function CustomDrawer(props: CustomDrawerProps): JSX.Element {
           infoText={upgradeBannerProps.infoText}
         ></UpgradeBanner>
       ) : null}
-    </div>
+    </>
   );
 }

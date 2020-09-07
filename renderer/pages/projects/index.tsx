@@ -1,8 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { IpcRendererEvent } from 'electron';
 import { useRouter } from 'next/router';
 import { StepperContext } from '../../modules/projects/redux/stepper/stepperContext';
-import { ProjectFilterBuilder } from '../../modules/projects/projects-dashboard/components/dashboard-filter/project-filter-builder';
 import {
   ProjectDetails,
   SearchForm,
@@ -10,18 +8,28 @@ import {
 import Layout from '../../modules/shared/hoc/Layout';
 import SpaceAround from '../../modules/shared/hoc/SpaceAround';
 import DashboardProjects from '../../modules/projects/projects-dashboard/components/dashboard-project-details/DashboardProjects';
+import ProjectsPagination, {
+  PAGINATION_MIN_ROWS,
+} from '../../modules/projects/projects-dashboard/components/pagination/pagination';
+import { ProjectFilterBuilder } from '../../modules/projects/projects-dashboard/components/dashboard-filter/project-filter-builder';
+import Paginator from '../../modules/shared/classes/paginator';
+import Box from '@material-ui/core/Box';
 
 export default function Projects(): JSX.Element {
   const [projects, setProjects] = useState<ProjectDetails[]>([]);
-  const { state } = useContext(StepperContext);
-  const router = useRouter();
-  // this state is required for the search operation in DashboardProjects component
   const [allProjects, setAllProjects] = useState<ProjectDetails[]>([]);
+  const [page, setPage] = useState<ProjectDetails[]>([]);
+  const [paginator] = useState(
+    new Paginator<ProjectDetails>([], PAGINATION_MIN_ROWS)
+  );
+  const { state } = useContext(StepperContext);
+
   useEffect(() => {
     if (state.creatingProject) {
-      router.push('/projects/creation');
+      useRouter().push('/projects/creation');
       return;
     }
+
     global.ipcRenderer.on('ide:projects', ideProjectsHandler);
     return () => {
       global.ipcRenderer.removeAllListeners('ide:projects');
@@ -35,31 +43,33 @@ export default function Projects(): JSX.Element {
   }, [state]);
 
   const ideProjectsHandler = (
-    _: IpcRendererEvent,
-    data: { message: string; projects: ProjectDetails[] }
+    _: unknown,
+    data: { projects: ProjectDetails[] }
   ) => {
-    setProjectInFilterMode(
-      {
-        searchValue: '',
-        filterValue: '',
-      },
-      data.projects
-    );
+    filterProjects({ searchValue: '', filterValue: '' }, data.projects);
     setAllProjects(data.projects);
+    setProjects(data.projects);
+    paginator.setItems(data.projects);
+    setPage(paginator.getItemsInPage());
   };
 
-  /* Below functions are needed for the updating Project state after 
-    deleting a Project from the Dashboard component 
-  */
-  const setAllProject = (projects: ProjectDetails[]): void => {
-    setAllProjects(projects);
-  };
-
-  const setProjectInFilterMode = (
+  const filterProjects = (
     searchForm: SearchForm,
     projects: ProjectDetails[]
   ): void => {
-    setProjects(new ProjectFilterBuilder(projects).applyFilter(searchForm));
+    const filtered = new ProjectFilterBuilder(projects).applyFilter(searchForm);
+    setProjects(filtered);
+    paginator.setItems(filtered);
+    setPage(paginator.getItemsInPage());
+  };
+
+  const handleItemsPerPageChange = (nItems: number): void => {
+    paginator.setItemsPerPage(nItems);
+  };
+
+  const handlePageChange = (page: number): void => {
+    paginator.changePage(page);
+    setPage(paginator.getItemsInPage());
   };
 
   return (
@@ -67,11 +77,18 @@ export default function Projects(): JSX.Element {
       <SpaceAround bgColor={'#F4F6F8'}>
         <DashboardProjects
           allProjects={allProjects}
-          projects={projects}
-          setProject={setProjectInFilterMode}
-          setAllProject={setAllProject}
+          projects={page}
+          setProject={filterProjects}
+          setAllProject={setAllProjects}
           dirPath={state.projectData.path}
         />
+        <Box mt="auto">
+          <ProjectsPagination
+            count={projects.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleItemsPerPageChange}
+          />
+        </Box>
       </SpaceAround>
     </Layout>
   );

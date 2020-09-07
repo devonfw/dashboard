@@ -8,7 +8,7 @@ interface Props {
 }
 
 const NgDataRouting = (props: Props): JSX.Element => {
-  const [routing, setRouting] = useState({ value: 'Yes' });
+  const [routing, setRouting] = useState({ value: 'true' });
 
   const handleChange = (event: ChangeEvent<{ value: string }>) => {
     const routingOpt = event.target.value;
@@ -27,8 +27,8 @@ const NgDataRouting = (props: Props): JSX.Element => {
           onChange={handleChange}
           variant="outlined"
         >
-          <MenuItem value={'Yes'}>Yes</MenuItem>
-          <MenuItem value={'No'}>No</MenuItem>
+          <MenuItem value={'true'}>Yes</MenuItem>
+          <MenuItem value={'false'}>No</MenuItem>
         </TextField>
       </FormControl>
     </>

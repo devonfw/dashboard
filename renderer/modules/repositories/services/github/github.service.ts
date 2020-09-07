@@ -31,8 +31,7 @@ function processResponse(data: ResType[]) {
 
 function fetchGithub(query: string): Promise<Response> {
   return fetch(
-    `https://api.github.com/search/repositories?q=${query}user:devonfw`,
-    { headers: { 'User-Agent': 'jambulud' } }
+    `https://api.github.com/search/repositories?q=${query}user:devonfw`
   );
 }
 
