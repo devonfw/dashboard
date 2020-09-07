@@ -16,6 +16,7 @@ import Paginator from '../../modules/shared/classes/paginator';
 import Box from '@material-ui/core/Box';
 
 export default function Projects(): JSX.Element {
+  const router = useRouter();
   const [projects, setProjects] = useState<ProjectDetails[]>([]);
   const [allProjects, setAllProjects] = useState<ProjectDetails[]>([]);
   const [page, setPage] = useState<ProjectDetails[]>([]);
@@ -26,7 +27,7 @@ export default function Projects(): JSX.Element {
 
   useEffect(() => {
     if (state.creatingProject) {
-      useRouter().push('/projects/creation');
+      router.push('/projects/creation');
       return;
     }
 
