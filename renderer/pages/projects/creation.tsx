@@ -26,7 +26,7 @@ export default function ProjectCreation(): JSX.Element {
   return (
     <Layout>
       <SpaceAround
-        mt={16}
+        pt={2}
         style={{
           backgroundColor: '#F4F6F8',
         }}
