@@ -10,44 +10,34 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
       },
       '& .MuiPaper-root': {
         backgroundColor: 'transparent',
-        textDecoration: 'none',
       },
       '& .MuiButton-root:hover': {
         backgroundColor: 'transparent',
       },
-      '& .MuiTypography-h6': {
-        fontSize: '14px',
-      },
     },
-    newProject: {
-      width: '211px',
-      height: '159px',
+    cardsContainer: {
+      display: 'grid',
+      width: '100%',
+      gridColumnGap: 24,
+      gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
     },
     link: {
       textDecoration: 'none',
     },
-    ProjectGrid: {
-      position: 'relative',
-      marginBottom: theme.spacing(4),
-      '& .MuiCardContent-root': {
-        position: 'absolute',
-        top: '90px',
-      },
+    cardContent: {
+      paddingTop: theme.spacing(0.5),
+      paddingRight: theme.spacing(2),
+      paddingBottom: theme.spacing(0.5),
+      paddingLeft: theme.spacing(2),
     },
-    alignCenter: {
-      textAlign: 'center',
-      marginTop: theme.spacing(2),
-      marginLeft: theme.spacing(4),
+    cardMedia: {
+      width: '190px',
+      height: '156px',
+      backgroundSize: 'contain',
     },
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       color: theme.palette.primary.contrastText,
-    },
-    name: {
-      color: theme.palette.primary.contrastText,
-    },
-    updateDate: {
-      color: theme.palette.primary.light,
     },
   })
 );

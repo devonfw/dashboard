@@ -11,6 +11,7 @@ import { SearchForm } from '../../../redux/stepper/data.model';
 import { DashboardFilter } from '../dashboard-filter/dashboard-filter';
 import { StepperContext } from '../../../redux/stepper/stepperContext';
 import TitleCounter from '../../../../shared/components/title-counter/title-counter';
+import { Box } from '@material-ui/core';
 
 interface DashboardSearchProps {
   searchRef: MutableRefObject<HTMLInputElement>;
@@ -50,29 +51,35 @@ export const DashboardSearch = (props: DashboardSearchProps): JSX.Element => {
   };
 
   return (
-    <div className={classes.header}>
-      <TitleCounter count={props.totalProjects}>Projects</TitleCounter>
-      <div className={classes.filter}>
+    <Box
+      display="flex"
+      flexWrap="wrap"
+      justifyContent="space-between"
+      mb={3}
+      width={1}
+    >
+      <TitleCounter count={props.totalProjects} className={classes.counter}>
+        Projects
+      </TitleCounter>
+      <Box component="form" display="flex">
         <DashboardFilter
           value={dashboardSearch.filterValue}
           filterHandler={onChangeSearchHandler}
           filterRef={props.filterRef}
         />
-        <div className="search">
-          <TextField
-            className={classes.searchBox}
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            value={dashboardSearch.searchValue}
-            inputRef={props.searchRef}
-            onChange={onChangeSearchHandler}
-            inputProps={{
-              id: 'search',
-            }}
-          />
-        </div>
-      </div>
-    </div>
+        <TextField
+          className={classes.searchBox}
+          id="outlined-basic"
+          label="Search"
+          variant="outlined"
+          value={dashboardSearch.searchValue}
+          inputRef={props.searchRef}
+          onChange={onChangeSearchHandler}
+          inputProps={{
+            id: 'search',
+          }}
+        />
+      </Box>
+    </Box>
   );
 };
