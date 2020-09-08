@@ -82,6 +82,7 @@ export default function Projects(): JSX.Element {
           setProject={filterProjects}
           setAllProject={setAllProjects}
           dirPath={state.projectData.path}
+          projectsCount={projects.length}
         />
         <Box mt="auto">
           <ProjectsPagination
