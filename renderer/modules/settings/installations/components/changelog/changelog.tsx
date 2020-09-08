@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useChangelogStyles } from './changelog.styles';
-import { DialogTitle, DialogContent, DialogActions } from './dialog';
+import {
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '../../../../shared/components/dialog';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import AsciidocViewer from '../asciidoct-viewer/asciidoc-viewer';
@@ -34,10 +38,10 @@ export default function Changelog(props: ChangelogProps): JSX.Element {
       <ButtonLink onClick={handleOpenChangelog(props.version)}></ButtonLink>
       <Dialog
         onClose={handleCloseChangelog}
-        aria-labelledby="customized-dialog-title"
+        aria-labelledby="changelog-dialog-title"
         open={open}
       >
-        <DialogTitle id="customized-dialog-title">{props.version}</DialogTitle>
+        <DialogTitle id="changelog-dialog-title">{props.version}</DialogTitle>
         <DialogContent dividers>
           <AsciidocViewer className={classes.link} content={content} />
         </DialogContent>

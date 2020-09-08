@@ -1,13 +1,13 @@
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import IdeDialogTitle from './ide-dialog-title/ide-dialog-title';
+import IdeList from './ide-list/ide-list';
 import { IdeInstallations } from '../landing-page/landing-page';
 import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from './ide-dialog-components/ide-dialog-components';
-import IdeDialogTitle from './ide-dialog-title/ide-dialog-title';
-import IdeList from './ide-list/ide-list';
+} from '../../../shared/components/dialog';
 
 interface IdeDialogProps {
   data: IdeInstallations[];
@@ -17,8 +17,12 @@ interface IdeDialogProps {
 
 export default function IdeDialog(props: IdeDialogProps): JSX.Element {
   return (
-    <Dialog onClose={props.onClose} open={props.open}>
-      <DialogTitle>
+    <Dialog
+      onClose={props.onClose}
+      open={props.open}
+      aria-labelledby="changelog-dialog-title"
+    >
+      <DialogTitle id="available-ides-dialog">
         <IdeDialogTitle></IdeDialogTitle>
       </DialogTitle>
       <DialogContent dividers>
