@@ -1,4 +1,4 @@
-import { DevonIdeScript } from '../../../../models/devonfw-dists.model';
+import { IdeVersions } from '../../../../models/devonfw-dists.model';
 import formatDate from '../../../shared/utils/date-formatter';
 
 const DEVONFW_VERSIONS_URL =
@@ -7,7 +7,7 @@ const LATEST_DEVONFW_VERSION_URL =
   'https://search.maven.org/classic/solrsearch/select?q=a%3A%22devonfw-ide-scripts%22&rows=20&wt=json';
 
 export default class DevonfwIdesService {
-  async getDevonfwIDEs(): Promise<DevonIdeScript[]> {
+  async getDevonfwIDEs(): Promise<IdeVersions[]> {
     try {
       return await this.fetchDevonfwIDEs();
     } catch (error) {
@@ -15,7 +15,7 @@ export default class DevonfwIdesService {
     }
   }
 
-  async getLatestDevonfwIDE(): Promise<DevonIdeScript> {
+  async getLatestDevonfwIDE(): Promise<IdeVersions> {
     try {
       return await this.fetchLatestDevonfwIde();
     } catch (error) {
@@ -23,12 +23,12 @@ export default class DevonfwIdesService {
     }
   }
 
-  private async fetchDevonfwIDEs(): Promise<DevonIdeScript[]> {
+  private async fetchDevonfwIDEs(): Promise<IdeVersions[]> {
     const idesJson = await fetch(DEVONFW_VERSIONS_URL);
     const ides = await idesJson.json();
     const docs: { v: string; timestamp: string }[] = ides.response.docs;
 
-    const devonfwIdes: DevonIdeScript[] = await Promise.all(
+    const devonfwIdes: IdeVersions[] = await Promise.all(
       docs.map(async (ide) => this.devonfwIdeScript(ide.v, ide.timestamp))
     );
 
@@ -43,11 +43,22 @@ export default class DevonfwIdesService {
     return this.devonfwIdeScript(latestIde.latestVersion, latestIde.timestamp);
   }
 
-  private devonfwIdeScript(version: string, timestamp: string): DevonIdeScript {
+  private devonfwIdeScript(version: string, timestamp: string): IdeVersions {
     return {
-      id: version,
       version: version,
       updated: formatDate(timestamp),
+      url: this.getIdeUrl(version),
+      changelog: false,
     };
+  }
+
+  private getIdeUrl(version: string): string {
+    return (
+      'https://search.maven.org/classic/remotecontent?filepath=com/devonfw/tools/ide/devonfw-ide-scripts/' +
+      version +
+      '/devonfw-ide-scripts-' +
+      version +
+      '.tar.gz'
+    );
   }
 }

@@ -2,48 +2,18 @@ import { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
 
 import Grid from '@material-ui/core/Grid';
-import Spinner from '../../../shared/components/spinner/spinner';
-import AcceptButton from '../../../shared/components/accept-button/accept-button';
 import WelcomeSnippet from '../welcome-snippet/welcome-snippet';
 
 import { ProfileData } from '../../../../models/dashboard/profile-data';
+import DownloadButton from '../../../shared/components/download-button/download-button';
 
 const DASHBOARD_DOWNLOAD_URL =
   'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
 
 export default function WelcomeToDevonfw(): JSX.Element {
   const [avatar, setAvatar] = useState('male.svg');
-  const [, setTotal] = useState(0);
-  const [, setReceived] = useState(0);
-  const [downloadProgress, setDownloadProgress] = useState(false);
-  const [, setDownloadStatusMsg] = useState('');
-  const [, setDownloadStatusMsgColor] = useState('error.main');
 
   useEffect(() => {
-    global.ipcRenderer.on(
-      'download progress',
-      (_: IpcRendererEvent, arg: { total: number; received: number }) => {
-        setTotal(arg.total);
-        setReceived(arg.received);
-        setDownloadStatusMsg('');
-      }
-    );
-
-    global.ipcRenderer.on(
-      'download completed',
-      (_: IpcRendererEvent, arg: string) => {
-        if (downloadProgress) {
-          setDownloadProgress(false);
-          setDownloadStatusMsg('Download was ' + arg + '.');
-          if (arg === 'completed') {
-            setDownloadStatusMsgColor('success.main');
-          } else {
-            setDownloadStatusMsgColor('error.main');
-          }
-        }
-      }
-    );
-
     global.ipcRenderer.send('find:profile');
 
     global.ipcRenderer.on(
@@ -55,6 +25,10 @@ export default function WelcomeToDevonfw(): JSX.Element {
         }
       }
     );
+
+    return () => {
+      global.ipcRenderer.removeAllListeners('get:profile');
+    };
   });
 
   return (
@@ -65,18 +39,9 @@ export default function WelcomeToDevonfw(): JSX.Element {
       <Grid item xs={12} md={7}>
         <>
           <WelcomeSnippet></WelcomeSnippet>
-          <AcceptButton
-            onClick={() => setDownloadProgress(true)}
-            href={DASHBOARD_DOWNLOAD_URL}
-            disabled={downloadProgress}
-          >
+          <DownloadButton href={DASHBOARD_DOWNLOAD_URL}>
             Download latest version
-          </AcceptButton>
-          <Spinner inProgress={downloadProgress}></Spinner>
-          {/* TODO: implement alternative way to handle download */}
-          {/* <Box component="p" color={downloadStatusMsgColor}>
-            {downloadStatusMsg}
-          </Box> */}
+          </DownloadButton>
         </>
       </Grid>
     </Grid>

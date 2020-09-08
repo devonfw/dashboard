@@ -10,19 +10,24 @@ import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import GetApp from '@material-ui/icons/GetApp';
+import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import useInstallationsStyles from './installations.styles';
 import Changelog from '../changelog/changelog';
+import Spinner from '../../../../shared/components/spinner/spinner';
+import DownloadButton from '../../../../shared/components/download-button/download-button';
 
 interface InstallationsViewProps {
   query: string;
-  queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
-  downloadHandler: (index: string) => void;
+  loading: boolean;
   installations: DevonIdeScript[];
   page: number;
   rowsPerPage: number;
+  queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
+  uninstallHandler: (path?: string) => void;
+  viewIdeHandler: (idePath?: string) => void;
   handlePageChange: (event: unknown, newPage: number) => void;
   handleRowsPerPageChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -58,6 +63,7 @@ export default function InstallationsView(
             <TableHead>
               <TableRow>
                 <TableCell>VERSION NAMES</TableCell>
+                <TableCell></TableCell>
                 <TableCell>RELEASE DATE</TableCell>
                 <TableCell>RELEASE NOTES</TableCell>
                 <TableCell align="center">UPDATE</TableCell>
@@ -65,6 +71,13 @@ export default function InstallationsView(
               </TableRow>
             </TableHead>
             <TableBody>
+              {props.loading ? (
+                <TableRow>
+                  <TableCell align="center" colSpan={6}>
+                    <Spinner inProgress={props.loading}></Spinner>
+                  </TableCell>
+                </TableRow>
+              ) : null}
               {(props.rowsPerPage > 0
                 ? props.installations.slice(
                     props.page * props.rowsPerPage,
@@ -74,6 +87,17 @@ export default function InstallationsView(
               ).map((installation: DevonIdeScript, index: number) => (
                 <TableRow key={index}>
                   <TableCell>{installation.version}</TableCell>
+                  <TableCell>
+                    {installation.path ? (
+                      <IconButton
+                        onClick={() => {
+                          props.viewIdeHandler(installation.path);
+                        }}
+                      >
+                        <VisibilityIcon fontSize="small" />
+                      </IconButton>
+                    ) : null}
+                  </TableCell>
                   <TableCell>{installation.updated}</TableCell>
                   <TableCell>
                     {installation.changelog ? (
@@ -81,26 +105,27 @@ export default function InstallationsView(
                     ) : null}
                   </TableCell>
                   <TableCell align="center">
-                    <AcceptButton>UPDATE</AcceptButton>
+                    <AcceptButton disabled={!installation.path}>
+                      UPDATE
+                    </AcceptButton>
                   </TableCell>
                   <TableCell align="center">
-                    {!installation.downloading && (
-                      <AcceptButton
-                        disabled={installation.installed}
+                    {installation.url ? (
+                      <DownloadButton
                         startIcon={<GetApp />}
-                        onClick={() => props.downloadHandler(installation.id)}
-                        href={
-                          'https://search.maven.org/classic/remotecontent?filepath=com/devonfw/tools/ide/devonfw-ide-scripts/' +
-                          installation.version +
-                          '/devonfw-ide-scripts-' +
-                          installation.version +
-                          '.tar.gz'
-                        }
+                        href={installation.url}
                       >
                         DOWNLOAD
+                      </DownloadButton>
+                    ) : (
+                      <AcceptButton
+                        onClick={() =>
+                          props.uninstallHandler(installation.path)
+                        }
+                      >
+                        UNINSTALL
                       </AcceptButton>
                     )}
-                    {installation.downloading && <CircularProgress size={24} />}
                   </TableCell>
                 </TableRow>
               ))}

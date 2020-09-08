@@ -15,13 +15,12 @@ export interface DevonfwConfig {
 }
 
 export interface DevonIdeScript {
-  id: string;
   version: string;
-  updated: string;
+  path?: string;
+  updated?: string;
 }
 
 export interface IdeVersions extends DevonIdeScript {
+  url?: string;
   changelog: boolean;
-  downloading: boolean;
-  installed: boolean;
 }
