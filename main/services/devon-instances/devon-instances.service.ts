@@ -1,9 +1,11 @@
+import { shell } from 'electron';
 import fs from 'fs';
 import path from 'path';
 import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
+  DevonIdeScript,
 } from '../../models/devonfw-dists.model';
 import * as util from 'util';
 import * as child from 'child_process';
@@ -24,6 +26,12 @@ export default class DevonInstancesService implements SaveDetails {
     platform.homedir(),
     '.devon',
     'projectinfo.json'
+  );
+
+  private idePathsFilePath = path.resolve(
+    process.env.USERPROFILE,
+    '.devon',
+    'ide-paths'
   );
 
   /* Find out DEVON ide instances  */
@@ -69,19 +77,79 @@ export default class DevonInstancesService implements SaveDetails {
     });
   }
 
+  updateUserCreatedDevonInstances(data: IdeDistribution[]): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const formattedData =
+        data
+          .map((ide) => ide.ideConfig.basepath)
+          .map((basepath) => this.formatPathFromWindows(basepath))
+          .join('\n') + '\n';
+      fs.writeFile(this.idePathsFilePath, formattedData, (err) => {
+        if (err) reject(err);
+        else resolve('Successs');
+      });
+    });
+  }
+
+  formatPathToWindows(dirPath: string): string {
+    return dirPath.replace('/', '').replace('/', ':/').replace(/\//g, path.sep);
+  }
+
+  formatPathFromWindows(dirPath: string): string {
+    return dirPath.replace('', '/').replace(':', '').replace(/\\/g, '/');
+  }
+
+  // Remove project details from projectinfo.json for the given ide
+  async removeProjectInfo(idePath: string): Promise<boolean> {
+    try {
+      const projects: ProjectDetails[] = await this.readFile();
+      const filteredProjects = projects.filter(
+        (project) => !project.path.includes(idePath)
+      );
+      this.writeFile(filteredProjects);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  // Remove path from ide-paths for the given ide
+  async removeIdeInfo(idePath: string): Promise<boolean> {
+    try {
+      const ides: DevonfwConfig = await this.getAllUserCreatedDevonInstances();
+      const filteredIdes: IdeDistribution[] = ides.distributions.filter(
+        (ide) => !ide.ideConfig.basepath.includes(idePath)
+      );
+      const result = await this.updateUserCreatedDevonInstances(filteredIdes);
+      return result === 'Successs' ? true : false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async uninstallIde(idePath: string): Promise<boolean> {
+    try {
+      const projectRemovalSuccess = await this.removeProjectInfo(idePath);
+      const ideRemovalSuccess = await this.removeIdeInfo(idePath);
+      return projectRemovalSuccess && ideRemovalSuccess;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  openIdeInSystemExplorer(idePath: string): void {
+    shell.showItemInFolder(idePath);
+  }
+
   /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
-      fs.readFile(
-        path.resolve(process.env.USERPROFILE, '.devon', 'ide-paths'),
-        'utf8',
-        (err, data) => {
-          if (err) reject('No instances found');
-          this.devonfwInstance(data)
-            .then((instances: DevonfwConfig) => resolve(instances))
-            .catch(() => reject('No instances found'));
-        }
-      );
+      fs.readFile(this.idePathsFilePath, 'utf8', (err, data) => {
+        if (err) reject('No instances found');
+        this.devonfwInstance(data)
+          .then((instances: DevonfwConfig) => resolve(instances))
+          .catch(() => reject('No instances found'));
+      });
     });
     return instancesDirReader;
   }
@@ -96,6 +164,21 @@ export default class DevonInstancesService implements SaveDetails {
     return versions;
   }
 
+  async getInstalledDevonfwIDEs(): Promise<DevonIdeScript[]> {
+    const devonfwConfig: DevonfwConfig = await this.getAllUserCreatedDevonInstances();
+    const distributions: IdeDistribution[] = devonfwConfig.distributions;
+    const installedDevonfwIDEs: DevonIdeScript[] = distributions.map(
+      (distribution: IdeDistribution) => {
+        return {
+          version: distribution.ideConfig.version,
+          path: distribution.ideConfig.basepath,
+        };
+      }
+    );
+
+    return installedDevonfwIDEs;
+  }
+
   async devonfwInstance(data: string): Promise<DevonfwConfig> {
     let paths: string[] = [];
     const instances: DevonfwConfig = { distributions: [] };
@@ -104,10 +187,7 @@ export default class DevonInstancesService implements SaveDetails {
       for (let singlepath of paths) {
         if (singlepath) {
           if (process.platform === 'win32') {
-            singlepath = singlepath
-              .replace('/', '')
-              .replace('/', ':/')
-              .replace(/\//g, path.sep);
+            singlepath = this.formatPathToWindows(singlepath);
           }
           try {
             const { stdout } = await utilExec('devon -v', {
