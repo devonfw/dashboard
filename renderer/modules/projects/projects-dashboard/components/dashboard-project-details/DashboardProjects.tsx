@@ -32,6 +32,7 @@ interface DashboardProjectsProps {
   setProject: (searchForm: SearchForm, projects: ProjectDetails[]) => void;
   setAllProject: (project: ProjectDetails[]) => void;
   dirPath: string;
+  projectsCount: number;
 }
 
 export default function DashboardProjects(
@@ -171,7 +172,7 @@ export default function DashboardProjects(
         searchRef={searchElement}
         filterRef={filterElement}
         searchHandler={searchHandler}
-        totalProjects={props.projects.length}
+        totalProjects={props.projectsCount}
       />
       <div className={classes.cardsContainer}>
         <NextLink href="/projects/creation" className={classes.link}>
