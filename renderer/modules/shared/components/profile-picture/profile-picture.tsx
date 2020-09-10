@@ -27,7 +27,7 @@ export default function ProfilePicture(): JSX.Element {
     return () => {
       global.ipcRenderer.removeAllListeners('get:profile');
     };
-  }, []);
+  });
 
   return (
     <div className={classes.customDrawerContainer}>

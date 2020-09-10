@@ -116,7 +116,7 @@ export default class Installations extends Component<
   };
 
   handleViewIde = (idePath: string): void => {
-    global.ipcRenderer.invoke('view:ide', idePath);
+    global.ipcRenderer.send('open:directory', idePath);
   };
 
   handlePageChange = (_: unknown, newPage: number): void => {
