@@ -1,4 +1,4 @@
-const MIN_CONSECUTIVE_SUCCESS = 2;
+const MIN_CONSECUTIVE_SUCCESS = 1;
 
 export class ListenerErrorHandler {
   successCount: number;
