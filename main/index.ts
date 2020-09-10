@@ -240,6 +240,12 @@ ipcMain.on('find:workspaceProjects', (e, option) => {
 });
 ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
+ipcMain.handle('uninstall:ide', (e, path) =>
+  new DevonInstancesService().uninstallIde(path)
+);
+ipcMain.handle('view:ide', (e, path) =>
+  new DevonInstancesService().openIdeInSystemExplorer(path)
+);
 ipcMain.on('open:projectDirectory', (e, path) => {
   openProjectDirectory(path);
 });

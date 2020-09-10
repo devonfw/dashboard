@@ -77,7 +77,11 @@ class NodeInitializer extends Component<NodeInitializerProps> {
       element.touched = true;
       element.value = event.target.value;
       if (element.validation) {
-        ValidateForm.checkValidity(element, event.target.id);
+        ValidateForm.checkValidity(
+          element,
+          event.target.id,
+          this.state.workspaceDir
+        );
       }
       formState.name = element;
     }

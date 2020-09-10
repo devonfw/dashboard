@@ -1,14 +1,14 @@
 import { Component, ChangeEvent } from 'react';
 import InstallationsView from './Installations.view';
 import { IpcRendererEvent } from 'electron';
+import ConfirmDialog from '../../../../shared/components/confirm-dialog/confirm.dialog';
 
 export interface DevonIdeScript {
-  id: string;
   version: string;
+  path?: string;
   updated: string;
-  installed: boolean;
+  url?: string;
   changelog: string | null;
-  downloading: boolean;
 }
 
 interface TableState {
@@ -20,6 +20,9 @@ interface InstallationsState {
   query?: string;
   installations: DevonIdeScript[];
   tableState?: TableState;
+  loading: boolean;
+  openConfirmDialog?: boolean;
+  uninstallIdePath?: string;
 }
 
 export default class Installations extends Component<
@@ -33,6 +36,9 @@ export default class Installations extends Component<
       page: 0,
       rowsPerPage: 5,
     },
+    loading: false,
+    openConfirmDialog: false,
+    uninstallIdePath: '',
   };
   allInstallations: DevonIdeScript[] = [];
 
@@ -40,25 +46,31 @@ export default class Installations extends Component<
     super(props);
   }
 
+  dialogTitle = 'Uninstalling IDE';
+  dialogContent =
+    'Devonfw Dashboard will no longer keep track of this IDE. Are you sure?';
+
   componentDidMount(): void {
+    global.ipcRenderer.send('fetch:devonIdeScripts');
+    this.setState({ loading: true });
     this.getInstallations();
-    this.downloadCompleteHandler();
   }
 
   componentWillUnmount(): void {
     global.ipcRenderer.removeAllListeners('get:devonIdeScripts');
-    global.ipcRenderer.removeAllListeners('download completed');
   }
 
   getInstallations = (): void => {
-    global.ipcRenderer.send('fetch:devonIdeScripts');
     global.ipcRenderer.on(
       'get:devonIdeScripts',
       (_: IpcRendererEvent, installations: DevonIdeScript) => {
-        this.setState((prev) => ({
-          installations: [...prev.installations, installations],
-          query: '',
-        }));
+        this.setState((prev) => {
+          return {
+            installations: [...prev.installations, installations],
+            query: '',
+            loading: false,
+          };
+        });
         this.allInstallations.push(installations);
       }
     );
@@ -76,24 +88,35 @@ export default class Installations extends Component<
     this.setState({ query, installations, tableState });
   };
 
-  downloadHandler = (index: string): void => {
-    const installations = this.state.installations.map((i: DevonIdeScript) => {
-      i.downloading = i.id === index;
-      return i;
-    });
-    this.setState({ installations });
+  confirmUninstall = (idePath: string): void => {
+    this.setState({ openConfirmDialog: true, uninstallIdePath: idePath });
   };
 
-  downloadCompleteHandler = (): void => {
-    global.ipcRenderer.on('download completed', () => {
-      const installations = this.state.installations.map(
-        (i: DevonIdeScript) => {
-          i.downloading = false;
-          return i;
+  handleCloseDialog = (confirm: boolean): void => {
+    this.setState({ openConfirmDialog: false });
+    if (confirm) this.uninstallIde(this.state.uninstallIdePath);
+    else this.setState({ uninstallIdePath: '' });
+  };
+
+  uninstallIde = (path?: string): void => {
+    global.ipcRenderer
+      .invoke('uninstall:ide', path)
+      .then((success: boolean) => {
+        if (success) {
+          this.setState({
+            installations: [],
+            loading: true,
+            uninstallIdePath: '',
+          });
+          this.allInstallations = [];
+          global.ipcRenderer.send('fetch:devonIdeScripts');
+          global.ipcRenderer.send('find:devonfwInstances');
         }
-      );
-      this.setState({ installations });
-    });
+      });
+  };
+
+  handleViewIde = (idePath: string): void => {
+    global.ipcRenderer.invoke('view:ide', idePath);
   };
 
   handlePageChange = (_: unknown, newPage: number): void => {
@@ -114,16 +137,26 @@ export default class Installations extends Component<
 
   render(): JSX.Element {
     return (
-      <InstallationsView
-        queryHandler={this.queryHandler}
-        query={this.state.query}
-        installations={this.state.installations}
-        downloadHandler={this.downloadHandler}
-        page={this.state.tableState.page}
-        rowsPerPage={this.state.tableState.rowsPerPage}
-        handlePageChange={this.handlePageChange}
-        handleRowsPerPageChange={this.handleRowsPerPageChange}
-      ></InstallationsView>
+      <>
+        <InstallationsView
+          query={this.state.query}
+          loading={this.state.loading}
+          installations={this.state.installations}
+          page={this.state.tableState.page}
+          rowsPerPage={this.state.tableState.rowsPerPage}
+          queryHandler={this.queryHandler}
+          uninstallHandler={this.confirmUninstall}
+          viewIdeHandler={this.handleViewIde}
+          handlePageChange={this.handlePageChange}
+          handleRowsPerPageChange={this.handleRowsPerPageChange}
+        ></InstallationsView>
+        <ConfirmDialog
+          title={this.dialogTitle}
+          content={this.dialogContent}
+          openDialog={this.state.openConfirmDialog}
+          onClose={this.handleCloseDialog}
+        ></ConfirmDialog>
+      </>
     );
   }
 }

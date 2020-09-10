@@ -5,7 +5,7 @@ import createStyles from '@material-ui/core/styles/createStyles';
 export const useUpgradeBannerStyles = makeStyles((theme: Theme) =>
   createStyles({
     updateAction: {
-      '& a': {
+      '& a, & div': {
         marginTop: theme.spacing(2),
       },
     },
