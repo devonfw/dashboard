@@ -149,7 +149,7 @@ export default function DashboardProjects(
   };
 
   const openProjectDirectory = () => {
-    global.ipcRenderer.send('open:projectDirectory', projectState.project.path);
+    global.ipcRenderer.send('open:directory', projectState.project.path);
   };
 
   const searchHandler = (event: ChangeEvent<HTMLInputElement>): void => {

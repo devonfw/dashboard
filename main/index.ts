@@ -122,19 +122,6 @@ function getDevonIdeScripts() {
     });
 }
 
-// Finding out Devonfw Ide Instances
-function countInstance() {
-  new DevonInstancesService()
-    .getAvailableDevonIdeInstances()
-    .then((instances) => {
-      mainWindow.webContents.send('count:instances', { total: instances });
-    })
-    .catch((error) => {
-      console.log(error);
-      mainWindow.webContents.send('count:instances', { total: 0 });
-    });
-}
-
 // Get all User created Instances
 function getDevonInstancesPath() {
   new DevonInstancesService()
@@ -161,28 +148,6 @@ function getDevonInstancesPath() {
     });
 }
 
-export function findOutWorkspaceLocation(paths: string[]): string[] {
-  const workspaces = [];
-  let location = '';
-  for (const path of paths) {
-    if (path.includes('workspaces')) {
-      location = path.substring(
-        path.lastIndexOf('workspaces') + 10,
-        -path.length
-      );
-      if (!workspaces.includes(location)) {
-        workspaces.push(location);
-      }
-    } else {
-      location = path + '\\workspaces';
-      if (!workspaces.includes(location)) {
-        workspaces.push(location);
-      }
-    }
-  }
-  return workspaces;
-}
-
 function getWorkspaceProject(workspacelocation: string) {
   readdirPromise(workspacelocation)
     .then((projects: string[]) => {
@@ -191,12 +156,6 @@ function getWorkspaceProject(workspacelocation: string) {
     .catch(() => {
       mainWindow.webContents.send('get:workspaceProjects', []);
     });
-}
-
-function getProjectDetails() {
-  new DevonInstancesService().readFile().then((details) => {
-    mainWindow.webContents.send('get:projectDetails', details);
-  });
 }
 
 /* Enable services */
@@ -219,10 +178,6 @@ new OpenProjectIDEListener(new DevonInstancesService()).listen();
 // Getting all the project depebding on Devonfw IDE selector
 new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 
-const openProjectDirectory = (path: string) => {
-  shell.showItemInFolder(path);
-};
-
 const changelogListener = new ChangelogListener();
 changelogListener.listen();
 
@@ -232,23 +187,21 @@ terminalService.openDialog(['openDirectory'], []);
 terminalService.allCommands(null, null);
 
 // Finding out Devonfw Ide
-ipcMain.on('find:devonfw', countInstance);
+ipcMain.handle('count:projetcs', () =>
+  new DevonInstancesService().getProjectsCount()
+);
 ipcMain.on('find:devonfwInstances', getDevonInstancesPath);
 ipcMain.on('find:checkForUpdates', () => checkForDevonUpdates(mainWindow));
 ipcMain.on('find:workspaceProjects', (e, option) => {
   getWorkspaceProject(option);
 });
-ipcMain.on('find:projectDetails', getProjectDetails);
 ipcMain.on('fetch:devonIdeScripts', getDevonIdeScripts);
 ipcMain.handle('uninstall:ide', (e, path) =>
   new DevonInstancesService().uninstallIde(path)
 );
-ipcMain.handle('view:ide', (e, path) =>
-  new DevonInstancesService().openIdeInSystemExplorer(path)
+ipcMain.on('open:directory', (e, path) =>
+  new DevonInstancesService().openPathInSystemExplorer(path)
 );
-ipcMain.on('open:projectDirectory', (e, path) => {
-  openProjectDirectory(path);
-});
 ipcMain.on('set:base64Img', (e, arg) => getBase64Img(arg, mainWindow));
 ipcMain.on('set:profile', (e, profile: UserProfile) =>
   setDashboardProfile(profile, mainWindow)
