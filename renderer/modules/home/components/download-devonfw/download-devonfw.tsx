@@ -23,7 +23,6 @@ export default function DownloadDevonfw(): JSX.Element {
         DOWNLOAD LATEST VERSION
       </Button>
       <Dialog
-        onClose={handleClose}
         aria-labelledby="download-dialog-title"
         open={open}
         classes={{ root: classes.root }}

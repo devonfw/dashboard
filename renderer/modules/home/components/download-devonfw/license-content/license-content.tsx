@@ -3,12 +3,12 @@ import {
   DialogActions,
 } from '../../../../shared/components/dialog';
 import { useState } from 'react';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import GitFormContent from '../git-form-content/git-form-content';
-import { LICENSE } from './license';
-import useLicenseContentStyles from './license-content.styles';
+import License from './license/license';
 
 interface LicenseContentProps {
   onClose: () => void;
@@ -17,7 +17,6 @@ interface LicenseContentProps {
 export default function LicenseContent(
   props: LicenseContentProps
 ): JSX.Element {
-  const classes = useLicenseContentStyles();
   const [next, setNext] = useState(false);
 
   const handleNext = () => {
@@ -31,11 +30,13 @@ export default function LicenseContent(
       ) : (
         <>
           <DialogContent dividers>
-            <LinearProgress />
-            <Typography>Accept pending...</Typography>
-            <Typography component="pre" className={classes.license}>
-              {LICENSE}
-            </Typography>
+            <Box pb={2}>
+              <Box pt={2} pb={1}>
+                <LinearProgress />
+              </Box>
+              <Typography>Accept pending...</Typography>
+            </Box>
+            <License />
           </DialogContent>
           <DialogActions>
             <Button

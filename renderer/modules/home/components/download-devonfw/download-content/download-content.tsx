@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import LicenseContent from '../license-content/license-content';
+import { Box } from '@material-ui/core';
 
 interface DownloadContentProps {
   onClose: () => void;
@@ -28,7 +29,9 @@ export default function DownloadContent(
       ) : (
         <>
           <DialogContent dividers>
-            <LinearProgress />
+            <Box pt={2} pb={1}>
+              <LinearProgress />
+            </Box>
             <Typography>Downloading...</Typography>
           </DialogContent>
           <DialogActions>
