@@ -75,7 +75,7 @@ export default function Projects(): JSX.Element {
 
   return (
     <Layout>
-      <SpaceAround bgColor={'#F4F6F8'}>
+      <SpaceAround bgcolor={'#F4F6F8'}>
         <DashboardProjects
           allProjects={allProjects}
           projects={page}

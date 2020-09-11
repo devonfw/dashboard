@@ -34,42 +34,12 @@ export default class DevonInstancesService implements SaveDetails {
     'ide-paths'
   );
 
-  /* Find out DEVON ide instances  */
-  getAvailableDevonIdeInstances(): Promise<number> {
-    const dirReader = new Promise<number>((resolve, reject) => {
-      this.getAllUserCreatedDevonInstances().then(
-        (instances: DevonfwConfig) => {
-          this.getCreatedDevonInstancesCount(instances)
-            .then((count) => {
-              resolve(count);
-            })
-            .catch((error) => reject(error));
-        }
-      );
-    });
-    return dirReader;
-  }
-
   /* Finding out total count of projects available in each DEVON ide instances */
-  getCreatedDevonInstancesCount(instances: DevonfwConfig): Promise<number> {
-    let count = 0;
+  getProjectsCount(): Promise<number> {
     return new Promise<number>(async (resolve, reject) => {
       try {
         const projectDetails = await this.readFile();
-        if (projectDetails.length) {
-          for (const distribution of instances.distributions) {
-            if (distribution.id) {
-              count =
-                count +
-                projectDetails.filter((data) =>
-                  data.path.includes(distribution.id)
-                ).length;
-            }
-          }
-          resolve(count);
-        } else {
-          resolve(0);
-        }
+        resolve(projectDetails.length);
       } catch (error) {
         console.error(error);
         reject(error);
@@ -137,7 +107,8 @@ export default class DevonInstancesService implements SaveDetails {
     }
   }
 
-  openIdeInSystemExplorer(idePath: string): void {
+  // Open system file explorer to view projects or devonfw IDEs
+  openPathInSystemExplorer(idePath: string): void {
     shell.showItemInFolder(idePath);
   }
 

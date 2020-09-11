@@ -3,7 +3,7 @@ import Installations from '../../modules/settings/installations/components/Insta
 
 export default function InstalledVersions(): JSX.Element {
   return (
-    <SpaceAround bgColor={'#f4f6f8'}>
+    <SpaceAround bgcolor={'#f4f6f8'}>
       <Installations></Installations>
     </SpaceAround>
   );

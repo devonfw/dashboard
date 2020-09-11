@@ -1,7 +1,7 @@
 import Box, { BoxProps } from '@material-ui/core/Box';
 
 interface SpaceAroundProps {
-  bgColor?: string;
+  bgcolor?: string;
 }
 
 export default function SpaceAround(
