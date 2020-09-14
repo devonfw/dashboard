@@ -1,7 +1,7 @@
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import createStyles from '@material-ui/core/styles/createStyles';
 
-export const useDownloadButtonStyles = makeStyles(() =>
+export const useDownloadDevonfwStyles = makeStyles(() =>
   createStyles({
     root: {
       '& .MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper': {
@@ -12,4 +12,4 @@ export const useDownloadButtonStyles = makeStyles(() =>
   })
 );
 
-export default useDownloadButtonStyles;
+export default useDownloadDevonfwStyles;

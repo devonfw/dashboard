@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   DialogContent,
   DialogActions,
@@ -8,15 +8,33 @@ import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import LicenseContent from '../license-content/license-content';
 import { Box } from '@material-ui/core';
+import { InstallFormContext } from '../../../redux/install-form';
 
 interface DownloadContentProps {
   onClose: () => void;
 }
 
+interface SaveInfo {
+  path: string;
+  filename: string;
+}
+
 export default function DownloadContent(
   props: DownloadContentProps
 ): JSX.Element {
+  const { dispatch } = useContext(InstallFormContext);
   const [next, setNext] = useState(false);
+  const [downloading, setDownloading] = useState(true);
+
+  useEffect(() => {
+    global.ipcRenderer.on(
+      'download completed',
+      (_: unknown, saveInfo: SaveInfo) => {
+        dispatch({ path: saveInfo.path, filename: saveInfo.filename });
+        setDownloading(false);
+      }
+    );
+  }, []);
 
   const handleNext = () => {
     setNext(true);
@@ -30,9 +48,15 @@ export default function DownloadContent(
         <>
           <DialogContent dividers>
             <Box pt={2} pb={1}>
-              <LinearProgress />
+              {downloading ? (
+                <LinearProgress />
+              ) : (
+                <LinearProgress variant="determinate" value={100} />
+              )}
             </Box>
-            <Typography>Downloading...</Typography>
+            <Typography>
+              {downloading ? 'Downloading...' : 'Download complete'}
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button
@@ -40,6 +64,7 @@ export default function DownloadContent(
               onClick={handleNext}
               variant="outlined"
               color="secondary"
+              disabled={downloading}
             >
               NEXT
             </Button>
