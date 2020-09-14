@@ -30,8 +30,8 @@ export default function DownloadContent(
     global.ipcRenderer.on(
       'download completed',
       (_: unknown, saveInfo: SaveInfo) => {
-        dispatch({ path: saveInfo.path, filename: saveInfo.filename });
         setDownloading(false);
+        dispatch({ path: saveInfo.path, filename: saveInfo.filename });
       }
     );
   }, []);

@@ -6,10 +6,14 @@ import DownloadContent from './download-content/download-content';
 import useDownloadDevonfwStyles from './download-devonfw.styles';
 import { InstallFormProvider } from '../../redux/install-form';
 
-const DASHBOARD_DOWNLOAD_URL =
-  'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
+interface DownloadDevonfwProps {
+  url: string;
+  children: JSX.Element | string;
+}
 
-export default function DownloadDevonfw(): JSX.Element {
+export default function DownloadDevonfw(
+  props: DownloadDevonfwProps
+): JSX.Element {
   const classes = useDownloadDevonfwStyles();
   const [open, setOpen] = useState(false);
 
@@ -27,9 +31,9 @@ export default function DownloadDevonfw(): JSX.Element {
         onClick={handleOpen}
         variant="contained"
         color="primary"
-        href={DASHBOARD_DOWNLOAD_URL}
+        href={props.url}
       >
-        DOWNLOAD LATEST VERSION
+        {props.children}
       </Button>
       <InstallFormProvider>
         <Dialog
