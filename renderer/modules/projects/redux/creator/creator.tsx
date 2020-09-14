@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {
-  ProjectData,
-  messageSender,
-} from '../../../shared/services/renderer/messageSender.service';
+import { messageSender } from '../../../shared/services/renderer/messageSender.service';
 import { CreateProjectActionData } from '../stepper/actions/create-project-action';
 import { StepperContext } from '../stepper/stepperContext';
+import { ProjectData } from '../stepper/project-data.model';
 
 export interface ICreatorContext {
   triggerCreation: (data: ProjectData) => void;
