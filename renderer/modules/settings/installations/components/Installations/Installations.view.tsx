@@ -10,14 +10,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
-import GetApp from '@material-ui/icons/GetApp';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import AcceptButton from '../../../../shared/components/accept-button/accept-button';
 import useInstallationsStyles from './installations.styles';
 import Changelog from '../changelog/changelog';
 import Spinner from '../../../../shared/components/spinner/spinner';
-import DownloadButton from '../../../../shared/components/download-button/download-button';
+import DownloadDevonfw from '../../../../home/components/download-devonfw/download-devonfw';
 
 interface InstallationsViewProps {
   query: string;
@@ -111,12 +110,9 @@ export default function InstallationsView(
                   </TableCell>
                   <TableCell align="center">
                     {installation.url ? (
-                      <DownloadButton
-                        startIcon={<GetApp />}
-                        href={installation.url}
-                      >
+                      <DownloadDevonfw url={installation.url}>
                         DOWNLOAD
-                      </DownloadButton>
+                      </DownloadDevonfw>
                     ) : (
                       <AcceptButton
                         onClick={() =>

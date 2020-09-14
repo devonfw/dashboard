@@ -3,7 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 
 // Packages
-import { BrowserWindow, app, ipcMain, shell } from 'electron';
+import { BrowserWindow, app, ipcMain, DownloadItem } from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
@@ -31,8 +31,10 @@ import RepositoriesListener from './modules/repositories/repositories-listener';
 import IDEsInstallationStatus from './modules/settings/installed-versions/services/ides-installation-status.service';
 import DevonfwIdesService from './modules/settings/installed-versions/services/devonfw-ides.service';
 import ChangelogListener from './modules/settings/installed-versions/services/listeners/changelog.listener';
+import DownloadListener from './modules/shared/services/download-listener';
+import InstallIdeListener from './modules/shared/services/install-ide-listener';
 
-let mainWindow;
+let mainWindow: BrowserWindow;
 // Prepare the renderer once the app is ready
 app.on('ready', async () => {
   await prepareNext('./renderer');
@@ -87,26 +89,8 @@ async function getWindowUrl(): Promise<string> {
   return url;
 }
 
-/* Manage all downloads */
-const downloadHandler = (_, item) => {
-  item.on('updated', (_, state) => {
-    if (state === 'interrupted') {
-      item.cancel();
-    } else if (state === 'progressing') {
-      if (!item.isPaused()) {
-        mainWindow.webContents.send('download progress', {
-          total: item.getTotalBytes(),
-          received: item.getReceivedBytes(),
-        });
-      }
-    }
-  });
-  item.once('done', (_, state) => {
-    mainWindow.webContents.send('download completed', state);
-    if (state === 'completed') {
-      shell.showItemInFolder(item.getSavePath());
-    }
-  });
+const downloadHandler = (_, item: DownloadItem) => {
+  new DownloadListener(item, mainWindow).listen();
 };
 
 // Get all devon-ide-scripts from maven repository
@@ -162,6 +146,8 @@ function getWorkspaceProject(workspacelocation: string) {
 
 new InstallListener(new SpawnTerminalFactory()).listen();
 
+new InstallIdeListener().listen();
+
 new ProjectCreationListener(
   new SpawnTerminalFactory(),
   new DevonInstancesService()
@@ -175,11 +161,10 @@ new ProjectDeleteListener(new DevonInstancesService()).listen();
 // Open a project in IDE process
 new OpenProjectIDEListener(new DevonInstancesService()).listen();
 
-// Getting all the project depebding on Devonfw IDE selector
+// Getting all the project depending on Devonfw IDE selector
 new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 
-const changelogListener = new ChangelogListener();
-changelogListener.listen();
+new ChangelogListener().listen();
 
 /* terminal service */
 const terminalService = new TerminalService();

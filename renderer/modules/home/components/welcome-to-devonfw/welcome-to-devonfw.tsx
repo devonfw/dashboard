@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import { IpcRendererEvent } from 'electron';
-
+import { ProfileData } from '../../../../models/dashboard/profile-data';
 import Grid from '@material-ui/core/Grid';
 import WelcomeSnippet from '../welcome-snippet/welcome-snippet';
-
-import { ProfileData } from '../../../../models/dashboard/profile-data';
-import DownloadButton from '../../../shared/components/download-button/download-button';
+import DownloadDevonfw from '../download-devonfw/download-devonfw';
 
 const DASHBOARD_DOWNLOAD_URL =
   'https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.devonfw.tools.ide&a=devonfw-ide-scripts&v=LATEST&p=tar.gz';
@@ -39,9 +37,9 @@ export default function WelcomeToDevonfw(): JSX.Element {
       <Grid item xs={12} md={7}>
         <>
           <WelcomeSnippet></WelcomeSnippet>
-          <DownloadButton href={DASHBOARD_DOWNLOAD_URL}>
-            Download latest version
-          </DownloadButton>
+          <DownloadDevonfw url={DASHBOARD_DOWNLOAD_URL}>
+            DOWNLOAD LATEST VERSION
+          </DownloadDevonfw>
         </>
       </Grid>
     </Grid>
