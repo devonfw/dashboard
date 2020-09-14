@@ -21,6 +21,7 @@ export default class InstallIdeListener {
 
   listen(): void {
     ipcMain.on(this.channel, this.installHandler.bind(this));
+    ipcMain.on(`${this.channel}:cancel`, this.cancelInstallHandler.bind(this));
   }
 
   private async installHandler(
@@ -35,6 +36,10 @@ export default class InstallIdeListener {
     if (hasExtracted) {
       this.install();
     }
+  }
+
+  private cancelInstallHandler(): void {
+    this.ideInstaller.cancelInstall();
   }
 
   private async extract(): Promise<boolean> {

@@ -2,6 +2,7 @@ import { InstallFormState } from '../redux/install-form';
 import { StopListener } from '../../shared/services/renderer/renderer.service';
 
 const CHANNEL = 'install-ide';
+const CANCEL_CHANNEL = `${CHANNEL}:cancel`;
 
 export interface InstallationStatus {
   finished: boolean;
@@ -24,6 +25,10 @@ export default class InstallationService {
     global.ipcRenderer.send(CHANNEL, options);
 
     return this.stopListener;
+  }
+
+  cancel(): void {
+    global.ipcRenderer.send(CANCEL_CHANNEL);
   }
 
   private stopListener() {

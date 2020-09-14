@@ -25,6 +25,7 @@ interface InstallingContentProps {
 export default function InstallingContent(
   props: InstallingContentProps
 ): JSX.Element {
+  const installationService = new InstallationService();
   const { state } = useContext(InstallFormContext);
   const [messages, setMessages] = useState<string[]>([]);
   const [installation, setInstallation] = useState({
@@ -39,7 +40,7 @@ export default function InstallingContent(
   }, []);
 
   const install = (state: InstallFormState) => {
-    return new InstallationService().install(installHandler, state);
+    return installationService.install(installHandler, state);
   };
 
   const installHandler = (status: InstallationStatus) => {
@@ -70,13 +71,17 @@ export default function InstallingContent(
       <DialogContent dividers>
         <Box pb={2}>
           <Box pt={2} pb={1}>
-            <LinearProgress />
+            {installation.finished ? (
+              <LinearProgress variant="determinate" value={100} />
+            ) : (
+              <LinearProgress />
+            )}
           </Box>
           <Typography>
             {installation.finished
               ? installation.error
                 ? 'Installation failed'
-                : 'Installation completed!'
+                : 'Installation finished!'
               : 'Installing setup...'}
           </Typography>
         </Box>
@@ -97,7 +102,7 @@ export default function InstallingContent(
           <>
             <Button
               autoFocus
-              onClick={props.onClose}
+              onClick={() => installationService.cancel()}
               variant="outlined"
               color="secondary"
             >

@@ -1,5 +1,6 @@
-import { exec, ChildProcess } from 'child_process';
+import { exec, ChildProcess, spawn } from 'child_process';
 import { join } from 'path';
+import { platform } from 'os';
 
 const settingsUrlQuestion = 'hit return to install';
 const licenseQuestion = 'Also it is included in';
@@ -13,6 +14,7 @@ interface InstallIdeOptions {
 
 export default class InstallIdeService {
   private installerProcess: ChildProcess;
+  private killed: boolean;
 
   constructor(
     private onProgress: (message: string) => void,
@@ -24,22 +26,34 @@ export default class InstallIdeService {
     this.installerProcess = exec(join(this.options.path, 'setup'));
     this.installerProcess.stdin.setDefaultEncoding('utf8');
     this.installerProcess.stdout.on('data', (data) => {
-      const processedData = data.toString().trim();
-      this.notifyProgress(processedData);
+      if (!this.killed) {
+        const processedData = data.toString().trim();
+        this.notifyProgress(processedData);
 
-      if (processedData.includes(settingsUrlQuestion)) {
-        this.setSettingsUrl();
-      }
+        if (processedData.includes(settingsUrlQuestion)) {
+          this.setSettingsUrl();
+        }
 
-      if (processedData.includes(licenseQuestion)) {
-        this.setLicenseAgreement();
-      }
+        if (processedData.includes(licenseQuestion)) {
+          this.setLicenseAgreement();
+        }
 
-      if (processedData.includes(completedMessage)) {
-        this.finish();
-        this.notifyFinish();
+        if (processedData.includes(completedMessage)) {
+          this.finish();
+          this.notifyFinish();
+        }
       }
     });
+  }
+
+  public cancelInstall(): void {
+    if (platform() === 'win32') {
+      spawn('taskkill', ['/pid', `${this.installerProcess.pid}`, '/f', '/t']);
+      this.killed = true;
+    } else {
+      this.killed = this.installerProcess.kill('SIGTERM');
+    }
+    this.notifyFinish();
   }
 
   private notifyProgress(progress: string): void {
