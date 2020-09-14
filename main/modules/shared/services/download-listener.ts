@@ -1,16 +1,12 @@
 import { DownloadItem, BrowserWindow } from 'electron';
-import ExtractorService from './extractor.service';
+import { dirname } from 'path';
 
 export default class DownloadListener {
-  private extractor: ExtractorService;
-  constructor(private item: DownloadItem, private mainWindow: BrowserWindow) {
-    this.extractor = new ExtractorService();
-  }
+  constructor(private item: DownloadItem, private mainWindow: BrowserWindow) {}
 
   listen(): void {
     this.onUpdate();
     this.onFinish();
-    this.extractFiles();
   }
 
   private onUpdate(): void {
@@ -29,10 +25,7 @@ export default class DownloadListener {
 
   private onFinish(): void {
     this.item.once('done', (_, state) => {
-      this.extractFiles();
       this.notifyFinish(state);
-      if (state === 'completed') {
-      }
     });
   }
 
@@ -44,21 +37,10 @@ export default class DownloadListener {
   }
 
   private notifyFinish(state: string): void {
-    this.mainWindow.webContents.send('download completed', state);
-  }
-
-  private extractFiles(): Promise<string> {
-    const filename = this.item.getFilename();
-    const savePath = this.item.getSavePath();
-    return this.extractor
-      .extract(savePath, filename)
-      .then(() => {
-        const message = `${filename} files have been dumped in ${savePath}`;
-        return message;
-      })
-      .catch(() => {
-        const message = `Extraction of ${filename} in ${savePath} has failed`;
-        return message;
-      });
+    this.mainWindow.webContents.send('download completed', {
+      state,
+      filename: this.item.getFilename(),
+      path: dirname(this.item.getSavePath()),
+    });
   }
 }

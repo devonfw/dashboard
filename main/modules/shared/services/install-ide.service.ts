@@ -23,7 +23,7 @@ export default class InstallIdeService {
   install(): void {
     this.installerProcess = exec(join(this.options.path, 'setup'));
     this.installerProcess.stdin.setDefaultEncoding('utf8');
-    this.installerProcess.stdout.on('data', function (data) {
+    this.installerProcess.stdout.on('data', (data) => {
       const processedData = data.toString().trim();
       this.notifyProgress(processedData);
 

@@ -56,8 +56,8 @@ export default class InstallIdeListener {
 
   private install(): void {
     this.ideInstaller = new InstallIdeService(
-      this.notifyProgress,
-      this.notifyFinish,
+      this.notifyProgress.bind(this),
+      this.notifyFinish.bind(this),
       this.options
     );
 
