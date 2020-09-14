@@ -1,11 +1,16 @@
-import { DownloadItem, shell, BrowserWindow } from 'electron';
+import { DownloadItem, BrowserWindow } from 'electron';
+import ExtractorService from './extractor.service';
 
 export default class DownloadListener {
-  constructor(private item: DownloadItem, private mainWindow: BrowserWindow) {}
+  private extractor: ExtractorService;
+  constructor(private item: DownloadItem, private mainWindow: BrowserWindow) {
+    this.extractor = new ExtractorService();
+  }
 
   listen(): void {
     this.onUpdate();
     this.onFinish();
+    this.extractFiles();
   }
 
   private onUpdate(): void {
@@ -17,7 +22,6 @@ export default class DownloadListener {
       if (state === 'progressing') {
         if (!this.item.isPaused()) {
           this.notifyProgress();
-          this.notifyPath();
         }
       }
     });
@@ -25,9 +29,9 @@ export default class DownloadListener {
 
   private onFinish(): void {
     this.item.once('done', (_, state) => {
+      this.extractFiles();
       this.notifyFinish(state);
       if (state === 'completed') {
-        shell.showItemInFolder(this.item.getSavePath());
       }
     });
   }
@@ -39,14 +43,22 @@ export default class DownloadListener {
     });
   }
 
-  private notifyPath(): void {
-    this.mainWindow.webContents.send('download path', {
-      savePath: this.item.getSavePath(),
-      filename: this.item.getFilename(),
-    });
-  }
-
   private notifyFinish(state: string): void {
     this.mainWindow.webContents.send('download completed', state);
+  }
+
+  private extractFiles(): Promise<string> {
+    const filename = this.item.getFilename();
+    const savePath = this.item.getSavePath();
+    return this.extractor
+      .extract(savePath, filename)
+      .then(() => {
+        const message = `${filename} files have been dumped in ${savePath}`;
+        return message;
+      })
+      .catch(() => {
+        const message = `Extraction of ${filename} in ${savePath} has failed`;
+        return message;
+      });
   }
 }

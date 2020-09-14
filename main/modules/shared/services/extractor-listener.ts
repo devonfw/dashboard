@@ -1,6 +1,5 @@
-import tar from 'tar';
 import { IpcMainEvent, ipcMain, WebContents } from 'electron';
-import { join } from 'path';
+import ExtractorService from './extractor.service';
 
 interface ExtractOptions {
   file: string;
@@ -10,8 +9,11 @@ interface ExtractOptions {
 export default class ExtractorListener {
   private args: ExtractOptions;
   private sender: WebContents;
+  private extractor: ExtractorService;
 
-  constructor(private channel = 'extract-files') {}
+  constructor(private channel = 'extract-files') {
+    this.extractor = new ExtractorService();
+  }
 
   listen(): void {
     ipcMain.on(this.channel, this.extractHandler.bind(this));
@@ -25,11 +27,8 @@ export default class ExtractorListener {
   }
 
   private extract() {
-    tar
-      .extract({
-        file: join(this.args.path, this.args.file),
-        cwd: this.args.path,
-      })
+    this.extractor
+      .extract(this.args.path, this.args.file)
       .then(() => {
         const message = `${this.args.file} files have been dumped in ${this.args.path}`;
         this.notifyProgress(message);

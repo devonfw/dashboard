@@ -33,7 +33,6 @@ import DevonfwIdesService from './modules/settings/installed-versions/services/d
 import ChangelogListener from './modules/settings/installed-versions/services/listeners/changelog.listener';
 import DownloadListener from './modules/shared/services/download-listener';
 import InstallIdeListener from './modules/shared/services/install-ide-listener';
-import ExtractorListener from './modules/shared/services/extractor-listener';
 
 let mainWindow: BrowserWindow;
 // Prepare the renderer once the app is ready
@@ -148,8 +147,6 @@ function getWorkspaceProject(workspacelocation: string) {
 new InstallListener(new SpawnTerminalFactory()).listen();
 
 new InstallIdeListener().listen();
-
-new ExtractorListener().listen();
 
 new ProjectCreationListener(
   new SpawnTerminalFactory(),

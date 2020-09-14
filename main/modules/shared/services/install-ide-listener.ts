@@ -1,83 +1,90 @@
-import { exec, ChildProcess } from 'child_process';
 import { ipcMain, IpcMainEvent, WebContents } from 'electron';
-import { join } from 'path';
-
-const settingsUrlQuestion = 'hit return to install';
-const licenseQuestion = 'Also it is included in';
-const completedMessage = 'Press any key to continue';
+import InstallIdeService from './install-ide.service';
+import ExtractorService from './extractor.service';
 
 interface InstallIdeOptions {
+  filename: string;
+  path: string;
   license: boolean;
   settingsUrl: string;
 }
 
 export default class InstallIdeListener {
-  private options: InstallIdeOptions;
   private sender: WebContents;
-  private path: string;
-  private installerProcess: ChildProcess;
+  private options: InstallIdeOptions;
+  private ideInstaller: InstallIdeService;
+  private extractor: ExtractorService;
 
-  constructor(private channel: string = 'install-ide') {}
+  constructor(private channel: string = 'install-ide') {
+    this.extractor = new ExtractorService();
+  }
 
   listen(): void {
     ipcMain.on(this.channel, this.installHandler.bind(this));
   }
 
-  private installHandler(
+  private async installHandler(
     event: IpcMainEvent,
-    path: string,
     options: InstallIdeOptions
-  ): void {
-    this.options = options;
+  ): Promise<void> {
     this.sender = event.sender;
-    this.path = path;
+    this.options = options;
 
-    this.startInstallation();
+    const hasExtracted = await this.extract();
+
+    if (hasExtracted) {
+      this.install();
+    }
   }
 
-  private startInstallation() {
-    this.installerProcess = exec(join(this.path, 'setup'));
-    this.installerProcess.stdin.setDefaultEncoding('utf8');
-    this.installerProcess.stdout.on('data', function (data) {
-      const processedData = data.toString().trim();
-      this.notifyProgress(processedData);
+  private async extract(): Promise<boolean> {
+    const path = this.options.path;
+    const filename = this.options.filename;
 
-      if (processedData.includes(settingsUrlQuestion)) {
-        this.setSettingsUrl();
-      }
+    try {
+      await this.extractor.extract(path, filename);
+      const message = `${filename} files have been dumped in ${path}`;
+      this.notifyProgress(message);
+    } catch (_) {
+      const message = `Extraction of ${filename} in ${path} has failed`;
+      this.notifyError(message);
+      return false;
+    }
 
-      if (processedData.includes(licenseQuestion)) {
-        this.setLicenseAgreement();
-      }
+    return true;
+  }
 
-      if (processedData.includes(completedMessage)) {
-        this.finish();
-        this.notifyFinish();
-      }
-    });
+  private install(): void {
+    this.ideInstaller = new InstallIdeService(
+      this.notifyProgress,
+      this.notifyFinish,
+      this.options
+    );
+
+    this.ideInstaller.install();
   }
 
   private notifyProgress(progress: string): void {
-    this.sender.send(this.channel, { finished: false, message: progress });
+    this.sender.send(this.channel, {
+      finished: false,
+      error: false,
+      message: progress,
+    });
   }
 
   private notifyFinish(): void {
-    this.sender.send(this.channel, { finished: true, message: '' });
+    this.sender.send(this.channel, {
+      finished: true,
+      error: false,
+      message: '',
+    });
   }
 
-  private setSettingsUrl(): void {
-    const settingsUrl = this.options.settingsUrl
-      ? this.options.settingsUrl
-      : '';
-    this.installerProcess.stdin.write(`${settingsUrl}\n`);
-  }
-
-  private setLicenseAgreement(): void {
-    const licenseAgreement = this.options.license ? 'yes' : 'no';
-    this.installerProcess.stdin.write(`${licenseAgreement}\n`);
-  }
-
-  private finish(): void {
-    this.installerProcess.stdin.write('\n');
+  private notifyError(message: string): void {
+    this.sender.send(this.channel, {
+      finished: true,
+      error: true,
+      message,
+    });
   }
 }
