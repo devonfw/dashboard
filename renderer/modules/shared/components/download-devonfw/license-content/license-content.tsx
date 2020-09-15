@@ -2,13 +2,14 @@ import {
   DialogContent,
   DialogActions,
 } from '../../../../shared/components/dialog';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Typography from '@material-ui/core/Typography';
 import GitFormContent from '../git-form-content/git-form-content';
 import License from './license/license';
+import Renderer from '../../../../shared/services/renderer/renderer.service';
 
 interface LicenseContentProps {
   onClose: () => void;
@@ -17,7 +18,16 @@ interface LicenseContentProps {
 export default function LicenseContent(
   props: LicenseContentProps
 ): JSX.Element {
-  const [next, setNext] = useState(false);
+  const [next, setNext] = useState(true);
+
+  useEffect(() => {
+    new Renderer()
+      .send<boolean>('check-license')
+      .then((accepted: boolean) => {
+        setNext(accepted);
+      })
+      .catch(() => setNext(false));
+  }, []);
 
   const handleNext = () => {
     setNext(true);

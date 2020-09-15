@@ -32,6 +32,7 @@ export default function DownloadDevonfw(
         variant="contained"
         color="primary"
         href={props.url}
+        disableElevation
       >
         {props.children}
       </Button>

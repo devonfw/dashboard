@@ -14,7 +14,7 @@ import {
 } from '../../../redux/install-form';
 import InstallationService, {
   InstallationStatus,
-} from '../../../services/installation.service';
+} from '../../../services/installation/installation.service';
 
 const MAX_MESSAGES_STORED = 40;
 

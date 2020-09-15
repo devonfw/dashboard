@@ -1,5 +1,5 @@
-import { InstallFormState } from '../redux/install-form';
-import { StopListener } from '../../shared/services/renderer/renderer.service';
+import { InstallFormState } from '../../redux/install-form';
+import { StopListener } from '../renderer/renderer.service';
 
 const CHANNEL = 'install-ide';
 const CANCEL_CHANNEL = `${CHANNEL}:cancel`;
