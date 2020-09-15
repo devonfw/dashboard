@@ -1,7 +1,7 @@
 import { useUpgradeBannerStyles } from './upgrade-banner.styles';
 import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
-import DownloadButton from '../download-button/download-button';
+import DownloadDevonfw from '../../../home/components/download-devonfw/download-devonfw';
 
 export interface UpgradeBannerProps {
   version: string;
@@ -26,9 +26,9 @@ export default function UpgradeBanner(props: UpgradeBannerProps): JSX.Element {
           <div>Get IDE fixes and more Features </div>
         </div>
         <div className={classes.updateAction}>
-          <DownloadButton href={DASHBOARD_DOWNLOAD_URL}>
+          <DownloadDevonfw url={DASHBOARD_DOWNLOAD_URL}>
             UPDATE NOW
-          </DownloadButton>
+          </DownloadDevonfw>
         </div>
       </div>
     </div>

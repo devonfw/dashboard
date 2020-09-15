@@ -1,7 +1,6 @@
 import { shell } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import platform from 'os';
 import {
   DevonfwConfig,
   IdeDistribution,
@@ -15,6 +14,10 @@ import {
 } from '../../models/project-details.model';
 import { SaveDetails } from './save-details';
 import { exec } from 'child_process';
+import {
+  idePathsFilePath,
+  devonFilePath,
+} from '../../modules/shared/config/paths';
 
 const utilExec = util.promisify(child.exec);
 const utilReaddir = util.promisify(fs.readdir);
@@ -22,18 +25,6 @@ const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
 export default class DevonInstancesService implements SaveDetails {
-  private devonFilePath = path.resolve(
-    platform.homedir(),
-    '.devon',
-    'projectinfo.json'
-  );
-
-  private idePathsFilePath = path.resolve(
-    process.env.USERPROFILE,
-    '.devon',
-    'ide-paths'
-  );
-
   /* Finding out total count of projects available in each DEVON ide instances */
   getProjectsCount(): Promise<number> {
     return new Promise<number>(async (resolve, reject) => {
@@ -54,7 +45,7 @@ export default class DevonInstancesService implements SaveDetails {
           .map((ide) => ide.ideConfig.basepath)
           .map((basepath) => this.formatPathFromWindows(basepath))
           .join('\n') + '\n';
-      fs.writeFile(this.idePathsFilePath, formattedData, (err) => {
+      fs.writeFile(idePathsFilePath, formattedData, (err) => {
         if (err) reject(err);
         else resolve('Successs');
       });
@@ -115,7 +106,7 @@ export default class DevonInstancesService implements SaveDetails {
   /* Finding all DEVON instances created by USER */
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
-      fs.readFile(this.idePathsFilePath, 'utf8', (err, data) => {
+      fs.readFile(idePathsFilePath, 'utf8', (err, data) => {
         if (err) reject('No instances found');
         this.devonfwInstance(data)
           .then((instances: DevonfwConfig) => resolve(instances))
@@ -192,7 +183,7 @@ export default class DevonInstancesService implements SaveDetails {
     creating a json file with project details
   */
   getData(data: ProjectDetails, writeFile: (data) => void): void {
-    fs.exists(this.devonFilePath, (exists: boolean) => {
+    fs.exists(devonFilePath, (exists: boolean) => {
       if (exists) {
         writeFile(data);
       } else {
@@ -223,9 +214,7 @@ export default class DevonInstancesService implements SaveDetails {
   /* Writing up project deatils in a JSON file */
   writeFile(data: ProjectDetails[], flag?: { flag: string }): void {
     const optional = flag ? flag : '';
-    fs.writeFile(this.devonFilePath, JSON.stringify(data), optional, function (
-      err
-    ) {
+    fs.writeFile(devonFilePath, JSON.stringify(data), optional, function (err) {
       if (err) throw err;
     });
   }
@@ -233,7 +222,7 @@ export default class DevonInstancesService implements SaveDetails {
   /* Reading out project deatils which user has created */
   readFile(): Promise<ProjectDetails[]> {
     return new Promise<ProjectDetails[]>((resolve, reject) => {
-      fs.readFile(this.devonFilePath, (error, data) => {
+      fs.readFile(devonFilePath, (error, data) => {
         if (error) reject(resolve([]));
         resolve(data ? JSON.parse(data.toString()) : []);
       });
