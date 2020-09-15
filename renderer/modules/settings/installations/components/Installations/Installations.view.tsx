@@ -54,7 +54,7 @@ export default function InstallationsView(
             INSTALLED TOOLS
           </Typography>
           <Typography gutterBottom variant="h5" component="h2">
-            Devon IDE Versions
+            devonfw IDE versions
           </Typography>
         </div>
         <TableContainer component={Paper}>
