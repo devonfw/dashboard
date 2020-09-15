@@ -1,5 +1,6 @@
 import { IdeVersions } from '../../../../models/devonfw-dists.model';
 import formatDate from '../../../shared/utils/date-formatter';
+import fetch from 'cross-fetch';
 
 const DEVONFW_VERSIONS_URL =
   'https://search.maven.org/classic/solrsearch/select?q=g%3A%22com.devonfw.tools.ide%22%20AND%20a%3A%22devonfw-ide-scripts%22&rows=20&core=gav&wt=json';

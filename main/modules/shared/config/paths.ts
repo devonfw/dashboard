@@ -1,20 +1,10 @@
 import path from 'path';
 import platform from 'os';
 
-export const licensePath = path.resolve(
-  platform.homedir(),
-  '.devon',
-  '.license.agreement'
-);
+const DEVON_DIR = path.resolve(platform.homedir(), '.devon');
 
-export const devonFilePath = path.resolve(
-  platform.homedir(),
-  '.devon',
-  'projectinfo.json'
-);
+export const idePathsFilePath = path.resolve(DEVON_DIR, 'ide-paths');
 
-export const idePathsFilePath = path.resolve(
-  process.env.USERPROFILE,
-  '.devon',
-  'ide-paths'
-);
+export const devonFilePath = path.resolve(DEVON_DIR, 'projectinfo.json');
+
+export const licensePath = path.resolve(DEVON_DIR, '.license.agreement');

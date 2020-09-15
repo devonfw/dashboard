@@ -107,10 +107,10 @@ export default class DevonInstancesService implements SaveDetails {
   getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
     const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
       fs.readFile(idePathsFilePath, 'utf8', (err, data) => {
-        if (err) reject('No instances found');
+        if (err) reject({ distributions: [] });
         this.devonfwInstance(data)
           .then((instances: DevonfwConfig) => resolve(instances))
-          .catch(() => reject('No instances found'));
+          .catch(() => reject({ distributions: [] }));
       });
     });
     return instancesDirReader;
@@ -145,22 +145,20 @@ export default class DevonInstancesService implements SaveDetails {
     let paths: string[] = [];
     const instances: DevonfwConfig = { distributions: [] };
     if (data) {
-      paths = data.split('\n');
+      paths = data.split('\n').filter((path) => path);
       for (let singlepath of paths) {
-        if (singlepath) {
-          if (process.platform === 'win32') {
-            singlepath = this.formatPathToWindows(singlepath);
-          }
-          try {
-            const { stdout } = await utilExec('devon -v', {
-              cwd: path.resolve(singlepath, 'scripts'),
-            });
-            instances.distributions.push(
-              this.getIdeDistribution(singlepath, stdout)
-            );
-          } catch (error) {
-            console.log(error);
-          }
+        if (process.platform === 'win32') {
+          singlepath = this.formatPathToWindows(singlepath);
+        }
+        try {
+          const { stdout } = await utilExec('devon -v', {
+            cwd: path.resolve(singlepath, 'scripts'),
+          });
+          instances.distributions.push(
+            this.getIdeDistribution(singlepath, stdout)
+          );
+        } catch (error) {
+          console.log(error);
         }
       }
     }
