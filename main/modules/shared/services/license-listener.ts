@@ -17,7 +17,7 @@ export default class LicenseListener {
   }
 
   private notifyAcceptState(): void {
-    this.sender.send(CHANNEL, this.isLicenseAccepted());
+    this.sender.send(CHANNEL, { error: false, body: this.isLicenseAccepted() });
   }
 
   private isLicenseAccepted(): boolean {

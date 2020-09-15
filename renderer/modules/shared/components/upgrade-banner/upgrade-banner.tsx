@@ -1,7 +1,7 @@
 import { useUpgradeBannerStyles } from './upgrade-banner.styles';
 import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
-import DownloadDevonfw from '../../../home/components/download-devonfw/download-devonfw';
+import DownloadDevonfw from '../download-devonfw/download-devonfw';
 
 export interface UpgradeBannerProps {
   version: string;

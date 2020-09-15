@@ -16,7 +16,7 @@ import AcceptButton from '../../../../shared/components/accept-button/accept-but
 import useInstallationsStyles from './installations.styles';
 import Changelog from '../changelog/changelog';
 import Spinner from '../../../../shared/components/spinner/spinner';
-import DownloadDevonfw from '../../../../home/components/download-devonfw/download-devonfw';
+import DownloadDevonfw from '../../../../shared/components/download-devonfw/download-devonfw';
 
 interface InstallationsViewProps {
   query: string;

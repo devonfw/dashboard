@@ -22,8 +22,10 @@ export default function LicenseContent(
 
   useEffect(() => {
     new Renderer()
-      .send('check-license')
-      .then((accepted: boolean) => setNext(accepted))
+      .send<boolean>('check-license')
+      .then((accepted: boolean) => {
+        setNext(accepted);
+      })
       .catch(() => setNext(false));
   }, []);
 
