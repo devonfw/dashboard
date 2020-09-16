@@ -1,3 +1,5 @@
+import fetch from 'cross-fetch';
+
 const urlForVersion = (version: string) =>
   `https://raw.githubusercontent.com/devonfw/ide/release/${version}/CHANGELOG.asciidoc`;
 
