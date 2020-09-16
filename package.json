@@ -1,8 +1,11 @@
 {
   "name": "devonfw-dashboard",
-  "productName": "devonfw dashboard",
   "version": "1.0.0",
-  "author": "devonfw core team",
+  "author": {
+    "name": "devonfw core team",
+    "email": "test@devonfw.com",
+    "url": "https://devonfw.com/"
+  },
   "description": "devonfw dashboard",
   "main": "main/out/index.js",
   "license": "Apache-2.0",
@@ -11,19 +14,25 @@
     "url": "https://github.com/devonfw/devonfw-dashboard"
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "start": "tsc-watch -p main --onSuccess \"npm run start-no-reload\"",
     "start-no-reload": "npm run build-main && electron .",
     "build": "npm run build-main && npm run build-renderer",
     "build-main": "tsc -p main",
     "build-renderer": "next build renderer && next export renderer",
     "dist": "npm run build && electron-builder",
+    "dist-linux": "npm run dist -- --linux",
+    "dist-macos": "npm run dist -- --mac",
+    "dist-win": "npm run dist -- --win",
     "dist-unpacked": "npm run dist -- --dir",
     "lint": "eslint main/**/*.ts renderer/**/*.ts renderer/**/*.tsx",
     "lint-fix": "npm run lint -- --fix",
     "prettier-format": "prettier --config .prettierrc \"./main/**/*.ts\" \"./renderer/**/*.{ts,tsx}\" --write"
   },
   "build": {
-    "asar": false,
+    "asar": true,
+    "productName": "devonfw-dashboard",
+    "appId": "com.devonfw.devonfw-dashboard",
     "icon": "resources/devon_logo.png",
     "files": [
       "main/out",
@@ -31,6 +40,22 @@
     ],
     "directories": {
       "buildResources": "resources"
+    },
+    "linux": {
+      "maintainer": "devonfw core team",
+      "target": [
+        "snap"
+      ]
+    },
+    "mac": {
+      "target": [
+        "default"
+      ]
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
     }
   },
   "husky": {
