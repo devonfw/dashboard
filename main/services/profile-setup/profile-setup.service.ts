@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import platform from 'os';
 import { UserProfile } from '../../modules/shared/models/user-profile';
+import { profileFilePath } from '../../modules/shared/config/paths';
 
 const defaultUser: UserProfile = {
   name: 'Unknown User',
@@ -11,12 +11,6 @@ const defaultUser: UserProfile = {
 };
 
 export class ProfileSetupService {
-  private profileFilePath = path.resolve(
-    platform.homedir(),
-    '.devon',
-    'dashboard-profile.json'
-  );
-
   createDefaultProfile(): Promise<string> {
     return this.setProfile(defaultUser);
   }
@@ -37,7 +31,7 @@ export class ProfileSetupService {
 
   doesProfileExist(): Promise<boolean> {
     return new Promise((resolve) => {
-      fs.access(this.profileFilePath, fs.constants.F_OK, (err) => {
+      fs.access(profileFilePath, fs.constants.F_OK, (err) => {
         if (err) resolve(false);
         resolve(true);
       });
@@ -49,7 +43,7 @@ export class ProfileSetupService {
     const profile = JSON.stringify(validatedProfile);
 
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.profileFilePath, profile, (err) => {
+      fs.writeFile(profileFilePath, profile, (err) => {
         if (err) reject('error: ' + err);
         resolve('success');
       });
@@ -58,7 +52,7 @@ export class ProfileSetupService {
 
   getProfile(): Promise<UserProfile> {
     return new Promise((resolve) => {
-      fs.readFile(this.profileFilePath, (err, data) => {
+      fs.readFile(profileFilePath, (err, data) => {
         if (err) resolve(defaultUser);
         const profileData = data ? JSON.parse(data.toString()) : defaultUser;
         resolve(profileData);
