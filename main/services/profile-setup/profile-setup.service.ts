@@ -21,7 +21,7 @@ export class ProfileSetupService {
     const profile = this.validateProfile(profileData);
 
     try {
-      await this.profileFile.write(profile);
+      await this.profileFile.writeObject(profile);
       return 'success';
     } catch (err) {
       throw new Error('error:' + err);
@@ -30,7 +30,7 @@ export class ProfileSetupService {
 
   async getProfile(): Promise<UserProfile> {
     try {
-      const profile = await this.profileFile.read<UserProfile>();
+      const profile = await this.profileFile.readObject<UserProfile>();
       return profile;
     } catch (_) {
       return defaultUser;
@@ -48,7 +48,7 @@ export class ProfileSetupService {
   async getBase64Img(src: string): Promise<string> {
     try {
       const image = new File(src);
-      const data = await image.readAsBuffer();
+      const data = await image.read();
       const ext = path.extname(src).substring(1);
       const base64Img = `data:image/${ext};base64,${data.toString('base64')}`;
       return base64Img;

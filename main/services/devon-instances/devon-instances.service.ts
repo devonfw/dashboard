@@ -18,6 +18,7 @@ import {
   idePathsFilePath,
   devonFilePath,
 } from '../../modules/shared/config/paths';
+import File from '../../modules/shared/classes/file';
 
 const utilExec = util.promisify(child.exec);
 const utilReaddir = util.promisify(fs.readdir);
@@ -25,6 +26,12 @@ const rmdir = util.promisify(fs.rmdir);
 const unlink = util.promisify(fs.unlink);
 
 export default class DevonInstancesService implements SaveDetails {
+  private idePathsFile: File;
+
+  constructor() {
+    this.idePathsFile = new File(idePathsFilePath);
+  }
+
   /* Finding out total count of projects available in each DEVON ide instances */
   getProjectsCount(): Promise<number> {
     return new Promise<number>(async (resolve, reject) => {
@@ -38,18 +45,19 @@ export default class DevonInstancesService implements SaveDetails {
     });
   }
 
-  updateUserCreatedDevonInstances(data: IdeDistribution[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const formattedData =
-        data
-          .map((ide) => ide.ideConfig.basepath)
-          .map((basepath) => this.formatPathFromWindows(basepath))
-          .join('\n') + '\n';
-      fs.writeFile(idePathsFilePath, formattedData, (err) => {
-        if (err) reject(err);
-        else resolve('Successs');
-      });
-    });
+  async updateUserCreatedDevonInstances(
+    data: IdeDistribution[]
+  ): Promise<string> {
+    try {
+      const paths = data.map((ide) => ide.ideConfig.basepath);
+      const formatted = paths.map((path) => this.formatPathFromWindows(path));
+      const storablePaths = formatted.join('\n') + '\n';
+
+      await this.idePathsFile.write(storablePaths);
+      return 'Successs';
+    } catch (err) {
+      throw new Error('Unable to update instances');
+    }
   }
 
   formatPathToWindows(dirPath: string): string {
@@ -104,16 +112,15 @@ export default class DevonInstancesService implements SaveDetails {
   }
 
   /* Finding all DEVON instances created by USER */
-  getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
-    const instancesDirReader = new Promise<DevonfwConfig>((resolve, reject) => {
-      fs.readFile(idePathsFilePath, 'utf8', (err, data) => {
-        if (err) reject({ distributions: [] });
-        this.devonfwInstance(data)
-          .then((instances: DevonfwConfig) => resolve(instances))
-          .catch(() => reject({ distributions: [] }));
-      });
-    });
-    return instancesDirReader;
+  async getAllUserCreatedDevonInstances(): Promise<DevonfwConfig> {
+    try {
+      const data = await this.idePathsFile.read();
+      const instances = await this.devonfwInstance(data.toString('utf8'));
+
+      return instances;
+    } catch (err) {
+      return { distributions: [] };
+    }
   }
 
   async getInstalledVersions(): Promise<string[]> {

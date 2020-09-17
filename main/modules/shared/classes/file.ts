@@ -16,26 +16,29 @@ export default class File {
     });
   }
 
-  write<T>(data: T): Promise<NodeJS.ErrnoException | void> {
+  writeObject<T>(data: T): Promise<NodeJS.ErrnoException | void> {
     const dataJSON = JSON.stringify(data);
+    return this.write(dataJSON);
+  }
 
+  write(data: string): Promise<NodeJS.ErrnoException | void> {
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.path, dataJSON, (err) => {
+      fs.writeFile(this.path, data, (err) => {
         if (err) reject(err);
         resolve();
       });
     });
   }
 
-  read<T>(): Promise<T> {
+  readObject<T>(): Promise<T> {
     return new Promise((resolve, reject) => {
-      this.readAsBuffer()
+      this.read()
         .then((data: Buffer) => resolve(JSON.parse(data.toString())))
         .catch((err) => reject(err));
     });
   }
 
-  readAsBuffer(): Promise<Buffer> {
+  read(): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       fs.readFile(this.path, (err, data) => {
         if (err) reject('file not found');
