@@ -25,7 +25,7 @@ interface InstallationsViewProps {
   page: number;
   rowsPerPage: number;
   queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
-  uninstallHandler: (path?: string) => void;
+  actionHandler: (action: 'uninstall' | 'update', path?: string) => void;
   viewIdeHandler: (idePath?: string) => void;
   handlePageChange: (event: unknown, newPage: number) => void;
   handleRowsPerPageChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -104,7 +104,12 @@ export default function InstallationsView(
                     ) : null}
                   </TableCell>
                   <TableCell align="center">
-                    <AcceptButton disabled={!installation.path}>
+                    <AcceptButton
+                      disabled={!installation.path}
+                      onClick={() =>
+                        props.actionHandler('update', installation.path)
+                      }
+                    >
                       UPDATE
                     </AcceptButton>
                   </TableCell>
@@ -116,7 +121,7 @@ export default function InstallationsView(
                     ) : (
                       <AcceptButton
                         onClick={() =>
-                          props.uninstallHandler(installation.path)
+                          props.actionHandler('uninstall', installation.path)
                         }
                       >
                         UNINSTALL

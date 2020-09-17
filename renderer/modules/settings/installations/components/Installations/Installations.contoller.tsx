@@ -16,13 +16,20 @@ interface TableState {
   rowsPerPage: number;
 }
 
+interface ConfirmDialogState {
+  open: boolean;
+  action: 'uninstall' | 'update' | null;
+  dialogTitle: string;
+  dialogContent: string;
+}
+
 interface InstallationsState {
   query?: string;
   installations: DevonIdeScript[];
   tableState?: TableState;
   loading: boolean;
-  openConfirmDialog?: boolean;
-  uninstallIdePath?: string;
+  selectedPath?: string;
+  confirmDialogState?: ConfirmDialogState;
 }
 
 export default class Installations extends Component<
@@ -37,18 +44,19 @@ export default class Installations extends Component<
       rowsPerPage: 5,
     },
     loading: false,
-    openConfirmDialog: false,
-    uninstallIdePath: '',
+    selectedPath: '',
+    confirmDialogState: {
+      open: false,
+      action: null,
+      dialogTitle: '',
+      dialogContent: '',
+    },
   };
   allInstallations: DevonIdeScript[] = [];
 
   constructor(props: unknown) {
     super(props);
   }
-
-  dialogTitle = 'Uninstalling IDE';
-  dialogContent =
-    'Devonfw Dashboard will no longer keep track of this IDE. Are you sure?';
 
   componentDidMount(): void {
     global.ipcRenderer.send('fetch:devonIdeScripts');
@@ -88,17 +96,39 @@ export default class Installations extends Component<
     this.setState({ query, installations, tableState });
   };
 
-  confirmUninstall = (idePath: string): void => {
-    this.setState({ openConfirmDialog: true, uninstallIdePath: idePath });
+  confirmAction = (
+    action: 'uninstall' | 'update',
+    selectedPath: string
+  ): void => {
+    const confirmDialogTitle =
+      action === 'uninstall' ? 'Uninstalling IDE' : 'Updating IDE';
+    const confirmDialogContent =
+      action === 'uninstall'
+        ? 'Devonfw Dashboard will no longer keep track of this IDE. Are you sure?'
+        : 'Devonfw Dashboard will update settings and software for this IDE. Proceed?';
+    const confirmDialogState: ConfirmDialogState = {
+      open: true,
+      action: action,
+      dialogTitle: confirmDialogTitle,
+      dialogContent: confirmDialogContent,
+    };
+    this.setState({ confirmDialogState, selectedPath });
   };
 
   handleCloseDialog = (confirm: boolean): void => {
-    this.setState({ openConfirmDialog: false });
-    if (confirm) this.uninstallIde(this.state.uninstallIdePath);
-    else this.setState({ uninstallIdePath: '' });
+    const confirmDialogState: ConfirmDialogState = {
+      ...this.state.confirmDialogState,
+      open: false,
+    };
+    this.setState({ confirmDialogState });
+    if (confirm) {
+      this.state.confirmDialogState.action === 'uninstall'
+        ? this.uninstallIde(this.state.selectedPath)
+        : this.updateIde(this.state.selectedPath);
+    } else this.setState({ selectedPath: '' });
   };
 
-  uninstallIde = (path?: string): void => {
+  uninstallIde = (path: string): void => {
     global.ipcRenderer
       .invoke('uninstall:ide', path)
       .then((success: boolean) => {
@@ -106,13 +136,17 @@ export default class Installations extends Component<
           this.setState({
             installations: [],
             loading: true,
-            uninstallIdePath: '',
+            selectedPath: '',
           });
           this.allInstallations = [];
           global.ipcRenderer.send('fetch:devonIdeScripts');
           global.ipcRenderer.send('find:devonfwInstances');
         }
       });
+  };
+
+  updateIde = (path: string): void => {
+    console.log('Updating', path);
   };
 
   handleViewIde = (idePath: string): void => {
@@ -145,15 +179,15 @@ export default class Installations extends Component<
           page={this.state.tableState.page}
           rowsPerPage={this.state.tableState.rowsPerPage}
           queryHandler={this.queryHandler}
-          uninstallHandler={this.confirmUninstall}
+          actionHandler={this.confirmAction}
           viewIdeHandler={this.handleViewIde}
           handlePageChange={this.handlePageChange}
           handleRowsPerPageChange={this.handleRowsPerPageChange}
         ></InstallationsView>
         <ConfirmDialog
-          title={this.dialogTitle}
-          content={this.dialogContent}
-          openDialog={this.state.openConfirmDialog}
+          title={this.state.confirmDialogState.dialogTitle}
+          content={this.state.confirmDialogState.dialogContent}
+          openDialog={this.state.confirmDialogState.open}
           onClose={this.handleCloseDialog}
         ></ConfirmDialog>
       </>
