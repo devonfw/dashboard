@@ -36,6 +36,7 @@ const theme = createMuiTheme({
         maxWidth: 500,
         fontSize: '0.75rem',
         borderRadius: '8px',
+        boxShadow: '0px 5px 16px 2px rgba(0, 0, 0, 0.4)',
       },
     },
     MuiDialogTitle: {

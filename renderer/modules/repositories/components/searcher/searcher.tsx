@@ -9,12 +9,14 @@ import LinkOpenerService from '../../../shared/services/link-opener/link-opener.
 import SearchCard from '../search-card/search-card';
 import Spinner from '../../../shared/components/spinner/spinner';
 import { Box } from '@material-ui/core';
+import Alerts from '../../../shared/components/alerts/alerts';
 
 const DELAY_TIME = 1000;
 interface SearcherState {
   query?: string;
   loading?: boolean;
   repositories?: Repository[];
+  showAlert: boolean;
 }
 
 interface SearcherProps {
@@ -25,7 +27,7 @@ export class Searcher extends Component<SearcherProps, SearcherState> {
   timeout: NodeJS.Timeout;
   githubService: GithubService;
   linkOpener: LinkOpenerService;
-  state = { loading: false, query: '', repositories: [] };
+  state = { loading: false, query: '', repositories: [], showAlert: false };
 
   constructor(props: SearcherProps) {
     super(props);
@@ -62,7 +64,10 @@ export class Searcher extends Component<SearcherProps, SearcherState> {
   };
 
   handleCopy = (url: string): (() => void) => {
-    return () => navigator.clipboard.writeText(url);
+    return () =>
+      navigator.clipboard.writeText(url).then(() => {
+        this.setState({ showAlert: true });
+      });
   };
 
   render(): JSX.Element {
@@ -96,6 +101,12 @@ export class Searcher extends Component<SearcherProps, SearcherState> {
             ))
           )}
         </Box>
+        <Alerts
+          close={() => this.setState({ showAlert: false })}
+          alertSeverity="success"
+          message="URL copied"
+          operation={this.state.showAlert}
+        ></Alerts>
       </>
     );
   }
