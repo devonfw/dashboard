@@ -17,6 +17,7 @@ import useInstallationsStyles from './installations.styles';
 import Changelog from '../changelog/changelog';
 import Spinner from '../../../../shared/components/spinner/spinner';
 import DownloadDevonfw from '../../../../shared/components/download-devonfw/download-devonfw';
+import UpdateIde from '../update-ide/update-ide';
 
 interface InstallationsViewProps {
   query: string;
@@ -25,7 +26,7 @@ interface InstallationsViewProps {
   page: number;
   rowsPerPage: number;
   queryHandler: (event: ChangeEvent<{ value: unknown }>) => void;
-  uninstallHandler: (path?: string) => void;
+  actionHandler: (action: 'uninstall' | 'update', path?: string) => void;
   viewIdeHandler: (idePath?: string) => void;
   handlePageChange: (event: unknown, newPage: number) => void;
   handleRowsPerPageChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -104,9 +105,7 @@ export default function InstallationsView(
                     ) : null}
                   </TableCell>
                   <TableCell align="center">
-                    <AcceptButton disabled={!installation.path}>
-                      UPDATE
-                    </AcceptButton>
+                    <UpdateIde path={installation.path || ''}></UpdateIde>
                   </TableCell>
                   <TableCell align="center">
                     {installation.url ? (
@@ -116,7 +115,7 @@ export default function InstallationsView(
                     ) : (
                       <AcceptButton
                         onClick={() =>
-                          props.uninstallHandler(installation.path)
+                          props.actionHandler('uninstall', installation.path)
                         }
                       >
                         UNINSTALL

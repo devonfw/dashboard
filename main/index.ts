@@ -34,6 +34,7 @@ import ChangelogListener from './modules/settings/installed-versions/services/li
 import DownloadListener from './modules/shared/services/download-listener';
 import InstallIdeListener from './modules/shared/services/install-ide-listener';
 import LicenseListener from './modules/shared/services/license-listener';
+import UpdateIdeListener from './modules/settings/installed-versions/services/listeners/update-ide.listener';
 
 let mainWindow: BrowserWindow;
 // Prepare the renderer once the app is ready
@@ -168,6 +169,8 @@ new OpenProjectIDEListener(new DevonInstancesService()).listen();
 new DevonIdeProjectsListener(new DevonInstancesService()).listen();
 
 new ChangelogListener().listen();
+
+new UpdateIdeListener().listen();
 
 /* terminal service */
 const terminalService = new TerminalService();
