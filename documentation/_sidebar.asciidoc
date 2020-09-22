@@ -1,7 +1,7 @@
 === devonfw dashboard 
-** link:landing-page[Landing page]
-** link:home-page[Home]
-** link:projects-page[Projects]
-** link:repositories-page[Repositories]
-** link:wiki-page[Wiki]
-** link:settings-page[Settings]
+** link:landing-page.asciidoc[Landing page]
+** link:home-page.asciidoc[Home]
+** link:projects-page.asciidoc[Projects]
+** link:repositories-page.asciidoc[Repositories]
+** link:wiki-page.asciidoc[Wiki]
+** link:settings-page.asciidoc[Settings]
