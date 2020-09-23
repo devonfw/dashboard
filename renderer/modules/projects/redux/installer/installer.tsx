@@ -4,6 +4,8 @@ import { StepperContext } from '../stepper/stepperContext';
 import { InstallModulesActionData } from '../stepper/actions/install-modules-action';
 import { useContext } from 'react';
 
+const MAX_MESSAGES = 50;
+
 export interface IInstallerContext {
   logMessages: string[];
   triggerInstallation: (path: string) => void;
@@ -27,7 +29,14 @@ export function InstallerProvider(props: InstallerProviderProps): JSX.Element {
     setLogMessages([]);
     const observable = messageSender.installModules(path);
     observable.subscribe(
-      (message) => setLogMessages((prev) => [...prev, message]),
+      (message) =>
+        setLogMessages((prev) => {
+          const messages = [...prev, message];
+          if (prev.length > MAX_MESSAGES) {
+            messages.shift();
+          }
+          return messages;
+        }),
       (err) => setLogMessages((prev) => [...prev, err]),
       (finishedWithError) => {
         dispatch(new InstallModulesActionData(false, !finishedWithError));
