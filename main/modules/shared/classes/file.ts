@@ -1,19 +1,16 @@
-import fs from 'fs';
+import FileText from './file-text';
 
 export default class File {
   path: string;
+  fileText: FileText;
 
   constructor(absolutePath: string) {
     this.path = absolutePath;
+    this.fileText = new FileText(this.path);
   }
 
   exists(): Promise<boolean> {
-    return new Promise((resolve) => {
-      fs.access(this.path, fs.constants.F_OK, (err) => {
-        if (err) resolve(false);
-        resolve(true);
-      });
-    });
+    return this.fileText.exists();
   }
 
   writeObject<T>(data: T): Promise<NodeJS.ErrnoException | void> {
@@ -22,12 +19,7 @@ export default class File {
   }
 
   write(data: string): Promise<NodeJS.ErrnoException | void> {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(this.path, data, (err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
+    return this.fileText.write(data);
   }
 
   readObject<T>(): Promise<T> {
@@ -39,12 +31,6 @@ export default class File {
   }
 
   read(): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      fs.readFile(this.path, (err, data) => {
-        if (err) reject('file not found');
-        if (!data) reject('empty file');
-        resolve(data);
-      });
-    });
+    return this.fileText.read();
   }
 }
