@@ -15,7 +15,7 @@ export default class UpdateIdeService {
   ) {}
 
   update(): void {
-    this.updateProcess = exec('devon ide update', {
+    this.updateProcess = exec('./devon ide update', {
       cwd: path.resolve(this.options.path, 'scripts'),
     });
     this.updateProcess.stdout.on('data', (data) => {
