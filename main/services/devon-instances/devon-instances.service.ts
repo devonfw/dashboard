@@ -158,7 +158,7 @@ export default class DevonInstancesService implements SaveDetails {
           singlepath = this.formatPathToWindows(singlepath);
         }
         try {
-          const { stdout } = await utilExec('devon -v', {
+          const { stdout } = await utilExec('./devon -v', {
             cwd: path.resolve(singlepath, 'scripts'),
           });
           instances.distributions.push(
