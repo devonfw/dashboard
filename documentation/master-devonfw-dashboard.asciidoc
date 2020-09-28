@@ -2,24 +2,24 @@
 
 == Landing page
 
-include::landing-page.asciidoc[leveloffset=2]
+include::landing-page[leveloffset=2]
 
 == Home
 
-include::home-page.asciidoc[leveloffset=2]
+include::home-page[leveloffset=2]
 
 == Projects
 
-include::projects-page.asciidoc[leveloffset=2]
+include::projects-page[leveloffset=2]
 
 == Repositories
 
-include::repositories-page.asciidoc[leveloffset=2]
+include::repositories-page[leveloffset=2]
 
 == Wiki
 
-include::wiki-page.asciidoc[leveloffset=2]
+include::wiki-page[leveloffset=2]
 
 == Settings
 
-include::settings-page.asciidoc[leveloffset=2]
+include::settings-page[leveloffset=2]
