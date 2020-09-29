@@ -13,12 +13,15 @@ import {
   ProjectDetails,
 } from '../../models/project-details.model';
 import { SaveDetails } from './save-details';
-import { exec } from 'child_process';
 import {
   idePathsFilePath,
   devonFilePath,
 } from '../../modules/shared/config/paths';
 import File from '../../modules/shared/classes/file';
+import { EclipseCommand } from '../../modules/projects/classes/commands/ide-commands/eclipse-command';
+import { VSCodeCommand } from '../../modules/projects/classes/commands/ide-commands/vscode-command';
+import { Command } from '../../modules/projects/classes/commands/command';
+import { CommandExecutor } from '../../modules/shared/classes/command-executor';
 
 const utilExec = util.promisify(child.exec);
 const utilReaddir = util.promisify(fs.readdir);
@@ -256,9 +259,9 @@ export default class DevonInstancesService implements SaveDetails {
     ide: string
   ): Promise<ProcessState> {
     try {
-      return await utilExec(this.findCommand(ide), {
-        cwd: project.path,
-      });
+      return await new CommandExecutor()
+        .addCommand(this.buildCommand(ide, project.path))
+        .executeAsPromise();
     } catch (error) {
       console.error(error);
     }
@@ -269,36 +272,30 @@ export default class DevonInstancesService implements SaveDetails {
     ide: string
   ): Promise<ProcessState> {
     return new Promise<ProcessState>((resolve, reject) => {
-      const terminal = exec(this.findCommand(ide), {
-        cwd: project.path,
-      });
-
-      terminal.stdout.on('data', (data) => {
-        resolve({
-          stdout: data.toString(),
-          stderr: '',
-        });
-      });
-
-      terminal.stderr.on('data', (data) => {
-        reject({
-          stdout: '',
-          stderr: data.toString(),
-        });
-      });
-
-      terminal.on('close', () => {
-        resolve(null);
-      });
+      new CommandExecutor()
+        .addCommand(this.buildCommand(ide, project.path))
+        .execute(
+          (data) =>
+            resolve({
+              stdout: data.toString(),
+              stderr: '',
+            }),
+          (data) =>
+            reject({
+              stdout: '',
+              stderr: data.toString(),
+            }),
+          () => resolve(null)
+        );
     });
   }
 
-  findCommand(ide: string): string {
+  buildCommand(ide: string, projectPath: string): Command {
     switch (ide) {
       case 'eclipse':
-        return 'devon eclipse';
+        return new EclipseCommand(projectPath);
       case 'vscode':
-        return 'devon vscode';
+        return new VSCodeCommand(projectPath);
     }
   }
 

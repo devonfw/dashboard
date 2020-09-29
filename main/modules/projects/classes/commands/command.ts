@@ -1,4 +1,4 @@
-import { exec, ChildProcess } from 'child_process';
+import { exec, ChildProcess, ExecException } from 'child_process';
 
 export type OnData = (data: string) => void;
 export type OnError = (data: string) => void;
@@ -16,7 +16,15 @@ export abstract class Command {
     this.setLocation();
     this.setCwd();
     this.build();
-    this.executor = exec(this.built, { cwd: this.cwd });
+    this.executor = exec(
+      this.built,
+      { cwd: this.cwd },
+      (exception: ExecException) => {
+        if (exception) {
+          throw exception;
+        }
+      }
+    );
   }
 
   public subscribe(onData: OnData, onError: OnError, onFinish: OnFinish): void {

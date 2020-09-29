@@ -23,4 +23,29 @@ export class CommandExecutor {
     this.command.execute();
     this.command.subscribe(notifyData, notifyError, notifyFinish);
   }
+
+  executeAsPromise(): Promise<{
+    stderr: string;
+    stdout: string;
+  }> {
+    return new Promise((resolve, reject) => {
+      let stdout = '';
+      let stderr = '';
+
+      try {
+        this.command.execute();
+        this.command.subscribe(
+          (data: string) => (stdout += data),
+          (error: string) => (stderr += error),
+          () =>
+            resolve({
+              stderr,
+              stdout,
+            })
+        );
+      } catch (exception) {
+        return reject(exception.message);
+      }
+    });
+  }
 }

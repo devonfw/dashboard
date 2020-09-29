@@ -1,4 +1,3 @@
-import { Terminal } from '../terminal/terminal';
 import { Command } from '../commands/command';
 import { IpcMainEvent, ipcMain } from 'electron';
 import { ListenerErrorHandler } from './listener-error-handler';
@@ -7,12 +6,10 @@ import { CommandExecutor } from '../../../shared/classes/command-executor';
 type RendererEvent = IpcMainEvent;
 
 export abstract class RendererListener<T> {
-  protected terminal: Terminal | null;
   protected event: RendererEvent;
   protected errorHandler: ListenerErrorHandler;
 
   constructor(private channel: string) {
-    this.terminal = null;
     this.errorHandler = new ListenerErrorHandler();
   }
 

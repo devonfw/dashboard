@@ -34,6 +34,7 @@ import DownloadListener from './modules/shared/services/download-listener';
 import InstallIdeListener from './modules/shared/services/install-ide-listener';
 import LicenseListener from './modules/shared/services/license-listener';
 import UpdateIdeListener from './modules/settings/installed-versions/services/listeners/update-ide.listener';
+import { OpenIdeListener } from './modules/ides/listeners/open-ide-listener';
 
 let mainWindow: BrowserWindow;
 // Prepare the renderer once the app is ready
@@ -144,6 +145,8 @@ function getWorkspaceProject(workspacelocation: string) {
 }
 
 /* Enable services */
+
+new OpenIdeListener().listen();
 
 new InstallListener().listen();
 

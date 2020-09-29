@@ -29,8 +29,22 @@ export default class MessageSenderService extends Renderer {
     return message;
   }
 
-  openIDE(ide: string, cwd?: string): Promise<string> {
-    return super.send<string>('terminal/all-commands', `devon ${ide}`, cwd);
+  openIDE(ide: string, idePath?: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      super.sendMultiple(
+        'ides/open-ide',
+        (res: { status: string; data: string }) => {
+          if (res.status === 'end') {
+            if (res.data === 'error') {
+              reject();
+            } else {
+              resolve();
+            }
+          }
+        },
+        { ide, idePath }
+      );
+    });
   }
 
   installModules(installData: InstallData): ChannelObservable {
