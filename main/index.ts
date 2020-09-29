@@ -14,7 +14,6 @@ import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
-import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
 import {
   getBase64Img,
@@ -146,16 +145,13 @@ function getWorkspaceProject(workspacelocation: string) {
 
 /* Enable services */
 
-new InstallListener(new SpawnTerminalFactory()).listen();
+new InstallListener().listen();
 
 new InstallIdeListener().listen();
 
 new LicenseListener().listen();
 
-new ProjectCreationListener(
-  new SpawnTerminalFactory(),
-  new DevonInstancesService()
-).listen();
+new ProjectCreationListener(new DevonInstancesService()).listen();
 
 new RepositoriesListener().listen();
 

@@ -1,13 +1,11 @@
-import { Command } from '../command';
+import InstallCommand, { InstallCommandData } from './install-command';
 
-export default class PomInstallCommand implements Command {
-  constructor(private cwd: string) {}
-
-  getCwd(): string {
-    return this.cwd;
+export default class PomInstallCommand extends InstallCommand {
+  constructor(data: InstallCommandData) {
+    super(data);
   }
 
-  toString(): string {
-    return `devon mvn clean install`;
+  setArgs(): void {
+    this.args = 'mvn clean install';
   }
 }

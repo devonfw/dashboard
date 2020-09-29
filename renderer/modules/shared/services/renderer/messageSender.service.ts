@@ -7,6 +7,11 @@ interface DialogStatus {
   canceled?: boolean;
 }
 
+export interface InstallData {
+  projectName: string;
+  idePath: string;
+}
+
 export default class MessageSenderService extends Renderer {
   constructor() {
     super();
@@ -28,8 +33,8 @@ export default class MessageSenderService extends Renderer {
     return super.send<string>('terminal/all-commands', `devon ${ide}`, cwd);
   }
 
-  installModules(path: string): ChannelObservable {
-    return this.sendObservable('terminal/install-modules', path);
+  installModules(installData: InstallData): ChannelObservable {
+    return this.sendObservable('terminal/install-modules', installData);
   }
 
   createProject(projectData: ProjectData): ChannelObservable {

@@ -4,7 +4,6 @@ import { ProjectData } from '../commands/project-commands/project';
 import AngularProjectCommand from '../commands/project-commands/angular-project-command';
 import JavaProjectCommand from '../commands/project-commands/java-project-command';
 import NodeProjectCommand from '../commands/project-commands/node-project-command';
-import { TerminalFactory } from '../terminal/terminal-factory';
 import { SaveDetails } from '../../../../services/devon-instances/save-details';
 import { projectDate } from '../../../shared/utils/project-date';
 import * as path from 'path';
@@ -12,11 +11,8 @@ import * as path from 'path';
 export class ProjectCreationListener extends RendererListener<ProjectData> {
   data: ProjectData;
 
-  constructor(
-    terminalFactory: TerminalFactory,
-    private saveProject: SaveDetails
-  ) {
-    super('terminal/create-project', terminalFactory);
+  constructor(private saveProject: SaveDetails) {
+    super('terminal/create-project');
   }
 
   public buildCommand(projectData: ProjectData): Command {
@@ -38,14 +34,12 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
   }
 
   protected onClose(): void {
-    this.terminal.on('close', () => {
-      this.send('end', this.getErrorStatus());
-      this.saveProject.saveProjectDetails({
-        date: projectDate(),
-        name: this.data.name,
-        domain: this.data.type,
-        path: path.join(this.data.path, this.data.name),
-      });
+    super.onClose();
+    this.saveProject.saveProjectDetails({
+      date: projectDate(),
+      name: this.data.name,
+      domain: this.data.type,
+      path: path.join(this.data.path, 'workspaces', this.data.name),
     });
   }
 }

@@ -1,17 +1,13 @@
-import { Command } from '../command';
 import { dataToCommandArgs, ProjectData } from './project';
+import ProjectCommand from './project-command';
 
-export default class AngularProjectCommand implements Command {
-  constructor(public data: ProjectData) {}
-
-  getCwd(): string {
-    return this.data.path;
+export default class AngularProjectCommand extends ProjectCommand {
+  constructor(public data: ProjectData) {
+    super(data);
   }
 
-  toString(): string {
-    const commandArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
-    const generationCommand = `devon ng new ${this.data.name} ${commandArgs}`;
-
-    return generationCommand;
+  setArgs(): void {
+    const extraArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
+    this.args = `ng new ${this.data.name} ${extraArgs}`;
   }
 }

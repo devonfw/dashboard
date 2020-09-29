@@ -158,11 +158,11 @@ export default class DevonInstancesService implements SaveDetails {
           singlepath = this.formatPathToWindows(singlepath);
         }
         try {
-          const { stdout } = await utilExec('./devon -v', {
-            cwd: path.resolve(singlepath, 'scripts'),
-          });
+          const command = path.join(singlepath, 'scripts', 'devon');
+          const commandWithArgs = `${command} -v`;
+          const version = (await utilExec(commandWithArgs)).stdout;
           instances.distributions.push(
-            this.getIdeDistribution(singlepath, stdout)
+            this.getIdeDistribution(singlepath, version.trim())
           );
         } catch (error) {
           console.log(error);
@@ -172,14 +172,14 @@ export default class DevonInstancesService implements SaveDetails {
     return instances;
   }
 
-  getIdeDistribution(singlepath: string, stdout: string): IdeDistribution {
+  getIdeDistribution(basepath: string, version: string): IdeDistribution {
     return {
-      id: singlepath,
+      id: basepath,
       ideConfig: {
-        version: stdout.trim(),
-        basepath: singlepath,
-        commands: path.resolve(singlepath, 'scripts', 'command'),
-        workspaces: path.resolve(singlepath, 'workspaces'),
+        version,
+        basepath,
+        commands: path.resolve(basepath, 'scripts', 'command'),
+        workspaces: path.resolve(basepath, 'workspaces'),
       },
     };
   }

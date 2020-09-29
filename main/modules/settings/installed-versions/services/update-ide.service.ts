@@ -15,9 +15,10 @@ export default class UpdateIdeService {
   ) {}
 
   update(): void {
-    this.updateProcess = exec('./devon ide update', {
-      cwd: path.resolve(this.options.path, 'scripts'),
-    });
+    const command = path.join(this.options.path, 'scripts', 'devon');
+    const commandWithArgs = `${command} ide update`;
+    this.updateProcess = exec(commandWithArgs);
+
     this.updateProcess.stdout.on('data', (data) => {
       if (!this.killed) {
         const processedData = data.toString().trim();
