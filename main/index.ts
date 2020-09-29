@@ -135,7 +135,7 @@ function getDevonInstancesPath() {
 }
 
 function getWorkspaceProject(workspacelocation: string) {
-  readdirPromise(workspacelocation)
+  readdirPromise(join(workspacelocation, 'workspaces'))
     .then((projects: string[]) => {
       mainWindow.webContents.send('get:workspaceProjects', projects);
     })
