@@ -28,7 +28,7 @@ export default function DevonfwIdeSelector(
       'get:devoninstances',
       (_: IpcRendererEvent, instancesPath: InstancePath[]) => {
         if (instancesPath.length > 0) {
-          const instances = instancesPath.map((p) => p.ideConfig.workspaces);
+          const instances = instancesPath.map((p) => p.ideConfig.basepath);
           setDevonIdeInstances(instances);
           selectInstance(instances[0]);
         }

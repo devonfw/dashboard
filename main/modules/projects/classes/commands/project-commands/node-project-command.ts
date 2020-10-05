@@ -1,17 +1,13 @@
 import { dataToCommandArgs, ProjectData } from './project';
-import { Command } from '../command';
+import ProjectCommand from './project-command';
 
-export default class NodeProjectCommand implements Command {
-  constructor(public data: ProjectData) {}
-
-  getCwd(): string {
-    return this.data.path;
+export default class NodeProjectCommand extends ProjectCommand {
+  constructor(public data: ProjectData) {
+    super(data);
   }
 
-  toString(): string {
-    const commandArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
-    const generationCommand = `devon node create ${this.data.name} ${commandArgs}`;
-
-    return generationCommand;
+  setArgs(): void {
+    const extraArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
+    this.args = `node create ${this.data.name} ${extraArgs}`;
   }
 }

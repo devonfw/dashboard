@@ -14,7 +14,6 @@ import { DevonfwConfig, IdeDistribution } from './models/devonfw-dists.model';
 import { ProfileSetupService } from './services/profile-setup/profile-setup.service';
 import { readdirPromise } from './modules/shared/utils/promised';
 import { InstallListener } from './modules/projects/classes/listeners/install-listener';
-import { SpawnTerminalFactory } from './modules/projects/classes/terminal/spawn-terminal-factory';
 import { ProjectCreationListener } from './modules/projects/classes/listeners/project-creation-listener';
 import {
   getBase64Img,
@@ -35,6 +34,7 @@ import DownloadListener from './modules/shared/services/download-listener';
 import InstallIdeListener from './modules/shared/services/install-ide-listener';
 import LicenseListener from './modules/shared/services/license-listener';
 import UpdateIdeListener from './modules/settings/installed-versions/services/listeners/update-ide.listener';
+import { OpenIdeListener } from './modules/ides/listeners/open-ide-listener';
 
 let mainWindow: BrowserWindow;
 // Prepare the renderer once the app is ready
@@ -135,7 +135,7 @@ function getDevonInstancesPath() {
 }
 
 function getWorkspaceProject(workspacelocation: string) {
-  readdirPromise(workspacelocation)
+  readdirPromise(join(workspacelocation, 'workspaces'))
     .then((projects: string[]) => {
       mainWindow.webContents.send('get:workspaceProjects', projects);
     })
@@ -146,16 +146,15 @@ function getWorkspaceProject(workspacelocation: string) {
 
 /* Enable services */
 
-new InstallListener(new SpawnTerminalFactory()).listen();
+new OpenIdeListener().listen();
+
+new InstallListener().listen();
 
 new InstallIdeListener().listen();
 
 new LicenseListener().listen();
 
-new ProjectCreationListener(
-  new SpawnTerminalFactory(),
-  new DevonInstancesService()
-).listen();
+new ProjectCreationListener(new DevonInstancesService()).listen();
 
 new RepositoriesListener().listen();
 

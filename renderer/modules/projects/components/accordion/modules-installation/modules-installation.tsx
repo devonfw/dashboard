@@ -15,12 +15,14 @@ export default function ModulesInstallation(): JSX.Element {
   const { state, dispatch } = useContext(StepperContext);
   const { triggerInstallation } = useContext(InstallerContext);
   const [install, setInstall] = useState<boolean | null>(null);
-  const path = `${state.projectData?.path}/${state.projectData?.name}`;
 
   const proceedInstall = () => {
     setInstall(true);
     dispatch(new InstallModulesActionData(true));
-    triggerInstallation(path);
+    triggerInstallation({
+      projectName: state.projectData.name,
+      idePath: state.projectData.path,
+    });
   };
 
   const cancelInstall = () => {
