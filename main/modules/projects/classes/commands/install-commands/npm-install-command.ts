@@ -1,13 +1,11 @@
-import { Command } from '../command';
+import InstallCommand, { InstallCommandData } from './install-command';
 
-export default class NpmInstallCommand implements Command {
-  constructor(private cwd: string) {}
-
-  getCwd(): string {
-    return this.cwd;
+export default class NpmInstallCommand extends InstallCommand {
+  constructor(data: InstallCommandData) {
+    super(data);
   }
 
-  toString(): string {
-    return `devon npm install`;
+  setArgs(): void {
+    this.args = 'npm install';
   }
 }

@@ -1,21 +1,15 @@
-import { Terminal } from '../terminal/terminal';
-import { TerminalFactory } from '../terminal/terminal-factory';
 import { Command } from '../commands/command';
 import { IpcMainEvent, ipcMain } from 'electron';
 import { ListenerErrorHandler } from './listener-error-handler';
+import { CommandExecutor } from '../../../shared/classes/command-executor';
 
 type RendererEvent = IpcMainEvent;
 
 export abstract class RendererListener<T> {
-  protected terminal: Terminal | null;
   protected event: RendererEvent;
   protected errorHandler: ListenerErrorHandler;
 
-  constructor(
-    private channel: string,
-    private terminalFactory: TerminalFactory
-  ) {
-    this.terminal = null;
+  constructor(private channel: string) {
     this.errorHandler = new ListenerErrorHandler();
   }
 
@@ -32,32 +26,27 @@ export abstract class RendererListener<T> {
   abstract buildCommand(arg: T): Command;
 
   private executeCommand(command: Command): void {
-    this.terminal = this.terminalFactory.createTerminal(command.getCwd());
-    this.onData();
-    this.onError();
-    this.onClose();
-    this.terminal.stdin.write(`${command.toString()} \n`);
-    this.terminal.stdin.end();
+    new CommandExecutor()
+      .addCommand(command)
+      .execute(
+        this.onData.bind(this),
+        this.onError.bind(this),
+        this.onClose.bind(this)
+      );
   }
 
-  protected onData(): void {
-    this.terminal.stdout.on('data', (data) => {
-      this.errorHandler.setSuccess();
-      this.send('data', data);
-    });
+  protected onData(data: string): void {
+    this.errorHandler.setSuccess();
+    this.send('data', data);
   }
 
-  protected onError(): void {
-    this.terminal.stderr.on('data', (data) => {
-      this.errorHandler.setError();
-      this.send('error', data);
-    });
+  protected onError(data: string): void {
+    this.errorHandler.setError();
+    this.send('error', data);
   }
 
   protected onClose(): void {
-    this.terminal.on('close', () => {
-      this.send('end', this.getErrorStatus());
-    });
+    this.send('end', this.getErrorStatus());
   }
 
   protected send(status: string, data: unknown): void {

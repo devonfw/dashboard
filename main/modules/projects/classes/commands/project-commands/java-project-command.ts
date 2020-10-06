@@ -1,17 +1,13 @@
 import { dataToCommandArgs, ProjectData } from './project';
-import { Command } from '../command';
+import ProjectCommand from './project-command';
 
-export default class JavaProjectCommand implements Command {
-  constructor(public data: ProjectData) {}
-
-  getCwd(): string {
-    return this.data.path;
+export default class JavaProjectCommand extends ProjectCommand {
+  constructor(public data: ProjectData) {
+    super(data);
   }
 
-  toString(): string {
-    const commandArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
-    const generationCommand = `devon java create ${commandArgs}`;
-
-    return generationCommand;
+  setArgs(): void {
+    const extraArgs = dataToCommandArgs(this.data.specificArgs).join(' ');
+    this.args = `java create ${extraArgs}`;
   }
 }
