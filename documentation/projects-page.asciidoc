@@ -14,17 +14,17 @@ toc::[]
 :reproducible:
 :source-highlighter: rouge
 
-== Introduction About How Devon IDE manages Projects
+== Introduction About How devonfw IDE manages Projects
 
-- DEVON IDE manages multiple projects that include Angular, JAVA, and Node. +
+- *devonfw IDE* manages multiple projects that include Angular, JAVA, and Node. +
 
-- DEVON IDE provides rich UI for creating multiple projects, abstracting all the functionality which is usually required while creating an application like opening a command terminal, specifying workspace, and executing commands. +
+- *devonfw IDE* provides rich UI for creating multiple projects, abstracting all the functionality which is usually required while creating an application like opening a command terminal, specifying workspace, and executing commands. +
 
-- DEVON IDE makes it easy to see all the projects which are in different DEVON IDE workspace, just by changing the "Devon Instance" dropdown. 
+- *devonfw IDE* makes it easy to see all the projects which are in different devonfw IDE workspace, just by changing the "devonfw Instance" dropdown. 
 
-- DEVON IDE makes it very easy to open a project in a different IDE like Visual Studio or Eclipse respectively just by right click on the Project folder and open option.
+- *devonfw IDE* makes it very easy to open a project in a different IDE like Visual Studio or Eclipse respectively just by right click on the Project folder and open option.
 
-- DEVON IDE also makes it easy to delete the project, explore the project location. +
+- *devonfw IDE* also makes it easy to delete the project, explore the project location. +
 
 = Projects
 
@@ -34,7 +34,7 @@ image::images/project_page/project_screen.png["Project Screen", width="600", lin
 
 == How to create a project
 
-Three main steps are involved in creating any DEVON project. They are: +
+Three main steps are involved in creating any devonfw project. They are: +
 
 *Step 1. Project Type* +
 
@@ -48,7 +48,7 @@ After the *Project type* selection, the second screen will appear for the user t
 
 image::images/project_page/project_data.png["Project Data", width="600", link="images/project_page/project_data.png"]
 
-User can change the *Devonfw IDE* workspace where the project is going to generate, just by changing the option in the *Devonfw Instance* dropdown which is set globally at the top of the project screen. +
+User can change the *devonfw IDE* workspace where the project is going to generate, just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the project screen. +
 
 image::images/home_page/toolbar_workspace.png["Toolbar", width="600", link="images/home_page/toolbar_workspace.png"]
 
@@ -86,9 +86,9 @@ image::images/project_page/project_details_screen.png["Project Details Screen", 
 
 image::images/project_page/project_details_features.png["Project Details Features", width="600", link="images/project_page/project_details_features.png"]
 
-* Project Details screen provides thorough information about the Project Details with respect to *Devonfw IDE* instances. The screen describes as follow ( check the above screen for the reference ): +
+* Project Details screen provides thorough information about the Project Details with respect to *devonfw IDE* instances. The screen describes as follow ( check the above screen for the reference ): +
 
-- It shows the total number of projects available in each *Devonfw IDE*.
+- It shows the total number of projects available in each *devonfw IDE*.
 
 - Filtering and searching the projects.
 
@@ -104,4 +104,4 @@ image::images/project_page/project_details_features.png["Project Details Feature
 
 . Deleting the project.
 
-- Users can see projects of different *Devonfw IDE* workspace just by changing the option in the *Devonfw Instance* dropdown which is set globally at the top of the screen.
+- Users can see projects of different *devonfw IDE* workspace just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the screen.

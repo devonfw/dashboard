@@ -25,11 +25,11 @@ It contains three sections: +
     3. Content +
 
 == Topbar +
-This section is at the top of the page, it contains *Devon Instance* dropdown to select devonfw-ide that can be used as a base for the projects.
+This section is at the top of the page, it contains *devonfw instance* dropdown to select devonfw-ide that can be used as a base for the projects.
 
 image::images/home_page/toolbar.png["Toolbar", width="600", link="images/home_page/toolbar.png"]
 
-Next to the *Devon Instance* dropdown, there is a *quick help* icon, clicking on it will open a popup which gives some tips for how to use Devon Dashboard IDE.
+Next to the *devonfw instance* dropdown, there is a *quick help* icon, clicking on it will open a popup which gives some tips for how to use Devon Dashboard IDE.
 
 image::images/home_page/quick_help.png["Quick Help", width="300", link="images/home_page/quick_help"]
 
@@ -44,11 +44,11 @@ image::images/home_page/sidebar.png["Sidebar", width="200", link="images/home_pa
 == Content Section
 The Content section has also divided into three sections: +
 
-1. A small introduction about the Devonfw IDE +
-2. A button to *Download latest version* of Devonfw IDE +
-3. A "Project" block which shows the total number of Projects which are available in different Devonfw IDE +
+1. A small introduction about the devonfw IDE +
+2. A button to *Download latest version* of devonfw IDE +
+3. A "Project" block which shows the total number of Projects which are available in different devonfw IDE +
 
-== Steps to download and Install Devonfw IDE +
+== Steps to download and Install devonfw IDE +
 *Step 1:* Click on *Download latest version* button which is in the Content section. Check the below screen for the reference.
 
 image::images/home_page/dolwnload_latest_version.png["Download Latest Version", width="600", link="images/home_page/dolwnload_latest_version.png"]
@@ -65,7 +65,7 @@ image::images/home_page/installing_devonfw_download_location_set.png["Download l
 
 image::images/home_page/installing_devonfw_dowload_completes.png["Download Devonfw Completed", width="600", link="images/home_page/installing_devonfw_dowload_completes.png"]
 
-*Step 4:* By Clicking *Next* button in the *Installing Devonfw* pop up, two options are shown: +
+*Step 4:* By Clicking *Next* button in the *Installing devonfw* pop up, two options are shown: +
 1: Select the Git url for the installation setup. +
 2: Skip this process. +
 
