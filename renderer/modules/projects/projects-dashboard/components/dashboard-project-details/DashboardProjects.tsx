@@ -175,7 +175,12 @@ export default function DashboardProjects(
         totalProjects={props.projectsCount}
       />
       <div className={classes.cardsContainer}>
-        <NextLink href="/projects/creation" className={classes.link}>
+        <NextLink
+          href={props.dirPath ? '/projects/creation' : '#'}
+          className={`${classes.link} ${
+            !props.dirPath ? classes.disabled : ''
+          }`}
+        >
           <NewProject />
         </NextLink>
         {props.projects && props.projects.length

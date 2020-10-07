@@ -48,7 +48,9 @@ export default function IdeCard(props: IdeCardProps): JSX.Element {
         </Typography>
       </CardContent>
       <CardActions className={classes.actions}>
-        <AcceptButton onClick={handleOpenIde}>Open</AcceptButton>
+        <AcceptButton disabled={!devonfwIde} onClick={handleOpenIde}>
+          Open
+        </AcceptButton>
         {loading ? <CircularProgress size={28} /> : null}
       </CardActions>
     </Card>

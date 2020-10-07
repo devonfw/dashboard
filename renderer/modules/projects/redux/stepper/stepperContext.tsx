@@ -15,6 +15,7 @@ export interface StepperState {
     success: boolean;
   };
   projectData: ProjectData;
+  accessibility: boolean;
 }
 
 const getInitialState = () => ({
@@ -34,6 +35,7 @@ const getInitialState = () => ({
     path: '',
     specificArgs: {},
   },
+  accessibility: false,
 });
 
 const reducer = (
@@ -84,6 +86,14 @@ const reducer = (
       const projectData = { ...state.projectData };
       projectData.path = state.projectData.path;
       return { ...getInitialState(), projectData: projectData };
+    }
+
+    case 'ACCESSIBILITY': {
+      return { ...state, accessibility: true };
+    }
+
+    case 'RESET_ACCESSIBILITY': {
+      return { ...state, accessibility: false };
     }
 
     default:

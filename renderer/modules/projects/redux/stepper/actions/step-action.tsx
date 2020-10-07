@@ -3,7 +3,9 @@ export type StepActionType =
   | 'PREVIOUS_STEP'
   | 'RESET_STEP'
   | 'SET_CREATING_PROJECT'
-  | 'RESET_STEPPER';
+  | 'RESET_STEPPER'
+  | 'ACCESSIBILITY'
+  | 'RESET_ACCESSIBILITY';
 
 export interface StepAction {
   type: StepActionType;

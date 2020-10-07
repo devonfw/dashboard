@@ -39,5 +39,9 @@ export const useDashboardProjectsStyles = makeStyles((theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
       color: theme.palette.primary.contrastText,
     },
+    disabled: {
+      cursor: 'default',
+      opacity: '0.5',
+    },
   })
 );

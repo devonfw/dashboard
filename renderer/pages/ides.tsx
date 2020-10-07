@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { StepperContext } from '../modules/projects/redux/stepper/stepperContext';
 import Layout from '../modules/shared/hoc/Layout';
@@ -22,7 +22,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function IDES(): JSX.Element {
   const classes = useStyles();
-  const { state } = useContext(StepperContext);
+  const { state, dispatch } = useContext(StepperContext);
+
+  useEffect(() => {
+    if (!state.projectData.path) {
+      dispatch({ type: 'ACCESSIBILITY' });
+    }
+  }, []);
 
   return (
     <Layout>
