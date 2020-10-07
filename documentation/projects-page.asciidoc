@@ -14,42 +14,94 @@ toc::[]
 :reproducible:
 :source-highlighter: rouge
 
+== Introduction About How devonfw IDE manages Projects
+
+- *devonfw IDE* manages multiple projects that include Angular, JAVA, and Node. +
+
+- *devonfw IDE* provides rich UI for creating multiple projects, abstracting all the functionality which is usually required while creating an application like opening a command terminal, specifying workspace, and executing commands. +
+
+- *devonfw IDE* makes it easy to see all the projects which are in different devonfw IDE workspace, just by changing the "devonfw Instance" dropdown. 
+
+- *devonfw IDE* makes it very easy to open a project in a different IDE like Visual Studio or Eclipse respectively just by right click on the Project folder and open option.
+
+- *devonfw IDE* also makes it easy to delete the project, explore the project location. +
+
 = Projects
 
-Clicking on *Projects* on the sidebar allows to navigate to the projects window, that helps you manage your current projects and create new ones.
+Click on the *Projects* link on the sidebar to navigate to the project's screen. The screen looks simple and describes more about creating projects. +
 
-== Your projects
+image::images/project_page/project_screen.png["Project Screen", width="600", link="images/project_page/project_screen.png"]
 
-Here are the different projects that you have in your machine. You can open them with your favorite IDE, show its enclosing folder or delete them.
+== How to create a project
 
+Three main steps are involved in creating any devonfw project. They are: +
 
-Also, you can filter them by different criteria.
+*Step 1. Project Type* +
 
-Clicking on *Add new project* will get you to the creation page.
+It is the first step where the user has to choose any one of technologies like *JAVA*, *Angular*, or *Node* and click the *Next* button for the further steps.
 
-== Project creation
+image::images/project_page/project_type.png["Project Type", width="600", link="images/project_page/project_type.png"]
 
-The project creation is dividen in tree simple steps:
+*Step 2. Project Data* +
 
-=== 1. Project type
+After the *Project type* selection, the second screen will appear for the user to fill up all the required fields. Once the user entered all the required fields, then the *Next* button will enable for the final step. +
 
-Here you can choose the technology used (Angular, Java, Node, ...).
-You can click *back* to go back to your projects.
+image::images/project_page/project_data.png["Project Data", width="600", link="images/project_page/project_data.png"]
 
-=== 2. Project data
+User can change the *devonfw IDE* workspace where the project is going to generate, just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the project screen. +
 
-Once the technology has been set, it is necessary to add some data depending to the project. The version of devonfw-ide that is going to be used is the one set on the topbar.
+image::images/home_page/toolbar_workspace.png["Toolbar", width="600", link="images/home_page/toolbar_workspace.png"]
 
-=== 3. Execution
+*Step 3. Execution* +
 
-In this step starts the creation of the files that conform your projects. It is divided in two sections: Creation and Setup installation.
+The execution step takes all the user entered data from the *Project Data* step and executes the respective commands to generate the project. +
+
+*Execution* has divided into two sections: +
+- Creation +
+- Setup Installation
 
 ==== 3.1 Creation
 
-Creates only source code. You'll be notified if the creation fails or is a success. If it fails you can retry it.
+* Creates only source code and notify the user if the project creation fails or success.
+
+image::images/project_page/creation.png["Creation", width="600", link="images/project_page/creation.png"]
+
+* In case any network issue or technical issue and the user wants to re-run the *Project execution* process, then the *Retry* button will help to start the process again.
+
+image::images/project_page/retry.png["Retry", width="600", link="images/project_page/retry.png"]
 
 ==== 3.2 Setup installation
 
-Allows you to install the dependencies of your application (maven modules for java, node modules for node, ...). You can *Proceed* or *skip* the installation.
+Allows user to install the dependencies of application (maven modules for java, node modules for node, angular) by clicking *Proceed* button. + 
 
-Click on *Finish* to go back to your projects.
+The installation can be skipped by clicking *cancel* button.
+
+image::images/project_page/installation.png["Installation", width="600", link="images/project_page/installation.png"]
+
+*Step 4.* Click on *Finish* button to go to *Project Details Screen*.
+
+image::images/project_page/project_details_screen.png["Project Details Screen", width="600", link="images/project_page/project_details_screen.png"]
+
+=== Project Details Page
+
+image::images/project_page/project_details_features.png["Project Details Features", width="600", link="images/project_page/project_details_features.png"]
+
+* Project Details screen provides thorough information about the Project Details with respect to *devonfw IDE* instances. The screen describes as follow ( check the above screen for the reference ): +
+
+- It shows the total number of projects available in each *devonfw IDE*.
+
+- Filtering and searching the projects.
+
+- *Add New Project* - For creating a Project.
+
+- Project folder which gives information about the project like which technology the project belongs to, the name of the project, and when it has created. 
+
+- There are many operations that are available on right-click on *Project folder* they are : 
+
+. Opening a project in different IDE ( Visual Studio or Eclipse )
+
+. Enclosing Folder, and
+
+. Deleting the project.
+
+- Users can see projects of different *devonfw IDE* workspace just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the screen.

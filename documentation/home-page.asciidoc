@@ -18,14 +18,65 @@ toc::[]
 
 This is the main page that you will find after your profile creation and the page where you will start from henceforth.
 
-It contains an small introduction, a button to download the latest version and a counter of your projects.
+It contains three sections: +
 
-Click on *Download latest version* to start creating projects.
+    1. Toolbar +
+    2. Sidebar +
+    3. Content +
 
-== Topbar
+== Topbar +
+This section is at the top of the page, it contains *devonfw instance* dropdown to select devonfw-ide that can be used as a base for the projects.
 
-In the bar at the bottom of the page, there is a selector where you can use the devonfw-ide that you want to use as base for your projects.
+image::images/home_page/toolbar.png["Toolbar", width="600", link="images/home_page/toolbar.png"]
 
-== Sidebar
+Next to the *devonfw instance* dropdown, there is a *quick help* icon, clicking on it will open a popup which gives some tips for how to use Devon Dashboard IDE.
 
-The sidebar contains links to access to different sections of the dashboard. There's also a button to update the components inside an specific devonfw-ide version.
+image::images/home_page/quick_help.png["Quick Help", width="300", link="images/home_page/quick_help"]
+
+== Sidebar +
+The sidebar has divided into two sections: +
+
+1. User Profile - Users can see his/her pic, name, and role. +
+2. Links to access to different sections of the dashboard.
+
+image::images/home_page/sidebar.png["Sidebar", width="200", link="images/home_page/sidebar.png"]
+
+== Content Section
+The Content section has also divided into three sections: +
+
+1. A small introduction about the devonfw IDE +
+2. A button to *Download latest version* of devonfw IDE +
+3. A "Project" block which shows the total number of Projects which are available in different devonfw IDE +
+
+== Steps to download and Install devonfw IDE +
+*Step 1:* Click on *Download latest version* button which is in the Content section. Check the below screen for the reference.
+
+image::images/home_page/dolwnload_latest_version.png["Download Latest Version", width="600", link="images/home_page/dolwnload_latest_version.png"]
+
+*Step 2:* By clicking *Download latest version* button, *Installing devonfw* popup will open.
+
+image::images/home_page/installing_devonfw.png["Installing Devonfw", width="600", link="images/home_page/installing_devonfw.png"]
+
+*Step 3:* *Installing devonfw* popup will automatically trigger one more popup to specify the location for downloading Devonfw IDE. Specify the location and click the *Save* button to download. +
+
+image::images/home_page/installing_devonfw_download_location_set.png["Download location popup", width="600", link="images/home_page/installing_devonfw_download_location_set.png"]
+
+*Step 3:* Once the download completes successfully, the *Next* button will be enabled for the further installation process.
+
+image::images/home_page/installing_devonfw_dowload_completes.png["Download Devonfw Completed", width="600", link="images/home_page/installing_devonfw_dowload_completes.png"]
+
+*Step 4:* By Clicking *Next* button in the *Installing devonfw* pop up, two options are shown: +
+1: Select the Git url for the installation setup. +
+2: Skip this process. +
+
+image::images/home_page/installation_options.png["Installation Options", width="600", link="images/home_page/installation_options.png"]
+
+*Step 5:* Select one of the above options. +
+
+- If the selection is *Git url*, then *Configuration file url* should be filled in the input box and needs to click *Next* button to start the further installation process. +
+
+- In case the user doesn't have *Git url*, then simply *Skip the process* and click the *Next* button to start the further installation process.
+
+*Step 6*: Click on the *Next* button for the final installation process. Wait for some time to complete the installation setup. Once the installation setup completes, the *Close* button will appear. Just click on it and go to the specified folder location.
+
+image::images/home_page/installation_setup.png["Installation Setup", width="600", link="images/home_page/installation_setup.png"]
