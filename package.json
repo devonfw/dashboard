@@ -78,7 +78,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "husky": "^4.2.5",
-    "next": "9.5.1",
+    "next": "9.5.4",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "tsc-watch": "^4.0.0",
