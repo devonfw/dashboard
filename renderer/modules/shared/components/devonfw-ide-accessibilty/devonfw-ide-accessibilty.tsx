@@ -16,13 +16,14 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
   const { state, dispatch } = useContext(StepperContext);
   const classes = devonfwIdeAccessibilityStyles();
   const [elRef, setElRef] = useState<null | HTMLElement>(null);
-  const refInput = useRef<HTMLButtonElement>() as MutableRefObject<
+  const refButton = useRef<HTMLButtonElement>() as MutableRefObject<
     HTMLButtonElement
   >;
   const open = Boolean(elRef);
+  const id = open ? 'devonfw access' : undefined;
   useEffect(() => {
     if (state.accessibility) {
-      refInput.current.click();
+      refButton.current.click();
     }
   }, [state.accessibility]);
 
@@ -37,8 +38,6 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
     dispatchAccessibilty();
   };
 
-  const id = open ? 'devonfw access' : undefined;
-
   const dispatchAccessibilty = () => {
     dispatch({ type: 'RESET_ACCESSIBILITY' });
   };
@@ -50,7 +49,7 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
         color="inherit"
         aria-label="Help"
         style={{ color: 'red' }}
-        ref={refInput}
+        ref={refButton}
       >
         <ReportProblemOutlinedIcon fontSize="large" />
       </IconButton>
