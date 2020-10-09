@@ -1,4 +1,10 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  MutableRefObject,
+} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Popper from '@material-ui/core/Popper';
 import ReportProblemOutlinedIcon from '@material-ui/icons/ReportProblemOutlined';
@@ -9,18 +15,25 @@ import DevonfwIdeAccessibilityContent from './devonfw-ide-accessibility-content/
 export default function DevonfwIdeAccessibilty(): JSX.Element {
   const { state, dispatch } = useContext(StepperContext);
   const classes = devonfwIdeAccessibilityStyles();
-  const elRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(true);
+  const [elRef, setElRef] = useState<null | HTMLElement>(null);
+  const refInput = useRef<HTMLButtonElement>() as MutableRefObject<
+    HTMLButtonElement
+  >;
+  const open = Boolean(elRef);
   useEffect(() => {
-    setOpen(state.accessibility);
+    if (state.accessibility) {
+      refInput.current.click();
+    }
   }, [state.accessibility]);
 
-  const handleClick = () => {
-    setOpen(true);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (!elRef) {
+      setElRef(event.currentTarget);
+    }
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setElRef(null);
     dispatchAccessibilty();
   };
 
@@ -36,8 +49,8 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
         onClick={handleClick}
         color="inherit"
         aria-label="Help"
-        ref={elRef}
         style={{ color: 'red' }}
+        ref={refInput}
       >
         <ReportProblemOutlinedIcon fontSize="large" />
       </IconButton>
@@ -45,7 +58,7 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
         placement="top"
         open={open}
         id={id}
-        anchorEl={elRef.current}
+        anchorEl={elRef}
         className={classes.popperRoot}
       >
         <div className={classes.content}>
