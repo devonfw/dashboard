@@ -23,7 +23,7 @@ export default function DevonfwIdeAccessibilty(): JSX.Element {
   const id = open ? 'devonfw access' : undefined;
   useEffect(() => {
     if (state.accessibility) {
-      refButton.current.click();
+      setElRef(refButton.current);
     }
   }, [state.accessibility]);
 
