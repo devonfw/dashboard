@@ -22,7 +22,7 @@ toc::[]
 Here you get a screen that allows you to create a profile. This is the same screen which you see during the intial setup of the dashboard. It is completely optional.
 
 .Account settings
-image::images/account-settings.png["Account settings", width="600", link="images/account-settings.png"]
+image::images/settings_page/account-settings.png["Account settings", width="600", link="images/settings_page/account-settings.png"]
 
 Fill the data and click on *Save* if you want to create the profile.
 
@@ -31,7 +31,7 @@ Fill the data and click on *Save* if you want to create the profile.
 The installed versions subsection allows you to manage the different versions of devonfw-ide available.
 
 .Installed versions
-image::images/installed-versions.png["Installed versions", width="600", link="images/installed-versions.png"]
+image::images/settings_page/installed-versions.png["Installed versions", width="600", link="images/settings_page/installed-versions.png"]
 
 * It lists the devonfw-ide you have installed in your system, along with the ones available for download from our maven repository.
 * If you want a specific version, you can search it here and *DOWNLOAD* it.

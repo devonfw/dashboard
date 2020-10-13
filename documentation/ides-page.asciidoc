@@ -1,0 +1,35 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+
+
+= IDE's
+
+This page allows you to open an IDE of your choice.
+
+.IDE's
+image::images/ides_page/ides.png["IDE's", width="600", link="images/ides_page/ides.png"]
+
+It currently lists only 3 IDEs: Eclipse, IntelliJ and VS Code.
+
+It will open the IDE from the devonfw instance that you have selected in the top bar:
+
+.Choose your devonfw instance
+image::images/ides_page/devonfw-instance-dropdown.png["Choose your devonfw instance", width="300", link="images/ides_page/devonfw-instance-dropdown.png"]
+
+Click on *OPEN* to launch the IDE of your choice. By default, the IDE will display projects from your main workspace in the selected devonfw instance.
+
+.Open an IDE
+image::images/ides_page/3-ides.png["Open an IDE", width="600", link="images/ides_page/3-ides.png"]
