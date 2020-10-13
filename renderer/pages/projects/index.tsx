@@ -23,12 +23,16 @@ export default function Projects(): JSX.Element {
   const [paginator] = useState(
     new Paginator<ProjectDetails>([], PAGINATION_MIN_ROWS)
   );
-  const { state } = useContext(StepperContext);
+  const { state, dispatch } = useContext(StepperContext);
 
   useEffect(() => {
     if (state.creatingProject) {
       router.push('/projects/creation');
       return;
+    }
+
+    if (!state.projectData.path) {
+      dispatch({ type: 'ACCESSIBILITY' });
     }
 
     global.ipcRenderer.on('ide:projects', ideProjectsHandler);

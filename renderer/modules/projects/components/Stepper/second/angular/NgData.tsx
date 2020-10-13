@@ -62,6 +62,7 @@ export default function NgData(): JSX.Element {
             '--style': ngData.styling.value,
             '--interactive': false,
             '--skip-install': null,
+            '--skip-git': null,
           },
         })
       );

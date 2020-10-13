@@ -1,4 +1,5 @@
 import React from 'react';
+import { useContext } from 'react';
 import { useRouter } from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,10 +9,13 @@ import Typography from '@material-ui/core/Typography';
 import Navigation from './navigation/navigation';
 import DevonfwIdeSelector from '../../../shared/components/devonfw-ide-selector/DevonfwIdeSelector';
 import Help from '../help/help';
+import { StepperContext } from '../../../projects/redux/stepper/stepperContext';
+import DevonfwIdeAccessibilty from '../devonfw-ide-accessibilty/devonfw-ide-accessibilty';
 
 export default function Drawer(props: { children: JSX.Element }): JSX.Element {
   const classes = useDawerStyles();
   const router = useRouter().route;
+  const { state } = useContext(StepperContext);
 
   return (
     <div className={classes.root}>
@@ -29,6 +33,7 @@ export default function Drawer(props: { children: JSX.Element }): JSX.Element {
                 Dashboard
               </Typography>
               <div className={classes.ideTools}>
+                {!state.projectData.path ? <DevonfwIdeAccessibilty /> : null}
                 <DevonfwIdeSelector className={classes.ideSelector} />
                 <Help />
               </div>
