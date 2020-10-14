@@ -20,12 +20,12 @@ toc::[]
 This page lists the different repositories under devonfw organization.
 
 .Repositories
-image::images/repositories.png["Repositories", width="600", link="images/repositories.png"]
+image::images/repositories_page/repositories.png["Repositories", width="600", link="images/repositories_page/repositories.png"]
 
 The list updates as you type in the search bar.
 
 .Search Repositories
-image::images/repositories_search.png["Search Repositories", width="600", link="images/repositories_search.png"]
+image::images/repositories_page/repositories_search.png["Search Repositories", width="600", link="images/repositories_page/repositories_search.png"]
 
 * You can click *COPY GITHUB URL* for any of the repository list item to copy its github URL to your clipboard and clone it locally.
 * You can also click the *OPEN REPOSITORY* button to view its github repository page in your default browser.

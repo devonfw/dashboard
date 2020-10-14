@@ -20,4 +20,4 @@ toc::[]
 This page displays the documentation of devonfw. You can also find it at https://devonfw.com/
 
 .Wiki
-image::images/wiki.png["Wiki", width="600", link="images/wiki.png"]
+image::images/wiki_page/wiki.png["Wiki", width="600", link="images/wiki_page/wiki.png"]

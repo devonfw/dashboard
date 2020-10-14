@@ -2,6 +2,7 @@
 ** link:landing-page[Landing page]
 ** link:home-page[Home]
 ** link:projects-page[Projects]
+** link:ides-page[IDE's]
 ** link:repositories-page[Repositories]
 ** link:wiki-page[Wiki]
 ** link:settings-page[Settings]
