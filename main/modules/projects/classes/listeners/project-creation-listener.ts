@@ -39,7 +39,12 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
       date: projectDate(),
       name: this.data.name,
       domain: this.data.type,
-      path: path.join(this.data.path, 'workspaces', this.data.name),
+      path: path.join(
+        this.data.path,
+        'workspaces',
+        this.data.workspace,
+        this.data.name
+      ),
     });
   }
 }

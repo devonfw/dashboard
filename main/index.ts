@@ -3,7 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 
 // Packages
-import { BrowserWindow, app, ipcMain, DownloadItem } from 'electron';
+import { BrowserWindow, Menu, app, ipcMain, DownloadItem } from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
@@ -58,6 +58,8 @@ app.on('ready', async () => {
   mainWindow.webContents.on('did-fail-load', async () =>
     mainWindow.loadURL(await getWindowUrl())
   );
+
+  Menu.setApplicationMenu(null);
 });
 
 // Quit the app once all windows are closed

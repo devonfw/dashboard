@@ -10,7 +10,7 @@ import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-import { FormControl, Button } from '@material-ui/core';
+import { FormControl, Button, MenuItem } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
@@ -182,6 +182,23 @@ export default function NgData(): JSX.Element {
           </Grid>
           <Grid item xs={12}>
             <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
+          </Grid>
+          <Grid item xs={12}>
+            <FormControl>
+              <TextField
+                select
+                label="Workspace"
+                id="select-workspace"
+                value="main"
+                variant="outlined"
+              >
+                {workspaceDir.map((option) => (
+                  <MenuItem key={option} value={option}>
+                    <div>{option}</div>
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
           </Grid>
         </Grid>
       </form>
