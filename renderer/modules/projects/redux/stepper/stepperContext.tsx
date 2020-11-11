@@ -33,6 +33,7 @@ const getInitialState = () => ({
     name: '',
     type: '',
     path: '',
+    workspace: 'main',
     specificArgs: {},
   },
   accessibility: false,
