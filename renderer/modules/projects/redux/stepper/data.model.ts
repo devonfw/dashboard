@@ -4,7 +4,7 @@ export interface INgData {
   name: ValueType;
   routing: ValueType;
   styling: ValueType;
-  devonInstances: ValueType;
+  workspace: ValueType;
 }
 
 export interface ValueType {

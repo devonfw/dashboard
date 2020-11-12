@@ -10,6 +10,7 @@ interface DialogStatus {
 export interface InstallData {
   projectName: string;
   idePath: string;
+  workspace: string;
 }
 
 export default class MessageSenderService extends Renderer {

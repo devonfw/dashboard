@@ -4,6 +4,7 @@ import { join } from 'path';
 export interface InstallCommandData {
   idePath: string;
   projectName: string;
+  workspace: string;
 }
 
 export default abstract class InstallCommand extends Command {
@@ -18,6 +19,11 @@ export default abstract class InstallCommand extends Command {
   }
 
   protected setCwd(): void {
-    this.cwd = join(this.data.idePath, 'workspaces', this.data.projectName);
+    this.cwd = join(
+      this.data.idePath,
+      'workspaces',
+      this.data.workspace,
+      this.data.projectName
+    );
   }
 }
