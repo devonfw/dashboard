@@ -4,6 +4,7 @@ export interface ProjectDataPayload {
   name?: string;
   type?: string;
   path?: string;
+  workspace?: string;
   specificArgs?: {
     [key: string]: string | boolean | null | undefined;
   };
