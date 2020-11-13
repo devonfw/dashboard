@@ -18,7 +18,6 @@ export class OpenProjectIDEListener implements ProjectListener {
     event: IpcMainEvent,
     args: { project: ProjectDetails; ide: string } | any
   ): void {
-    console.log(args);
     if (args.ide === 'vscode') {
       this.devonInstance
         .openIdeExecutionCommandForVscode(args.project, args.ide)

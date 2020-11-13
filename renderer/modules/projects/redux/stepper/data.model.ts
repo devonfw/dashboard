@@ -30,6 +30,7 @@ export interface ProjectDetails {
   domain: string;
   date: string;
   path: string;
+  workspace: string;
 }
 
 export interface ProjectDeleteUpdates {

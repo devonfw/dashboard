@@ -45,6 +45,7 @@ export class ProjectCreationListener extends RendererListener<ProjectData> {
         this.data.workspace,
         this.data.name
       ),
+      workspace: this.data.workspace,
     });
   }
 }

@@ -43,7 +43,7 @@ export default function DashboardProjects(
   const initialState = {
     mouseX: null,
     mouseY: null,
-    project: { name: '', domain: '', date: '', path: '' },
+    project: { name: '', domain: '', date: '', path: '', workspace: 'main' },
   };
   const initialAlertState = {
     alertSeverity: '',
