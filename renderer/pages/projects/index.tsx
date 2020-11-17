@@ -14,6 +14,7 @@ import ProjectsPagination, {
 import { ProjectFilterBuilder } from '../../modules/projects/projects-dashboard/components/dashboard-filter/project-filter-builder';
 import Paginator from '../../modules/shared/classes/paginator';
 import Box from '@material-ui/core/Box';
+import { WorkspaceService } from '../../modules/projects/services/workspace.service';
 
 export default function Projects(): JSX.Element {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Projects(): JSX.Element {
   const [paginator] = useState(
     new Paginator<ProjectDetails>([], PAGINATION_MIN_ROWS)
   );
+  const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
   const { state, dispatch } = useContext(StepperContext);
 
   useEffect(() => {
@@ -36,14 +38,19 @@ export default function Projects(): JSX.Element {
     }
 
     global.ipcRenderer.on('ide:projects', ideProjectsHandler);
+    const workspaceService = new WorkspaceService(setWorkspaceDir);
+    workspaceService.getProjectsInWorkspace(state.projectData.path);
     return () => {
       global.ipcRenderer.removeAllListeners('ide:projects');
+      workspaceService.closeListener();
     };
   }, []);
 
   useEffect(() => {
     if (state.projectData.path) {
       global.ipcRenderer.send('ide:projects', state.projectData.path);
+      const workspaceService = new WorkspaceService(setWorkspaceDir);
+      workspaceService.getProjectsInWorkspace(state.projectData.path);
     }
   }, [state]);
 
@@ -87,6 +94,7 @@ export default function Projects(): JSX.Element {
           setAllProject={setAllProjects}
           dirPath={state.projectData.path}
           projectsCount={projects.length}
+          workspaces={workspaceDir}
         />
         <Box mt="auto">
           <ProjectsPagination

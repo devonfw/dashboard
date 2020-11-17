@@ -29,7 +29,7 @@ export default function ProjectDetail(props: ProjectDetailProps): JSX.Element {
       <CardContent className={classes.cardContent}>
         <Typography component="span">
           <Box fontWeight="fontWeightBold" fontSize={14}>
-            {props.project.workspace}/{props.project.name}
+            {props.project.name}
           </Box>
         </Typography>
         <Typography component="span">

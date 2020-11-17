@@ -33,6 +33,7 @@ interface DashboardProjectsProps {
   setAllProject: (project: ProjectDetails[]) => void;
   dirPath: string;
   projectsCount: number;
+  workspaces: string[];
 }
 
 export default function DashboardProjects(
@@ -183,16 +184,27 @@ export default function DashboardProjects(
         >
           <NewProject />
         </NextLink>
-        {props.projects && props.projects.length
-          ? props.projects.map((project) => (
-              <ProjectDetail
-                key={project.path}
-                project={project}
-                handleClick={handleClick}
-              />
-            ))
-          : null}
       </div>
+      {props.workspaces && props.workspaces.length
+        ? props.workspaces.map((workspace) => (
+            <div key={workspace} style={{ width: '100%' }}>
+              <h4>workspace {workspace}</h4>
+              <div className={classes.cardsContainer}>
+                {props.projects && props.projects.length
+                  ? props.projects
+                      .filter((project) => project.workspace === workspace)
+                      .map((project) => (
+                        <ProjectDetail
+                          key={project.path}
+                          project={project}
+                          handleClick={handleClick}
+                        />
+                      ))
+                  : 'No projects in this workspace. Click Add New Project button above to create a new project.'}
+              </div>
+            </div>
+          ))
+        : null}
       <MenuList
         project={projectState.project}
         state={projectState}
