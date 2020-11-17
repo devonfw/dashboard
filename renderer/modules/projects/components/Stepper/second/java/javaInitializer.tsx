@@ -63,6 +63,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     this.context.dispatch(
       new ProjectDataActionData({
         name: formData.formControls.artifact.value,
+        workspace: formData.workspace,
         specificArgs: this.specificArgs(),
       })
     );
@@ -143,6 +144,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     const formState = {
       ...this.state.formControls,
     };
+    let selectedWorkspace = this.state.workspace;
     if (identifier === 'version') {
       const element = { ...formState.version };
       element.touched = true;
@@ -159,9 +161,14 @@ class JavaInitializer extends Component<JavaInitializerProps> {
       formState.db = element;
     }
 
+    if (identifier === 'workspace') {
+      selectedWorkspace = value;
+    }
+
     this.setState({
       formControls: formState,
       formIsValid: ValidateForm.javaFormStateValidity(formState),
+      workspace: selectedWorkspace,
     });
   }
 
@@ -178,7 +185,9 @@ class JavaInitializer extends Component<JavaInitializerProps> {
       default:
         return this.eventHandler(
           formChangeState.identifier,
-          formChangeState.event ? formChangeState.event.target.value : ''
+          formChangeState.event
+            ? formChangeState.event.target.value
+            : formChangeState.value || ''
         );
     }
   };
@@ -207,6 +216,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
           <Grid item xs={12} className={classes.content}>
             <JavaFormBuider
               formControls={this.state.formControls}
+              workspaces={this.state.workspaceDir}
               updateFormState={this.updateFormState}
             />
           </Grid>

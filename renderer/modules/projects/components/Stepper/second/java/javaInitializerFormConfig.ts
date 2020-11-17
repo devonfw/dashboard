@@ -76,6 +76,7 @@ const javaProjectConfig: IJavaInitializerForm = {
     batch: false,
   },
   formIsValid: false,
+  workspace: 'main',
 };
 
 export default javaProjectConfig;
