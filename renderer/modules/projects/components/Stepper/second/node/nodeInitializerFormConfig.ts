@@ -21,6 +21,7 @@ const nodeProjectConfig: INodeInitializerForm = {
     },
   },
   formIsValid: false,
+  workspace: 'main',
 };
 
 export default nodeProjectConfig;

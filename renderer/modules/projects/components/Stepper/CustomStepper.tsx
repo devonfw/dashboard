@@ -33,13 +33,6 @@ export default function CustomStepper(): JSX.Element {
   return (
     <>
       <MaterialStepper steps={steps} />
-      <p style={{ paddingBottom: '2rem' }}>
-        Choose the technology in the below section, dolor sit amet, consectetur
-        adipiscing elit. Phasellus non tincidunt velit. Quisque laoreet, lectus
-        id tincidunt fringilla, eros est bibendum felis, sit amet lobortis ante
-        sem non diam. Donec viverra a nisi eu eleifend. Mauris vel leo tempor,
-        commodo felis in, sollicitudin velit.
-      </p>
       {steps[state.activeStep].stepJSX}
     </>
   );

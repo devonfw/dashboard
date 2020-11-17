@@ -11,7 +11,6 @@ const projectCardStyle = (theme: Theme) =>
     },
     action: {
       marginTop: theme.spacing(2),
-      marginLeft: theme.spacing(3),
       display: 'flex',
       '& button': {
         marginRight: theme.spacing(2),

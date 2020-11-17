@@ -12,6 +12,7 @@ import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { WorkspaceService } from '../../../../services/workspace.service';
 import { ErrorHandler } from '../validation/error-handler/error-handler';
 import Input from '../form-inputs/input/Input';
+import SelectWorkspace from '../form-inputs/select-workspace/select-workspace';
 
 interface NodeInitializerProps {
   classes: {
@@ -57,6 +58,7 @@ class NodeInitializer extends Component<NodeInitializerProps> {
       payload: {
         projectData: {
           name: formData.formControls.name.value.toLowerCase(),
+          workspace: formData.workspace,
           specificArgs: {
             '-n': null,
             '--skip-install': null,
@@ -92,6 +94,12 @@ class NodeInitializer extends Component<NodeInitializerProps> {
     });
   };
 
+  handleWorkspaceSelection = (option: string) => {
+    this.setState({
+      workspace: option,
+    });
+  };
+
   setActiveState = () => {
     this.context.dispatch({
       type: 'RESET_STEP',
@@ -116,6 +124,12 @@ class NodeInitializer extends Component<NodeInitializerProps> {
               }}
             />
             <ErrorHandler formControl={this.state.formControls.name} />
+          </Grid>
+          <Grid item xs={12}>
+            <SelectWorkspace
+              workspaces={this.state.workspaceDir}
+              onSelected={this.handleWorkspaceSelection}
+            ></SelectWorkspace>
           </Grid>
         </Grid>
         <div className={classes.action}>

@@ -19,19 +19,25 @@ export default function DataStep(): JSX.Element {
   const stack: Stack = stacksMap[technologies];
 
   return (
-    <div className={classes.dataContainer}>
-      <Grid container spacing={6}>
-        <Grid item xs={5} md={3} lg={3} xl={2}>
-          <StackCard
-            variant={true}
-            image={stack.image}
-            text={stack.text}
-          ></StackCard>
+    <>
+      <p style={{ height: '60px' }}>
+        Fill in the data to configure your new project. The dashboard will
+        create the project with the values you put here.
+      </p>
+      <div className={classes.dataContainer}>
+        <Grid container spacing={6}>
+          <Grid item xs={5} md={3} lg={3} xl={2}>
+            <StackCard
+              variant={true}
+              image={stack.image}
+              text={stack.text}
+            ></StackCard>
+          </Grid>
+          <Grid item xs={7} md={8} lg={7} xl={6}>
+            {stacksJSXMap[technologies]}
+          </Grid>
         </Grid>
-        <Grid item xs={7} md={8} lg={7} xl={6}>
-          {stacksJSXMap[technologies]}
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+    </>
   );
 }
