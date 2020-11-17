@@ -188,7 +188,7 @@ export default function DashboardProjects(
       {props.workspaces && props.workspaces.length
         ? props.workspaces.map((workspace) => (
             <div key={workspace} style={{ width: '100%' }}>
-              <h4>workspace {workspace}</h4>
+              <h3>workspace {workspace}</h3>
               <div className={classes.cardsContainer}>
                 {props.projects && props.projects.length
                   ? props.projects
