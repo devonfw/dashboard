@@ -12,20 +12,15 @@ export default function WelcomeToDevonfw(): JSX.Element {
   const [avatar, setAvatar] = useState('male.svg');
 
   useEffect(() => {
-    global.ipcRenderer.send('find:profile');
-
-    global.ipcRenderer.on(
-      'get:profile',
-      (_: IpcRendererEvent, data: ProfileData) => {
-        if (data.gender !== '') {
-          const avatarImg = data.gender + '.svg';
-          setAvatar(avatarImg);
-        }
+    global.ipcRenderer.invoke('find:profile').then((profile: ProfileData) => {
+      if (profile.gender !== '') {
+        const avatarImg = profile.gender + '.svg';
+        setAvatar(avatarImg);
       }
-    );
+    });
 
     return () => {
-      global.ipcRenderer.removeAllListeners('get:profile');
+      global.ipcRenderer.removeAllListeners('find:profile');
     };
   });
 

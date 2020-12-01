@@ -18,14 +18,12 @@ export default function ProfilePicture(): JSX.Element {
   });
 
   useEffect(() => {
-    global.ipcRenderer.send('find:profile');
+    global.ipcRenderer
+      .invoke('find:profile')
+      .then((profile: ProfileData) => setProfile(profile));
 
-    global.ipcRenderer.on(
-      'get:profile',
-      (_: IpcRendererEvent, profile: ProfileData) => setProfile(profile)
-    );
     return () => {
-      global.ipcRenderer.removeAllListeners('get:profile');
+      global.ipcRenderer.removeAllListeners('find:profile');
     };
   });
 
