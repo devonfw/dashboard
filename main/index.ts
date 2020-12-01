@@ -19,7 +19,6 @@ import {
   getBase64Img,
   setDashboardProfile,
   checkProfileStatus,
-  getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
 import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updates';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
@@ -199,4 +198,4 @@ ipcMain.on('set:profile', (e, profile: UserProfile) =>
   setDashboardProfile(profile, mainWindow)
 );
 ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
-ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));
+ipcMain.handle('find:profile', () => new ProfileSetupService().getProfile());

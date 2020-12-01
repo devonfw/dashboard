@@ -26,15 +26,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    if (props.settingsPage) global.ipcRenderer.send('find:profile');
-
-    global.ipcRenderer.on(
-      'get:profile',
-      (_: IpcRendererEvent, profile: ProfileData) => {
-        const sanitizedData = sanitizeData(profile);
-        setData(sanitizedData);
-      }
-    );
+    if (props.settingsPage) loadProfile();
 
     global.ipcRenderer.on(
       'get:base64Img',
@@ -51,18 +43,25 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
       'get:profileCreationStatus',
       (_: IpcRendererEvent, status: string) => {
         if (status === 'success') {
-          if (props.settingsPage) global.ipcRenderer.send('find:profile');
+          if (props.settingsPage) loadProfile();
           else navigateToHome();
         }
       }
     );
 
     return () => {
-      global.ipcRenderer.removeAllListeners('get:profile');
+      global.ipcRenderer.removeAllListeners('find:profile');
       global.ipcRenderer.removeAllListeners('get:base64Img');
       global.ipcRenderer.removeAllListeners('get:profileCreationStatus');
     };
   }, []);
+
+  const loadProfile = () => {
+    global.ipcRenderer.invoke('find:profile').then((profile: ProfileData) => {
+      const sanitizedData = sanitizeData(profile);
+      setData(sanitizedData);
+    });
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputname: string = event.target.name;
@@ -102,7 +101,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   };
 
   const onCancel = () => {
-    global.ipcRenderer.send('find:profile');
+    loadProfile();
     setButtonsDisabled(true);
   };
 
