@@ -23,6 +23,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import NextLink from '../../../../shared/components/nextjs-link/NextLink';
 import ProjectDetail from './project-detail';
 import Alerts from '../../../../shared/components/alerts/alerts';
+import ConfirmDialog from '../../../../shared/components/confirm-dialog/confirm.dialog';
 import MenuList from '../menu-list/menu-list';
 import NewProject from '../new-project/new-project';
 
@@ -64,6 +65,18 @@ export default function DashboardProjects(
   const filterElement = useRef<HTMLInputElement>() as MutableRefObject<
     HTMLInputElement
   >;
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  const deleteConfimation = (value: boolean): void => {
+    if (value === true) {
+      deleteProject();
+    }
+    setOpenDialog(false);
+  };
+
+  const openDeleteProjectConfirmationDialog = () => {
+    setOpenDialog(true);
+  };
 
   const closeAlert = () => {
     setAlertMessage((prevState: AlertType) => {
@@ -128,7 +141,13 @@ export default function DashboardProjects(
   };
 
   const handleClose = () => {
-    setProjectState(initialState);
+    setProjectState((prev) => {
+      return {
+        ...prev,
+        mouseX: null,
+        mouseY: null,
+      };
+    });
   };
 
   const openProjectInIde = (ide: string) => {
@@ -211,8 +230,9 @@ export default function DashboardProjects(
         handleClose={handleClose}
         openProjectInIde={openProjectInIde}
         openProjectDirectory={openProjectDirectory}
-        deleteProject={deleteProject}
+        deleteProject={openDeleteProjectConfirmationDialog}
       />
+
       <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -222,6 +242,12 @@ export default function DashboardProjects(
         message={alertMessage.message}
         operation={alertMessage.operation}
       />
+      <ConfirmDialog
+        title={'Confirmation'}
+        content={`Are you sure do you want to delete the "${projectState.project.name}" project?`}
+        openDialog={openDialog}
+        onClose={deleteConfimation}
+      ></ConfirmDialog>
     </div>
   );
 }
