@@ -24,7 +24,8 @@ export default function NgData(): JSX.Element {
   const ERRORMSG = {
     projectAlreadyExists: 'Project already exits with this name',
     projectRequired: 'Please provide project name',
-    pattern: 'Please remove special characters and numeric numbers',
+    pattern:
+      'Please enter valid project name (eg: app or app-demo or app-demo123)',
   };
   const [data, setData] = useState<INgData>({
     name: {
@@ -94,7 +95,7 @@ export default function NgData(): JSX.Element {
         error: ERRORMSG.projectAlreadyExists,
         valid: false,
       });
-    } else if (targetValue.match(/^[a-z]*$/gi) == null) {
+    } else if (targetValue.match(/^[a-z](\-*[a-z]\d*)*$/gi) == null) {
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.pattern,
