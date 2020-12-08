@@ -13,14 +13,14 @@ const ides: IDE[] = [
     description:
       'Eclipse contains a base workspace and an extensible plug-in system for customizing the environment.',
   },
-
-  {
+  // TODO: add download screen for intellij
+  /* {
     name: 'intellij',
     image: '/static/assets/ides/intellij.svg',
     title: 'Intellij',
     description:
       'Its powerful static code analysis and ergonomic design makes development a productive and enjoyable experience.',
-  },
+  }, */
   {
     name: 'vscode',
     image: '/static/assets/ides/vscode.svg',
