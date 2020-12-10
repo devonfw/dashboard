@@ -204,26 +204,65 @@ export default function DashboardProjects(
           <NewProject />
         </NextLink>
       </div>
-      {props.workspaces && props.workspaces.length
+      {props.workspaces &&
+      props.workspaces.length &&
+      searchElement.current.value
         ? props.workspaces.map((workspace) => (
             <div key={workspace} style={{ width: '100%' }}>
-              <h3>workspace {workspace}</h3>
-              <div className={classes.cardsContainer}>
-                {props.projects && props.projects.length
-                  ? props.projects
-                      .filter((project) => project.workspace === workspace)
-                      .map((project) => (
-                        <ProjectDetail
-                          key={project.path}
-                          project={project}
-                          handleClick={handleClick}
-                        />
-                      ))
-                  : 'No projects in this workspace. Click Add New Project button above to create a new project.'}
-              </div>
+              {props.projects.filter(
+                (project) => project.workspace === workspace
+              ).length ? (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div className={classes.cardsContainer}>
+                    {props.projects && props.projects.length
+                      ? props.projects
+                          .filter((project) => project.workspace === workspace)
+                          .map((project) => (
+                            <ProjectDetail
+                              key={project.path}
+                              project={project}
+                              handleClick={handleClick}
+                            />
+                          ))
+                      : null}
+                  </div>
+                </>
+              ) : null}
             </div>
           ))
-        : null}
+        : props.workspaces.map((workspace) => (
+            <div key={workspace} style={{ width: '100%' }}>
+              {props.projects.filter(
+                (project) => project.workspace === workspace
+              ).length ? (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div className={classes.cardsContainer}>
+                    {props.projects && props.projects.length
+                      ? props.projects
+                          .filter((project) => project.workspace === workspace)
+                          .map((project) => (
+                            <ProjectDetail
+                              key={project.path}
+                              project={project}
+                              handleClick={handleClick}
+                            />
+                          ))
+                      : null}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div>
+                    No projects in this workspace. Click Add New Project button
+                    above to create a new project.
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
       <MenuList
         project={projectState.project}
         state={projectState}
