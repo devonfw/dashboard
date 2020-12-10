@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { DevonIdeScript } from './Installations.contoller';
-import { TextField, Card, Typography } from '@material-ui/core';
+import { TextField, Card, Typography, Tooltip } from '@material-ui/core';
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -89,13 +89,15 @@ export default function InstallationsView(
                   <TableCell>{installation.version}</TableCell>
                   <TableCell>
                     {installation.path ? (
-                      <IconButton
-                        onClick={() => {
-                          props.viewIdeHandler(installation.path);
-                        }}
-                      >
-                        <VisibilityIcon fontSize="small" />
-                      </IconButton>
+                      <Tooltip title={installation.path} placement="top" arrow>
+                        <IconButton
+                          onClick={() => {
+                            props.viewIdeHandler(installation.path);
+                          }}
+                        >
+                          <VisibilityIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
                     ) : null}
                   </TableCell>
                   <TableCell>{installation.updated}</TableCell>
