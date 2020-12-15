@@ -1,0 +1,22 @@
+on:
+    push:
+        branches:
+            - develop
+    pull_request:
+        branches:
+            - develop
+name: Wiki Sync
+jobs:
+    update-wiki:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@master
+          - name: Sync Wiki
+            uses: joeizzard/action-wiki-sync@master
+            with:
+                username: devonfw
+                access_token: ${{ secrets.GITHUB_TOKEN }}
+                wiki_folder: documentation
+                commit_username: 'suprishi'
+                commit_email: 'saptarshi.bose@capgemini.com'
+                commit_message: 'action: wiki sync'
