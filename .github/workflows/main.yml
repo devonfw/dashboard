@@ -4,8 +4,8 @@ env:
     REPO_SOURCE: "dashboard"
     REPO_DEST:  "dashboard.wiki"
     REPO_CONSOLIDATE: "devonfw-guide"
-    GH_REPO_DEST: "github.com/${ORG}/${REPO_DEST}.git"
-    GH_REPO_CONSOLIDATE: "github.com/${ORG}/${REPO_CONSOLIDATE}.git"
+    GH_REPO_DEST: github.com/${ORG}/${REPO_DEST}.git
+    GH_REPO_CONSOLIDATE: github.com/${ORG}/${REPO_CONSOLIDATE}.git
 on:
     push:
         branches:
