@@ -15,6 +15,6 @@ jobs:
         steps:
           - name: Sync Wiki
             run: |
-                yes | cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
+                cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
