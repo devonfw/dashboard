@@ -1,3 +1,6 @@
+env:
+    REPO_SOURCE: "dashboard"
+    REPO_DEST:  "dashboard.wiki"
 on:
     push:
         branches:
@@ -5,18 +8,13 @@ on:
     pull_request:
         branches:
             - develop
-name: Wiki Sync
+name: Sync Wiki
 jobs:
     update-wiki:
         runs-on: ubuntu-latest
         steps:
-          - uses: actions/checkout@master
           - name: Sync Wiki
-            uses: joeizzard/action-wiki-sync@master
-            with:
-                username: devonfw
-                access_token: ${{ secrets.GITHUB_TOKEN }}
-                wiki_folder: documentation
-                commit_username: 'suprishi'
-                commit_email: 'saptarshi.bose@capgemini.com'
-                commit_message: 'action: wiki sync'
+            run: |
+                yes | cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
+                cd ${REPO_DEST}
+                grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
