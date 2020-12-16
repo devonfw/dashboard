@@ -20,16 +20,11 @@ jobs:
             with:
               token: ${{secrets.github_token}}
           - name: Checkout ${REPO_SOURCE} Repository
-            uses: actions/checkout@v2
-            with:
-              path: ${REPO_SOURCE}
+            run: git clone https://github.com/${ORG}/${REPO_SOURCE}.git ${REPO_SOURCE}
           - name: Checkout ${REPO_DEST} Repository
             run: git clone https://github.com/${ORG}/${REPO_DEST}.git ${REPO_DEST}
           - name: Checkout ${REPO_CONSOLIDATE} Repository
-            uses: actions/checkout@v2
-            with:
-              path: ${REPO_CONSOLIDATE}
-              repository: ${ORG}/${REPO_CONSOLIDATE}
+            run: git clone https://github.com/${ORG}/${REPO_CONSOLIDATE}.git ${REPO_CONSOLIDATE}
           - name: Sync Wiki
             env:
                 BUILD_USER: ${{ secrets.BUILD_USER }}
