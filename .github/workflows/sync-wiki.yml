@@ -1,7 +1,4 @@
 env:
-    ORG: "devonfw"
-    REPO_SOURCE: "dashboard"
-    REPO_DEST:  "dashboard.wiki"
     REPO_CONSOLIDATE: "devonfw-guide"
 on:
     push:
@@ -15,19 +12,36 @@ jobs:
     update-wiki:
         runs-on: ubuntu-latest
         steps:
+          - name: setup variables
+            run: |
+                echo "ORG=$(echo '${{ github.repository }}' | awk -F '/' '{print $0}')" >> $GITHUB_ENV
+                echo "REPO_SOURCE=$(echo '${{ github.repository }}' | awk -F '/' '{print $1}')" >> $GITHUB_ENV
+                echo "REPO_DEST=${REPO_SOURCE}.wiki" >> $GITHUB_ENV
+            shell: bash
           - name: Generate build number
             uses: einaregilsson/build-number@v3
             with:
-              token: ${{secrets.github_token}} 
+              token: ${{secrets.github_token}}
+          - name: Checkout ${REPO_SOURCE} Repository
+            uses: actions/checkout@v2
+            with:
+              path: ${REPO_SOURCE}
+          - name: Checkout ${REPO_DEST} Repository
+            uses: actions/checkout@v2
+            with:
+              path: ${REPO_DEST}
+              repository: https://github.com/${ORG}/${REPO_DEST}.git
+          - name: Checkout ${REPO_CONSOLIDATE} Repository
+            uses: actions/checkout@v2
+            with:
+              path: ${REPO_CONSOLIDATE}
+              repository: ${ORG}/${REPO_CONSOLIDATE}
           - name: Sync Wiki
             env:
                 BUILD_USER: ${{ secrets.BUILD_USER }}
                 BUILD_USER_PASSWD: ${{ secrets.BUILD_USER_PASSWD }}
                 BUILD_USER_EMAIL:  ${{ secrets.BUILD_USER_EMAIL }}
             run: |
-                cd ..
-                git clone https://github.com/${ORG}/${REPO_DEST}.git
-                git clone https://github.com/${ORG}/${REPO_CONSOLIDATE}.git
                 cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
