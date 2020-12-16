@@ -1,12 +1,8 @@
 env:
     ORG: "devonfw"
-    EMAIL: "icsddevonfwsupport.apps2@capgemini.com"
     REPO_SOURCE: "dashboard"
     REPO_DEST:  "dashboard.wiki"
     REPO_CONSOLIDATE: "devonfw-guide"
-    GH_REPO_DEST: github.com/devonfw/dashboard.wiki.git
-    GH_REPO_CONSOLIDATE: github.com/devonfw/devonfw-guide.git
-    GH_SECRET_KEY: ${{ secrets.GITHUB_TOKEN }}
 on:
     push:
         branches:
@@ -19,11 +15,19 @@ jobs:
     update-wiki:
         runs-on: ubuntu-latest
         steps:
+          - name: Generate build number
+            uses: einaregilsson/build-number@v3
+            with:
+              token: ${{secrets.github_token}} 
           - name: Sync Wiki
+            env:
+                BUILD_USER: ${{ secrets.BUILD_USER }}
+                BUILD_USER_PASSWD: ${{ secrets.BUILD_USER_PASSWD }}
+                BUILD_USER_EMAIL:  ${{ secrets.BUILD_USER_EMAIL }}
             run: |
                 cd ..
-                git clone https://${GH_REPO_DEST}
-                git clone https://${GH_REPO_CONSOLIDATE}
+                git clone https://github.com/${ORG}/${REPO_DEST}.git
+                git clone https://github.com/${ORG}/${REPO_CONSOLIDATE}.git
                 cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
@@ -32,15 +36,15 @@ jobs:
                     pkill -9 -P $$ &> /dev/null || true 
                     exit 0
                 else 
-                    git config user.email ${EMAIL}
-                    git config user.name ${USER}
+                    git config user.email ${BUILD_USER_EMAIL}
+                    git config user.name ${BUILD_USER}
                     git status
                     git add .
                     git commit -m "${REPO_SOURCE} documentation | Travis CI build number $TRAVIS_BUILD_NUMBER"
-                    git remote add origin-wiki "https://${USER}:${GITHUB_TOKEN}@${GH_REPO_DEST}"
+                    git remote add origin-wiki "https://${BUILD_USER}:${BUILD_USER_PASSWD}@github.com/${ORG}/${REPO_DEST}.git"
                     git push origin-wiki master
                     cd ../${REPO_CONSOLIDATE}
-                    if [ ! -d ${REPO_DEST} ]; then git submodule add https://${GH_REPO_DEST}; fi;
+                    if [ ! -d ${REPO_DEST} ]; then git submodule add https://github.com/${ORG}/${REPO_DEST}.git; fi;
                     git submodule init
                     git submodule update --recursive --remote
                     cd ${REPO_DEST}
@@ -48,7 +52,7 @@ jobs:
                     git pull
                     cd ..
                     git add .
-                    git commit -m "${REPO_SOURCE} documentation | Travis CI build number $TRAVIS_BUILD_NUMBER"
-                    git remote add origin-wiki "https://${USER}:${GITHUB_TOKEN}@${GH_REPO_CONSOLIDATE}"
+                    git commit -m "${REPO_SOURCE} documentation | GitHub Actions build number $BUILD_NUMBER"
+                    git remote add origin-wiki "https://${BUILD_USER}:${BUILD_USER_PASSWD}@github.com/${ORG}/${REPO_CONSOLIDATE}.git"
                     git push origin-wiki master
                 fi
