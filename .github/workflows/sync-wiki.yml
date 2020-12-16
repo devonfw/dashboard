@@ -24,10 +24,7 @@ jobs:
             with:
               path: ${REPO_SOURCE}
           - name: Checkout ${REPO_DEST} Repository
-            uses: actions/checkout@v2
-            with:
-              path: ${REPO_DEST}
-              repository: ${ORG}/${REPO_DEST}
+            run: git clone https://github.com/${ORG}/${REPO_DEST}.git ${REPO_DEST}
           - name: Checkout ${REPO_CONSOLIDATE} Repository
             uses: actions/checkout@v2
             with:
