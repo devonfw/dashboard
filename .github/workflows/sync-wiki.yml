@@ -27,7 +27,7 @@ jobs:
             uses: actions/checkout@v2
             with:
               path: ${REPO_DEST}
-              repository: https://github.com/${ORG}/${REPO_DEST}.git
+              repository: ${ORG}/${REPO_DEST}
           - name: Checkout ${REPO_CONSOLIDATE} Repository
             uses: actions/checkout@v2
             with:
