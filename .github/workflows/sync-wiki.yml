@@ -25,6 +25,14 @@ jobs:
             run: git clone https://github.com/${ORG}/${REPO_DEST}.git ${REPO_DEST}
           - name: Checkout ${REPO_CONSOLIDATE} Repository
             run: git clone https://github.com/${ORG}/${REPO_CONSOLIDATE}.git ${REPO_CONSOLIDATE}
+          - name: Copy docs and consolidate links
+            run: |
+                cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
+                cd ${REPO_DEST}
+                grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
+          - name: Check for changes to continue
+            if: ${{ git diff-index --quite HEAD && [ ! -n "$git status -s)" ] }}
+            uses: andymckay/cancel-action@0.2
           - name: Sync Wiki
             env:
                 BUILD_USER: ${{ secrets.BUILD_USER }}
@@ -43,7 +51,7 @@ jobs:
                     git config user.name ${BUILD_USER}
                     git status
                     git add .
-                    git commit -m "${REPO_SOURCE} documentation | Travis CI build number $TRAVIS_BUILD_NUMBER"
+                    git commit -m "${REPO_SOURCE} documentation | Travis CI build number $BUILD_NUMBER"
                     git remote add origin-wiki "https://${BUILD_USER}:${BUILD_USER_PASSWD}@github.com/${ORG}/${REPO_DEST}.git"
                     git push origin-wiki master
                     cd ../${REPO_CONSOLIDATE}
