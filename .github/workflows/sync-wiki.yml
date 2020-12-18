@@ -30,7 +30,7 @@ jobs:
                 cp -rf ${REPO_SOURCE}/documentation/* ${REPO_DEST}/
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
-                echo "TO_BE_CANCELLED=$(git diff-index --quiet HEAD && [ ! -n "$(git status -s)" ];then "true"; fi)" >> $GITHUB_ENV
+                echo "TO_BE_CANCELLED=$(git diff-index --quiet HEAD && if [ ! -n "$(git status -s)" ];then echo "true"; fi)" >> $GITHUB_ENV
           - name: Check for changes to continue
             if: ${{ env.TO_BE_CANCELLED }}
             uses: andymckay/cancel-action@0.2
