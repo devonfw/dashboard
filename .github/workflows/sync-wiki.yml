@@ -40,6 +40,8 @@ jobs:
                 BUILD_USER_PASSWD: ${{ secrets.BUILD_USER_PASSWD }}
                 BUILD_USER_EMAIL:  ${{ secrets.BUILD_USER_EMAIL }}
             run: |
+                echo $PWD
+                ls
                 git config user.email ${BUILD_USER_EMAIL}
                 git config user.name ${BUILD_USER}
                 git status
