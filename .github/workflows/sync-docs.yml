@@ -34,10 +34,8 @@ jobs:
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
                 echo "TO_BE_CANCELLED=$(if [ -z "$(git diff-index --quiet HEAD && git status -s)" ]; then echo "true"; else echo "false"; fi)" >> $GITHUB_ENV
-          - name: Check for changes to continue
-            if: ${{ env.TO_BE_CANCELLED == 'true' }}
-            uses: andymckay/cancel-action@0.2
           - name: Sync Wiki
+            if: ${{ env.TO_BE_CANCELLED == 'false' }}
             run: |
                 cd ${REPO_DEST}
                 git config user.email ${BUILD_USER_EMAIL}
@@ -48,6 +46,7 @@ jobs:
                 git remote add origin-wiki "https://${BUILD_USER}:${BUILD_USER_PASSWD}@github.com/${ORG}/${REPO_DEST}.git"
                 git push origin-wiki master
           - name: Sync devonfw guide
+            if: ${{ env.TO_BE_CANCELLED == 'false' }}
             run: |
                 cd ${REPO_CONSOLIDATE}
                 if [ ! -d ${REPO_DEST} ]; then git submodule add https://github.com/${ORG}/${REPO_DEST}.git; fi;
