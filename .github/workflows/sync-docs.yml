@@ -2,7 +2,7 @@ env:
     REPO_CONSOLIDATE: "devonfw-guide"
     BUILD_USER: ${{ secrets.BUILD_USER }}
     BUILD_USER_PASSWD: ${{ secrets.BUILD_USER_PASSWD }}
-    BUILD_USER_EMAIL:  ${{ secrets.BUILD_USER_EMAIL }}:  
+    BUILD_USER_EMAIL:  ${{ secrets.BUILD_USER_EMAIL }}
 on:
     push:
         branches:
