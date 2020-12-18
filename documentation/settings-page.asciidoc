@@ -39,6 +39,6 @@ image::images/settings_page/installed-versions.png["Installed versions", width="
 * For the installed versions:
 ** You can view it in your system explorer by clicking the eye icon.
 ** You can update its settings and softwares by clicking on *UPDATE*.
-** You can also *UNINSTALL* an installed version, after which the devonfw dashboard will no longer keep track of the Projects and IDEs belonging to that version
+** You can also *UNINSTALL* an installed version, after which the devonfw dashboard will no longer keep track of the projects and IDEs belonging to that version
 
 
