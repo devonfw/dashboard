@@ -35,7 +35,7 @@ jobs:
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
                 echo "TO_BE_CANCELLED=$(if [ -z "$(git diff-index --quiet HEAD && git status -s)" ]; then echo "true"; else echo "false"; fi)" >> $GITHUB_ENV
           - name: Check for changes to continue
-            if: ${{ env.TO_BE_CANCELLED == "true" }}
+            if: ${{ env.TO_BE_CANCELLED == 'true' }}
             uses: andymckay/cancel-action@0.2
           - name: Sync Wiki
             run: |
