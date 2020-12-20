@@ -38,7 +38,7 @@ Three main steps are involved in creating any devonfw project. They are: +
 
 *Step 1. Project Type* +
 
-It is the first step where the user has to choose any one of technologies like *JAVA*, *Angular*, or *Node* and click the *Next* button for the further steps.
+In this first step the user has to choose the language resp. technology to start the project with, e.g. *JAVA*, *Angular*, or *Node* and click the *Next* button for to continue to the next step.
 
 image::images/project_page/project_type.png["Project Type", width="600", link="images/project_page/project_type.png"]
 
