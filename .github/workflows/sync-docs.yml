@@ -34,13 +34,13 @@ jobs:
                 cd ${REPO_DEST}
                 grep -lr "link:[a-zA-Z0-9_.-]*.asciidoc.*" .| xargs -r sed -i "s/.asciidoc//g"
                 echo ">"
-                git diff-index --quiet HEAD && git status -s
+                git diff-index --quiet HEAD & git status -s
                 echo "<"
                 git status
                 echo ">"
-                git diff-index --quiet HEAD && git status -s
+                git diff-index --quiet HEAD & git status -s
                 echo "<"
-                echo "TO_BE_CANCELLED=$(if [[ $(git diff-index --quiet HEAD && git status -s) ]]; then echo "false"; else echo "true"; fi)" >> $GITHUB_ENV
+                echo "TO_BE_CANCELLED=$(if [[ $(git diff-index --quiet HEAD & git status -s) ]]; then echo "false"; else echo "true"; fi)" >> $GITHUB_ENV
                 echo "$TO_BE_CANCELLED"
           - name: Sync Wiki
             if: ${{ env.TO_BE_CANCELLED == 'false' }}
