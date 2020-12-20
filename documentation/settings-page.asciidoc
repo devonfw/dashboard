@@ -34,7 +34,7 @@ The installed versions subsection allows you to manage the different versions of
 image::images/settings_page/installed-versions.png["Installed versions", width="600", link="images/settings_page/installed-versions.png"]
 
 * It lists the devonfw-ide you have installed in your system, along with the ones available for download from our maven repository.
-* If you want a specific version, you can search it here and *DOWNLOAD* it.
+* If you want to install specific version, you can search it here and *DOWNLOAD* it.
 * To check the release notes for a version, simply click on *Consolidated list of features*
 * For the installed versions:
 ** You can view it in your system explorer by clicking the eye icon.
