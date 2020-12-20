@@ -21,7 +21,7 @@ This is the entry point of the devonfw dashboard. Click on *get started* to star
 
 == Your devonfw distributions
 
-The first time you open the application you will get a dialog with all the devonfw distributions found installed in your machine. Click on *got it* to continue.
+The first time you open the application you will get a dialog with all the devonfw distributions found on your machine. Click on *got it* to continue.
 
 == Profile form
 
