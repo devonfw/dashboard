@@ -42,12 +42,15 @@ jobs:
                 echo "<"
                 echo "TO_BE_CANCELLED=$(if [[ $(git diff-index --quiet HEAD & git status -s) ]]; then echo "false"; else echo "true"; fi)" >> $GITHUB_ENV
                 echo "$TO_BE_CANCELLED"
+          - name: setup git user
+            if: ${{ env.TO_BE_CANCELLED == 'false' }}
+            run: |
+                git config --global user.email ${BUILD_USER_EMAIL}
+                git config --global user.name ${BUILD_USER}
           - name: Sync Wiki
             if: ${{ env.TO_BE_CANCELLED == 'false' }}
             run: |
-                cd ${REPO_DEST}
-                git config user.email ${BUILD_USER_EMAIL}
-                git config user.name ${BUILD_USER}
+                cd ${REPO_DEST}                
                 git status
                 git add .
                 git commit -m "${REPO_SOURCE} documentation | GitHub Actions build number $BUILD_NUMBER"
