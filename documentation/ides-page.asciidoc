@@ -17,7 +17,7 @@ toc::[]
 
 = IDE's
 
-This page allows you to open an IDE of your choice.
+This page allows you to open the IDE of your choice.
 
 .IDE's
 image::images/ides_page/ides.png["IDE's", width="600", link="images/ides_page/ides.png"]
