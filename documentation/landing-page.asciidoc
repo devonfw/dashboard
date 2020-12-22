@@ -17,7 +17,7 @@ toc::[]
 
 = Landing page
 
-This is the entry point of the devonfw dashboard. Click on *get started* to start using it.
+This is the entry point of the devonfw dashboard. Click on *Get started* to start using it.
 
 == Your devonfw distributions
 
