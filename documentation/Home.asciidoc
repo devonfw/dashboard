@@ -1,0 +1,59 @@
+:toc: macro
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+toc::[]
+:idprefix:
+:idseparator: -
+:reproducible:
+:source-highlighter: rouge
+:listing-caption: Listing
+
+= dashboard
+
+Welcome to dashboard! This document will guide you in using the dashboard as per your needs. But before proceeding to *how*, let us understand *what* is it and *why* has it been developed.
+
+== Overview
+
+The dashboard is your one stop destination for all your `devonfw-ide` needs. It serves as a UI on top of `devonfw-ide`.
+
+.dashboard
+image::images/collage.png["dashboard", width="600", link="images/collage.png"]
+
+Are you new to `devonfw`? You can download and setup the latest `devonfw-ide` from *dashboard* and link:home-page[get started]. Or if you prefer, you can also link:settings-page[download] one of our older `devonfw-ide` versions available from our maven repository. The dashboard will be a fantastic introduction to `devonfw` as it encapsulates all that `devonfw` offers.
+
+Or if you are already using `devonfw-ide`, you can link:settings-page[update] its settings and software to the latest versions available.
+
+If you are an existing user, you will find all your link:projects-page[projects] created under your `workspaces` directory spread across your different `devonfw-ide` versions (2020.04.003 or higher) all in one place in the dashboard. You can also create new (`devon4ng`, `devon4j` and `devon4node`) projects from within the dashboard and manage it from there itself.
+
+You can launch any of your most used link:ides-page[IDE's] (VS Code, Eclipse or IntelliJ) from your active `devonfw-ide` intsance.
+
+You can also go through the list of `devonfw` link:repositories-page[repositories], open any one of them up in the browser or copy their URL for cloning locally.
+
+You also have the `devonfw` link:wiki-page[wiki] to know more about `devonfw` right from within the *dashboard*.
+
+== Motivation
+
+The `devon-ide` is a collections of tools and software which you can configure and customize as per your requirements. It ships with a number of command line tools under an umbrella `devon` command.
+
+The main motivation behind *dashboard* is to provide a user interface on top of this collection of command line tools. So it can do (almost) everything that the `devonfw-ide` could and more.
+
+It was also developed to serve as a single point of contact for the most common `devonfw` tasks. You can have multiple `devonfw-ide` of different versions, each holding multiple projects and softwares configured differently. With *dashboard* you can manage all your projects from the same place.
+
+.Handle multiple 'devon-ide's
+image::images/dashboard-multiple-ides.png["Handle multiple 'devon-ide's", width="600", link="images/dashboard-multiple-ides.png"]
+
+== Features
+
+* More user friendly than a command line tool
+* Saves time getting to know `devonfw` and facilitates its usage
+* Enhanced visibility of your projects, IDEs and `devonfw-ide` instances
+* Better version control of all your `devonfw-ide`
+* Project inventory management
+* Connected to `devonfw` docs
