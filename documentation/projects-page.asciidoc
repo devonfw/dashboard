@@ -14,23 +14,44 @@ toc::[]
 :reproducible:
 :source-highlighter: rouge
 
-== Introduction About How devonfw IDE manages Projects
+== Introduction to project management in the dashboard
 
-- *devonfw IDE* manages multiple projects that include Angular, JAVA, and Node. +
+- The *dashboard* manages multiple projects in multiple workspaces that include Angular, JAVA, and Node. +
 
-- *devonfw IDE* provides rich UI for creating multiple projects, abstracting all the functionality which is usually required while creating an application like opening a command terminal, specifying workspace, and executing commands. +
+- The *dashboard* provides rich UI for creating multiple projects, abstracting all the functionality which is usually required while creating an application like opening a command terminal, specifying workspace, and executing commands. +
 
-- *devonfw IDE* makes it easy to see all the projects which are in different devonfw IDE workspace, just by changing the "devonfw Instance" dropdown. 
+- The *dashboard* makes it easy to see all the projects which are in different devonfw-ide workspace, just by changing the "devonfw Instance" dropdown. 
 
-- *devonfw IDE* makes it very easy to open a project in a different IDE like Visual Studio or Eclipse respectively just by right click on the Project folder and open option.
+- The *dashboard* makes it very easy to open a project in a different IDE like Visual Studio or Eclipse respectively just by right click on the Project folder and open option.
 
-- *devonfw IDE* also makes it easy to delete the project, explore the project location. +
+- The *dashboard* also makes it easy to delete the project, explore the project location. +
 
-= Projects
+== Projects
 
-Click on the *Projects* link on the sidebar to navigate to the project's screen. The screen looks simple and describes more about creating projects. +
+Click on the *Projects* link on the sidebar to navigate to the project's screen. The screen displays all the projects in the currently selected devonfw-ide, grouped by the workspaces in which they exist. +
+Note: Currently it only displays projects created through the dashboard. +
 
-image::images/project_page/project_screen.png["Project Screen", width="600", link="images/project_page/project_screen.png"]
+image::images/project_page/project_page.png["Project Screen", width="600", link="images/project_page/project_page.png"]
+
+- It shows the total number of projects available in each *devonfw-ide*.
+
+- Filtering and searching the projects.
+
+- *Add New Project* - For creating a Project.
+
+- Project folder which gives information about the project like which technology the project belongs to, the name of the project, and when it has created. 
+
+- There are many operations that are available on right-click on *Project folder* they are : 
+
+. Opening a project in different IDE ( Visual Studio or Eclipse )
+
+. Enclosing Folder, and
+
+. Deleting the project.
+
+- Users can see projects of different *devonfw-ide* workspace just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the screen.
+
+Click on *Add New Project* to start creating a new project. +
 
 == How to create a project
 
@@ -38,17 +59,17 @@ Three main steps are involved in creating any devonfw project. They are: +
 
 *Step 1. Project Type* +
 
-In this first step the user has to choose the language resp. technology to start the project with, e.g. *JAVA*, *Angular*, or *Node* and click the *Next* button for to continue to the next step.
+In this first step the user has to choose the language technology to start the project with, e.g. *Angular*, *Java* or *Node* and click the *Next* button for to continue to the next step.
 
 image::images/project_page/project_type.png["Project Type", width="600", link="images/project_page/project_type.png"]
 
 *Step 2. Project Data* +
 
-After the *Project type* selection, the second screen will appear for the user to fill up all the required fields. Once the user entered all the required fields, then the *Next* button will enable for the final step. +
+After the *Project type* selection, the second screen will appear for the user to fill up all the required fields. User can select the workspace in the active devonfw-ide for the project in this step. Once the user enters all the required fields, the *Next* button will be enabled for the final step. +
 
 image::images/project_page/project_data.png["Project Data", width="600", link="images/project_page/project_data.png"]
 
-User can change the *devonfw IDE* workspace where the project is going to generate, just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the project screen. +
+User can change the *devonfw-ide* workspace where the project is going to generate, just by changing the option in the *devonfw instance* dropdown which is set globally in the header of the dashboard. +
 
 image::images/home_page/toolbar_workspace.png["Toolbar", width="600", link="images/home_page/toolbar_workspace.png"]
 
@@ -80,28 +101,4 @@ image::images/project_page/installation.png["Installation", width="600", link="i
 
 *Step 4.* Click on *Finish* button to go to *Project Details Screen*.
 
-image::images/project_page/project_details_screen.png["Project Details Screen", width="600", link="images/project_page/project_details_screen.png"]
 
-=== Project Details Page
-
-image::images/project_page/project_details_features.png["Project Details Features", width="600", link="images/project_page/project_details_features.png"]
-
-* Project Details screen provides thorough information about the Project Details with respect to *devonfw IDE* instances. The screen describes as follow ( check the above screen for the reference ): +
-
-- It shows the total number of projects available in each *devonfw IDE*.
-
-- Filtering and searching the projects.
-
-- *Add New Project* - For creating a Project.
-
-- Project folder which gives information about the project like which technology the project belongs to, the name of the project, and when it has created. 
-
-- There are many operations that are available on right-click on *Project folder* they are : 
-
-. Opening a project in different IDE ( Visual Studio or Eclipse )
-
-. Enclosing Folder, and
-
-. Deleting the project.
-
-- Users can see projects of different *devonfw IDE* workspace just by changing the option in the *devonfw instance* dropdown which is set globally at the top of the screen.

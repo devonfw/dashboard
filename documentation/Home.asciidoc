@@ -28,11 +28,11 @@ image::images/collage.png["dashboard", width="600", link="images/collage.png"]
 
 Are you new to `devonfw`? You can download and setup the latest `devonfw-ide` from *dashboard* and link:home-page[get started]. Or if you prefer, you can also link:settings-page[download] one of our older `devonfw-ide` versions available from our maven repository. The dashboard will be a fantastic introduction to `devonfw` as it encapsulates all that `devonfw` offers.
 
-Or if you are already using `devonfw-ide`, you can link:settings-page[update] its settings and software to the latest versions available.
+If you are already using `devonfw-ide`, you can link:settings-page[update] its settings and software to the latest versions available.
 
-If you are an existing user, you will find all your link:projects-page[projects] created under your `workspaces` directory spread across your different `devonfw-ide` versions (2020.04.003 or higher) all in one place in the dashboard. You can also create new (`devon4ng`, `devon4j` and `devon4node`) projects from within the dashboard and manage it from there itself.
+If you are an existing user, you will find all your `workspaces` spread across your different `devonfw-ide` versions (2020.04.003 or higher) link:projects-page[all in one place] in the dashboard. You can also create new (`devon4ng`, `devon4j` and `devon4node`) projects from within the dashboard and manage it from there itself.
 
-You can launch any of your most used link:ides-page[IDE's] (VS Code, Eclipse or IntelliJ) from your active `devonfw-ide` intsance.
+You can launch any of your most used link:ides-page[IDE's] (VS Code or Eclipse) from your active `devonfw-ide` intsance.
 
 You can also go through the list of `devonfw` link:repositories-page[repositories], open any one of them up in the browser or copy their URL for cloning locally.
 
