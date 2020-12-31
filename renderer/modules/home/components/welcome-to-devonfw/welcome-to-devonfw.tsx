@@ -27,7 +27,7 @@ export default function WelcomeToDevonfw(): JSX.Element {
     return () => {
       global.ipcRenderer.removeAllListeners('get:profile');
     };
-  });
+  }, []);
 
   return (
     <Grid container spacing={3} style={{ fontSize: '16px' }}>
