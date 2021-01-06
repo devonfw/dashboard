@@ -17,12 +17,12 @@ toc::[]
 
 = IDE's
 
-This page allows you to open an IDE of your choice.
+This page allows you to open the IDE of your choice.
 
 .IDE's
 image::images/ides_page/ides.png["IDE's", width="600", link="images/ides_page/ides.png"]
 
-It currently lists only 3 IDEs: Eclipse, IntelliJ and VS Code.
+It currently lists only 2 IDEs: Eclipse and VS Code.
 
 It will open the IDE from the devonfw instance that you have selected in the top bar:
 
@@ -32,4 +32,4 @@ image::images/ides_page/devonfw-instance-dropdown.png["Choose your devonfw insta
 Click on *OPEN* to launch the IDE of your choice. By default, the IDE will display projects from your main workspace in the selected devonfw instance.
 
 .Open an IDE
-image::images/ides_page/3-ides.png["Open an IDE", width="600", link="images/ides_page/3-ides.png"]
+image::images/ides_page/2-ides.png["Open an IDE", width="600", link="images/ides_page/2-ides.png"]

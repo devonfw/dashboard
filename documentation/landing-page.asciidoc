@@ -17,17 +17,26 @@ toc::[]
 
 = Landing page
 
-This is the entry point of the devonfw dashboard. Click on *get started* to start using it.
+This is the entry point of the devonfw dashboard. Click on *GET STARTED NOW* to start using it.
+
+.Get Started
+image::images/landing_page/get_started.png["Get Started", width="600", link="images/landing_page/get_started.png"]
 
 == Your devonfw distributions
 
-The first time you open the application you will get a dialog with all the devonfw distributions found installed in your machine. Click on *got it* to continue.
+The first time you open the application you will get a dialog with all the devonfw distributions found on your machine. Click on *OK GOT IT* to continue.
+
+.devon-ide distributions
+image::images/landing_page/devonfw_distributions_dialog.png["devon-ide distributions", width="450", link="images/landing_page/devonfw_distributions_dialog.png"]
 
 == Profile form
 
-Here there is a screen that allows users to create a profile. This is useful if you want to have multiple dashboards with different roles, names, ...
+Here you will find a screen that allows you to create a profile. This is just for the purpose of customizing your dashboard.
 
-Fill the data and click on *Create my profile* if you want to create the profile at the moment or *Will do it later* to skip the creation.
+.Profile
+image::images/landing_page/profile_form.png["Profile", width="600", link="images/landing_page/profile_form.png"]
+
+Fill the data and click on *CREATE MY PROFILE* if you want to create the profile at the moment or click *WILL DO IT LATER* to skip the creation.
 
 
 
