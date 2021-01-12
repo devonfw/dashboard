@@ -67,7 +67,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
       dispatch({
         type: 'USER_PROFILE',
         payload: {
-          userProfile: sanitizedData,
+          userProfile: profile,
         },
       });
     });
