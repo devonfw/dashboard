@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { IpcRendererEvent } from 'electron';
 import { ProfileData } from '../../../../models/dashboard/profile-data';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
 import useStyles from './profile-setup.style';
@@ -9,12 +9,14 @@ import FormControlName from './form-control-name/form-control-name';
 import FormControlRole from './form-control-role/form-control-role';
 import FormControlImage from './form-control-image/form-control-image';
 import FormControlGender from './form-control-gender/form-control-gender';
+import { StepperContext } from '../../../projects/redux/stepper/stepperContext';
 
 interface ProfileSetupProps {
   settingsPage?: boolean;
 }
 
 export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
+  const { dispatch } = useContext(StepperContext);
   const classes = useStyles();
   const router = useRouter();
   const [data, setData] = useState<ProfileData>({
@@ -43,8 +45,10 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
       'get:profileCreationStatus',
       (_: IpcRendererEvent, status: string) => {
         if (status === 'success') {
-          if (props.settingsPage) loadProfile();
-          else navigateToHome();
+          loadProfile();
+          if (!props.settingsPage) {
+            navigateToHome();
+          }
         }
       }
     );
@@ -60,6 +64,12 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
     global.ipcRenderer.invoke('find:profile').then((profile: ProfileData) => {
       const sanitizedData = sanitizeData(profile);
       setData(sanitizedData);
+      dispatch({
+        type: 'USER_PROFILE',
+        payload: {
+          userProfile: profile,
+        },
+      });
     });
   };
 

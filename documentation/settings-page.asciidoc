@@ -33,12 +33,13 @@ The installed versions subsection allows you to manage the different versions of
 .Installed versions
 image::images/settings_page/installed-versions.png["Installed versions", width="600", link="images/settings_page/installed-versions.png"]
 
-* It lists the devonfw-ide you have installed in your system, along with the ones available for download from our maven repository.
-* If you want a specific version, you can search it here and *DOWNLOAD* it.
+* It lists the devonfw-ide you have installed in your system, along with the ones available for download from our maven repository
+* If you want to install specific version, you can search it here and *DOWNLOAD* it
 * To check the release notes for a version, simply click on *Consolidated list of features*
 * For the installed versions:
-** You can view it in your system explorer by clicking the eye icon.
-** You can update its settings and softwares by clicking on *UPDATE*.
-** You can also *UNINSTALL* an installed version, after which the devonfw dashboard will no longer keep track of the Projects and IDEs belonging to that version
+** Hovering over the eye icon shows you the path for the devonfw-ide in a tooltip
+** You can view it in your system explorer by clicking the eye icon
+** You can update its settings and softwares by clicking on *UPDATE*
+** You can also *UNINSTALL* an installed version, after which the dashboard will no longer keep track of the projects and IDEs belonging to that devonfw-ide
 
 
