@@ -8,7 +8,7 @@ const rulesDetails: { [key: string]: Rules } = {
   name: {
     required: 'Please provide a value',
     pattern: 'Please remove special characters and numeric numbers',
-    existing: 'Artifact name already exist',
+    existing: 'Name already exists',
   },
   group: {
     required: 'Please provide a value',
@@ -18,7 +18,7 @@ const rulesDetails: { [key: string]: Rules } = {
   artifact: {
     required: 'Please provide a value',
     pattern: 'Please remove special characters and numeric numbers',
-    existing: 'Artifact name already exist',
+    existing: 'Artifact name already exists',
   },
   version: {
     required: 'Please provide a value',

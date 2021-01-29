@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { useContext, useState, ChangeEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
@@ -15,10 +16,10 @@ import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
-import { WorkspaceService } from '../../../../services/workspace.service';
 
 export default function NgData(): JSX.Element {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
+  const [projectsDir, setProjectsDir] = useState<string[]>([]);
   const classes = ngDataStyle();
   const { state, dispatch } = useContext(StepperContext);
   const ERRORMSG = {
@@ -46,12 +47,22 @@ export default function NgData(): JSX.Element {
   });
 
   useEffect(() => {
-    const workspaceService = new WorkspaceService(setWorkspaceDir);
-    workspaceService.getProjectsInWorkspace(state.projectData.path);
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', join(state.projectData.path, 'workspaces'))
+      .then((dirs: string[]) => setWorkspaceDir(dirs));
+    getProjectsInWorkspace(
+      join(state.projectData.path, 'workspaces', state.projectData.workspace)
+    );
     return () => {
-      workspaceService.closeListener();
+      global.ipcRenderer.removeAllListeners('get:dirsFromPath');
     };
   }, []);
+
+  const getProjectsInWorkspace = (workspacePath: string) => {
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', workspacePath)
+      .then((dirs: string[]) => setProjectsDir(dirs));
+  };
 
   const handleNg = () => {
     const ngData: INgData = data;
@@ -80,13 +91,13 @@ export default function NgData(): JSX.Element {
     });
   };
 
-  const validateExistingProject = (event: EventType) => {
+  const validateExistingProject = (event?: EventType) => {
     const targetValue =
-      event.event && event.event.target
+      event && event.event && event.event.target
         ? event.event.target.value
         : data.name.value;
     if (
-      workspaceDir.filter(
+      projectsDir.filter(
         (project) => project.toLowerCase() === targetValue.toLowerCase()
       ).length
     ) {
@@ -148,6 +159,7 @@ export default function NgData(): JSX.Element {
     setData((prevState: INgData) => {
       return { ...prevState, workspace: { value: option } };
     });
+    getProjectsInWorkspace(join(state.projectData.path, 'workspaces', option));
   };
 
   const setActiveState = () => {
@@ -157,7 +169,7 @@ export default function NgData(): JSX.Element {
   };
 
   const handleblur = () => {
-    validateExistingProject({});
+    validateExistingProject();
   };
 
   const step = (

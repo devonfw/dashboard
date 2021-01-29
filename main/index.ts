@@ -145,6 +145,15 @@ function getWorkspaceProject(workspacelocation: string) {
     });
 }
 
+async function getDirsFromPath(path: string) {
+  try {
+    const dirs = await readdirPromise(path);
+    return dirs;
+  } catch (e) {
+    return [];
+  }
+}
+
 /* Enable services */
 
 new OpenIdeListener().listen();
@@ -199,3 +208,4 @@ ipcMain.on('set:profile', (e, profile: UserProfile) =>
 );
 ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
 ipcMain.handle('find:profile', () => new ProfileSetupService().getProfile());
+ipcMain.handle('get:dirsFromPath', (e, path) => getDirsFromPath(path));

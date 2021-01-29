@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
@@ -16,7 +17,6 @@ import {
 } from '../../../../../../models/dashboard/FormType';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
-import { WorkspaceService } from '../../../../services/workspace.service';
 import { JavaFormBuider } from './java-form-buider';
 
 interface JavaInitializerProps {
@@ -31,30 +31,36 @@ interface JavaInitializerProps {
 
 class JavaInitializer extends Component<JavaInitializerProps> {
   state: IJavaInitializerForm = javaProjectConfig;
-  workspaceService: WorkspaceService;
 
   constructor(props: JavaInitializerProps) {
     super(props);
-    this.workspaceService = new WorkspaceService(
-      this.setDevonfwWorkspaces.bind(this)
-    );
   }
 
   componentDidMount(): void {
-    this.workspaceService.getProjectsInWorkspace(
-      this.context.state.projectData.path
+    global.ipcRenderer
+      .invoke(
+        'get:dirsFromPath',
+        join(this.context.state.projectData.path, 'workspaces')
+      )
+      .then((dirs: string[]) => this.setState({ workspaceDir: dirs }));
+    this.getProjectsInWorkspace(
+      join(
+        this.context.state.projectData.path,
+        'workspaces',
+        this.state.workspace
+      )
     );
   }
 
   componentWillUnMount(): void {
-    this.workspaceService.closeListener();
+    global.ipcRenderer.removeAllListeners('get:dirsFromPath');
   }
 
-  setDevonfwWorkspaces(dirs: string): void {
-    this.setState({
-      workspaceDir: dirs,
-    });
-  }
+  getProjectsInWorkspace = (workspacePath: string) => {
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', workspacePath)
+      .then((dirs: string[]) => this.setState({ projectsDir: dirs }));
+  };
 
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -125,7 +131,7 @@ class JavaInitializer extends Component<JavaInitializerProps> {
     const packageName: FormType = { ...updatedForm.packageName };
 
     artifact.value = value;
-    ValidateForm.checkValidity(artifact, 'artifact', this.state.workspaceDir);
+    ValidateForm.checkValidity(artifact, 'artifact', this.state.projectsDir);
     artifact.touched = true;
 
     packageName.value = groupElement.value
@@ -163,6 +169,9 @@ class JavaInitializer extends Component<JavaInitializerProps> {
 
     if (identifier === 'workspace') {
       selectedWorkspace = value;
+      this.getProjectsInWorkspace(
+        join(this.context.state.projectData.path, 'workspaces', value)
+      );
     }
 
     this.setState({
