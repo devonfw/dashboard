@@ -1,4 +1,5 @@
-import { useContext, useState, ChangeEvent, useEffect } from 'react';
+import { join } from 'path';
+import { useContext, useState, ChangeEvent, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
 import {
@@ -19,6 +20,8 @@ import { WorkspaceService } from '../../../../services/workspace.service';
 
 export default function NgData(): JSX.Element {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
+  const [projectsDir, setProjectsDir] = useState<string[]>([]);
+  let projectsDirOldVal: string[] = [];
   const classes = ngDataStyle();
   const { state, dispatch } = useContext(StepperContext);
   const ERRORMSG = {
@@ -46,12 +49,60 @@ export default function NgData(): JSX.Element {
   });
 
   useEffect(() => {
-    const workspaceService = new WorkspaceService(setWorkspaceDir);
-    workspaceService.getProjectsInWorkspace(state.projectData.path);
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', join(state.projectData.path, 'workspaces'))
+      .then((dirs: string[]) => setWorkspaceDir(dirs));
+    getProjectsInWorkspace(
+      join(state.projectData.path, 'workspaces', state.projectData.workspace)
+    );
+    if (projectsDir === projectsDirOldVal) {
+      console.log('oldval');
+    } else {
+      console.log('newval');
+      console.log('projectsDir old val: ', projectsDirOldVal);
+      console.log('projectsDir before calling fn: ', projectsDir);
+      validateExistingProject();
+    }
     return () => {
-      workspaceService.closeListener();
+      global.ipcRenderer.removeAllListeners('get:dirsFromPath');
     };
   }, []);
+
+  const useStateCallback = (initialState: string[]) => {
+    const [cbstate, setCbState] = useState(initialState);
+    const initCb = (a: unknown) => {};
+    const cbRef = useRef(initCb); // mutable ref to store current callback
+
+    const setStateCallback = (cbstate: string[], cb: any) => {
+      cbRef.current = cb; // store passed callback to ref
+      setCbState(cbstate);
+    };
+
+    useEffect(() => {
+      // cb.current is `null` on initial render, so we only execute cb on cbstate *updates*
+      if (cbRef.current) {
+        cbRef.current(cbstate);
+        cbRef.current = initCb; // reset callback after execution
+      }
+    }, [cbstate]);
+
+    return [cbstate, setStateCallback];
+  };
+
+  const getProjectsInWorkspace = (
+    workspacePath: string,
+    callback?: () => void
+  ) => {
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', workspacePath)
+      .then((dirs: string[]) =>
+        setProjectsDir((prevState: string[]) => {
+          projectsDirOldVal = prevState;
+          if (callback) callback();
+          return dirs;
+        })
+      );
+  };
 
   const handleNg = () => {
     const ngData: INgData = data;
@@ -80,16 +131,19 @@ export default function NgData(): JSX.Element {
     });
   };
 
-  const validateExistingProject = (event: EventType) => {
+  const validateExistingProject = (event?: EventType) => {
     const targetValue =
-      event.event && event.event.target
+      event && event.event && event.event.target
         ? event.event.target.value
         : data.name.value;
+    console.log('target value: ', targetValue);
+    console.log('projectsDir in fn: ', projectsDir);
     if (
-      workspaceDir.filter(
+      projectsDir.filter(
         (project) => project.toLowerCase() === targetValue.toLowerCase()
       ).length
     ) {
+      console.log('projectAlreadyExists');
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.projectAlreadyExists,
@@ -124,6 +178,7 @@ export default function NgData(): JSX.Element {
     updatedData.name.error = formData.error;
     updatedData.name.valid = formData.valid;
     updatedData.name.touched = true;
+    console.log('formdata: ', updatedData);
     setData((prevState: INgData) => {
       return {
         ...prevState,
@@ -148,6 +203,15 @@ export default function NgData(): JSX.Element {
     setData((prevState: INgData) => {
       return { ...prevState, workspace: { value: option } };
     });
+    getProjectsInWorkspace(join(state.projectData.path, 'workspaces', option));
+    /* if (projectsDir === projectsDirOldVal) {
+      console.log('oldval');
+    } else {
+      console.log('newval');
+      console.log('projectsDir old val: ', projectsDirOldVal);
+      console.log('projectsDir before calling fn: ', projectsDir);
+      validateExistingProject();
+    } */
   };
 
   const setActiveState = () => {
@@ -157,7 +221,7 @@ export default function NgData(): JSX.Element {
   };
 
   const handleblur = () => {
-    validateExistingProject({});
+    validateExistingProject();
   };
 
   const step = (
