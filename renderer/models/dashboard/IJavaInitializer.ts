@@ -5,6 +5,7 @@ export interface IJavaInitializerForm {
   formControls: JavaFormControls;
   batchProcessControl: { batch: boolean };
   formIsValid: boolean;
+  projectsDir: string[];
   workspace: string;
 }
 
