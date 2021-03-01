@@ -22,6 +22,7 @@ export default function ModulesInstallation(): JSX.Element {
     triggerInstallation({
       projectName: state.projectData.name,
       idePath: state.projectData.path,
+      workspace: state.projectData.workspace,
     });
   };
 

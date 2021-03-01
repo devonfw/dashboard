@@ -22,6 +22,6 @@ export interface ProjectData {
   name: string;
   path: string;
   type: string;
-
+  workspace: string;
   specificArgs?: SpecificArgs;
 }

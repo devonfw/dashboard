@@ -14,6 +14,6 @@ export default abstract class ProjectCommand extends Command {
   }
 
   protected setCwd(): void {
-    this.cwd = join(this.data.path, 'workspaces');
+    this.cwd = join(this.data.path, 'workspaces', this.data.workspace);
   }
 }

@@ -3,7 +3,7 @@ import { join } from 'path';
 import { format } from 'url';
 
 // Packages
-import { BrowserWindow, app, ipcMain, DownloadItem } from 'electron';
+import { BrowserWindow, Menu, app, ipcMain, DownloadItem } from 'electron';
 import isDev from 'electron-is-dev';
 import prepareNext from 'electron-next';
 
@@ -19,7 +19,6 @@ import {
   getBase64Img,
   setDashboardProfile,
   checkProfileStatus,
-  getDashboardProfile,
 } from './modules/profile-setup/handle-profile-setup';
 import { checkForDevonUpdates } from './modules/devon-updates/handle-devon-updates';
 import { ProjectDeleteListener } from './modules/projects/classes/listeners/project-delete-listener';
@@ -58,6 +57,8 @@ app.on('ready', async () => {
   mainWindow.webContents.on('did-fail-load', async () =>
     mainWindow.loadURL(await getWindowUrl())
   );
+
+  Menu.setApplicationMenu(null);
 });
 
 // Quit the app once all windows are closed
@@ -144,6 +145,15 @@ function getWorkspaceProject(workspacelocation: string) {
     });
 }
 
+async function getDirsFromPath(path: string) {
+  try {
+    const dirs = await readdirPromise(path);
+    return dirs;
+  } catch (e) {
+    return [];
+  }
+}
+
 /* Enable services */
 
 new OpenIdeListener().listen();
@@ -197,4 +207,5 @@ ipcMain.on('set:profile', (e, profile: UserProfile) =>
   setDashboardProfile(profile, mainWindow)
 );
 ipcMain.on('find:profileStatus', () => checkProfileStatus(mainWindow));
-ipcMain.on('find:profile', () => getDashboardProfile(mainWindow));
+ipcMain.handle('find:profile', () => new ProfileSetupService().getProfile());
+ipcMain.handle('get:dirsFromPath', (e, path) => getDirsFromPath(path));

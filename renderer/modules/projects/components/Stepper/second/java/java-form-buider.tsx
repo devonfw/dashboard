@@ -6,9 +6,11 @@ import { databaseKeys } from '../../../../../../models/dashboard/Database';
 import { ErrorHandler } from '../validation/error-handler/error-handler';
 import Input from '../form-inputs/input/Input';
 import Select from '../form-inputs/select/Select';
+import SelectWorkspace from '../form-inputs/select-workspace/select-workspace';
 
 interface JavaFormBuiderProps {
   formControls: JavaFormControls;
+  workspaces: string[];
   updateFormState: (formChangeState: ValueType) => void;
 }
 
@@ -18,6 +20,9 @@ export const JavaFormBuider = (props: JavaFormBuiderProps): JSX.Element => {
       identifier: event.target.id,
       event: event,
     });
+  };
+  const handleWorkspaceSelection = (option: string) => {
+    props.updateFormState({ identifier: 'workspace', value: option });
   };
   return (
     <>
@@ -68,6 +73,10 @@ export const JavaFormBuider = (props: JavaFormBuiderProps): JSX.Element => {
           });
         }}
       />
+      <SelectWorkspace
+        workspaces={props.workspaces}
+        onSelected={handleWorkspaceSelection}
+      ></SelectWorkspace>
     </>
   );
 };

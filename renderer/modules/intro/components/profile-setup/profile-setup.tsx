@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { IpcRendererEvent } from 'electron';
 import { ProfileData } from '../../../../models/dashboard/profile-data';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, useContext } from 'react';
 
 import Button from '@material-ui/core/Button';
 import useStyles from './profile-setup.style';
@@ -9,12 +9,14 @@ import FormControlName from './form-control-name/form-control-name';
 import FormControlRole from './form-control-role/form-control-role';
 import FormControlImage from './form-control-image/form-control-image';
 import FormControlGender from './form-control-gender/form-control-gender';
+import { StepperContext } from '../../../projects/redux/stepper/stepperContext';
 
 interface ProfileSetupProps {
   settingsPage?: boolean;
 }
 
 export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
+  const { dispatch } = useContext(StepperContext);
   const classes = useStyles();
   const router = useRouter();
   const [data, setData] = useState<ProfileData>({
@@ -26,15 +28,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   const [buttonsDisabled, setButtonsDisabled] = useState<boolean>(true);
 
   useEffect(() => {
-    if (props.settingsPage) global.ipcRenderer.send('find:profile');
-
-    global.ipcRenderer.on(
-      'get:profile',
-      (_: IpcRendererEvent, profile: ProfileData) => {
-        const sanitizedData = sanitizeData(profile);
-        setData(sanitizedData);
-      }
-    );
+    if (props.settingsPage) loadProfile();
 
     global.ipcRenderer.on(
       'get:base64Img',
@@ -51,18 +45,33 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
       'get:profileCreationStatus',
       (_: IpcRendererEvent, status: string) => {
         if (status === 'success') {
-          if (props.settingsPage) global.ipcRenderer.send('find:profile');
-          else navigateToHome();
+          loadProfile();
+          if (!props.settingsPage) {
+            navigateToHome();
+          }
         }
       }
     );
 
     return () => {
-      global.ipcRenderer.removeAllListeners('get:profile');
+      global.ipcRenderer.removeAllListeners('find:profile');
       global.ipcRenderer.removeAllListeners('get:base64Img');
       global.ipcRenderer.removeAllListeners('get:profileCreationStatus');
     };
   }, []);
+
+  const loadProfile = () => {
+    global.ipcRenderer.invoke('find:profile').then((profile: ProfileData) => {
+      const sanitizedData = sanitizeData(profile);
+      setData(sanitizedData);
+      dispatch({
+        type: 'USER_PROFILE',
+        payload: {
+          userProfile: profile,
+        },
+      });
+    });
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const inputname: string = event.target.name;
@@ -102,7 +111,7 @@ export default function ProfileSetup(props: ProfileSetupProps): JSX.Element {
   };
 
   const onCancel = () => {
-    global.ipcRenderer.send('find:profile');
+    loadProfile();
     setButtonsDisabled(true);
   };
 

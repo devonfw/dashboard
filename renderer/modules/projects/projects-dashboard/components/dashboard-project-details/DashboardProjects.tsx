@@ -23,6 +23,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import NextLink from '../../../../shared/components/nextjs-link/NextLink';
 import ProjectDetail from './project-detail';
 import Alerts from '../../../../shared/components/alerts/alerts';
+import ConfirmDialog from '../../../../shared/components/confirm-dialog/confirm.dialog';
 import MenuList from '../menu-list/menu-list';
 import NewProject from '../new-project/new-project';
 
@@ -33,6 +34,7 @@ interface DashboardProjectsProps {
   setAllProject: (project: ProjectDetails[]) => void;
   dirPath: string;
   projectsCount: number;
+  workspaces: string[];
 }
 
 export default function DashboardProjects(
@@ -43,7 +45,7 @@ export default function DashboardProjects(
   const initialState = {
     mouseX: null,
     mouseY: null,
-    project: { name: '', domain: '', date: '', path: '' },
+    project: { name: '', domain: '', date: '', path: '', workspace: 'main' },
   };
   const initialAlertState = {
     alertSeverity: '',
@@ -63,6 +65,18 @@ export default function DashboardProjects(
   const filterElement = useRef<HTMLInputElement>() as MutableRefObject<
     HTMLInputElement
   >;
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
+  const deleteConfimation = (value: boolean): void => {
+    if (value === true) {
+      deleteProject();
+    }
+    setOpenDialog(false);
+  };
+
+  const openDeleteProjectConfirmationDialog = () => {
+    setOpenDialog(true);
+  };
 
   const closeAlert = () => {
     setAlertMessage((prevState: AlertType) => {
@@ -127,7 +141,13 @@ export default function DashboardProjects(
   };
 
   const handleClose = () => {
-    setProjectState(initialState);
+    setProjectState((prev) => {
+      return {
+        ...prev,
+        mouseX: null,
+        mouseY: null,
+      };
+    });
   };
 
   const openProjectInIde = (ide: string) => {
@@ -183,24 +203,75 @@ export default function DashboardProjects(
         >
           <NewProject />
         </NextLink>
-        {props.projects && props.projects.length
-          ? props.projects.map((project) => (
-              <ProjectDetail
-                key={project.path}
-                project={project}
-                handleClick={handleClick}
-              />
-            ))
-          : null}
       </div>
+      {props.workspaces &&
+      props.workspaces.length &&
+      searchElement.current.value
+        ? props.workspaces.map((workspace) => (
+            <div key={workspace} style={{ width: '100%' }}>
+              {props.projects.filter(
+                (project) => project.workspace === workspace
+              ).length ? (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div className={classes.cardsContainer}>
+                    {props.projects && props.projects.length
+                      ? props.projects
+                          .filter((project) => project.workspace === workspace)
+                          .map((project) => (
+                            <ProjectDetail
+                              key={project.path}
+                              project={project}
+                              handleClick={handleClick}
+                            />
+                          ))
+                      : null}
+                  </div>
+                </>
+              ) : null}
+            </div>
+          ))
+        : props.workspaces.map((workspace) => (
+            <div key={workspace} style={{ width: '100%' }}>
+              {props.projects.filter(
+                (project) => project.workspace === workspace
+              ).length ? (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div className={classes.cardsContainer}>
+                    {props.projects && props.projects.length
+                      ? props.projects
+                          .filter((project) => project.workspace === workspace)
+                          .map((project) => (
+                            <ProjectDetail
+                              key={project.path}
+                              project={project}
+                              handleClick={handleClick}
+                            />
+                          ))
+                      : null}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3>workspace {workspace}</h3>
+                  <div>
+                    No projects in this workspace. Click Add New Project button
+                    above to create a new project.
+                  </div>
+                </>
+              )}
+            </div>
+          ))}
       <MenuList
         project={projectState.project}
         state={projectState}
         handleClose={handleClose}
         openProjectInIde={openProjectInIde}
         openProjectDirectory={openProjectDirectory}
-        deleteProject={deleteProject}
+        deleteProject={openDeleteProjectConfirmationDialog}
       />
+
       <Backdrop className={classes.backdrop} open={open}>
         <CircularProgress color="inherit" />
       </Backdrop>
@@ -210,6 +281,12 @@ export default function DashboardProjects(
         message={alertMessage.message}
         operation={alertMessage.operation}
       />
+      <ConfirmDialog
+        title={'Confirmation'}
+        content={`Are you sure do you want to delete the "${projectState.project.name}" project?`}
+        openDialog={openDialog}
+        onClose={deleteConfimation}
+      ></ConfirmDialog>
     </div>
   );
 }

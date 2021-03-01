@@ -24,28 +24,35 @@ export default function StackStep(): JSX.Element {
   };
 
   return (
-    <Grid container spacing={4}>
-      {stackKeys.map((key) => {
-        const techStack: Stack = stacksMap[key];
+    <>
+      <p style={{ height: '60px' }}>
+        Here you can choose the technology based on which you want to create
+        your project. Currently the dashboard supports creation of projects from
+        one of devon4ng, devon4j and devon4node technologies.
+      </p>
+      <Grid container spacing={4}>
+        {stackKeys.map((key) => {
+          const techStack: Stack = stacksMap[key];
 
-        return (
-          <Grid item xs={6} md={4} lg={3} xl={2} key={techStack.id}>
-            <StackCard
-              variant={techStack.command === stack}
-              image={techStack.image}
-              text={techStack.text}
-              onClick={() => setStack(techStack.command)}
-            />
-          </Grid>
-        );
-      })}
-      <Grid item xs={12}>
-        <StepperNavigation
-          onBack={goBackToProjects}
-          onNext={goToNextStep}
-          disableNext={!stack}
-        />
+          return (
+            <Grid item xs={6} md={4} lg={3} xl={2} key={techStack.id}>
+              <StackCard
+                variant={techStack.command === stack}
+                image={techStack.image}
+                text={techStack.text}
+                onClick={() => setStack(techStack.command)}
+              />
+            </Grid>
+          );
+        })}
+        <Grid item xs={12}>
+          <StepperNavigation
+            onBack={goBackToProjects}
+            onNext={goToNextStep}
+            disableNext={!stack}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

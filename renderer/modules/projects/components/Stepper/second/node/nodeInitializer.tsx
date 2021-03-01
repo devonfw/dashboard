@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Component, ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/styles';
@@ -9,9 +10,9 @@ import nodeInitializerStyle from './nodeInitializerStyle';
 import nodeProjectConfig from './nodeInitializerFormConfig';
 import ValidateForm from '../validation/ValidateForm';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
-import { WorkspaceService } from '../../../../services/workspace.service';
 import { ErrorHandler } from '../validation/error-handler/error-handler';
 import Input from '../form-inputs/input/Input';
+import SelectWorkspace from '../form-inputs/select-workspace/select-workspace';
 
 interface NodeInitializerProps {
   classes: {
@@ -23,30 +24,36 @@ interface NodeInitializerProps {
 
 class NodeInitializer extends Component<NodeInitializerProps> {
   state: INodeInitializerForm = nodeProjectConfig;
-  workspaceService: WorkspaceService;
 
   constructor(props: NodeInitializerProps) {
     super(props);
-    this.workspaceService = new WorkspaceService(
-      this.setDevonfwWorkspaces.bind(this)
-    );
   }
 
   componentDidMount(): void {
-    this.workspaceService.getProjectsInWorkspace(
-      this.context.state.projectData.path
+    global.ipcRenderer
+      .invoke(
+        'get:dirsFromPath',
+        join(this.context.state.projectData.path, 'workspaces')
+      )
+      .then((dirs: string[]) => this.setState({ workspaceDir: dirs }));
+    this.getProjectsInWorkspace(
+      join(
+        this.context.state.projectData.path,
+        'workspaces',
+        this.state.workspace
+      )
     );
   }
 
   componentWillUnMount(): void {
-    this.workspaceService.closeListener();
+    global.ipcRenderer.removeAllListeners('get:dirsFromPath');
   }
 
-  setDevonfwWorkspaces(dirs: string): void {
-    this.setState({
-      workspaceDir: dirs,
-    });
-  }
+  getProjectsInWorkspace = (workspacePath: string) => {
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', workspacePath)
+      .then((dirs: string[]) => this.setState({ projectsDir: dirs }));
+  };
 
   createProjectHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -57,6 +64,7 @@ class NodeInitializer extends Component<NodeInitializerProps> {
       payload: {
         projectData: {
           name: formData.formControls.name.value.toLowerCase(),
+          workspace: formData.workspace,
           specificArgs: {
             '-n': null,
             '--skip-install': null,
@@ -80,7 +88,7 @@ class NodeInitializer extends Component<NodeInitializerProps> {
         ValidateForm.checkValidity(
           element,
           event.target.id,
-          this.state.workspaceDir
+          this.state.projectsDir
         );
       }
       formState.name = element;
@@ -90,6 +98,15 @@ class NodeInitializer extends Component<NodeInitializerProps> {
       formControls: formState,
       formIsValid: ValidateForm.nodeFormStateValidity(formState),
     });
+  };
+
+  handleWorkspaceSelection = (option: string) => {
+    this.setState({
+      workspace: option,
+    });
+    this.getProjectsInWorkspace(
+      join(this.context.state.projectData.path, 'workspaces', option)
+    );
   };
 
   setActiveState = () => {
@@ -116,6 +133,12 @@ class NodeInitializer extends Component<NodeInitializerProps> {
               }}
             />
             <ErrorHandler formControl={this.state.formControls.name} />
+          </Grid>
+          <Grid item xs={12}>
+            <SelectWorkspace
+              workspaces={this.state.workspaceDir}
+              onSelected={this.handleWorkspaceSelection}
+            ></SelectWorkspace>
           </Grid>
         </Grid>
         <div className={classes.action}>

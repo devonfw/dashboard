@@ -13,7 +13,14 @@ export default abstract class IdeCommand extends Command {
   abstract setArgs(): void;
 
   protected setLocation(): void {
-    this.location = join(this.projectPath, '..', '..', 'scripts', 'devon');
+    this.location = join(
+      this.projectPath,
+      '..',
+      '..',
+      '..',
+      'scripts',
+      'devon'
+    );
   }
 
   protected setCwd(): void {

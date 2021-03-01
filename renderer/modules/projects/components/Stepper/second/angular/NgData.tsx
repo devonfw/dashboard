@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { useContext, useState, ChangeEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { StepperContext } from '../../../../redux/stepper/stepperContext';
@@ -8,22 +9,24 @@ import {
 } from '../../../../redux/stepper/data.model';
 import NgDataRouting from './ng-data/NgDataRouting';
 import NgDataStyling from './ng-data/NgDataStyling';
+import SelectWorkspace from '../form-inputs/select-workspace/select-workspace';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { FormControl, Button } from '@material-ui/core';
 import ngDataStyle from './ngData.style';
 import { NextStepAction } from '../../../../redux/stepper/actions/step-action';
 import { ProjectDataActionData } from '../../../../redux/stepper/actions/project-data-action';
-import { WorkspaceService } from '../../../../services/workspace.service';
 
 export default function NgData(): JSX.Element {
   const [workspaceDir, setWorkspaceDir] = useState<string[]>([]);
+  const [projectsDir, setProjectsDir] = useState<string[]>([]);
   const classes = ngDataStyle();
   const { state, dispatch } = useContext(StepperContext);
   const ERRORMSG = {
     projectAlreadyExists: 'Project already exits with this name',
     projectRequired: 'Please provide project name',
-    pattern: 'Please remove special characters and numeric numbers',
+    pattern:
+      'Please enter valid project name (eg: app or app-demo or app-demo123)',
   };
   const [data, setData] = useState<INgData>({
     name: {
@@ -38,18 +41,28 @@ export default function NgData(): JSX.Element {
     styling: {
       value: 'scss',
     },
-    devonInstances: {
-      value: '',
+    workspace: {
+      value: 'main',
     },
   });
 
   useEffect(() => {
-    const workspaceService = new WorkspaceService(setWorkspaceDir);
-    workspaceService.getProjectsInWorkspace(state.projectData.path);
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', join(state.projectData.path, 'workspaces'))
+      .then((dirs: string[]) => setWorkspaceDir(dirs));
+    getProjectsInWorkspace(
+      join(state.projectData.path, 'workspaces', state.projectData.workspace)
+    );
     return () => {
-      workspaceService.closeListener();
+      global.ipcRenderer.removeAllListeners('get:dirsFromPath');
     };
   }, []);
+
+  const getProjectsInWorkspace = (workspacePath: string) => {
+    global.ipcRenderer
+      .invoke('get:dirsFromPath', workspacePath)
+      .then((dirs: string[]) => setProjectsDir(dirs));
+  };
 
   const handleNg = () => {
     const ngData: INgData = data;
@@ -57,6 +70,7 @@ export default function NgData(): JSX.Element {
       dispatch(
         new ProjectDataActionData({
           name: ngData.name.value,
+          workspace: ngData.workspace.value,
           specificArgs: {
             '--routing': ngData.routing.value,
             '--style': ngData.styling.value,
@@ -77,13 +91,13 @@ export default function NgData(): JSX.Element {
     });
   };
 
-  const validateExistingProject = (event: EventType) => {
+  const validateExistingProject = (event?: EventType) => {
     const targetValue =
-      event.event && event.event.target
+      event && event.event && event.event.target
         ? event.event.target.value
         : data.name.value;
     if (
-      workspaceDir.filter(
+      projectsDir.filter(
         (project) => project.toLowerCase() === targetValue.toLowerCase()
       ).length
     ) {
@@ -92,7 +106,7 @@ export default function NgData(): JSX.Element {
         error: ERRORMSG.projectAlreadyExists,
         valid: false,
       });
-    } else if (targetValue.match(/^[a-z]*$/gi) == null) {
+    } else if (targetValue.match(/^[a-z](\-*[a-z]\d*)*$/gi) == null) {
       validateProjectName({
         value: targetValue,
         error: ERRORMSG.pattern,
@@ -141,6 +155,13 @@ export default function NgData(): JSX.Element {
     });
   };
 
+  const handleWorkspaceSelection = (option: string) => {
+    setData((prevState: INgData) => {
+      return { ...prevState, workspace: { value: option } };
+    });
+    getProjectsInWorkspace(join(state.projectData.path, 'workspaces', option));
+  };
+
   const setActiveState = () => {
     dispatch({
       type: 'RESET_STEP',
@@ -148,7 +169,7 @@ export default function NgData(): JSX.Element {
   };
 
   const handleblur = () => {
-    validateExistingProject({});
+    validateExistingProject();
   };
 
   const step = (
@@ -182,6 +203,12 @@ export default function NgData(): JSX.Element {
           </Grid>
           <Grid item xs={12}>
             <NgDataStyling onSelected={handleStyleSelection}></NgDataStyling>
+          </Grid>
+          <Grid item xs={12}>
+            <SelectWorkspace
+              workspaces={workspaceDir}
+              onSelected={handleWorkspaceSelection}
+            ></SelectWorkspace>
           </Grid>
         </Grid>
       </form>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StepperActions } from './actions/stepper-actions';
 import { updateProjectDataState } from './utils/utils';
 import { ProjectData } from './project-data.model';
+import { ProfileData } from '../../../../models/dashboard/profile-data';
 
 export interface StepperState {
   activeStep: number;
@@ -16,6 +17,7 @@ export interface StepperState {
   };
   projectData: ProjectData;
   accessibility: boolean;
+  userProfile: ProfileData;
 }
 
 const getInitialState = () => ({
@@ -33,9 +35,16 @@ const getInitialState = () => ({
     name: '',
     type: '',
     path: '',
+    workspace: 'main',
     specificArgs: {},
   },
   accessibility: false,
+  userProfile: {
+    name: '',
+    image: '',
+    gender: '',
+    role: '',
+  },
 });
 
 const reducer = (
@@ -84,8 +93,13 @@ const reducer = (
 
     case 'RESET_STEPPER': {
       const projectData = { ...state.projectData };
+      const profileData = { ...state.userProfile };
       projectData.path = state.projectData.path;
-      return { ...getInitialState(), projectData: projectData };
+      return {
+        ...getInitialState(),
+        projectData: projectData,
+        userProfile: profileData,
+      };
     }
 
     case 'ACCESSIBILITY': {
@@ -94,6 +108,16 @@ const reducer = (
 
     case 'RESET_ACCESSIBILITY': {
       return { ...state, accessibility: false };
+    }
+
+    case 'USER_PROFILE': {
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          ...action.payload.userProfile,
+        },
+      };
     }
 
     default:

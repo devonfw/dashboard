@@ -12,7 +12,7 @@ const nodeProjectConfig: INodeInitializerForm = {
       value: '',
       validation: {
         required: true,
-        pattern: /^[a-z]*$/gi,
+        pattern: /^[a-z](\-*[a-z]\d*)*$/gi,
         existing: true,
       },
       valid: false,
@@ -21,6 +21,8 @@ const nodeProjectConfig: INodeInitializerForm = {
     },
   },
   formIsValid: false,
+  projectsDir: [],
+  workspace: 'main',
 };
 
 export default nodeProjectConfig;

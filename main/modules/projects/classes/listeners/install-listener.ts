@@ -14,7 +14,12 @@ export class InstallListener extends RendererListener<InstallCommandData> {
   }
 
   public buildCommand(data: InstallCommandData): Command {
-    const path = join(data.idePath, 'workspaces', data.projectName);
+    const path = join(
+      data.idePath,
+      'workspaces',
+      data.workspace,
+      data.projectName
+    );
     if (uses(path, 'package.json')) {
       if (uses(path, 'package-lock.json')) {
         return new NpmInstallCommand(data);

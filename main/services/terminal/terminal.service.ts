@@ -8,7 +8,7 @@ import {
   OpenDialogFilters,
 } from '../../models/open-dialog.model';
 
-const MAX_BUFFER = 1024 * 500; /* 500 KB */
+const MAX_BUFFER = 1024 * 1024; /* 1024 KB */
 
 export class TerminalService {
   @Process('terminal/open-dialog')

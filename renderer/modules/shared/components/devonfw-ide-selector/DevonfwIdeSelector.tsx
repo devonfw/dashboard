@@ -8,7 +8,7 @@ import WhiteTextField from '../white-text-field/white-text-field';
 
 interface InstancePath {
   ideConfig: {
-    workspaces: string;
+    basepath: string;
   };
 }
 

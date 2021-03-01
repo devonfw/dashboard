@@ -27,6 +27,11 @@ export default function ExecutionStep(): JSX.Element {
 
   return (
     <>
+      <p style={{ height: '60px' }}>
+        The dashboard will create the project for you. If you want to download
+        the modules for your project, expand the <b>Modules Installation</b>{' '}
+        section and click <b>Proceed</b>.
+      </p>
       <ProjectCreation></ProjectCreation>
       <ModulesInstallation></ModulesInstallation>
       <Box display="flex" mt={3}>
