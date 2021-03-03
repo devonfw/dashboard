@@ -1,11 +1,16 @@
 on:
   push:
+    branches: [develop]
+
+  pull_request:
+    branches: [develop]
 
 name: Run Tests
 
 jobs:
   build:
     name: Run the tests
+    if: ${{github.repository == 'devonfw/dashboard'}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
