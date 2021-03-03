@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [develop]
+
+  pull_request:
+    branches: [develop]
+
+name: Run Tests
+
+jobs:
+  build:
+    name: Run the tests
+    if: ${{github.repository == 'devonfw/dashboard'}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies with NPM
+        run: npm install
+      - name: Run the tests with NPM
+        run: npm run test
