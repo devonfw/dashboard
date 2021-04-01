@@ -1,0 +1,22 @@
+on:
+  push:
+    tags:
+      - '*'
+
+name: Build and release
+
+jobs:
+  test:
+    name: Generate the build
+    if: ${{github.repository == 'devonfw/dashboard'}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies with NPM
+        run: npm install
+      - name: Build the distributable
+        run: npm run dist
