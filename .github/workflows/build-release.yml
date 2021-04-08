@@ -5,7 +5,7 @@ on:
 name: Build and release
 
 jobs:
-  test:
+  build:
     name: Generate the build
     if: ${{github.repository == 'devonfw/dashboard'}}
     runs-on: ${{ matrix.os }}
@@ -19,3 +19,13 @@ jobs:
         run: npm install
       - name: Build the distributable
         run: npm run dist
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          files: |
+            ./dist/*.snap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
