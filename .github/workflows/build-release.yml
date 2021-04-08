@@ -19,6 +19,8 @@ jobs:
         run: npm install
       - name: Build the distributable
         run: npm run dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
@@ -27,5 +29,7 @@ jobs:
           draft: true
           files: |
             ./dist/*.snap
+            ./dist/*.dmg
+            ./dist/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
