@@ -28,7 +28,7 @@ jobs:
         with: 
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            return context.payload.ref.replace(/\/refs\/tags\//, '');
+            return github.ref.replace(/\/refs\/tags\//, '');
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
