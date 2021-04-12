@@ -1,6 +1,7 @@
 on:
-  push:
-    branches: [develop]
+  create:
+    tags:
+      - '*'
 
 name: Build and release
 
