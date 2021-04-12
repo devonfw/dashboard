@@ -24,6 +24,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract tag name
         id: get_version
+        uses: actions/github-script@0.2.0
         with: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           script: |
