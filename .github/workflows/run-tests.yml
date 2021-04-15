@@ -22,3 +22,7 @@ jobs:
         run: npm install
       - name: Run the tests with NPM
         run: npm run test
+      - name: Run the build
+        run: npm run dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
