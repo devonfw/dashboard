@@ -18,7 +18,7 @@ toc::[]
 
 This is the main page that you will find after your profile creation and the page where you will start from henceforth.
 
-It contains three sections: +
+It contains three sections as below: +
 
     1. Toolbar +
     2. Sidebar +
