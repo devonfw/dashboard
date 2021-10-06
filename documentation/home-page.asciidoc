@@ -51,7 +51,7 @@ The Content section has also divided into three sections: +
 == Steps to download and Install devonfw IDE +
 *Step 1:* Click on *Download latest version* button which is in the Content section. Check the below screen for the reference.
 
-image::images/home_page/dolwnload_latest_version.png["Download Latest Version", width="600", link="images/home_page/dolwnload_latest_version.png"]
+image::images/home_page/download_latest_version.png["Download Latest Version", width="600", link="images/home_page/download_latest_version.png"]
 
 *Step 2:* By clicking *Download latest version* button, *Installing devonfw* popup will open.
 
@@ -63,7 +63,7 @@ image::images/home_page/installing_devonfw_download_location_set.png["Download l
 
 *Step 3:* Once the download completes successfully, the *Next* button will be enabled for the further installation process.
 
-image::images/home_page/installing_devonfw_dowload_completes.png["Download Devonfw Completed", width="600", link="images/home_page/installing_devonfw_dowload_completes.png"]
+image::images/home_page/installing_devonfw_download_completes.png["Download Devonfw Completed", width="600", link="images/home_page/installing_devonfw_download_completes.png"]
 
 *Step 4:* By Clicking *Next* button in the *Installing devonfw* pop up, two options are shown: +
 1: Select the Git url for the installation setup. +
