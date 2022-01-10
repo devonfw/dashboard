@@ -5,7 +5,7 @@ on:
       - '**.asciidoc'
       - '**.md'      
     branches:
-      - master
+      - develop
   workflow_dispatch:
 jobs:
   spellchecker:
